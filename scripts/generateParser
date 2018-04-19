@@ -1,0 +1,20 @@
+#!/bin/bash
+
+BIN="$(dirname $0)/../node_modules/.bin"
+
+$BIN/ts-node ./src/parser/generateParser.ts > ./src/parser/sqrl.ts
+
+###
+# @NOTE: These are some hacks to remove typescript errors from the generated file
+#        Please triple check produced diff when using it
+for line in `$BIN/tsc | grep '^src/parser/sqrl.ts' | grep "'s1' is declared but its value is never read" | cut '-d(' -f2 | cut -d, -f1`; do
+  sed "${line}s/let s0, s1;/let s0;/" src/parser/sqrl.ts > src/parser/.sqrl.ts.tmp;
+  mv src/parser/.sqrl.ts.tmp src/parser/sqrl.ts
+done
+
+for line in `$BIN/tsc | grep '^src/parser/sqrl.ts' | grep "Cannot find name 's1'" | cut '-d(' -f2 | cut -d, -f1  | sort --reverse -n`; do
+  sed "${line}d" src/parser/sqrl.ts > src/parser/.sqrl.ts.tmp
+  mv src/parser/.sqrl.ts.tmp src/parser/sqrl.ts
+done
+
+$BIN/prettier --write src/parser/sqrl.ts

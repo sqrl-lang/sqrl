@@ -1,0 +1,223 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`works 1`] = `
+Object {
+  "A": "function() {
+  return bluebird.resolve({});
+}",
+  "B": "function() {
+  return bluebird.resolve({ a: 5 });
+}",
+  "C": "function() {
+  return bluebird.resolve({ a: 6 });
+}",
+  "D": "function() {
+  return bluebird.resolve({ a: 6 });
+}",
+  "E": "function() {
+  return bluebird.resolve({ a: { c: 11 } });
+}",
+  "EmptyList": "function() {
+  return bluebird.resolve([]);
+}",
+  "F": "function() {
+  return bluebird.resolve({ a: { c: 11 } });
+}",
+  "G": "function() {
+  return bluebird.resolve(
+    functions._dataObject(
+      \\"a\\",
+      functions._dataObject(
+        \\"c\\",
+        functions.subtract(functions.divide(this, 6, 2), 1)
+      )
+    )
+  );
+}",
+  "H": "function() {
+  return bluebird.resolve({
+    data: {
+      credit_card: \\"3158934446506168\\",
+      item_id: 74213386,
+      purchase_id: 1849329
+    },
+    http_request: { headers: { \\"x-real-ip\\": \\"216.4.4.170\\" } },
+    machine_fingerprints: { marketplace: 91188146 },
+    name: \\"purchase_item\\",
+    session: {
+      actor: { id: 12345, type: \\"user\\", username: \\"demarion.bauch@hoppe.org\\" }
+    },
+    timestamp: \\"2015-10-12T21:53:04.370Z\\"
+  });
+}",
+  "IntList": "function() {
+  return bluebird.resolve([1, 2, 3]);
+}",
+  "NullFeature": "function() {
+  return bluebird.resolve(null);
+}",
+  "One": "function() {
+  return bluebird.resolve(1);
+}",
+  "Six": "function() {
+  return bluebird.resolve(6);
+}",
+  "SqrlAssertionStatements": "function() {
+  const p0 = bluebird.resolve(true);
+  return this.load(
+    \`28:function() {
+  return bluebird.resolve(
+    functions._assertCmp(
+      this,
+      {},
+      \\"=\\",
+      {},
+      \\"line 43\\\\\\\\n  ASSERT {} = {};\\\\\\\\n  ^^^^^^^^^^^^^^\\\\\\\\n\\"
+    )
+  );
+}\`,
+    \`29:function() {
+  return bluebird.resolve(
+    functions._assertCmp(
+      this,
+      { a: {} },
+      \\"=\\",
+      { a: {} },
+      'line 44\\\\\\\\n  ASSERT {\\"a\\": {}} = { \\"a\\": {} };\\\\\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\\\\\n'
+    )
+  );
+}\`,
+    \`30:function() {
+  return bluebird.resolve(
+    functions._assertCmp(
+      this,
+      functions._dataObject(\\"a\\", [1, 2]),
+      \\"=\\",
+      functions._dataObject(\\"a\\", [1, 2]),
+      'line 45\\\\\\\\n  ASSERT {\\"a\\": [1, 2]} = { \\"a\\": [1, 2] };\\\\\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\\\\\n'
+    )
+  );
+}\`,
+    \`31:function() {
+  return bluebird.resolve(
+    functions._assertCmp(
+      this,
+      functions._dataObject(\\"a\\", 9, \\"b\\", functions.divide(this, 6, 2)),
+      \\"=\\",
+      { a: 9, b: 3 },
+      'line 46\\\\\\\\n  ASSERT {\\"a\\": 5 + 4, \\"b\\": Six / 2} = { \\"a\\": 9, \\"b\\": 3 };\\\\\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\\\\\n'
+    )
+  );
+}\`,
+    \`32:function() {
+  const p0 = bluebird.resolve(\\"=\\");
+  const p1 = bluebird.resolve({ a: 6 });
+  const p2 = bluebird.resolve(
+    'line 47\\\\\\\\n  ASSERT C = {\\"a\\": 6};\\\\\\\\n  ^^^^^^^^^^^^^^^^^^^\\\\\\\\n'
+  );
+  return bluebird
+    .all([bluebird.resolve(this), this.fetch(\\"C\\"), p0, p1, p2])
+    .spread(functions._assertCmp);
+}\`
+  ).then(() => p0);
+}",
+  "SqrlClock": "function() {
+  return bluebird.resolve(functions.now());
+}",
+  "SqrlCountStatements": "function() {
+  return bluebird.resolve(true);
+}",
+  "SqrlCountUniqueStatements": "function() {
+  return bluebird.resolve(true);
+}",
+  "SqrlExecutionComplete": "function() {
+  return bluebird.resolve(true);
+}",
+  "SqrlIsClassify": "function() {
+  return bluebird.resolve(true);
+}",
+  "SqrlKafka": "function() {
+  const f0 = () =>
+    bluebird.resolve(functions.attr(this.slots[\\"SqrlOutput\\"].value(), \\"kafka\\"));
+  return this.load(\\"SqrlOutput\\").then(f0);
+}",
+  "SqrlLabelStatements": "function() {
+  return bluebird.resolve(true);
+}",
+  "SqrlLogStatements": "function() {
+  return bluebird.resolve(true);
+}",
+  "SqrlMutate": "function() {
+  return bluebird.resolve(true);
+}",
+  "SqrlNoopStatements": "function() {
+  return bluebird.resolve(true);
+}",
+  "SqrlOutput": "function() {
+  return bluebird.resolve(functions.getSqrlOutput(this, true));
+}",
+  "SqrlSaveStatements": "function() {
+  return bluebird.resolve(true);
+}",
+  "Zero": "function() {
+  return bluebird.resolve(0);
+}",
+  "ast:0b4b0127e16fadc99fab4c263110754b": "function() {
+  return bluebird.resolve(
+    functions._assertCmp(
+      this,
+      functions._dataObject(\\"a\\", [1, 2]),
+      \\"=\\",
+      functions._dataObject(\\"a\\", [1, 2]),
+      'line 45\\\\n  ASSERT {\\"a\\": [1, 2]} = { \\"a\\": [1, 2] };\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\n'
+    )
+  );
+}",
+  "ast:6aabb51126bfd37252f23213f39c4676": "function() {
+  const p0 = bluebird.resolve(\\"=\\");
+  const p1 = bluebird.resolve({ a: 6 });
+  const p2 = bluebird.resolve(
+    'line 47\\\\n  ASSERT C = {\\"a\\": 6};\\\\n  ^^^^^^^^^^^^^^^^^^^\\\\n'
+  );
+  return bluebird
+    .all([bluebird.resolve(this), this.fetch(\\"C\\"), p0, p1, p2])
+    .spread(functions._assertCmp);
+}",
+  "ast:86de5da6a621d67aca0a5a645cc454a2": "function() {
+  return bluebird.resolve(
+    functions._assertCmp(
+      this,
+      {},
+      \\"=\\",
+      {},
+      \\"line 43\\\\n  ASSERT {} = {};\\\\n  ^^^^^^^^^^^^^^\\\\n\\"
+    )
+  );
+}",
+  "ast:997a4129ca48f22c0db2969cd1cbbf04": "function() {
+  return bluebird.resolve(
+    functions._assertCmp(
+      this,
+      functions._dataObject(\\"a\\", 9, \\"b\\", functions.divide(this, 6, 2)),
+      \\"=\\",
+      { a: 9, b: 3 },
+      'line 46\\\\n  ASSERT {\\"a\\": 5 + 4, \\"b\\": Six / 2} = { \\"a\\": 9, \\"b\\": 3 };\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\n'
+    )
+  );
+}",
+  "ast:f10850eaa2b96f3aa046a713484c545c": "function() {
+  return bluebird.resolve(
+    functions._assertCmp(
+      this,
+      { a: {} },
+      \\"=\\",
+      { a: {} },
+      'line 44\\\\n  ASSERT {\\"a\\": {}} = { \\"a\\": {} };\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\n'
+    )
+  );
+}",
+  "bool(:)": "function() {
+  return bluebird.resolve(true);
+}",
+}
+`;

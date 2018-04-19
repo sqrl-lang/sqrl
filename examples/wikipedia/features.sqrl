@@ -1,0 +1,16 @@
+LET EventData := input();
+LET SqrlClock := jsonValue(EventData, '$.meta.dt');
+
+LET Domain := jsonValue(EventData, "$.meta.domain");
+LET Timestamp := jsonValue(EventData, "$.timestamp");
+LET Title := jsonValue(EventData, "$.title");
+LET User := node("User", jsonValue(EventData, "$.user"));
+LET PageUrl := jsonValue(EventData, "$.meta.uri");
+LET AddedContent := jsonValue(EventData, "$.content.added");
+LET OldRev := jsonValue(EventData, "$.revision.old");
+LET NewRev := jsonValue(EventData, "$.revision.new");
+LET DiffUrl := concat(
+    "https://", Domain, "/w/index.php?",
+    "title=", urlEncode(Title), "&type=revision&",
+    "diff=", NewRev, "&oldid=", OldRev
+);

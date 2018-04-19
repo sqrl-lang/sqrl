@@ -1,0 +1,6 @@
+{
+  "license": "(MIT OR BSD-2-Clause OR BSD-3-Clause OR Apache-2.0)",
+  "whitelist": {
+    "optimist": "<=0.6.1"
+  }
+}

@@ -1,0 +1,6 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`supports basic statements: multiple-definitions 1`] = `
+[Error: Multiple definitions of A
+:3  LET A := FeatureOne + 1;]
+`;

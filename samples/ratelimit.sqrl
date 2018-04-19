@@ -1,0 +1,8 @@
+LET RequestIp := input();
+LET Ip := node('Ip', RequestIp);
+LET SqrlMutate := true;
+
+LET Remaining := rateLimit(BY Ip MAX 2 EVERY 30 SECONDS);
+
+CREATE RULE BlockedByRateLimit WHERE Remaining = 0;
+WHEN BlockedByRateLimit THEN blockAction();

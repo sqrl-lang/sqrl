@@ -1,0 +1,2 @@
+LET Name := input();
+LET Text := concat("Hello, ", Name, "!");

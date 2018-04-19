@@ -1,0 +1,4 @@
+#!/bin/bash
+exec node --require ts-node/register \
+          --max-old-space-size=4096 \
+          "$(dirname $0)/src/cli.ts" "$@"

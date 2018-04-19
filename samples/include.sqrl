@@ -1,0 +1,3 @@
+LET File := input();
+INCLUDE "include/one.sqrl" WHERE File="one";
+INCLUDE "include/two.sqrl" WHERE File="two";

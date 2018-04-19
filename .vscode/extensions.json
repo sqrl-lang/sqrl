@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "eg2.tslint",
+    "redhat.vscode-yaml"
+  ]
+}

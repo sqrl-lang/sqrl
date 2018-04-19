@@ -1,0 +1,3 @@
+LET ActionData := input();
+
+LET ActionName := jsonValue(ActionData, '$.name');

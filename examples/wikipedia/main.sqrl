@@ -1,0 +1,13 @@
+INCLUDE "features.sqrl";
+
+LET BadWords := patternMatches("bad-words.txt", AddedContent);
+LET CountByUser := count(BY User);
+
+log("Page: %s", PageUrl);
+log("Diff: %s", DiffUrl);
+log("Count by user: %d (%s)", CountByUser, User);
+
+CREATE RULE UsedBadWords WHERE BadWords
+    WITH REASON "Matched pattern ${BadWords}: ${AddedContent}";
+
+WHEN UsedBadWords THEN blockAction();

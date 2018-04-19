@@ -1,0 +1,6 @@
+LET Name := input();
+
+LET FlagNames := ['greg', 'amy', 'steven', 'jennifier', 'josh'];
+
+CREATE RULE FlaggedName WHERE Name in FlagNames
+    WITH REASON "The name ${Name} was flagged.";
