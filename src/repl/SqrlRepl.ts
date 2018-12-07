@@ -20,20 +20,31 @@ import SqrlObject from "../object/SqrlObject";
 import { SlotMissingCallbackError } from "../execute/SqrlExecutionState";
 import { isValidFeatureName } from "../feature/FeatureName";
 import { Context } from "../api/ctx";
+import { Readable, Writable } from "stream";
+import Semaphore from "../jslib/Semaphore";
+import invariant from "../jslib/invariant";
 
 export class SqrlRepl extends EventEmitter {
   private traceFactory: () => Context;
   private server: repl.REPLServer | null = null;
   private historyPath: string = expandTilde("~/.sqrl_repl_history");
+  private stdin: Readable;
+  private stdout: Writable;
+  private busy = new Semaphore();
 
   constructor(
     private functionRegistry: FunctionRegistry,
     private test: SqrlTest,
-    options: { traceFactory: () => Context }
+    options: {
+      traceFactory: () => Context;
+      stdin?: Readable;
+      stdout?: Writable;
+    }
   ) {
     super();
     this.traceFactory = options.traceFactory;
-    /* do nothing */
+    this.stdin = options.stdin || process.stdin;
+    this.stdout = options.stdout || process.stdout;
   }
 
   async repl(ctx: Context, input: string): Promise<any> {
@@ -104,6 +115,7 @@ export class SqrlRepl extends EventEmitter {
   }
 
   private async eval(cmd, context, filename) {
+    this.busy.increment();
     const ctx = this.traceFactory();
     try {
       appendFileSync(this.historyPath, cmd);
@@ -135,6 +147,8 @@ export class SqrlRepl extends EventEmitter {
       } else {
         throw e;
       }
+    } finally {
+      this.busy.decrement();
     }
   }
 
@@ -155,11 +169,16 @@ export class SqrlRepl extends EventEmitter {
 
   on(event: "exit", callback: () => void);
   on(event, callback) {
-    super.on(event, callback);
+    invariant(event === "exit", "Only exit event is supported");
+    super.on("exit", () => {
+      this.busy.waitForZero().then(callback);
+    });
   }
 
   start() {
     this.server = repl.start({
+      input: this.stdin,
+      output: this.stdout,
       prompt: "sqrl> ",
       ignoreUndefined: true,
       eval: (cmd, context, filename, callback) => {
@@ -173,7 +192,11 @@ export class SqrlRepl extends EventEmitter {
       this.server = null;
       this.emit("exit");
     });
-    this.readHistory().map(line => (this.server as any).history.push(line));
+
+    // Internal api to push history
+    if ((this.server as any).history) {
+      this.readHistory().map(line => (this.server as any).history.push(line));
+    }
   }
 
   stop() {
