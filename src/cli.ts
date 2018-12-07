@@ -16,11 +16,13 @@ const args = docopt(CliDoc, {
 
 const output = getCliOutput(args);
 const closeables = new CloseableGroup();
-let exitCode = 0;
+let exitCode = 1;
 cliMain(args, output, closeables)
   .catch(err => {
     output.compileError(err);
-    exitCode = 1;
+  })
+  .then(() => {
+    exitCode = 0;
   })
   .finally(() => {
     closeables.close();
