@@ -1,4 +1,7 @@
 language: node_js
+env:
+  global:
+    - SQRL_TEST_REDIS=localhost:6379
 node_js:
   - 'node'
   - '8'

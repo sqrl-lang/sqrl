@@ -20,8 +20,8 @@ export function redisTest(
   if ((global as any).__INTEGRATION__) {
     test(name + " (with redis)", async () => {
       invariant(
-        process.env.TEST_REDIS,
-        "Integration test requires TEST_REDIS environment variable"
+        process.env.SQRL_TEST_REDIS,
+        "Integration test requires SQRL_TEST_REDIS environment variable"
       );
       const redis = new RedisService(process.env.TEST_REDIS);
       const pingResult = await bluebird
