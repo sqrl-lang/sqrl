@@ -5,7 +5,6 @@
  */
 import SqrlObject from "./SqrlObject";
 
-import invariant from "../jslib/invariant";
 import { UniqueId } from "../platform/UniqueId";
 import chalk from "chalk";
 
@@ -17,23 +16,6 @@ export default class SqrlUniqueId extends SqrlObject {
   getUniqueId(): UniqueId {
     return this.uniqueId;
   }
-
-  cmpG(other) {
-    invariant(
-      other instanceof SqrlUniqueId,
-      "SqrlUniqueId can only be compared with the same type"
-    );
-    return this.uniqueId.greaterThan(other.uniqueIdId);
-  }
-
-  equals(other) {
-    invariant(
-      other instanceof SqrlUniqueId,
-      "SqrlUniqueId can only be compared with the same type"
-    );
-    return this.uniqueId.equals(other.uniqueIdId);
-  }
-
   getBuffer() {
     return this.uniqueId.getBuffer();
   }

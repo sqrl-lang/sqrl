@@ -17,7 +17,7 @@ const args = docopt(CliDoc, {
 const output = getCliOutput(args);
 const closeables = new CloseableGroup();
 let exitCode = 1;
-cliMain(args, output, closeables)
+cliMain(args, closeables, { output })
   .catch(err => {
     output.compileError(err);
   })

@@ -9,7 +9,6 @@ node_js:
 services:
   - redis-server
 script:
-  - npm run coverage # jest test with coverage flag does coverage too
-  - npm run test:integration
+  - npm run test:integration --coverage
 after_script:
   - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls' # sends the coverage report to coveralls

@@ -135,13 +135,17 @@ async function createLabeler(
   };
 }
 
-export function getCliOutput(args: CliArgs): CliOutput {
+export function getCliOutput(
+  args: CliArgs,
+  stdout: Writable = process.stdout
+): CliOutput {
   const outputOptions: CliOutputOptions = {
+    stdout,
     onlyBlocked: args["--only-blocked"]
   };
   if (args["--output"] === "pretty") {
     if (args.compile) {
-      return new CliSlotJsOutput();
+      return new CliSlotJsOutput(stdout);
     } else {
       return new CliPrettyOutput(outputOptions);
     }
@@ -150,9 +154,9 @@ export function getCliOutput(args: CliArgs): CliOutput {
   } else if (args["--output"] === "json") {
     return new CliJsonOutput(outputOptions);
   } else if (args["--output"] === "expr") {
-    return new CliExprOutput();
+    return new CliExprOutput(stdout);
   } else if (args["--output"] === "slot-js") {
-    return new CliSlotJsOutput();
+    return new CliSlotJsOutput(stdout);
   } else {
     throw new Error("Unknown output type: " + args["--output"]);
   }
@@ -216,15 +220,22 @@ function buildFunctionRegistry(
 
 export async function cliMain(
   args: CliArgs,
-  output: CliOutput,
   closeables: CloseableGroup,
   options: {
+    output?: CliOutput;
     stdin?: Readable;
     stdout?: Writable;
   } = {}
 ) {
   const defaultTrc = createDefaultContext();
   const inputs = getInputs(args);
+  let output: CliOutput;
+  if (options.output) {
+    output = options.output;
+  } else {
+    output = getCliOutput(args, options.stdout || process.stdout);
+    closeables.add(output);
+  }
 
   if (args.test) {
     const { filesystem, source } = await sourceOptionsFromPath(
@@ -324,6 +335,8 @@ export async function cliMain(
       compilingLock.release();
 
       if (args["--stream"]) {
+        output.startStream();
+
         let concurrency: number = null;
         if (args["--concurrency"]) {
           concurrency = parseInt(args["--concurrency"], 10);
@@ -346,6 +359,7 @@ export async function cliMain(
       if (!(output instanceof CliCompileOutput)) {
         throw new Error("Output format not compatible with `compile`");
       }
+      invariant(compiledOutput, "Compile options must include a filename");
       await output.compiled(spec, compiledOutput);
     } else if (args.repl) {
       let filesystem: Filesystem = new LocalFilesystem(process.cwd());

@@ -23,7 +23,7 @@ export function redisTest(
         process.env.SQRL_TEST_REDIS,
         "Integration test requires SQRL_TEST_REDIS environment variable"
       );
-      const redis = new RedisService(process.env.TEST_REDIS);
+      const redis = new RedisService(process.env.SQRL_TEST_REDIS);
       const pingResult = await bluebird
         .resolve(redis.ping(buildTestTrace()))
         .timeout(100)

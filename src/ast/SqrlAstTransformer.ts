@@ -139,7 +139,6 @@ export default class SqrlAstTransformer {
       );
       return this.transform(transformed);
     }
-
     // If we need state / when context arguments add them automatically
     if (props.stateArg) {
       const astArgs: Ast[] = [...ast.args];
@@ -200,7 +199,6 @@ export default class SqrlAstTransformer {
         args
       });
     }
-
     return ast;
   }
 

@@ -21,15 +21,13 @@ export function registerBoolFunctions(registry: FunctionRegistry) {
   registry.save(and, {
     safe: true,
     allowSqrlObjects: true,
-    allowNull: true,
-    args: AT.minArgs(2)
+    allowNull: true
   });
 
   registry.save(and, {
     name: "andOrNull",
     safe: true,
-    allowSqrlObjects: true,
-    args: AT.minArgs(2)
+    allowSqrlObjects: true
   });
 
   registry.save(
@@ -140,7 +138,6 @@ export function registerBoolFunctions(registry: FunctionRegistry) {
     },
     {
       allowSqrlObjects: true,
-      args: AT.minArgs(2),
       safe: true,
       allowNull: true
     }
@@ -160,7 +157,6 @@ export function registerBoolFunctions(registry: FunctionRegistry) {
       promiseArgs: true,
       callbackArgs: true,
       allowSqrlObjects: true,
-      args: AT.minArgs(2),
       allowNull: true,
       stateArg: true,
       safe: true,
@@ -168,9 +164,8 @@ export function registerBoolFunctions(registry: FunctionRegistry) {
     }
   );
 
-  // This *should* become the preferred version of or
   registry.save(
-    function orParallel(state, ...promises) {
+    function _orParallel(state, ...promises) {
       return new Promise(resolve => {
         let remaining = promises.length;
         for (const promise of promises) {
@@ -193,8 +188,7 @@ export function registerBoolFunctions(registry: FunctionRegistry) {
       allowSqrlObjects: true,
       allowNull: true,
       async: true,
-      stateArg: true,
-      args: AT.minArgs(2)
+      stateArg: true
     }
   );
 }

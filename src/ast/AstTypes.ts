@@ -280,16 +280,4 @@ function typeChecker(compileChecker: CompileChecker): TypeChecker {
   return o;
 }
 
-function minArgs(count?) {
-  return (ast?) =>
-    sqrlInvariant(
-      ast.args,
-      ast.args.length >= count,
-      `${ast.func}() requires atleast two arguments`
-    );
-}
-const AT = Object.assign(compileCheckers, {
-  minArgs
-});
-
-export default AT;
+export default compileCheckers;

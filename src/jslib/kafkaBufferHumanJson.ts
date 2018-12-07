@@ -4,19 +4,16 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import bignum = require("bignum");
-import isAscii from "./isAscii";
 import mapObject from "./mapObject";
+import { bufferToHexEncodedAscii } from "./bufferToHexEncodedAscii";
 
 function friendlyBuffer(buf) {
   try {
     const text = buf.toString("utf-8");
-    if (isAscii(text)) {
-      return text;
-    }
+    return bufferToHexEncodedAscii(text);
   } catch (err) {
-    /* fall through */
+    return `0x${buf.toString("hex")}`;
   }
-  return `0x${buf.toString("hex")}`;
 }
 
 function deepFriendlyMap(obj) {
@@ -33,11 +30,12 @@ function deepFriendlyMap(obj) {
   }
 }
 
+/**
+ * Convert a given buffer into something that is human readable.
+ * This process is not necessarily reversible and is meant for convenience
+ * only.
+ */
 export function kafkaBufferHumanJson(topic: string, msg: Buffer): any {
-  // @TODO: Could do decoding of avro/protobuf here
-
-  // The message is /probably/ json.
-  // Try convert it, and otherwise just return the hex
   try {
     return JSON.parse(msg.toString("utf-8"));
   } catch (err) {

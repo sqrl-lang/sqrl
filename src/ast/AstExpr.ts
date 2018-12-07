@@ -187,17 +187,19 @@ function exprOrderedMinimalLoad(exprs: Expr[]): Slot[] {
 
 function andExpr(state: AstExprState, args: Ast[]): Expr {
   let hadFalse = false;
-  const exprs = args.map(arg => _astToExpr(arg, state)).filter(expr => {
-    if (expr.type === "constant") {
-      if (SqrlObject.isTruthy(expr.value)) {
-        // Filter out truthy values
-        return false;
-      } else {
-        hadFalse = true;
+  const exprs = args
+    .map(arg => _astToExpr(arg, state))
+    .filter(expr => {
+      if (expr.type === "constant") {
+        if (SqrlObject.isTruthy(expr.value)) {
+          // Filter out truthy values
+          return false;
+        } else {
+          hadFalse = true;
+        }
       }
-    }
-    return true;
-  });
+      return true;
+    });
 
   if (hadFalse) {
     return constantExpr(false);
@@ -218,17 +220,19 @@ function andExpr(state: AstExprState, args: Ast[]): Expr {
 
 function orExpr(state: AstExprState, args: Ast[]): Expr {
   let hadTrue = false;
-  const exprs = args.map(arg => _astToExpr(arg, state)).filter(expr => {
-    if (expr.type === "constant") {
-      if (SqrlObject.isTruthy(expr.value)) {
-        hadTrue = true;
-      } else {
-        // Filter out falsy values
-        return false;
+  const exprs = args
+    .map(arg => _astToExpr(arg, state))
+    .filter(expr => {
+      if (expr.type === "constant") {
+        if (SqrlObject.isTruthy(expr.value)) {
+          hadTrue = true;
+        } else {
+          // Filter out falsy values
+          return false;
+        }
       }
-    }
-    return true;
-  });
+      return true;
+    });
 
   if (hadTrue) {
     return constantExpr(true);

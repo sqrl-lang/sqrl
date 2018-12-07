@@ -13,12 +13,15 @@ import { LabelerSpec } from "../execute/LabelerSpec";
 import { jsonStableStringify } from "../jslib/jsonStableStringify";
 import { serializeExpr } from "../expr/serializeExpr";
 import { createDefaultContext } from "../helpers/ContextHelpers";
+import { Writable } from "stream";
 
 export interface CliOutputOptions {
+  stdout?: Writable;
   onlyBlocked?: boolean;
 }
 
 export abstract class CliOutput {
+  constructor(protected stdout: Writable) {}
   close() {
     return;
   }
@@ -48,11 +51,11 @@ export class CliExprOutput extends CliCompileOutput {
     const { slotNames, slotExprs } = await compiledOutput.fetchBuildOutput(
       createDefaultContext()
     );
-    console.log(
+    this.stdout.write(
       jsonStableStringify({
         slotExprs: slotExprs.map(expr => serializeExpr(expr)),
         slotNames
-      })
+      }) + "\n"
     );
   }
 }
@@ -64,6 +67,7 @@ export class CliSlotJsOutput extends CliCompileOutput {
 }
 
 export abstract class CliActionOutput extends CliOutput {
+  abstract startStream();
   abstract action(
     manipulator: SimpleManipulator,
     execution: SqrlExecutionState,
@@ -73,7 +77,10 @@ export abstract class CliActionOutput extends CliOutput {
 
 export class CliJsonOutput extends CliActionOutput {
   constructor(private options: CliOutputOptions) {
-    super();
+    super(options.stdout);
+  }
+  startStream() {
+    /* do nothing */
   }
   action(
     manipulator: SimpleManipulator,
@@ -91,7 +98,10 @@ export class CliJsonOutput extends CliActionOutput {
 
 export class CliCsvOutput extends CliActionOutput {
   constructor(private options: CliOutputOptions) {
-    super();
+    super(options.stdout || process.stdout);
+  }
+  startStream() {
+    /* perhaps write out the headers */
   }
   action(
     manipulator: SimpleManipulator,

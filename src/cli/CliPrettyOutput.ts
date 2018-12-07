@@ -37,10 +37,8 @@ export class CliPrettyOutput extends CliActionOutput {
   private lastCount = 0;
 
   constructor(private options: CliOutputOptions) {
-    super();
+    super(options.stdout);
     this.lastSummary = Date.now();
-    this.summaryInterval = setInterval(() => this.writeSummary(), 1000);
-    this.summaryInterval.unref();
   }
 
   private writeSummary() {
@@ -125,6 +123,11 @@ export class CliPrettyOutput extends CliActionOutput {
     }
     this.line(chalk.redBright("New source failed to compile:"));
     this.line(prefixLines(this.errorText(err), chalk.red(">") + " "));
+  }
+
+  startStream() {
+    this.summaryInterval = setInterval(() => this.writeSummary(), 1000);
+    this.summaryInterval.unref();
   }
 
   action(

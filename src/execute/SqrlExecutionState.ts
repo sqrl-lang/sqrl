@@ -5,7 +5,6 @@
  */
 import { Manipulator } from "../platform/Manipulator";
 import SqrlObject from "../object/SqrlObject";
-import TaskManager from "../jslib/TaskManager";
 
 import bluebird = require("bluebird");
 import { foreachObject } from "../jslib/foreachObject";
@@ -153,11 +152,6 @@ export class SqrlExecutionState {
   }
   fatal(props: { [key: string]: any }, format: string, ...args: Array<any>) {
     return this.ctx.fatal(props, format, ...args);
-  }
-
-  addTask(promise, name) {
-    // Adds a background job associated with this sqrl run
-    TaskManager.wrap(name, promise);
   }
 
   codedWarning(format: string, ...args: Array<any>) {

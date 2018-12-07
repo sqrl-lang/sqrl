@@ -1,0 +1,102 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`repl works 1`] = `
+Object {
+  "slotExprs": Array [
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "exprs": Array [],
+      "func": "now",
+      "type": "call",
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+    Object {
+      "type": "input",
+    },
+    Object {
+      "exprs": Array [
+        Object {
+          "exprs": Array [
+            Object {
+              "type": "constant",
+              "value": "Hello, ",
+            },
+            Object {
+              "slot": 11,
+              "type": "value",
+            },
+            Object {
+              "type": "constant",
+              "value": "!",
+            },
+          ],
+          "func": "concat",
+          "type": "call",
+        },
+      ],
+      "load": Array [
+        11,
+      ],
+      "type": "load",
+    },
+    Object {
+      "type": "constant",
+      "value": true,
+    },
+  ],
+  "slotNames": Array [
+    "SqrlMutate",
+    "SqrlIsClassify",
+    "SqrlClock",
+    "SqrlExecutionComplete",
+    "SqrlLogStatements",
+    "SqrlNoopStatements",
+    "SqrlAssertionStatements",
+    "SqrlSaveStatements",
+    "SqrlCountStatements",
+    "SqrlCountUniqueStatements",
+    "SqrlLabelStatements",
+    "Name",
+    "Text",
+    "bool(:)",
+  ],
+}
+`;
