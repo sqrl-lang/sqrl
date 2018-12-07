@@ -1,7 +1,12 @@
 language: node_js
 node_js:
-  - 'node' # use latest stable nodejs version
+  - 'node'
+  - '8'
+  - '10'
+services:
+  - redis-server
 script:
   - npm run coverage # jest test with coverage flag does coverage too
+  - npm run test:integration
 after_script:
   - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls' # sends the coverage report to coveralls
