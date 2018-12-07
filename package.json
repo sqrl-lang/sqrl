@@ -39,7 +39,6 @@
     "@types/bignum": "^0.0.29",
     "@types/ioredis": "^3.2.10",
     "@types/jsonpath": "^0.2.0",
-    "@types/moment": "^2.13.0",
     "@types/prettier": "^1.13.1",
     "bignum": "^0.13.0",
     "bluebird": "^3.5.1",

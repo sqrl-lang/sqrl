@@ -78,9 +78,9 @@ function asyncSafetyNet(name: string, fn, config: SafetyNetConfig) {
     "async function [%s] requires state argument as it is likely to fail due to timeouts",
     name
   );
-  return function(state) {
+  return function(state, ...args) {
     return wrapped
-      .apply(null, arguments)
+      .call(null, state, ...args)
       .timeout(state.featureTimeout, `Timeout after ${state.featureTimeout}`)
       .catch(err => {
         state.logError(err, errorProps);
