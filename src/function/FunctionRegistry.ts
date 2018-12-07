@@ -12,7 +12,10 @@ import isPromise from "../jslib/isPromise";
 import invariant from "../jslib/invariant";
 import { sqrlInvariant } from "../api/parse";
 import { SqrlParserState } from "../compile/SqrlParserState";
-import { SqrlExecutionErrorProps } from "../execute/SqrlExecutionState";
+import {
+  SqrlExecutionErrorProps,
+  SqrlExecutionState
+} from "../execute/SqrlExecutionState";
 import { nice } from "node-nice";
 import hrtimeToNs from "../jslib/hrtimeToNs";
 import { getGlobalLogger } from "../api/log";
@@ -64,8 +67,13 @@ interface SafetyNetConfig {
   stateArg: boolean;
   vital: boolean;
 }
-function asyncSafetyNet(name: string, fn, config: SafetyNetConfig) {
-  const wrapped = bluebird.method(fn);
+function asyncSafetyNet(
+  name: string,
+  fn,
+  config: SafetyNetConfig
+): (state: SqrlExecutionState) => bluebird<any> {
+  // @TODO: We see a type error because
+  const wrapped: any = bluebird.method(fn);
   const { vital, stateArg } = config;
 
   const errorProps: SqrlExecutionErrorProps = { functionName: name };
@@ -78,9 +86,9 @@ function asyncSafetyNet(name: string, fn, config: SafetyNetConfig) {
     "async function [%s] requires state argument as it is likely to fail due to timeouts",
     name
   );
-  return function(state, ...args) {
+  return function(state) {
     return wrapped
-      .call(null, state, ...args)
+      .apply(null, arguments)
       .timeout(state.featureTimeout, `Timeout after ${state.featureTimeout}`)
       .catch(err => {
         state.logError(err, errorProps);
