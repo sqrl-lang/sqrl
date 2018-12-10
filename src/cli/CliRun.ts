@@ -12,6 +12,7 @@ import Semaphore from "../jslib/Semaphore";
 import * as split2 from "split2";
 import { CliActionOutput } from "./CliOutput";
 import { Context } from "../api/ctx";
+import { promiseFinally } from "../jslib/promiseFinally";
 
 export class CliRun {
   constructor(
@@ -84,15 +85,16 @@ export class CliRun {
       }
 
       // @todo: Perhaps we want to run serially to ensure output is more easily digestable
-      busy
-        .wrap(
+      promiseFinally(
+        busy.wrap(
           this.action(options.ctx, lineValues, options.features).catch(err => {
             console.error("Error: " + err.toString());
           })
-        )
-        .finally(() => {
+        ),
+        () => {
           stream.resume();
-        });
+        }
+      );
 
       if (concurrency && busy.getCount() === concurrency) {
         stream.pause();

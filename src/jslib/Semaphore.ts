@@ -13,6 +13,7 @@ import invariant from "./invariant";
 import pendingPromise, { PendingPromise } from "./pendingPromise";
 
 import isPromise from "./isPromise";
+import { promiseFinally } from "./promiseFinally";
 
 const MAX_TIMEOUT = 30000;
 
@@ -51,21 +52,19 @@ export default class Semaphore extends EventEmitter {
         isPromise(promise),
         "Semaphore withLock coroutine must return a promise"
       );
-      // Bluebird just required for `.finally`. Can get rid of it later.
-      return bluebird.resolve(promise).finally(() => {
+      return promiseFinally(promise, () => {
         this.decrement();
       });
     });
   }
 
-  wrap<T>(promise: Promise<T> | bluebird<T>): bluebird<T> {
+  wrap<T>(promise: Promise<T>): Promise<T> {
     invariant(
       this.max === null,
       "Cannot use wrap if semaphore has a max (might block)"
     );
     this.increment();
-    // Bluebird just required for `.finally`. Can get rid of it later.
-    return bluebird.resolve(promise).finally(() => {
+    return promiseFinally(promise, () => {
       this.decrement();
     });
   }

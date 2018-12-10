@@ -9,6 +9,7 @@
 import { docopt } from "docopt";
 import { cliMain, CliDoc, getCliOutput } from "./cli/CliMain";
 import { CloseableGroup } from "./jslib/Closeable";
+import { promiseFinally } from "./jslib/promiseFinally";
 
 const args = docopt(CliDoc, {
   version: 0.1
@@ -17,14 +18,17 @@ const args = docopt(CliDoc, {
 const output = getCliOutput(args);
 const closeables = new CloseableGroup();
 let exitCode = 1;
-cliMain(args, closeables, { output })
-  .catch(err => {
-    output.compileError(err);
-  })
-  .then(() => {
-    exitCode = 0;
-  })
-  .finally(() => {
+
+promiseFinally(
+  cliMain(args, closeables, { output })
+    .catch(err => {
+      output.compileError(err);
+    })
+    .then(() => {
+      exitCode = 0;
+    }),
+  () => {
     closeables.close();
     process.exit(exitCode);
-  });
+  }
+);
