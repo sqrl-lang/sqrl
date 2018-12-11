@@ -13,4 +13,4 @@ script:
   - npm run test:integration --coverage
   - "redis-cli get 'sqrl:test' | grep '^okay'"
 after_script:
-  - "cat packages/sqrl/coverage/lcov.info | ./node_modules/.bin/coveralls" # sends the coverage report to coveralls
+  - "cat coverage/lcov.info | ./node_modules/.bin/coveralls" # sends the coverage report to coveralls
