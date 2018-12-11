@@ -31,7 +31,7 @@ export interface RedisInterface {
     ctx: Context,
     key: Buffer,
     value: string,
-    mode?: null | "NX" | "XX"
+    mode?: "NX" | "XX"
   ): Promise<boolean>;
   getList(ctx: Context, key: Buffer): Promise<string[]>;
   listPush(
@@ -94,12 +94,7 @@ export class RedisService implements RedisInterface {
   async del(ctx: Context, ...keys: Buffer[]) {
     return this.conn.del(...keys);
   }
-  async set(
-    ctx: Context,
-    key: Buffer,
-    value: string,
-    mode: null | "NX" | "XX"
-  ) {
+  async set(ctx: Context, key: Buffer, value: string, mode?: "NX" | "XX") {
     const args = mode ? [mode] : [];
     const rv = await this.conn.set(key, value, ...args);
     if (rv === "OK") {

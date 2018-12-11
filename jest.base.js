@@ -1,0 +1,15 @@
+// Copyright 2018 Twitter, Inc.
+// Licensed under the Apache License, Version 2.0
+// http://www.apache.org/licenses/LICENSE-2.0
+
+module.exports = {
+  setupTestFrameworkScriptFile: "jest-extended",
+  transform: {
+    "\\.ts$": "ts-jest"
+  },
+  globals: {
+    __INTEGRATION__: false
+  },
+  moduleFileExtensions: ["ts", "js"],
+  testEnvironment: "node"
+};

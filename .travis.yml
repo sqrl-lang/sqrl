@@ -3,12 +3,14 @@ env:
   global:
     - SQRL_TEST_REDIS=localhost:6379
 node_js:
-  - 'node'
-  - '8'
-  - '10'
+  - "node"
+  - "8"
+  - "10"
 services:
   - redis-server
 script:
+  - npm run bootstrap
   - npm run test:integration --coverage
+  - "redis-cli get 'sqrl:test' | grep '^okay'"
 after_script:
-  - 'cat coverage/lcov.info | ./node_modules/.bin/coveralls' # sends the coverage report to coveralls
+  - "cat packages/sqrl/coverage/lcov.info | ./node_modules/.bin/coveralls" # sends the coverage report to coveralls

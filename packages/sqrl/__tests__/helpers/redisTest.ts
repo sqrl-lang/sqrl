@@ -24,13 +24,20 @@ export function redisTest(
         "Integration test requires SQRL_TEST_REDIS environment variable"
       );
       const redis = new RedisService(process.env.SQRL_TEST_REDIS);
-      const pingResult = await bluebird
-        .resolve(redis.ping(buildTestTrace()))
+      const setResult = await bluebird
+        .resolve(
+          redis.set(
+            buildTestTrace(),
+            Buffer.from("sqrl:test"),
+            `okay@${Date.now()}`
+          )
+        )
         .timeout(100)
         .catch(err => {
-          return "Redis ping failed: " + err.toString();
+          return "Redis write failed: " + err.toString();
         });
-      expect(pingResult).toEqual("PONG");
+      expect(setResult).toEqual(true);
+
       try {
         return await callback(redis);
       } finally {
