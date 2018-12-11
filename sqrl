@@ -3,17 +3,7 @@
 root="$(dirname $0)"
 pkg="$root/packages/sqrl"
 
-if [ ! -e "$root/node_modules" ]; then
-  echo 'Core dependencies not found!' >&2
-  echo 'Please run `npm install` first.' >&2
-  exit 1
-fi
-
-if [ ! -e "$pkg/node_modules" ]; then
-  echo 'SQRL package dependencies not found!' >&2
-  echo 'Please run `npm run bootstrap` first.' >&2
-  exit 1
-fi
+$root/scripts/ensure-installed
 
 export NODE_PATH="$pkg/node_modules:$NODE_PATH"
 exec node --require ts-node/register \

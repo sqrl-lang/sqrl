@@ -1,6 +1,8 @@
+Wikipedia SQRL Example
+======================
 
-To fetch articles in realtime and scan them:
-./stream-updates/main.js en.wikipedia.org | ../../sqrl -- run ./main.sqrl --stream=EventData
+To stream live data from wikipedia and run it against the SQRL files here, simply run:
+$ ./stream
 
-To batch process a days worth from a file, only highlighting the bad ones
+If you want to batch process days worth of data from a file, and only highlight bad entries
 cat wiki-data | ../../sqrl -- run ./main.sqrl --stream=EventData --only-blocked
