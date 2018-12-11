@@ -10,10 +10,5 @@ module.exports = {
   name: package.name,
   rootDir: "../..",
   setupTestFrameworkScriptFile: "jest-extended",
-  transform: {
-    "\\.ts$": "ts-jest"
-  },
   testRegex: `<rootDir>/packages/${package.name}/__tests__/.*\\.spec\\.ts$`,
-  moduleFileExtensions: ["ts", "js"],
-  testEnvironment: "node"
 };

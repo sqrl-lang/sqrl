@@ -1,7 +1,19 @@
 {
   "private": true,
   "name": "sqrl",
+  "hexo": {
+    "version": "3.8.0"
+  },
   "dependencies": {
+    "hexo": "^3.3.8",
+    "hexo-deployer-git": "^0.3.1",
+    "hexo-cli": "^1.0.3",
+    "hexo-renderer-ejs": "^0.2.0",
+    "hexo-renderer-less": "^0.2.0",
+    "hexo-renderer-marked": "^0.2.10",
+    "hexo-renderer-sass": "^0.3.2",
+    "hexo-server": "^0.2.1",
+    "hexo-theme-doc": "^0.1.0",
     "lerna": "^3.6.0"
   },
   "scripts": {
