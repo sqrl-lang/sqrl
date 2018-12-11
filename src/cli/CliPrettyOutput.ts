@@ -93,8 +93,11 @@ export class CliPrettyOutput extends CliActionOutput {
   }
 
   close() {
-    this.writeSummary();
-    clearInterval(this.summaryInterval);
+    if (this.summaryInterval) {
+      this.writeSummary();
+      clearInterval(this.summaryInterval);
+      this.summaryInterval = null;
+    }
   }
 
   compileError(err: Error) {
