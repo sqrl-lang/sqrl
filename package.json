@@ -21,6 +21,7 @@
     "test": "jest",
     "test:integration": "jest --config=jest.integration.config.js",
     "coverage": "jest --coverage",
+    "build": "lerna run build",
     "watch": "npm run build -- --watch",
     "watch:test": "npm run test -- --watch",
     "watch:test:integration": "npm run test:integration -- --watch"

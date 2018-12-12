@@ -12,8 +12,6 @@
     "inlineSourceMap": false,
     "typeRoots": ["./node_modules/@types"],
     "types": ["jest-extended"],
-    "rootDir": ".",
-
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,

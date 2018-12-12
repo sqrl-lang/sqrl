@@ -1,0 +1,68 @@
+{
+  "name": "sqrl-cli",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "homepage": "",
+  "bin": {
+    "sqrl": "lib/cli.js"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "author": {
+    "name": "Josh Yudaken",
+    "email": "josh@smyte.com"
+  },
+  "keywords": [
+    "sqrl"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib && rimraf coverage",
+    "cli": "ts-node src/cli.ts",
+    "docs": "typedoc --out docs --ignoreCompilerErrors --stripInternal --excludeExternals src/api/",
+    "format": "prettier --write \"{src,__tests__}/**/*.ts\"",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "build": "tsc --pretty",
+    "test": "jest",
+    "test:integration": "jest --config=jest.integration.config.js",
+    "coverage": "jest --coverage",
+    "watch": "npm run build -- --watch",
+    "watch:test": "npm run test -- --watch",
+    "watch:test:integration": "npm run test:integration -- --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.0.1",
+    "@types/node": "^8.10.38",
+    "jest": "^22.4.4",
+    "ts-jest": "^22.4.6",
+    "ts-node": "^5.0.1",
+    "typescript": "^3.1.6"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "@types/chokidar": "^1.7.5",
+    "chalk": "^2.4.1",
+    "chokidar": "^2.0.4",
+    "docopt": "^0.6.2",
+    "fast-stable-stringify": "^1.0.0",
+    "micro": "^9.3.2",
+    "micro-query": "^0.3.0",
+    "micro-route": "^2.5.0",
+    "moment": "^2.22.2",
+    "split2": "^3.0.0",
+    "sqrl": "0.0.0",
+    "sqrl-text-functions": "0.0.0",
+    "wait-for-sigint": "^0.1.0"
+  }
+}

@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import FunctionRegistry from "./FunctionRegistry";
-import { default as AT } from "../../src/ast/AstTypes";
+import { default as AT } from "../ast/AstTypes";
 import bluebird = require("bluebird");
 
 export function registerTimeFunctions(registry: FunctionRegistry) {

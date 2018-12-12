@@ -13,11 +13,11 @@ import isPromise from "../jslib/isPromise";
 import util = require("util");
 import { niceForEach } from "node-nice";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
-import { FeatureMap } from "../feature/FeatureTypes";
 import { RuleSpecMap } from "./LabelerSpec";
 import * as moment from "moment";
 import { isValidFeatureName } from "../feature/FeatureName";
 import { DatabaseSet, Context } from "../api/ctx";
+import { FeatureMap } from "../api/execute";
 
 export interface SqrlExecutionErrorProps {
   functionName?: string;

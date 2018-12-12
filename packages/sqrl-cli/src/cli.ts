@@ -8,8 +8,8 @@
 
 import { docopt } from "docopt";
 import { cliMain, CliDoc, getCliOutput } from "./cli/CliMain";
+import { promiseFinally } from "sqrl/lib/jslib/promiseFinally";
 import { CloseableGroup } from "./jslib/Closeable";
-import { promiseFinally } from "./jslib/promiseFinally";
 
 const args = docopt(CliDoc, {
   version: 0.1

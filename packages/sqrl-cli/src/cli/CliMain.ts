@@ -4,44 +4,44 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 // tslint:disable:no-console
-import { compileParserStateAst } from "../compile/SqrlCompile";
-import { SqrlParserState } from "../compile/SqrlParserState";
-import FunctionRegistry from "../function/FunctionRegistry";
+import { compileParserStateAst } from "sqrl/lib/compile/SqrlCompile";
+import { SqrlParserState } from "sqrl/lib/compile/SqrlParserState";
+import FunctionRegistry from "sqrl/lib/function/FunctionRegistry";
 import {
   registerAllFunctions,
   FunctionServices
-} from "../function/registerAllFunctions";
-import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
-import { SqrlExecutable } from "../execute/SqrlExecutable";
-import { FeatureMap } from "../feature/FeatureTypes";
-import invariant from "../jslib/invariant";
-import { createSqrlServer } from "../simple/SqrlServer";
-import { SqrlTest } from "../testing/SqrlTest";
-import { SqrlRepl } from "../repl/SqrlRepl";
+} from "sqrl/lib/function/registerAllFunctions";
+import { SqrlCompiledOutput } from "sqrl/lib/compile/SqrlCompiledOutput";
+import { SqrlExecutable } from "sqrl/lib/execute/SqrlExecutable";
+import { FeatureMap } from "sqrl/lib/feature/FeatureTypes";
+import invariant from "sqrl/lib/jslib/invariant";
+import { createSqrlServer } from "../SqrlServer";
+import { SqrlTest } from "sqrl/lib/testing/SqrlTest";
+import { SqrlRepl } from "sqrl/lib/repl/SqrlRepl";
 
-import { SimpleManipulator } from "../simple/SimpleManipulator";
-import { LocalFilesystem, Filesystem } from "../api/filesystem";
+import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
+import { LocalFilesystem, Filesystem } from "sqrl/lib/api/filesystem";
 import * as path from "path";
 import * as waitForSigint from "wait-for-sigint";
-import { LabelerSpec } from "../execute/LabelerSpec";
-import { SimpleBlockService } from "../simple/SimpleBlockService";
-import { AssertService } from "../function/AssertFunctions";
-import SqrlObject from "../object/SqrlObject";
-import { sqrlCompare } from "../function/ComparisonFunctions";
-import SqrlAst from "../ast/SqrlAst";
-import { StatementAst } from "../ast/Ast";
-import { buildServicesFromAddresses } from "../helpers/ServiceHelpers";
+import { LabelerSpec } from "sqrl/lib/execute/LabelerSpec";
+import { SimpleBlockService } from "sqrl/lib/simple/SimpleBlockService";
+import { AssertService } from "sqrl/lib/function/AssertFunctions";
+import SqrlObject from "sqrl/lib/object/SqrlObject";
+import { sqrlCompare } from "sqrl/lib/function/ComparisonFunctions";
+import SqrlAst from "sqrl/lib/ast/SqrlAst";
+import { StatementAst } from "sqrl/lib/ast/Ast";
+import { buildServicesFromAddresses } from "sqrl/lib/helpers/ServiceHelpers";
 import {
   executableFromSpec,
   sourceOptionsFromPath,
   sourceOptionsFromFilesystem
-} from "../helpers/CompileHelpers";
-import { createDefaultContext } from "../helpers/ContextHelpers";
-import { SimpleLogService } from "../simple/SimpleLogService";
-import { WatchedSourceTree } from "../cli/WatchedSourceTree";
-import { CliPrettyOutput } from "../cli/CliPrettyOutput";
-import { CliRun } from "../cli/CliRun";
-import Semaphore from "../jslib/Semaphore";
+} from "sqrl/lib/helpers/CompileHelpers";
+import { createDefaultContext } from "sqrl/lib/helpers/ContextHelpers";
+import { SimpleLogService } from "sqrl/lib/simple/SimpleLogService";
+import { WatchedSourceTree } from "./WatchedSourceTree";
+import { CliPrettyOutput } from "./CliPrettyOutput";
+import { CliRun } from "./CliRun";
+import Semaphore from "sqrl/lib/jslib/Semaphore";
 import {
   CliActionOutput,
   CliCsvOutput,
@@ -51,15 +51,18 @@ import {
   CliCompileOutput,
   CliExprOutput,
   CliSlotJsOutput
-} from "../cli/CliOutput";
-import { Context } from "../api/ctx";
-import { getGlobalLogger } from "../api/log";
-import { SimpleDatabaseSet } from "../platform/DatabaseSet";
-import { SimpleContext } from "../platform/Trace";
+} from "./CliOutput";
+import { Context } from "sqrl/lib/api/ctx";
+import { getGlobalLogger } from "sqrl/lib/api/log";
+import { SimpleDatabaseSet } from "sqrl/lib/platform/DatabaseSet";
+import { SimpleContext } from "sqrl/lib/platform/Trace";
 import { readFile } from "fs";
 import { promisify } from "util";
-import { CloseableGroup } from "../jslib/Closeable";
 import { Readable, Writable } from "stream";
+import { register as registerTextFunctions } from "sqrl-text-functions";
+import * as SQRL from "sqrl";
+import { CloseableGroup } from "../jslib/Closeable";
+
 const readFileAsync = promisify(readFile);
 
 export const CliDoc = `
@@ -215,6 +218,10 @@ function buildFunctionRegistry(
 
   const functionRegistry = new FunctionRegistry();
   registerAllFunctions(functionRegistry, services);
+
+  // @TODO: Need to work on how these additional functions get loaded
+  registerTextFunctions(new SQRL.FunctionRegistry(functionRegistry));
+
   return { functionRegistry, services };
 }
 

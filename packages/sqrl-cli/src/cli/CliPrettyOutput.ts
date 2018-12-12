@@ -3,14 +3,14 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlExecutionState } from "../execute/SqrlExecutionState";
+import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
 import * as moment from "moment";
 import chalk from "chalk";
-import { SimpleManipulator } from "../simple/SimpleManipulator";
-import { FeatureMap } from "../feature/FeatureTypes";
-import SqrlObject from "../object/SqrlObject";
+import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
+import { FeatureMap } from "sqrl/lib/feature/FeatureTypes";
+import SqrlObject from "sqrl/lib/object/SqrlObject";
 import * as util from "util";
-import { SqrlCompileError } from "../api/parse";
+import { SqrlCompileError } from "sqrl/lib/api/parse";
 import { CliOutputOptions, CliActionOutput } from "./CliOutput";
 
 const CHECKMARK = "\u2713";

@@ -9,7 +9,6 @@ import SqrlAst from "../ast/SqrlAst";
 import { SqrlParserState } from "../compile/SqrlParserState";
 
 import { StatementAst } from "../ast/Ast";
-import { FeatureMap } from "../feature/FeatureTypes";
 import { parseSqrl } from "../parser/SqrlParse";
 import FunctionRegistry from "../function/FunctionRegistry";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
@@ -17,6 +16,7 @@ import { JsExecutionContext } from "../execute/JsExecutionContext";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
 import { Filesystem } from "../api/filesystem";
 import { Context } from "../api/ctx";
+import { FeatureMap } from "../api/execute";
 
 const DEFAULT_FEATURE_TIMEOUT = 5000;
 

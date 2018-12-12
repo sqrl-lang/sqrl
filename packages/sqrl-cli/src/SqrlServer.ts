@@ -3,18 +3,16 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SimpleManipulator } from "./SimpleManipulator";
-import { SqrlExecutionState } from "../execute/SqrlExecutionState";
-import * as bluebird from "bluebird";
+import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
+import { SqrlExecutionState } from "sqrl/lib//execute/SqrlExecutionState";
 import * as micro from "micro";
 import * as microQuery from "micro-query";
-import { dispatch } from "micro-route";
-import * as zipObject from "lodash.zipobject";
-import { FeatureMap } from "../feature/FeatureTypes";
+// tslint:disable-next-line:no-submodule-imports (it is the documented suggestion)
+import * as dispatch from "micro-route/dispatch";
 import { IncomingMessage, ServerResponse } from "http";
-import SqrlExecutable from "../execute/SqrlExecutable";
-import { FiredRule } from "../function/WhenFunctions";
-import { Context } from "../api/ctx";
+import SqrlExecutable from "sqrl/lib/execute/SqrlExecutable";
+import { FiredRule } from "sqrl/lib/function/WhenFunctions";
+import { Context, FeatureMap } from "sqrl";
 
 function userInvariant(cond, message) {
   if (!cond) {
@@ -85,10 +83,14 @@ async function run(
   if (query.features) {
     const featureNames = query.features.split(",");
     try {
-      const values = await bluebird.map(featureNames, featureName =>
-        execution.fetchBasicByName(featureName)
+      rv.features = {};
+      await Promise.all(
+        featureNames.map(async featureName => {
+          rv.features[featureName] = await execution.fetchBasicByName(
+            featureName
+          );
+        })
       );
-      rv.features = zipObject(featureNames, values);
     } catch (e) {
       throw micro.createError(500, e.message, e);
     }

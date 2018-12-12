@@ -4,15 +4,15 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 // tslint:disable:no-console
-import { SqrlExecutable } from "../execute/SqrlExecutable";
-import { FeatureMap } from "../feature/FeatureTypes";
-import { SimpleManipulator } from "../simple/SimpleManipulator";
-import { SqrlExecutionState } from "../execute/SqrlExecutionState";
-import Semaphore from "../jslib/Semaphore";
+import { SqrlExecutable } from "sqrl/lib/execute/SqrlExecutable";
+import { FeatureMap } from "sqrl/lib/feature/FeatureTypes";
+import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
+import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
+import Semaphore from "sqrl/lib/jslib/Semaphore";
 import * as split2 from "split2";
 import { CliActionOutput } from "./CliOutput";
-import { Context } from "../api/ctx";
-import { promiseFinally } from "../jslib/promiseFinally";
+import { Context } from "sqrl/lib/api/ctx";
+import { promiseFinally } from "sqrl/lib/jslib/promiseFinally";
 
 export class CliRun {
   constructor(

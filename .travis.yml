@@ -10,6 +10,7 @@ services:
   - redis-server
 script:
   - npm run bootstrap
+  - npm run build
   - npm run test:integration -- --coverage
   - "redis-cli get 'sqrl:test' | grep '^okay'"
 after_script:

@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "../../src/function/FunctionRegistry";
+import FunctionRegistry from "../function/FunctionRegistry";
 import { default as AT } from "../ast/AstTypes";
 import { Ast, CallAst } from "../ast/Ast";
 

@@ -8,7 +8,7 @@ import { kafkaBufferHumanJson } from "../jslib/kafkaBufferHumanJson";
 import mapObject from "../jslib/mapObject";
 import SqrlKey from "../object/SqrlKey";
 import { WhenCause, FiredRule } from "../function/WhenFunctions";
-import { FeatureMap } from "../feature/FeatureTypes";
+import { FeatureMap } from "..";
 
 export class SimpleManipulator extends Manipulator {
   public sqrlKeys: Set<string> = new Set();

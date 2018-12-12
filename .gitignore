@@ -1,6 +1,7 @@
 *~
 .DS_Store
 .*.swp
+*.log
 .deploy*/
 .nyc_output
 coverage/

@@ -1,7 +1,8 @@
 #!/bin/bash
+set -eo pipefail
 
 root="$(dirname $0)"
-pkg="$root/packages/sqrl"
+pkg="$root/packages/sqrl-cli"
 
 $root/scripts/ensure-installed
 

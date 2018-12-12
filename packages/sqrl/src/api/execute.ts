@@ -8,22 +8,26 @@ import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { SqrlExecutable } from "../execute/SqrlExecutable";
 import { executableFromString as _executableFromString } from "../helpers/CompileHelpers";
 import { default as _FunctionRegistry } from "../function/FunctionRegistry";
-import { buildFunctionRegistry as _buildFunctionRegistry } from "../../__tests__/helpers/sqrlTest";
 import { Context } from "./ctx";
 import { Ast } from "../ast/Ast";
 import invariant from "../jslib/invariant";
 import { LogProperties } from "./log";
 import { CompileState } from "./parse";
+import { buildFunctionRegistryFromAddresses } from "../helpers/FunctionRegistryHelpers";
 
 export interface ExecutableOptions {
   functionRegistry: FunctionRegistry;
+}
+
+export interface FeatureMap {
+  [feature: string]: any;
 }
 
 /**
  * Build a function registry with the default functions included.
  */
 export function buildFunctionRegistry() {
-  return new FunctionRegistry(_buildFunctionRegistry());
+  return new FunctionRegistry(buildFunctionRegistryFromAddresses({}));
 }
 
 /**

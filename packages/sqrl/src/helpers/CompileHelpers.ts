@@ -11,7 +11,6 @@ import {
 import { basename, dirname } from "path";
 import { parseSqrl } from "../parser/SqrlParse";
 import FunctionRegistry from "../function/FunctionRegistry";
-import { FeatureMap } from "../feature/FeatureTypes";
 import SqrlExecutable from "../execute/SqrlExecutable";
 import { compileParserStateAst } from "../compile/SqrlCompile";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
@@ -20,6 +19,7 @@ import { JsExecutionContext } from "../execute/JsExecutionContext";
 import { StatementAst } from "../ast/Ast";
 import invariant from "../jslib/invariant";
 import { Context } from "../api/ctx";
+import { FeatureMap } from "../api/execute";
 
 export function statementsFromString(source: string): StatementAst[] {
   return parseSqrl(source).statements;
