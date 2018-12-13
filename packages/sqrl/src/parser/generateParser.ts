@@ -47,8 +47,8 @@ for (const rule of allowedStartRules) {
     "align"
   ].join(","),
   customHeader: `
-  import buildSqrlError from '../compile/buildSqrlError';
-  import {Ast, AstLocation, mapAst} from '../ast/Ast';
+  import { buildSqrlError } from '../compile/buildSqrlError';
+  import { Ast, AstLocation, mapAst } from '../ast/Ast';
   `.replace(/^ */gm, ""),
   returnTypes
 };

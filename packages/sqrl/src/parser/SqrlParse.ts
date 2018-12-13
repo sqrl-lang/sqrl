@@ -3,13 +3,49 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import SqrlAst from "../ast/SqrlAst";
-import { Ast, ScriptAst, ReplAst } from "../ast/Ast";
+import { Ast, ScriptAst, ReplAst, AstLocation } from "../ast/Ast";
 import mapObject from "../jslib/mapObject";
 import sqrlErrorWrap from "../compile/sqrlErrorWrap";
+import sqrl = require("../parser/sqrl");
+import { SqrlAstError } from "../api/parse";
+
+export function parse(
+  startRule: string,
+  queryText: string,
+  options: {
+    customFunctions?: Set<string>;
+    filename?: string;
+    location?: AstLocation;
+  } = {}
+): Ast {
+  const customFunctions: Set<string> = options.customFunctions || new Set();
+  const mergeLocation = (location: sqrl.IFileRange): AstLocation => {
+    return (
+      options.location ||
+      Object.assign({}, location, {
+        filename: options.filename || null,
+        source: queryText
+      })
+    );
+  };
+
+  try {
+    return sqrl.parse(queryText, {
+      customFunctions,
+      mergeLocation,
+      startRule
+    });
+  } catch (e) {
+    if (!(e instanceof sqrl.SyntaxError)) {
+      throw e;
+    }
+    const location = e.location ? mergeLocation(e.location) : null;
+    throw new SqrlAstError(e.message, location, queryText);
+  }
+}
 
 export function parseExpr(text: string): Ast {
-  let result: Ast = SqrlAst.parse("SqrlExpr", text);
+  let result: Ast = parse("SqrlExpr", text);
   while (result.type === "expr") {
     result = result.expr;
   }
@@ -17,7 +53,7 @@ export function parseExpr(text: string): Ast {
 }
 
 export function parseRepl(text: string, options = {}): ReplAst {
-  const ast = SqrlAst.parse("SqrlRepl", text, options);
+  const ast = parse("SqrlRepl", text, options);
   if (ast.type !== "repl") {
     throw new Error("Expected repl return type");
   }
@@ -28,7 +64,7 @@ export function parseSqrl(
   text: string,
   options: { filename?: string } = {}
 ): ScriptAst {
-  const ast = SqrlAst.parse("SqrlScript", text, options);
+  const ast = parse("SqrlScript", text, options);
   if (ast.type !== "script") {
     throw new Error("Expected script return type");
   }

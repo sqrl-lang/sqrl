@@ -7,11 +7,11 @@ import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
 import * as moment from "moment";
 import chalk from "chalk";
 import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
-import { FeatureMap } from "sqrl/lib/feature/FeatureTypes";
 import SqrlObject from "sqrl/lib/object/SqrlObject";
 import * as util from "util";
 import { SqrlCompileError } from "sqrl/lib/api/parse";
 import { CliOutputOptions, CliActionOutput } from "./CliOutput";
+import { FeatureMap } from "sqrl";
 
 const CHECKMARK = "\u2713";
 const CROSS = "\u2717";

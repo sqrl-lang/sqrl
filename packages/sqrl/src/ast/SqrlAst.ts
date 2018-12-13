@@ -6,7 +6,6 @@
 import invariant from "../jslib/invariant";
 import { foreachObject } from "../jslib/foreachObject";
 import murmurhash = require("murmurhash-native");
-import sqrl = require("../parser/sqrl");
 
 import { SqrlSlot } from "../slot/SqrlSlot";
 import {
@@ -27,7 +26,6 @@ import {
   IncludeAst
 } from "./Ast";
 import SqrlObject from "../object/SqrlObject";
-import { SqrlAstError } from "../api/parse";
 
 function invariantAst(ast: Ast): void {
   invariant(
@@ -42,38 +40,6 @@ const noop: NoopAst = {
 
 const SqrlAst = {
   SqrlSlot,
-
-  parse(
-    startRule: string,
-    queryText: string,
-    options: {
-      filename?: string;
-      location?: AstLocation;
-    } = {}
-  ): Ast {
-    const mergeLocation = (location: sqrl.IFileRange): AstLocation => {
-      return (
-        options.location ||
-        Object.assign({}, location, {
-          filename: options.filename || null,
-          source: queryText
-        })
-      );
-    };
-
-    try {
-      return sqrl.parse(queryText, {
-        mergeLocation,
-        startRule
-      });
-    } catch (e) {
-      if (!(e instanceof sqrl.SyntaxError)) {
-        throw e;
-      }
-      const location = e.location ? mergeLocation(e.location) : null;
-      throw new SqrlAstError(e.message, location, queryText);
-    }
-  },
 
   featureEquals(feature: string, val: any): BinaryExprAst {
     return {

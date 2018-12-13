@@ -66,6 +66,9 @@ jsonFields.aliasFeature = ["value", "alias"];
 recurseFields.countArgs = ["sumFeature", "features"];
 jsonFields.countArgs = ["timespan"];
 
+recurseFields.customCall = [];
+jsonFields.customCall = ["func", "source"];
+
 recurseFields.rules = ["rules"];
 jsonFields.rules = [];
 

@@ -39,11 +39,11 @@ import { LABELER_FEATURE_FUNCTION } from "../function/StdlibFunctions";
 import { Filesystem, EmptyFilesystem } from "../api/filesystem";
 import SqrlRuleSlot from "../slot/SqrlRuleSlot";
 import { RuleSpec } from "../execute/LabelerSpec";
-import { FeatureMap } from "../feature/FeatureTypes";
 import { AbstractLogger } from "../util/Logger";
 import { LogProperties, getGlobalLogger } from "../api/log";
 import { buildSqrlError } from "./buildSqrlError";
 import { sqrlInvariant } from "../api/parse";
+import { FeatureMap } from "../api/execute";
 
 export interface SqrlParserSourceOptions {
   statements: StatementAst[];

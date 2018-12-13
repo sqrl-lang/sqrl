@@ -18,6 +18,7 @@
   },
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
+    "clean": "lerna run clean",
     "test": "jest",
     "test:integration": "jest --config=jest.integration.config.js",
     "coverage": "jest --coverage",

@@ -1,7 +1,7 @@
 import { Writable, Readable } from "stream";
 import invariant from "sqrl/lib/jslib/invariant";
 import { cliMain, CliArgs } from "../../src/cli/CliMain";
-import { CloseableGroup } from "sqrl/lib/jslib/Closeable";
+import { CloseableGroup } from "../../src/jslib/Closeable";
 
 class StringBuffer extends Writable {
   public string: string = "";

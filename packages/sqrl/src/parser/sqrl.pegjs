@@ -195,6 +195,7 @@ CallExpr = (
   StreamingStatsCallExpr /
   SumCallExpr /
   TrendingCallExpr /
+  CustomCallExpr /
   SimpleCallExpr
 );
 
@@ -390,6 +391,14 @@ PercentileForCallExpr = func:PercentileForFunc _? "(" _? percentileArgs:Percenti
     location: loc()
   }
 }
+
+CustomCallExpr = func:Func &{ 
+  return options.customFunctions.has(func);
+} _? "(" _? source:CustomCallSource _? ")" {
+  return {type: 'customCall', func, source, location: loc()};
+}
+
+CustomCallSource = $((String / (![()] .) / "(" CustomCallSource ")")*);
 
 SimpleCallExpr = func:Func _? "(" _? args:ExprList? _? ")" {
   return {type: 'call', func: func, args: args || [], location: loc()};

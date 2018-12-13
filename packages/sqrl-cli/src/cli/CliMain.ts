@@ -13,7 +13,6 @@ import {
 } from "sqrl/lib/function/registerAllFunctions";
 import { SqrlCompiledOutput } from "sqrl/lib/compile/SqrlCompiledOutput";
 import { SqrlExecutable } from "sqrl/lib/execute/SqrlExecutable";
-import { FeatureMap } from "sqrl/lib/feature/FeatureTypes";
 import invariant from "sqrl/lib/jslib/invariant";
 import { createSqrlServer } from "../SqrlServer";
 import { SqrlTest } from "sqrl/lib/testing/SqrlTest";
@@ -62,6 +61,7 @@ import { Readable, Writable } from "stream";
 import { register as registerTextFunctions } from "sqrl-text-functions";
 import * as SQRL from "sqrl";
 import { CloseableGroup } from "../jslib/Closeable";
+import { FeatureMap } from "sqrl";
 
 const readFileAsync = promisify(readFile);
 

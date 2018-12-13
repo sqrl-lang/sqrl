@@ -8,9 +8,9 @@ import { SqrlExecutionState } from "./SqrlExecutionState";
 import { Manipulator } from "../platform/Manipulator";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
 import { LabelerSpec, RuleSpecMap } from "./LabelerSpec";
-import { FeatureMap } from "../feature/FeatureTypes";
 import { JsExecutionContext } from "./JsExecutionContext";
 import { Context } from "../api/ctx";
+import { FeatureMap } from "../api/execute";
 
 const DEFAULT_FEATURE_TIMEOUT_MS = 1000;
 function zipToObjects(keys: string[], objects: any) {

@@ -7,13 +7,12 @@
 
 import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
 import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
-import { FeatureMap } from "sqrl/lib/feature/FeatureTypes";
 import { SqrlCompiledOutput } from "sqrl/lib/compile/SqrlCompiledOutput";
 import { LabelerSpec } from "sqrl/lib/execute/LabelerSpec";
 import jsonStableStringify = require("fast-stable-stringify");
 import { createDefaultContext } from "sqrl/lib/helpers/ContextHelpers";
 import { Writable } from "stream";
-import { serializeExpr } from "sqrl";
+import { serializeExpr, FeatureMap } from "sqrl";
 
 export interface CliOutputOptions {
   stdout?: Writable;

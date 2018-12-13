@@ -202,6 +202,12 @@ export interface CallAst extends BaseAst {
   args: Ast[];
 }
 
+export interface CustomCallAst extends BaseAst {
+  type: "customCall";
+  func: string;
+  source: string;
+}
+
 export interface RegisteredCallAst extends BaseAst {
   type: "registeredCall";
   func: string;
@@ -281,6 +287,7 @@ export type StatementAst =
 
 export type Ast =
   | ConstantAst
+  | CustomCallAst
   | StateAst
   | SlotAst
   | NotAst
