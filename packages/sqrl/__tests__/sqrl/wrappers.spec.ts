@@ -18,12 +18,10 @@ test("wrappers work", async () => {
 
   const ctx = SQRL.createSimpleContext();
   const executable = await SQRL.executableFromString(
-    "LET X := concat('Hello ', world(), excl());",
-    {
-      functionRegistry
-    }
+    functionRegistry,
+    "LET X := concat('Hello ', world(), excl());"
   );
 
   const execution = await executable.execute(ctx);
-  await expect(execution.fetchFeature("X")).resolves.toEqual("Hello world!");
+  await expect(execution.fetchValue("X")).resolves.toEqual("Hello world!");
 });

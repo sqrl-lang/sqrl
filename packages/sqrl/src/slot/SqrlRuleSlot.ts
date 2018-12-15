@@ -9,7 +9,7 @@ import SqrlAst from "../ast/SqrlAst";
 import invariant from "../jslib/invariant";
 import { registerSlotClass, SerializedRuleSlot } from "./SerializedSlot";
 import { SqrlDocDefinition, CostProps, SqrlFeatureDoc } from "../doc/SqrlDoc";
-import { RuleSpec } from "../execute/LabelerSpec";
+import { RuleSpec } from "../api/ExecutableSpec";
 import { mapRegExpMatches } from "../jslib/mapRegExpMatches";
 import { buildDocDefinition } from "./SqrlFeatureSlot";
 

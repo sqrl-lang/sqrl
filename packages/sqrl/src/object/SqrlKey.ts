@@ -4,17 +4,17 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import SqrlNode from "./SqrlNode";
-import SqrlObject from "./SqrlObject";
+import { SqrlObject } from "./SqrlObject";
 
 import { bufferToHexEncodedAscii } from "../jslib/bufferToHexEncodedAscii";
 import invariant from "../jslib/invariant";
 import stringify = require("fast-stable-stringify");
-import chalk from "chalk";
-import { indent } from "../jslib/indent";
 import { timeToBuffer } from "../jslib/timeToBuffer";
 import { DatabaseSet } from "../api/ctx";
+import { RenderedSpan } from "sqrl-common";
+import { mkSpan, indentSpan } from "./span";
 
-export default class SqrlKey extends SqrlObject {
+export class SqrlKey extends SqrlObject {
   public shardValue: number;
   public buffer: Buffer;
 
@@ -53,16 +53,19 @@ export default class SqrlKey extends SqrlObject {
     );
   }
 
-  renderText() {
-    return chalk.grey(
-      `key {\n` +
-        `${chalk.blue(indent(this.counterNode.renderText(), 2))}\n` +
-        `  time: ${chalk.blue(new Date(this.timeMs).toISOString())}\n` +
-        `  features: ${chalk.blue(
-          this.featureValues ? stringify(this.featureValues) : "<none>"
-        )}\n` +
-        `}`
-    );
+  render(): RenderedSpan {
+    return mkSpan("type:key", [
+      mkSpan("", "key {\n"),
+      mkSpan("counter", [indentSpan(this.counterNode.render(), 2)]),
+      mkSpan("key:time", "\n  time: "),
+      mkSpan("value:time", new Date(this.timeMs).toISOString() + "\n"),
+      mkSpan("key:features", `  features: `),
+      mkSpan(
+        "value:features",
+        this.featureValues ? stringify(this.featureValues) : "<none>"
+      ),
+      mkSpan("", "\n}")
+    ]);
   }
 
   getHex(): string {

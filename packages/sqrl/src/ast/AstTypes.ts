@@ -10,30 +10,29 @@ import { Ast, CallAst } from "./Ast";
 import { isValidFeatureName } from "../feature/FeatureName";
 import mapToObj from "../jslib/mapToObj";
 import SqrlNode from "../object/SqrlNode";
-import { ensureArray } from "../jslib/ensureArray";
+import { ensureArray } from "sqrl-common";
+import {
+  StateArgument,
+  WhenContextArgument,
+  ArgumentCheck
+} from "../api/ArgumentCheck";
 
 // @TODO: The types in this file are pretty tough
 export type ArgsChecker = (ast: CallAst) => void;
 
-export interface CompileChecker {
-  (argAst: Ast, srcAst?: Ast, message?: string): void;
-
-  isStateArg?: boolean;
-}
-
-export type SpecialArgType = "state" | "whenContext";
-export const SPECIAL_ARG_TYPES = {
-  state: "state",
-  whenContext: "whenContext"
-};
+export type CompileCheckCallback = (
+  argAst: Ast,
+  srcAst?: Ast,
+  message?: string
+) => void;
 
 export interface RuntimeTypeChecker {
-  compileChecker: CompileChecker;
+  isOptional: boolean;
+  compileTimeCheck: CompileCheckCallback;
   runtimeChecker?: (value: any) => string | null;
-  specialArgType?: SpecialArgType;
 }
 
-export type AstArgs = ArgsChecker | RuntimeTypeChecker[];
+export type AstArgs = RuntimeTypeChecker[];
 
 export interface OptionalTypeChecker extends RuntimeTypeChecker {
   array: RuntimeTypeChecker;
@@ -43,7 +42,8 @@ export interface OptionalTypeChecker extends RuntimeTypeChecker {
   number: RuntimeTypeChecker;
   object: RuntimeTypeChecker;
   sqrlNode: RuntimeTypeChecker;
-  sqrlNodeOrArray: RuntimeTypeChecker;
+  sqrlNodeOrNodes: RuntimeTypeChecker;
+
   sqrlGeoPoint: RuntimeTypeChecker;
   string: RuntimeTypeChecker;
 }
@@ -74,7 +74,7 @@ const runtimeCheckers = {
   number: ensureRuntimeTypeOf("number"),
   object: ensureRuntimeTypeOf("object"),
   sqrlNode: ensureRuntimeInstanceOf(SqrlNode),
-  sqrlNodeOrArray: ensureRuntimeInstanceOf(SqrlNode, true),
+  sqrlNodeOrNodes: ensureRuntimeInstanceOf(SqrlNode, true),
   string: ensureRuntimeTypeOf("string")
 };
 
@@ -96,19 +96,13 @@ const compileCheckers = {
   },
   feature: ensureAstType("feature"),
   list: ensureAstType("list"),
-  state: createSpecialArg("state"),
-  whenContext: createSpecialArg("whenContext"),
+  state: new StateArgument(),
+  whenContext: new WhenContextArgument(),
   custom: typeChecker,
 
   compileTypesInvariant,
   validateRuntime
 };
-
-function createSpecialArg(type: SpecialArgType) {
-  const fn = typeChecker(() => true);
-  fn.specialArgType = type;
-  return fn;
-}
 
 function ensure(message, checker) {
   return typeChecker((argAst, srcAst?: Ast, typeMessage?: string) => {
@@ -203,14 +197,10 @@ function ensureObjectWithConstantKeys(ast?) {
   return keys;
 }
 
-function compileTypesInvariant(fnAst: CallAst, types: any) {
+function compileTypesInvariant(fnAst: CallAst, types: ArgumentCheck[]) {
   const { args } = fnAst;
 
-  if (!Array.isArray(types)) {
-    return types(fnAst);
-  }
-
-  const optArgs = types.filter(t => t._optional).length;
+  const optArgs = types.filter(t => t.isOptional).length;
   const maxArgs = types.length;
   const minArgs = maxArgs - optArgs;
   const providedArgs = args.length;
@@ -228,12 +218,12 @@ function compileTypesInvariant(fnAst: CallAst, types: any) {
   );
 
   for (let i = 0; i < types.length; i++) {
-    const checker = types[i];
-    checker.compileChecker(args[i], fnAst);
+    const checker: ArgumentCheck = types[i];
+    checker.compileTimeCheck(args[i], fnAst);
   }
 }
 
-function validateRuntime(fnArgs: any[], types: RuntimeTypeChecker[]) {
+function validateRuntime(fnArgs: any[], types: ArgumentCheck[]) {
   let errors = [];
   for (let i = 0; i < fnArgs.length; i++) {
     const checker = types[i];
@@ -253,28 +243,33 @@ function validateRuntime(fnArgs: any[], types: RuntimeTypeChecker[]) {
   return errors;
 }
 
-function createRuntimeCheckers(compileChecker: CompileChecker, _optional) {
+function createRuntimeCheckers(
+  compileTimeCheck: CompileCheckCallback,
+  isOptional: boolean
+) {
   return mapToObj(Object.keys(runtimeCheckers), (k?) => ({
-    compileChecker,
+    compileTimeCheck,
     runtimeChecker: runtimeCheckers[k],
-    _optional
+    isOptional
   }));
 }
 
-function typeChecker(compileChecker: CompileChecker): TypeChecker {
+function typeChecker(compileTimeCheck: CompileCheckCallback): TypeChecker {
   const o = Object.assign(
     {
-      compileChecker,
-      _optional: false
+      compileTimeCheck,
+      isOptional: false
     },
-    createRuntimeCheckers(compileChecker, false)
+    createRuntimeCheckers(compileTimeCheck, false)
   );
 
   o.optional = Object.assign(
     {},
     o,
-    { _optional: true },
-    createRuntimeCheckers(compileChecker, true)
+    {
+      isOptional: true
+    },
+    createRuntimeCheckers(compileTimeCheck, true)
   );
 
   return o;

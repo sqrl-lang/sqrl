@@ -3,17 +3,6 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-/**
- * Helper class to construct new Ast objects
- */
-export class AstBuilder {
-  static constant(value: any): ConstantAst {
-    return {
-      type: "constant",
-      value
-    };
-  }
-}
 
 /**
  * Indicates the location of the Ast within source code

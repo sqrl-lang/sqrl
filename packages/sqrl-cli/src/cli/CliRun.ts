@@ -4,25 +4,22 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 // tslint:disable:no-console
-import { SqrlExecutable } from "sqrl/lib/execute/SqrlExecutable";
+// tslint:disable:no-submodule-imports (@TODO)
 import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
-import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
 import Semaphore from "sqrl/lib/jslib/Semaphore";
 import * as split2 from "split2";
 import { CliActionOutput } from "./CliOutput";
 import { Context } from "sqrl/lib/api/ctx";
 import { promiseFinally } from "sqrl/lib/jslib/promiseFinally";
-import { FeatureMap } from "sqrl";
+import { FeatureMap, Executable, Execution } from "sqrl";
 
 export class CliRun {
   constructor(
-    private executable: SqrlExecutable,
+    private executable: Executable,
     private output: CliActionOutput
   ) {}
 
-  triggerRecompile(
-    compileCallback: () => Promise<SqrlExecutable>
-  ): Promise<void> {
+  triggerRecompile(compileCallback: () => Promise<Executable>): Promise<void> {
     this.output.sourceRecompiling();
     return compileCallback()
       .then(rv => {
@@ -36,24 +33,21 @@ export class CliRun {
 
   async action(trc: Context, inputs: FeatureMap, features: string[]) {
     const manipulator = new SimpleManipulator();
-    const execution: SqrlExecutionState = await this.executable.startExecution(
-      trc,
-      {
-        featureTimeoutMs: 10000,
-        inputs,
-        manipulator
-      }
-    );
+    const execution: Execution = await this.executable.execute(trc, {
+      featureTimeoutMs: 10000,
+      inputs,
+      manipulator
+    });
 
     const loggedFeatures = {};
     await Promise.all(
       features.map(async featureName => {
-        const value = await execution.fetchByName(featureName);
+        const value = await execution.fetchValue(featureName);
         loggedFeatures[featureName] = value;
       })
     );
 
-    await execution.fetchBasicByName("SqrlExecutionComplete");
+    await execution.fetchFeature("SqrlExecutionComplete");
     await manipulator.mutate(trc);
 
     this.output.action(manipulator, execution, loggedFeatures);

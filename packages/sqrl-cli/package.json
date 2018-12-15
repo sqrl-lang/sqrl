@@ -1,6 +1,6 @@
 {
   "name": "sqrl-cli",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "> TODO: description",
   "homepage": "",
   "bin": {
@@ -55,14 +55,18 @@
     "chalk": "^2.4.1",
     "chokidar": "^2.0.4",
     "docopt": "^0.6.2",
+    "eventemitter3": "^3.1.0",
+    "expand-tilde": "^2.0.2",
     "fast-stable-stringify": "^1.0.0",
     "micro": "^9.3.2",
     "micro-query": "^0.3.0",
     "micro-route": "^2.5.0",
     "moment": "^2.22.2",
     "split2": "^3.0.0",
-    "sqrl": "0.0.0",
-    "sqrl-text-functions": "0.0.0",
+    "sqrl": "file:../sqrl",
+    "sqrl-common": "file:../sqrl-common",
+    "sqrl-redis-functions": "file:../sqrl-redis-functions",
+    "sqrl-text-functions": "file:../sqrl-text-functions",
     "wait-for-sigint": "^0.1.0"
   }
 }

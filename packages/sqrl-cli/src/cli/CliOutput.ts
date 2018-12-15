@@ -6,13 +6,16 @@
 // tslint:disable:no-console
 
 import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
-import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
-import { SqrlCompiledOutput } from "sqrl/lib/compile/SqrlCompiledOutput";
-import { LabelerSpec } from "sqrl/lib/execute/LabelerSpec";
 import jsonStableStringify = require("fast-stable-stringify");
-import { createDefaultContext } from "sqrl/lib/helpers/ContextHelpers";
 import { Writable } from "stream";
-import { serializeExpr, FeatureMap } from "sqrl";
+import {
+  serializeExpr,
+  FeatureMap,
+  Execution,
+  ExecutableCompiler,
+  ExecutableSpec,
+  createSimpleContext
+} from "sqrl";
 
 export interface CliOutputOptions {
   stdout?: Writable;
@@ -40,15 +43,15 @@ export abstract class CliOutput {
 
 export abstract class CliCompileOutput extends CliOutput {
   abstract compiled(
-    spec: LabelerSpec,
-    compiledOutput: SqrlCompiledOutput
+    spec: ExecutableSpec,
+    compiledOutput: ExecutableCompiler
   ): Promise<void>;
 }
 
 export class CliExprOutput extends CliCompileOutput {
-  async compiled(spec: LabelerSpec, compiledOutput: SqrlCompiledOutput) {
-    const { slotNames, slotExprs } = await compiledOutput.fetchBuildOutput(
-      createDefaultContext()
+  async compiled(spec: ExecutableSpec, compiledOutput: ExecutableCompiler) {
+    const { slotNames, slotExprs } = await compiledOutput.buildExprs(
+      createSimpleContext()
     );
     this.stdout.write(
       jsonStableStringify({
@@ -60,7 +63,7 @@ export class CliExprOutput extends CliCompileOutput {
 }
 
 export class CliSlotJsOutput extends CliCompileOutput {
-  async compiled(spec: LabelerSpec, compiledOutput: SqrlCompiledOutput) {
+  async compiled(spec: ExecutableSpec, compiledOutput: ExecutableCompiler) {
     console.log(jsonStableStringify(spec));
   }
 }
@@ -69,7 +72,7 @@ export abstract class CliActionOutput extends CliOutput {
   abstract startStream();
   abstract action(
     manipulator: SimpleManipulator,
-    execution: SqrlExecutionState,
+    execution: Execution,
     loggedFeatures: FeatureMap
   );
 }
@@ -83,7 +86,7 @@ export class CliJsonOutput extends CliActionOutput {
   }
   action(
     manipulator: SimpleManipulator,
-    execution: SqrlExecutionState,
+    execution: Execution,
     loggedFeatures: FeatureMap
   ) {
     if (this.options.onlyBlocked) {
@@ -104,7 +107,7 @@ export class CliCsvOutput extends CliActionOutput {
   }
   action(
     manipulator: SimpleManipulator,
-    execution: SqrlExecutionState,
+    execution: Execution,
     loggedFeatures: FeatureMap
   ) {
     if (this.options.onlyBlocked) {

@@ -3,12 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "../../src/function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
 import { default as AT } from "../../src/ast/AstTypes";
 import { SqrlExecutionState } from "../../src/execute/SqrlExecutionState";
-import { Manipulator } from "../../src/platform/Manipulator";
+import { Manipulator } from "../../src/api/Manipulator";
 
-export function registerTestFunctions(registry: FunctionRegistry) {
+export function registerTestFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
     function getSqrlOutput(state: SqrlExecutionState) {
       const manipulator: Manipulator = state.manipulator as any;

@@ -13,7 +13,7 @@ import {
   IfExpr,
   CallExpr
 } from "../expr/Expr";
-import FunctionRegistry from "../function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
 
 class ConstantJsExpr {
   usedPromise: boolean = false;
@@ -68,7 +68,7 @@ class JsState {
   constants: ConstantJsExpr[];
   iterator: boolean;
 
-  constructor(public functionRegistry: FunctionRegistry) {
+  constructor(public functionRegistry: SqrlFunctionRegistry) {
     this.functionsJs = [];
     this.constants = [];
     this.iterator = false;
@@ -348,7 +348,7 @@ function exprToJs(expr: Expr, state: JsState): JsExpr {
 }
 
 export const SqrlJs = {
-  generateExpr(functionRegistry: FunctionRegistry, expr: Expr) {
+  generateExpr(functionRegistry: SqrlFunctionRegistry, expr: Expr) {
     const state = new JsState(functionRegistry);
     const js = exprToJs(expr, state);
     return state.buildExpr(js);

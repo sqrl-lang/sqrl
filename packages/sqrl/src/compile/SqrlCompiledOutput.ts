@@ -12,7 +12,7 @@ import { SqrlInputSlot } from "../slot/SqrlSlot";
 import invariant from "../jslib/invariant";
 import { isValidFeatureName } from "../feature/FeatureName";
 import { compileParserStateAst } from "./SqrlCompile";
-import { LabelerSpec } from "../execute/LabelerSpec";
+import { ExecutableSpec } from "../api/ExecutableSpec";
 import { Context } from "../api/ctx";
 import { buildSqrlError } from "../api/parse";
 
@@ -202,8 +202,8 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
       Object.values(this.slots).forEach(slot => recurseUsedSlot(slot));
     }
 
-    const usedSlotNames: (string | null)[] = slotNames.map(
-      name => (this.slots.hasOwnProperty(name) ? name : null)
+    const usedSlotNames: (string | null)[] = slotNames.map(name =>
+      this.slots.hasOwnProperty(name) ? name : null
     );
 
     return { slotNames, usedSlotNames };
@@ -268,7 +268,10 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     });
   }
 
-  async buildLabelerSpec(ctx: Context, options: {} = {}): Promise<LabelerSpec> {
+  async buildLabelerSpec(
+    ctx: Context,
+    options: {} = {}
+  ): Promise<ExecutableSpec> {
     const {
       slotNames,
       slotExprs,

@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 
 import { default as AT } from "../ast/AstTypes";
 import crypto = require("crypto");
@@ -27,7 +27,7 @@ function arrayMath(callback, values, defaultValue = null) {
   return isNaN(result) ? null : result;
 }
 
-export function registerMathFunctions(registry: FunctionRegistry) {
+export function registerMathFunctions(registry: SqrlFunctionRegistry) {
   const safeMathOpts = {
     argCount: 2,
     pure: true,

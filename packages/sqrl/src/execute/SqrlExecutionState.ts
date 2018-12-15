@@ -3,8 +3,8 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Manipulator } from "../platform/Manipulator";
-import SqrlObject from "../object/SqrlObject";
+import { Manipulator } from "../api/Manipulator";
+import { SqrlObject } from "../object/SqrlObject";
 
 import bluebird = require("bluebird");
 import { foreachObject } from "../jslib/foreachObject";
@@ -13,11 +13,13 @@ import isPromise from "../jslib/isPromise";
 import util = require("util");
 import { niceForEach } from "node-nice";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
-import { RuleSpecMap } from "./LabelerSpec";
+import { RuleSpecMap } from "../api/ExecutableSpec";
 import * as moment from "moment";
 import { isValidFeatureName } from "../feature/FeatureName";
 import { DatabaseSet, Context } from "../api/ctx";
-import { FeatureMap } from "../api/execute";
+import { FeatureMap, Execution } from "../api/execute";
+import { SqrlBoxed } from "../api/SqrlBoxed";
+import { SourcePrinter } from "../api/executable";
 
 export interface SqrlExecutionErrorProps {
   functionName?: string;
@@ -39,7 +41,7 @@ export class SlotMissingCallbackError extends Error {
   }
 }
 
-export class SqrlExecutionState {
+export class SqrlExecutionState implements Execution {
   slots: bluebird<any>[];
   names: string[];
   functionCache;
@@ -52,8 +54,6 @@ export class SqrlExecutionState {
   public databaseSet: DatabaseSet | null;
   private clockMs: number = null;
   public ruleSpecs: RuleSpecMap;
-
-  /** @hidden */
   public ctx: Context;
 
   _fetch: (slot: number) => bluebird<any>;
@@ -114,9 +114,33 @@ export class SqrlExecutionState {
     );
     this.clockMs = clockMoment.valueOf();
   }
+
+  /**
+   * Get the source code printer for the executable.
+   */
+  getSourcePrinter(): SourcePrinter {
+    return this.sourcePrinter;
+  }
+
   getClock() {
     invariant(this.clockMs !== null, "Clock not fetched or unavailable");
     return this.clockMs;
+  }
+
+  getClockMs() {
+    return this.getClock();
+  }
+
+  async fetchFeature(featureName: string): Promise<SqrlObject> {
+    const value = await this.fetchByName(featureName);
+    if (value instanceof SqrlObject) {
+      return value;
+    } else {
+      return new SqrlBoxed(value);
+    }
+  }
+  fetchValue(featureName: string): Promise<any> {
+    return Promise.resolve(this.fetchBasicByName(featureName));
   }
 
   // @TODO: Deprecate in place of cacheAccessor

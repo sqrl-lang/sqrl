@@ -3,19 +3,18 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { Ast, CallAst } from "../ast/Ast";
 
 import invariant from "../jslib/invariant";
 import { SqrlParserState } from "../compile/SqrlParserState";
-import { sqrlInvariant } from "../api/parse";
+import { sqrlInvariant, buildSqrlError } from "../api/parse";
 import SqrlAst from "../ast/SqrlAst";
-import { buildSqrlError } from "../api/parse";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 
 export const LABELER_FEATURE_FUNCTION = "input";
 
-export function registerStdlibFunctions(registry: FunctionRegistry) {
+export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
   registry.save(function functionList() {
     return Object.keys(registry.functionProperties).filter(
       func => !func.startsWith("_")

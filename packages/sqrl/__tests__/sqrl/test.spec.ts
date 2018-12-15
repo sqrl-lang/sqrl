@@ -3,16 +3,16 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "../../src/function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlTest } from "../../src/testing/SqrlTest";
-import { JestAssertService } from "../helpers/JestAssert";
+import { JestAssertService } from "sqrl-test-utils";
 import { SimpleDatabaseSet } from "../../src/platform/DatabaseSet";
 import { SimpleContext } from "../../src/platform/Trace";
 import { getGlobalLogger } from "../../src/api/log";
 
 test("Basic test works", async () => {
-  const functionRegistry = new FunctionRegistry();
+  const functionRegistry = new SqrlFunctionRegistry();
   registerAllFunctions(functionRegistry, {
     assert: new JestAssertService()
   });

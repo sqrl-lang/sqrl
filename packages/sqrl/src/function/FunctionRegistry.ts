@@ -3,9 +3,9 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { default as AT, AstArgs, SPECIAL_ARG_TYPES } from "../ast/AstTypes";
+import { default as AT } from "../ast/AstTypes";
 import { Ast, CallAst } from "../ast/Ast";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 
 import bluebird = require("bluebird");
 import isPromise from "../jslib/isPromise";
@@ -19,6 +19,11 @@ import {
 import { nice } from "node-nice";
 import hrtimeToNs from "../jslib/hrtimeToNs";
 import { getGlobalLogger } from "../api/log";
+import {
+  WhenContextArgument,
+  StateArgument,
+  ArgumentCheck
+} from "../api/ArgumentCheck";
 
 const AsyncFunction = Object.getPrototypeOf(async function() {
   /* intentional */
@@ -28,7 +33,7 @@ export interface SaveFunctionProperties {
   allowNull?: boolean;
   allowSqrlObjects?: boolean;
   argCount?: number;
-  args?: AstArgs;
+  args?: ArgumentCheck[];
   async?: boolean;
   asyncSafe?: boolean;
   docstring?: string;
@@ -140,7 +145,7 @@ function syncSafetyNet(name: string, fn, config: SafetyNetConfig) {
   }
 }
 
-export default class FunctionRegistry {
+export class SqrlFunctionRegistry {
   // Use integers for calculation
   static intCostMultiplier = 100000;
 
@@ -291,19 +296,15 @@ export default class FunctionRegistry {
         "The .stateArg argument is not valid together with .args"
       );
       props.args.forEach((arg, idx) => {
-        if (arg.specialArgType) {
-          if (arg.specialArgType === SPECIAL_ARG_TYPES.state) {
-            invariant(idx === 0, "State argument must be the first argument");
-            stateArg = true;
-          } else if (arg.specialArgType === SPECIAL_ARG_TYPES.whenContext) {
-            invariant(
-              idx === 1 && stateArg === true,
-              "WhenContext argument must be the second argument, with state as the first"
-            );
-            whenContextArg = true;
-          } else {
-            throw new Error("Unknown special argument type");
-          }
+        if (arg instanceof StateArgument) {
+          invariant(idx === 0, "State argument must be the first argument");
+          stateArg = true;
+        } else if (arg instanceof WhenContextArgument) {
+          invariant(
+            idx === 1 && stateArg === true,
+            "WhenContext argument must be the second argument, with state as the first"
+          );
+          whenContextArg = true;
         }
       });
     }

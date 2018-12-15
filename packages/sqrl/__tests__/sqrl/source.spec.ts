@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { runSqrl } from "../helpers/sqrlTest";
+import { runSqrlTest } from "../../src/testing/runSqrlTest";
 
 function cleanSource(source) {
   const lines = source.split("\n");
@@ -33,7 +33,7 @@ function sourceTemplate(strings: TemplateStringsArray, ...args: any[]): string {
 }
 
 test("saves features", async () => {
-  await runSqrl(sourceTemplate`
+  await runSqrlTest(sourceTemplate`
     LET Result := 5;
     ASSERT source(Result) = ${`
       function() {

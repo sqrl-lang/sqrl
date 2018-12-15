@@ -3,12 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { default as AT } from "../ast/AstTypes";
 
 import flatten from "../jslib/flatten";
 import invariant from "../jslib/invariant";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 
 function _isStringOrArray(v?) {
   return typeof v === "string" || Array.isArray(v);
@@ -21,7 +21,7 @@ function tryEnsureNumberArray(arr?) {
   return arr.filter((value?) => typeof value === "number");
 }
 
-export function registerArrayFunctions(registry: FunctionRegistry) {
+export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
     function dedupe(arr) {
       if (!Array.isArray(arr)) {

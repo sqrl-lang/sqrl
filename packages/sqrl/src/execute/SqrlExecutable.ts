@@ -5,9 +5,9 @@
  */
 import { SqrlExecutionState } from "./SqrlExecutionState";
 
-import { Manipulator } from "../platform/Manipulator";
+import { Manipulator } from "../api/Manipulator";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
-import { LabelerSpec, RuleSpecMap } from "./LabelerSpec";
+import { ExecutableSpec, RuleSpecMap } from "../api/ExecutableSpec";
 import { JsExecutionContext } from "./JsExecutionContext";
 import { Context } from "../api/ctx";
 import { FeatureMap } from "../api/execute";
@@ -44,7 +44,7 @@ export class SqrlExecutable {
   // Array of slots required in order to run the labeler
   requiredSlots: number[];
 
-  constructor(executionContext: JsExecutionContext, props: LabelerSpec) {
+  constructor(executionContext: JsExecutionContext, props: ExecutableSpec) {
     const { slotNames, slotJs } = props;
 
     this.ruleSpecs = props.ruleSpec;

@@ -25,7 +25,7 @@ import {
   SqrlEmptySlot,
   SqrlInputSlot
 } from "../slot/SqrlSlot";
-import FunctionRegistry from "../function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
 import invariant from "../jslib/invariant";
 import mapObject from "../jslib/mapObject";
 import { SerializedSlot, deserializeSlot } from "../slot/SerializedSlot";
@@ -38,7 +38,7 @@ import { NodeId } from "../platform/NodeId";
 import { LABELER_FEATURE_FUNCTION } from "../function/StdlibFunctions";
 import { Filesystem, EmptyFilesystem } from "../api/filesystem";
 import SqrlRuleSlot from "../slot/SqrlRuleSlot";
-import { RuleSpec } from "../execute/LabelerSpec";
+import { RuleSpec } from "../api/ExecutableSpec";
 import { AbstractLogger } from "../util/Logger";
 import { LogProperties, getGlobalLogger } from "../api/log";
 import { buildSqrlError } from "./buildSqrlError";
@@ -53,7 +53,7 @@ export interface SqrlParserSourceOptions {
 export interface SqrlParserOptions {
   statements: StatementAst[];
   filesystem?: Filesystem;
-  functionRegistry: FunctionRegistry;
+  functionRegistry: SqrlFunctionRegistry;
   allowAssertions?: boolean;
   allowPrivate?: boolean;
   baseLibrary?: string;
@@ -84,7 +84,7 @@ export abstract class SqrlParseInfo extends AbstractLogger {
   baseLibrary: string;
   allowAssertions: boolean;
   allowPrivate: boolean;
-  functionRegistry: FunctionRegistry;
+  functionRegistry: SqrlFunctionRegistry;
   importer: SqrlImporter;
   filesystem: Filesystem;
   remainingInputs: FeatureMap;
@@ -175,7 +175,7 @@ export class SqrlParserState extends SqrlParseInfo {
   globalWhere: Ast = SqrlAst.constant(true);
   currentIterator: string | null = null;
 
-  functionRegistry: FunctionRegistry;
+  functionRegistry: SqrlFunctionRegistry;
   usedFiles: Set<string> = new Set();
 
   constructor(options: SqrlParserOptions, serialized: SqrlSerialized = null) {
@@ -404,14 +404,17 @@ export class SqrlParserState extends SqrlParseInfo {
       globalName
     );
 
+    this.addStatementSlot(globalName, slotAst);
+
+    return slotAst;
+  }
+
+  addStatementSlot(globalName: string, slotAst: SlotAst) {
     const slot = this.slots[globalName];
     if (!(slot instanceof SqrlStatementSlot)) {
       throw new Error("Expected statement slot: " + globalName);
     }
-
     slot.addWait(slotAst.slotName);
-
-    return slotAst;
   }
 
   newGlobal(sourceAst: Ast, ast: Ast, name: string = null): SlotAst {

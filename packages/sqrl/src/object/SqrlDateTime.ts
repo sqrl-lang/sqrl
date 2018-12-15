@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import SqrlObject from "./SqrlObject";
+import { SqrlObject } from "./SqrlObject";
 
 export default class SqrlDateTime extends SqrlObject {
   isoString: string;

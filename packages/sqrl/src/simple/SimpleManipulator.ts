@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Manipulator, ManipulatorCallback } from "../platform/Manipulator";
+import { Manipulator, ManipulatorCallback } from "../api/Manipulator";
 import { kafkaBufferHumanJson } from "../jslib/kafkaBufferHumanJson";
 import mapObject from "../jslib/mapObject";
-import SqrlKey from "../object/SqrlKey";
+import { SqrlKey } from "../object/SqrlKey";
 import { WhenCause, FiredRule } from "../function/WhenFunctions";
 import { FeatureMap } from "..";
 

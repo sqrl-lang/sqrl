@@ -4,7 +4,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import invariant from "../jslib/invariant";
-import { foreachObject } from "../jslib/foreachObject";
 import murmurhash = require("murmurhash-native");
 
 import { SqrlSlot } from "../slot/SqrlSlot";
@@ -25,7 +24,8 @@ import {
   BinaryExprAst,
   IncludeAst
 } from "./Ast";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
+import { AstBuilder } from "../api/AstBuilder";
 
 function invariantAst(ast: Ast): void {
   invariant(
@@ -109,55 +109,13 @@ const SqrlAst = {
   },
 
   and(...asts: Ast[]): Ast {
-    invariant(asts.length > 0, "SqrlAst.and requires atleast one ast");
-    let result: Ast = SqrlAst.constant(true);
-    for (let idx = asts.length - 1; idx >= 0; idx--) {
-      const ast: Ast = asts[idx];
-      invariantAst(ast);
-      if (ast.type === "constant") {
-        if (ast.value) {
-          continue;
-        } else {
-          return SqrlAst.constant(false);
-        }
-      } else {
-        result = SqrlAst.isConstantTrue(result)
-          ? ast
-          : {
-              type: "boolean_expr",
-              operator: "and",
-              left: ast,
-              right: result
-            };
-      }
-    }
-    return result;
+    asts.forEach(ast => invariantAst(ast));
+    return AstBuilder.and(asts);
   },
 
   or(...asts: Ast[]): Ast {
-    invariant(asts.length > 0, "SqrlAst.or requires atleast one ast");
-    let result: Ast = SqrlAst.constant(false);
-    for (let idx = asts.length - 1; idx >= 0; idx--) {
-      const ast: Ast = asts[idx];
-      invariantAst(ast);
-      if (ast.type === "constant") {
-        if (!ast.value) {
-          continue;
-        } else {
-          return SqrlAst.constant(true);
-        }
-      } else {
-        result = SqrlAst.isExactConstant(result, false)
-          ? ast
-          : {
-              type: "boolean_expr",
-              operator: "or",
-              left: ast,
-              right: result
-            };
-      }
-    }
-    return result;
+    asts.forEach(ast => invariantAst(ast));
+    return AstBuilder.or(asts);
   },
 
   not(ast: Ast): NotAst {
@@ -211,10 +169,7 @@ const SqrlAst = {
     return values.map(SqrlAst.constant);
   },
   list(...exprs: Ast[]): ListAst {
-    return {
-      type: "list",
-      exprs
-    };
+    return AstBuilder.list(exprs);
   },
   registerCall(ast) {
     invariant(ast.type === "call", "must be call");
@@ -268,23 +223,14 @@ const SqrlAst = {
   },
   props(obj) {
     invariant(typeof obj === "object", "Expected object for SqrlAst.props");
-    const args = [];
-    foreachObject(obj, (ast, key) => {
-      args.push(SqrlAst.constant(key), ast);
-    });
-    return SqrlAst.call("dataObject", args);
+    return AstBuilder.props(obj);
   },
   branch(condition: Ast, trueBranch: Ast, falseBranch: Ast = null): Ast {
     falseBranch = falseBranch || SqrlAst.constant(null);
     if (condition.type === "constant") {
       return SqrlObject.isTruthy(condition.value) ? trueBranch : falseBranch;
     }
-    return {
-      type: "if",
-      condition,
-      trueBranch,
-      falseBranch
-    };
+    return AstBuilder.branch(condition, trueBranch, falseBranch);
   },
   branchOrNull(condition: Ast, trueBranch: Ast) {
     return SqrlAst.branch(condition, trueBranch, SqrlAst.constant(null));

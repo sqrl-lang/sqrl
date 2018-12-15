@@ -8,5 +8,5 @@ module.exports = {
   ...base,
   projects: ["packages/sqrl/jest.config.js"],
   coverageDirectory: "<rootDir>/coverage/",
-  testRegex: `.*\\.spec\\.ts$`
+  testRegex: `.*/__tests__/.*\\.spec\\.ts$`
 };

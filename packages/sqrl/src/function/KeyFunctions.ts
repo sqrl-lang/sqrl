@@ -3,17 +3,17 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 
-import SqrlKey from "../object/SqrlKey";
+import { SqrlKey } from "../object/SqrlKey";
 
 import { murmurhashJsonBuffer } from "../jslib/murmurhashJson";
-import sqrlValueCartesianProduct from "../jslib/sqrlValueCartesianProduct";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 import { nice } from "node-nice";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import SqrlNode from "../object/SqrlNode";
 import { Context } from "../api/ctx";
+import { sqrlCartesianProduct } from "sqrl-common";
 
 export async function buildKey40(
   ctx: Context,
@@ -66,13 +66,13 @@ async function getKeyList(
   }
 
   return Promise.all(
-    sqrlValueCartesianProduct(featureValues, {
+    sqrlCartesianProduct(featureValues, {
       maxArrays: 1
     }).map(values => buildKey40(ctx, counterNode, ...values))
   );
 }
 
-export function registerKeyFunctions(registry: FunctionRegistry) {
+export function registerKeyFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
     async function buildKey40Sqrl(
       state: SqrlExecutionState,

@@ -3,14 +3,18 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { UniqueId } from "../platform/UniqueId";
-import SqrlObject from "./SqrlObject";
+import { UniqueId } from "../api/UniqueId";
+import { SqrlObject } from "./SqrlObject";
 import SqrlUniqueId from "./SqrlUniqueId";
 
 import invariant from "../jslib/invariant";
 import { NodeId } from "../platform/NodeId";
-import chalk from "chalk";
-import { indent } from "../jslib/indent";
+import { Context } from "../api/ctx";
+import { SqrlKey } from "./SqrlKey";
+import { nice } from "node-nice";
+import { murmurhashJsonBuffer } from "../jslib/murmurhashJson";
+import { sqrlCartesianProduct, RenderedSpan } from "sqrl-common";
+import { mkSpan, indentSpan } from "./span";
 
 export default class SqrlNode extends SqrlObject {
   public nodeId: NodeId;
@@ -50,14 +54,19 @@ export default class SqrlNode extends SqrlObject {
     return this.uniqueId.getUniqueId();
   }
 
-  renderText() {
-    return chalk.grey(
-      `node<${chalk.blue(this.nodeId.type)}/${chalk.blue(
-        this.nodeId.key
-      )}> {\n` +
-        `${indent(this.uniqueId.renderText(), 2)}\n` +
-        `}`
-    );
+  render(): RenderedSpan {
+    return mkSpan("type:node", [
+      mkSpan("type:name", "node"),
+      mkSpan("type:syntax", "<"),
+      mkSpan("value:nodeId", [
+        mkSpan("nodeId:type", this.nodeId.type),
+        mkSpan("value:separator", "/"),
+        mkSpan("nodeId:key", this.nodeId.key)
+      ]),
+      mkSpan("type:syntax", "> {\n"),
+      indentSpan(this.uniqueId.render(), 2),
+      mkSpan("type:syntax", "\n}")
+    ]);
   }
 
   getData() {
@@ -66,5 +75,57 @@ export default class SqrlNode extends SqrlObject {
       value: this.value,
       uniqueId: this.uniqueId.getData()
     };
+  }
+
+  async buildCounterKey(
+    ctx: Context,
+    ...featureValues: Array<any>
+  ): Promise<SqrlKey | null> {
+    const hasEmpty = featureValues.some(v => {
+      return v === null || v === "";
+    });
+    if (hasEmpty) {
+      return null;
+    }
+
+    // Search through all the values for Node/UniqueId
+    let timeMs = this.uniqueId.getTimeMs();
+    for (const value of featureValues) {
+      if (value instanceof SqrlObject) {
+        timeMs = Math.max(timeMs, value.tryGetTimeMs() || 0);
+      }
+    }
+
+    const basicFeatureValues = await nice(() =>
+      SqrlObject.ensureBasic(featureValues)
+    );
+    let featuresHash: Buffer;
+    if (featureValues.length) {
+      featuresHash = await murmurhashJsonBuffer(basicFeatureValues);
+    } else {
+      featuresHash = Buffer.alloc(16);
+    }
+    return new SqrlKey(
+      ctx.requireDatabaseSet(),
+      this,
+      basicFeatureValues,
+      timeMs,
+      featuresHash
+    );
+  }
+
+  async buildCounterKeyList(
+    ctx: Context,
+    ...featureValues: Array<any>
+  ): Promise<SqrlKey[]> {
+    if (featureValues.length === 0) {
+      return [await this.buildCounterKey(ctx)];
+    }
+
+    return Promise.all(
+      sqrlCartesianProduct(featureValues, {
+        maxArrays: 1
+      }).map(values => this.buildCounterKey(ctx, ...values))
+    );
   }
 }

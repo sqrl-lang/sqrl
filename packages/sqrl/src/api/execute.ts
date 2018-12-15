@@ -3,17 +3,20 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 
 import { SqrlExecutable } from "../execute/SqrlExecutable";
-import { executableFromString as _executableFromString } from "../helpers/CompileHelpers";
-import { default as _FunctionRegistry } from "../function/FunctionRegistry";
+import { SqrlFunctionRegistry as _FunctionRegistry } from "../function/FunctionRegistry";
 import { Context } from "./ctx";
-import { Ast } from "../ast/Ast";
+import { Ast, CallAst } from "../ast/Ast";
 import invariant from "../jslib/invariant";
 import { LogProperties } from "./log";
 import { CompileState } from "./parse";
-import { buildFunctionRegistryFromAddresses } from "../helpers/FunctionRegistryHelpers";
+import { buildFunctionRegistryForServices } from "../helpers/FunctionRegistryHelpers";
+import { Manipulator } from "./Manipulator";
+import { ArgumentCheck } from "./ArgumentCheck";
+import { SourcePrinter } from "./executable";
+import { FunctionServices } from "../function/registerAllFunctions";
+import { SqrlObject } from "sqrl-common";
 
 export interface ExecutableOptions {
   functionRegistry: FunctionRegistry;
@@ -26,22 +29,18 @@ export interface FeatureMap {
 /**
  * Build a function registry with the default functions included.
  */
-export function buildFunctionRegistry() {
-  return new FunctionRegistry(buildFunctionRegistryFromAddresses({}));
+export function buildFunctionRegistry(services: FunctionServices = {}) {
+  return new FunctionRegistry(buildFunctionRegistryForServices(services));
 }
 
 /**
- * This method creates an SQRL Executable given source code and a function
- * registry.
+ * Options for registering a new function
  */
-export function executableFromString(
-  sqrl: string,
-  options: ExecutableOptions
-): Promise<Executable> {
-  return _executableFromString(sqrl, {
-    ...options,
-    functionRegistry: options.functionRegistry._wrapped
-  }).then(_executable => new Executable(_executable));
+export interface FunctionOptions {
+  allowNull?: boolean;
+  allowSqrlObjects?: boolean;
+  pure?: boolean;
+  args?: ArgumentCheck[];
 }
 
 /**
@@ -59,17 +58,47 @@ export class FunctionRegistry {
     public _wrapped: _FunctionRegistry
   ) {}
 
-  register(func: (...args: any) => Promise<any>) {
+  register(
+    func: (state: Execution, ...args: any) => Promise<any>,
+    options: FunctionOptions = {}
+  ) {
     this._wrapped.save(func, {
-      async: true
+      async: true,
+      allowNull: options.allowNull || false,
+      allowSqrlObjects: options.allowSqrlObjects || false,
+      pure: options.pure || false,
+      args: options.args
     });
   }
 
-  registerSync(func: (...args: any) => any) {
-    this._wrapped.save(func);
+  registerSync(func: (...args: any) => any, options: FunctionOptions = {}) {
+    this._wrapped.save(func, {
+      allowNull: options.allowNull || false,
+      allowSqrlObjects: options.allowSqrlObjects || false,
+      pure: options.pure || false,
+      args: options.args
+    });
   }
 
-  registerTransform(transform: (state: CompileState, ast: Ast) => Ast) {
+  registerStatement(
+    statementFeature: string,
+    func: (state: Execution, ...args: any) => Promise<any>,
+    options: FunctionOptions = {}
+  ) {
+    this._wrapped.save(func, {
+      statementFeature,
+      async: true,
+      allowNull: options.allowNull || false,
+      allowSqrlObjects: options.allowSqrlObjects || false,
+      pure: options.pure || false,
+      statement: true,
+      args: options.args
+    });
+  }
+  registerTransform(
+    transform: (state: CompileState, ast: CallAst) => Ast,
+    options?: {}
+  ) {
     invariant(
       transform.name,
       "registerTransform() must be called with a named function"
@@ -95,8 +124,22 @@ export class Executable {
     public _wrapped: SqrlExecutable
   ) {}
 
-  async execute(ctx: Context): Promise<Execution> {
-    return new Execution(await this._wrapped.startExecution(ctx));
+  async execute(
+    ctx: Context,
+    options: {
+      manipulator?: Manipulator;
+      inputs?: FeatureMap;
+      featureTimeoutMs?: number;
+    } = {}
+  ): Promise<Execution> {
+    return this._wrapped.startExecution(ctx, {});
+  }
+
+  /**
+   * Get the source code printer for the executable.
+   */
+  getSourcePrinter(): SourcePrinter {
+    return this._wrapped.sourcePrinter;
   }
 }
 
@@ -104,64 +147,59 @@ export class Executable {
  * A SQRL Execution is the runtime representation of a single event executing
  * in the SQRL runtime.
  */
-export class Execution {
-  /**
-   * @hidden
-   */
-  constructor(
-    /**
-     * @hidden
-     */
-    public _wrapped: SqrlExecutionState
-  ) {}
+export interface Execution {
+  readonly ctx: Context;
+  readonly manipulator: Manipulator;
 
   /**
    * Returns a promise for the given feature name for the execution. If the
    * feature has not been calculated yet this will start the calculation.
    */
-  fetchFeature(featureName: string): Promise<any> {
-    return Promise.resolve(this._wrapped.fetchBasicByName(featureName));
-  }
+  fetchFeature(featureName: string): Promise<SqrlObject>;
+
+  /**
+   * Returns a promise for the given feature name for the execution. If the
+   * feature has not been calculated yet this will start the calculation.
+   */
+  fetchValue(featureName: string): Promise<any>;
+
+  /**
+   * Get the source code printer for the executable.
+   */
+  getSourcePrinter(): SourcePrinter;
+
+  /**
+   * Returns the current event time in milliseconds
+   */
+  getClockMs(): number;
 
   /**
    * Logs a message at the trace (lowest) level
    */
-  trace(props: LogProperties, format: string, ...param: any[]) {
-    return this._wrapped.trace(props, format, ...param);
-  }
+  trace(props: LogProperties, format: string, ...param: any[]);
 
   /**
    * Logs a message at the debug (second lowest) level
    */
-  debug(props: LogProperties, format: string, ...param: any[]) {
-    return this._wrapped.debug(props, format, ...param);
-  }
+  debug(props: LogProperties, format: string, ...param: any[]);
 
   /**
    * Logs a message at the info (normal) level
    */
-  info(props: LogProperties, format: string, ...param: any[]) {
-    return this._wrapped.info(props, format, ...param);
-  }
+  info(props: LogProperties, format: string, ...param: any[]);
 
   /**
    * Logs a message at the warn (priority) level
    */
-  warn(props: LogProperties, format: string, ...param: any[]) {
-    return this._wrapped.warn(props, format, ...param);
-  }
+  warn(props: LogProperties, format: string, ...param: any[]);
 
   /**
    * Logs a message at the error (high priority) level
    */
-  error(props: LogProperties, format: string, ...param: any[]) {
-    return this._wrapped.error(props, format, ...param);
-  }
+  error(props: LogProperties, format: string, ...param: any[]);
 
   /**
    * Logs a message at the fatal (highest priority) level
    */
-  fatal(props: LogProperties, format: string, ...param: any[]) {
-    return this._wrapped.fatal(props, format, ...param);
-  }
+  fatal(props: LogProperties, format: string, ...param: any[]);
 }

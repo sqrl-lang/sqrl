@@ -5,7 +5,7 @@
  */
 import { compileParserStateAst } from "../../src/compile/SqrlCompile";
 import { SqrlParserState } from "../../src/compile/SqrlParserState";
-import FunctionRegistry from "../../src/function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlCompiledOutput } from "../../src/compile/SqrlCompiledOutput";
 import { statementsFromString } from "../../src/helpers/CompileHelpers";
@@ -13,10 +13,8 @@ import { JsExecutionContext } from "../../src/execute/JsExecutionContext";
 import SqrlExecutable from "../../src/execute/SqrlExecutable";
 import { createDefaultContext } from "../../src/helpers/ContextHelpers";
 import { SimpleManipulator } from "../../src/simple/SimpleManipulator";
-import { FeatureMap } from "../../src/feature/FeatureTypes";
 import { Filesystem } from "../../src/api/filesystem";
-import invariant from "../../src/jslib/invariant";
-import { buildFunctionRegistry } from "./sqrlTest";
+import { FeatureMap } from "../../src/api/execute";
 
 export class VirtualSourceTree extends Filesystem {
   constructor(
@@ -47,37 +45,8 @@ export class VirtualSourceTree extends Filesystem {
   }
 }
 
-export async function runFsCompile(source: { [path: string]: string }) {
-  const filesystem = new VirtualSourceTree(source);
-  const functionRegistry = buildFunctionRegistry();
-
-  const sqrlBuffer = filesystem.tryRead("main.sqrl");
-  invariant(sqrlBuffer, "Expected to find main.sqrl in test fs");
-  const statements = statementsFromString(sqrlBuffer.toString("utf-8"));
-  const parserState = new SqrlParserState({
-    filesystem,
-    functionRegistry,
-    statements
-  });
-  compileParserStateAst(parserState);
-  const compiledOutput = new SqrlCompiledOutput(parserState);
-  const trace = createDefaultContext();
-  const spec = await compiledOutput.buildLabelerSpec(trace);
-  const context = new JsExecutionContext(functionRegistry);
-  const executable = new SqrlExecutable(context, spec);
-  const sourcePrinter = executable.sourcePrinter;
-
-  return {
-    compiledOutput,
-    executable,
-    functionRegistry,
-    trace,
-    sourcePrinter
-  };
-}
-
 export async function runCompile(sqrl: string) {
-  const functionRegistry = new FunctionRegistry();
+  const functionRegistry = new SqrlFunctionRegistry();
   registerAllFunctions(functionRegistry);
   const statements = statementsFromString(sqrl);
   const parserState = new SqrlParserState({ functionRegistry, statements });

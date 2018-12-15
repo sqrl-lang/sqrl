@@ -4,13 +4,13 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { default as AT } from "../ast/AstTypes";
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { CallAst, Ast } from "../ast/Ast";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import SqrlAst from "../ast/SqrlAst";
 
-export function registerSourceFunction(registry: FunctionRegistry) {
+export function registerSourceFunction(registry: SqrlFunctionRegistry) {
   registry.save(
     function allSource(state, props = {}) {
       return state.sourcePrinter.getHumanAllSource(props);

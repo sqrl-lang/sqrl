@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { runSqrl } from "../helpers/sqrlTest";
+import { runSqrlTest } from "../../src/testing/runSqrlTest";
 
 test("handles repeated iter", async () => {
-  await runSqrl(`
+  await runSqrlTest(`
     
   LET IntList := [1,2,3];
   LET A := [X + 1 FOR X in IntList];
@@ -17,7 +17,7 @@ test("handles repeated iter", async () => {
 });
 
 test("handles null in where", async () => {
-  await runSqrl(`
+  await runSqrlTest(`
   LET Sequence := [ [4, 2], [1, 0], [2, null], [3, 1] ];
   LET A := [X FOR X in Sequence WHERE index(X, 1) > 0];
   LET B := [X FOR X in Sequence WHERE index(X, 1) > 5];
@@ -27,7 +27,7 @@ test("handles null in where", async () => {
 });
 
 test("works with in", async () => {
-  await runSqrl(`
+  await runSqrlTest(`
 
   # Intersect two sets and then ignore some strings
   LET SequenceA := [ "1", "2", "3", "4", "5" ];
@@ -46,7 +46,7 @@ test("works with in", async () => {
 });
 
 test("where supports sqrl truthy", async () => {
-  await runSqrl(`
+  await runSqrlTest(`
 
   # Intersect two sets and then ignore some strings
   LET SequenceA := [1, 2, 3, 4, 5, 6];

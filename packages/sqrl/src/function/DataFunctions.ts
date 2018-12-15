@@ -3,12 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { Ast } from "../ast/Ast";
 
 import { default as AT } from "../ast/AstTypes";
 import SqrlAst from "../ast/SqrlAst";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 
 import invariant from "../jslib/invariant";
 import jsonpath = require("jsonpath");
@@ -18,7 +18,7 @@ import { sqrlInvariant } from "../api/parse";
 // $[ (digits / single quoted string / double quoted string) ] (anything)
 const JSON_BRAKET_REGEX = /^\$\[([0-9]+|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")\](.*)$/;
 
-export function registerDataFunctions(registry: FunctionRegistry) {
+export function registerDataFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
     function attr(data: any, key: string | number): any {
       if (data instanceof SqrlObject) {

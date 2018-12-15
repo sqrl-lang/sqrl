@@ -1,6 +1,6 @@
 {
   "name": "sqrl-text-functions",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "> TODO: description",
   "homepage": "",
   "directories": {
@@ -46,6 +46,8 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "sqrl": "0.0.0"
+    "node-nice": "0.0.1",
+    "re2": "^1.8.3",
+    "sqrl": "file:../sqrl"
   }
 }

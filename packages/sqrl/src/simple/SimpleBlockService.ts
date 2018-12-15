@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { BlockService } from "../function/BlockFunctions";
-import { Manipulator } from "../platform/Manipulator";
+import { Manipulator } from "../api/Manipulator";
 import { SimpleManipulator } from "../simple/SimpleManipulator";
 import { WhenCause } from "../function/WhenFunctions";
 

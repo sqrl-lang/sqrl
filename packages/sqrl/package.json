@@ -1,6 +1,6 @@
 {
   "name": "sqrl",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "sqrl",
   "repository": "",
   "author": {
@@ -32,11 +32,9 @@
   "dependencies": {
     "bignum": "^0.13.0",
     "bluebird": "^3.5.1",
-    "chalk": "^2.4.1",
     "debug": "^3.1.0",
     "double-ended-queue": "^2.1.0-0",
     "eventemitter3": "^3.1.0",
-    "expand-tilde": "^2.0.2",
     "fast-stable-stringify": "^1.0.0",
     "ioredis": "^3.2.2",
     "js-yaml": "^3.12.0",
@@ -46,7 +44,7 @@
     "murmurhash-native": "^3.3.0",
     "node-nice": "^0.0.1",
     "prettier": "^1.13.7",
-    "re2": "^1.8.3"
+    "sqrl-common": "file:../sqrl-common"
   },
   "devDependencies": {
     "@types/bignum": "^0.0.29",
@@ -59,11 +57,11 @@
     "@types/prettier": "^1.13.1",
     "coveralls": "^2.0.0",
     "jest": "^22.4.4",
-    "jest-diff": "^22.4.3",
     "jest-environment-node-debug": "^2.0.0",
     "jest-extended": "^0.7.2",
     "pegjs": "^0.10.0",
     "rimraf": "^2.0.0",
+    "sqrl-test-utils": "0.0.0",
     "ts-jest": "^22.4.6",
     "ts-node": "^5.0.1",
     "ts-pegjs": "^0.2.1",

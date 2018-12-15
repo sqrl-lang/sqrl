@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "../function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
 import SqrlAst from "./SqrlAst";
 
 import invariant from "../jslib/invariant";
@@ -12,7 +12,7 @@ import { sqrlInvariant } from "../api/parse";
 import { Ast, jsonAst } from "./Ast";
 import { Expr, ConstantExpr, walkExpr, Slot } from "../expr/Expr";
 import { SqrlSlot } from "../slot/SqrlSlot";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
 
 const binaryOperatorToFunction = {
@@ -37,7 +37,7 @@ class AstExprState {
   currentIterator: string | null = null;
 
   constructor(
-    public functionRegistry: FunctionRegistry,
+    public functionRegistry: SqrlFunctionRegistry,
     private compiledSqrl: SqrlCompiledOutput
   ) {}
 
@@ -296,7 +296,6 @@ function callExpr(state: AstExprState, func: string, args: Ast[]): Expr {
 }
 
 function _astToExpr(ast: Ast, state: AstExprState): Expr {
-  const funcRegistry = state.functionRegistry;
   return sqrlErrorWrap(
     {
       location: ast.location
@@ -359,14 +358,6 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
       } else if (ast.type === "call" || ast.type === "registeredCall") {
         const func = ast.func;
         const location = ast.location || null;
-
-        sqrlInvariant(
-          ast,
-          ast.type === "registeredCall" || !funcRegistry.isStatement(ast.func),
-          "Statement not valid in this context:: %s",
-          ast.func
-        );
-
         return sqrlErrorWrap({ location }, () => {
           return callExpr(state, func, ast.args);
         });
@@ -464,7 +455,7 @@ function _exprExtractLoad(expr?, loaded: Set<SqrlSlot> = new Set()): Expr {
 export function processExprAst(
   ast: Ast,
   compiledSqrl: SqrlCompiledOutput,
-  functionRegistry: FunctionRegistry
+  functionRegistry: SqrlFunctionRegistry
 ): Expr {
   const astExprState = new AstExprState(functionRegistry, compiledSqrl);
   return _exprExtractLoad(_astToExpr(ast, astExprState));

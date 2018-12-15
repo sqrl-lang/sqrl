@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 
 import { default as AT } from "../ast/AstTypes";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 
 function and(...args) {
   for (const arg of args) {
@@ -17,7 +17,7 @@ function and(...args) {
   return true;
 }
 
-export function registerBoolFunctions(registry: FunctionRegistry) {
+export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
   registry.save(and, {
     safe: true,
     allowSqrlObjects: true,

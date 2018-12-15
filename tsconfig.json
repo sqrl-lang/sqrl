@@ -11,7 +11,6 @@
     "removeComments": true,
     "inlineSourceMap": false,
     "typeRoots": ["./node_modules/@types"],
-    "types": ["jest-extended"],
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,

@@ -7,9 +7,13 @@ import {
   runCompile,
   compileToExecution,
   fetchExecutableFeature,
-  runFsCompile
+  VirtualSourceTree
 } from "../helpers/runCompile";
-import { runSqrl } from "../helpers/sqrlTest";
+import {
+  runSqrlTest,
+  buildTestFunctionRegistry
+} from "../../src/testing/runSqrlTest";
+import { executableFromFilesystem } from "../../src";
 
 test("supports basic statements", async () => {
   await expect(
@@ -58,7 +62,7 @@ test("supports where clauses", async () => {
     })
   ).resolves.toEqual(2);
 
-  await runSqrl(`
+  await runSqrlTest(`
   LET TestActionName := '';
   LET Ip := '1.2.3.4' WHERE TestActionName = 'login';
   LET Ip := '5.6.7.8' WHERE TestActionName = 'signup';
@@ -77,7 +81,7 @@ test("supports where clauses", async () => {
 });
 
 test("supports where default values", async () => {
-  await runSqrl(`
+  await runSqrlTest(`
     LET TestActionName := '';
     LET Ip := 'loginIp' WHERE TestActionName = 'login';
     LET Ip := 'signupIp' WHERE TestActionName = 'signup';
@@ -91,48 +95,54 @@ test("supports where default values", async () => {
     ASSERT Ip = 'defaultIp';`);
 
   await expect(
-    runFsCompile({
-      "main.sqrl": `
+    executableFromFilesystem(
+      await buildTestFunctionRegistry(),
+      new VirtualSourceTree({
+        "main.sqrl": `
     LET Act := "b";
     INCLUDE "a.sqrl" WHERE Act="a";
     ASSERT Act="c";
   `,
-      "a.sqrl": `
+        "a.sqrl": `
   LET Something := "x" DEFAULT;
   `
-    })
+      })
+    )
   ).rejects.toThrow(
     /LET statement with DEFAULT is not valid in file included with WHERE/
   );
 
-  const { executable } = await runFsCompile({
-    "main.sqrl": `
+  const executable = await executableFromFilesystem(
+    await buildTestFunctionRegistry(),
+    new VirtualSourceTree({
+      "main.sqrl": `
     LET Choose := input();
     INCLUDE "default.sqrl";
     INCLUDE "red.sqrl" WHERE Choose="red";
     INCLUDE "blue.sqrl" WHERE Choose="blue";
   `,
-    "default.sqrl": 'LET Color := "none" DEFAULT;',
-    "blue.sqrl": 'LET Color := "cloudy blue";',
-    "red.sqrl": 'LET Color := "deep dark red";'
-  });
+      "default.sqrl": 'LET Color := "none" DEFAULT;',
+      "blue.sqrl": 'LET Color := "cloudy blue";',
+      "red.sqrl": 'LET Color := "deep dark red";'
+    })
+  );
 
   await expect(
-    fetchExecutableFeature(executable, "Color", {
+    fetchExecutableFeature(executable._wrapped, "Color", {
       inputs: {
         Choose: "pink"
       }
     })
   ).resolves.toEqual("none");
   await expect(
-    fetchExecutableFeature(executable, "Color", {
+    fetchExecutableFeature(executable._wrapped, "Color", {
       inputs: {
         Choose: "red"
       }
     })
   ).resolves.toEqual("deep dark red");
   await expect(
-    fetchExecutableFeature(executable, "Color", {
+    fetchExecutableFeature(executable._wrapped, "Color", {
       inputs: {
         Choose: "blue"
       }

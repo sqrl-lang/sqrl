@@ -3,10 +3,9 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import SqrlObject from "./SqrlObject";
-
-import { UniqueId } from "../platform/UniqueId";
-import chalk from "chalk";
+import { SqrlObject } from "./SqrlObject";
+import { UniqueId } from "../api/UniqueId";
+import { mkSpan } from "./span";
 
 export default class SqrlUniqueId extends SqrlObject {
   constructor(private uniqueId: UniqueId) {
@@ -36,12 +35,15 @@ export default class SqrlUniqueId extends SqrlObject {
     };
   }
 
-  renderText() {
-    return chalk.grey(
-      `uniqueId<${chalk.blue(
-        new Date(this.uniqueId.getTimeMs()).toISOString()
-      )}@${chalk.blue(this.uniqueId.getRemainder().toString())}>`
-    );
+  render() {
+    return mkSpan("type:uniqueId", [
+      mkSpan("type:name", "uniqueId"),
+      mkSpan("type:syntax", "<"),
+      mkSpan("value:time", new Date(this.uniqueId.getTimeMs()).toISOString()),
+      mkSpan("value:separator", "@"),
+      mkSpan("value:remainder", this.uniqueId.getRemainder().toString()),
+      mkSpan("type:syntax", ">")
+    ]);
   }
 
   getBasicValue() {

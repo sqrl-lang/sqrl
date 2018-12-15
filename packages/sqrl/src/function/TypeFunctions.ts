@@ -3,8 +3,8 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import SqrlObject from "../object/SqrlObject";
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlObject } from "../object/SqrlObject";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 const FLOAT_REGEX = /^-?[0-9]*(\.[0-9]+)?$/;
 
 function float(value: any): number | null {
@@ -35,7 +35,7 @@ function int(value: any): number | null {
 
   return Math.floor(value);
 }
-export function registerTypeFunctions(registry: FunctionRegistry) {
+export function registerTypeFunctions(registry: SqrlFunctionRegistry) {
   registry.save(int, {
     argCount: 1,
     pure: true,

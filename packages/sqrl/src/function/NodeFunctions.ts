@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { Ast, CallAst, ConstantAst } from "../ast/Ast";
 
 import { default as AT } from "../ast/AstTypes";
@@ -14,14 +14,8 @@ import SqrlNode from "../object/SqrlNode";
 import bluebird = require("bluebird");
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { sqrlInvariant } from "../api/parse";
-import { UniqueId } from "../platform/UniqueId";
 import SqrlUniqueId from "../object/SqrlUniqueId";
-import { Context } from "../api/ctx";
-
-export interface UniqueIdService {
-  create(ctx: Context): Promise<UniqueId>;
-  fetch(ctx: Context, type: string, value: string): Promise<UniqueId>;
-}
+import { UniqueIdService } from "../api/UniqueIdService";
 
 async function toNode(
   service: UniqueIdService,
@@ -43,7 +37,7 @@ async function toNode(
 }
 
 export function registerNodeFunctions(
-  registry: FunctionRegistry,
+  registry: SqrlFunctionRegistry,
   service: UniqueIdService
 ) {
   registry.save(null, {
@@ -89,9 +83,7 @@ export function registerNodeFunctions(
     async function _nodeList(
       state: SqrlExecutionState,
       type: string,
-      arr: string[],
-      props = {},
-      sqrlNodeMigrateDate: string = null
+      arr: string[]
     ) {
       if (type === null || arr === null || !Array.isArray(arr)) {
         return null;
@@ -103,7 +95,7 @@ export function registerNodeFunctions(
     },
     {
       allowNull: true,
-      args: [AT.state, AT.any.string, AT.any, AT.any.optional, AT.any.optional]
+      args: [AT.state, AT.any.string, AT.any]
     }
   );
 
@@ -148,13 +140,7 @@ export function registerNodeFunctions(
   registry.save(null, {
     name: "nodeList",
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
-      let args = ast.args;
-      if (args.length === 2) {
-        args = [...args, ...SqrlAst.constants({}, null)];
-      } else if (args.length === 3) {
-        args = [...args, SqrlAst.constant(null)];
-      }
-      return SqrlAst.call("_nodeList", args);
+      return SqrlAst.call("_nodeList", ast.args);
     }
   });
 

@@ -5,15 +5,15 @@
  */
 /* eslint-disable no-useless-escape */
 
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { default as AT } from "../ast/AstTypes";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { CallAst, Ast } from "../ast/Ast";
 import SqrlAst from "../ast/SqrlAst";
 import { sqrlInvariant } from "../api/parse";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 
-export function registerStringFunctions(registry: FunctionRegistry) {
+export function registerStringFunctions(registry: SqrlFunctionRegistry) {
   registry.save(function concat(...strings) {
     for (const string of strings) {
       if (typeof string !== "string" && typeof string !== "number") {

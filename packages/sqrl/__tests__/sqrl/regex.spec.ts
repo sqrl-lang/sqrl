@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { runSqrl } from "../helpers/sqrlTest";
+import { runSqrlTest } from "../../src/testing/runSqrlTest";
 
 test("regex works", async () => {
-  await runSqrl(`
+  await runSqrlTest(`
   LET Phone := "1(212)333-4444";
   ASSERT regexMatch(Phone, "123") = null;
   ASSERT regexMatch(Phone, "4444") = ["4444"];

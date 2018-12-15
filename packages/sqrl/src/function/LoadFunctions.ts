@@ -6,7 +6,7 @@
 import { default as AT } from "../ast/AstTypes";
 import { Ast, CallAst, ConstantAst } from "../ast/Ast";
 import SqrlAst from "../ast/SqrlAst";
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { SqrlParserState } from "../compile/SqrlParserState";
 
 import * as path from "path";
@@ -26,7 +26,7 @@ function loadFile(
   return buffer.toString("utf-8");
 }
 
-export function registerLoadFunctions(registry: FunctionRegistry) {
+export function registerLoadFunctions(registry: SqrlFunctionRegistry) {
   registry.save(null, {
     name: "loadJson",
     transformAst(state: SqrlParserState, ast: CallAst): Ast {

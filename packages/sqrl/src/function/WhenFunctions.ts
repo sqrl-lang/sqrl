@@ -4,20 +4,13 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { default as AT } from "../ast/AstTypes";
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import invariant from "../jslib/invariant";
 import { REASON_FEATURE_REGEX } from "../slot/SqrlRuleSlot";
-
-export interface FiredRule {
-  name: string;
-  reason: string | null;
-}
-export interface WhenCause {
-  firedRules: FiredRule[];
-}
-
-export function registerWhenFunctions(registry: FunctionRegistry) {
+import { WhenCause, FiredRule } from "../api/when";
+export { WhenCause, FiredRule };
+export function registerWhenFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
     function _buildWhenContext(
       state: SqrlExecutionState,

@@ -23,6 +23,9 @@ export interface Context extends Logger {
   requireDatabaseSet(): DatabaseSet;
 }
 
-export function createSimpleContext() {
-  return new SimpleContext(new SimpleDatabaseSet("0"), getGlobalLogger());
+export function createSimpleContext(logger?: Logger) {
+  return new SimpleContext(
+    new SimpleDatabaseSet("0"),
+    logger || getGlobalLogger()
+  );
 }

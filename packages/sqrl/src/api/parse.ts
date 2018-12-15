@@ -6,12 +6,13 @@
 import { LogProperties } from "./log";
 import { Filesystem } from "./filesystem";
 import { SqrlParserState } from "../compile/SqrlParserState";
-import { AstLocation } from "./ast";
+import { AstLocation, SlotAst } from "./ast";
 import { Ast } from "../ast/Ast";
 
 import util = require("util");
 import { sqrlSourceArrow } from "../compile/sqrlSourceArrow";
 import invariant from "../jslib/invariant";
+import { SqrlConstantSlot } from "../slot/SqrlSlot";
 
 /**
  * Return a SqrlCompileError that can be thrown. This function helps us work
@@ -46,6 +47,29 @@ export function sqrlInvariant(
 }
 
 /**
+ * A constant slot allows creation of a global slot, while still changing the
+ * value later during the compile process
+ */
+export class ConstantSlot {
+  /**
+   * @hidden
+   */
+  constructor(
+    /**
+     * @hidden
+     */
+    public _wrapped: SqrlConstantSlot
+  ) {}
+
+  getValue(): any {
+    return this._wrapped.getValue();
+  }
+  setValue(newValue: any) {
+    return this._wrapped.setValue(newValue);
+  }
+}
+
+/**
  * A SQRL CompileState represents the state of the SQRL compiler during a single
  * compilation.
  */
@@ -65,6 +89,32 @@ export class CompileState {
    */
   getFilesystem(): Filesystem {
     return this._wrapped.filesystem;
+  }
+
+  /**
+   * Creates a new global slot. If there is a problem creating the slot the
+   * error message will point to the code in `sourceAst`.
+   */
+  setGlobal(sourceAst: Ast, valueAst: Ast, name?: string): SlotAst {
+    return this._wrapped.newGlobal(sourceAst, valueAst, name);
+  }
+
+  /**
+   * Creates a new global slot if it doesn't already exist. Ensures that the
+   * slot is a ConstantSlot and returns an object that can be used to update
+   * the value.
+   */
+  setConstantSlot(sourceAst: Ast, name: string, initialValue: any) {
+    return new ConstantSlot(
+      this._wrapped.ensureConstantSlot(sourceAst, name, initialValue)
+    );
+  }
+
+  /**
+   * Adds a statement
+   */
+  addStatement(name: string, slotAst: SlotAst) {
+    this._wrapped.addStatementSlot(name, slotAst);
   }
 
   /**

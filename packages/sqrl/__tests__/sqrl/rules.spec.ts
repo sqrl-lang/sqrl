@@ -4,23 +4,23 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { default as AT } from "../../src/ast/AstTypes";
-import FunctionRegistry from "../../src/function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlTest } from "../../src/testing/SqrlTest";
-import { JestAssertService } from "../helpers/JestAssert";
+import { JestAssertService } from "sqrl-test-utils";
 import {
-  buildTestTrace,
-  runSqrl,
-  buildFunctionRegistry
-} from "../helpers/sqrlTest";
+  runSqrlTest,
+  buildTestFunctionRegistry
+} from "../../src/testing/runSqrlTest";
+import { createSimpleContext } from "../../src";
 
 test("rules work", async () => {
-  const functionRegistry = new FunctionRegistry();
+  const functionRegistry = new SqrlFunctionRegistry();
   registerAllFunctions(functionRegistry, { assert: new JestAssertService() });
   const test = new SqrlTest(functionRegistry, {});
 
   await test.run(
-    buildTestTrace(),
+    createSimpleContext(),
     `
   LET X := 5 + 1;
   CREATE RULE MyRule WHERE X;
@@ -31,11 +31,11 @@ test("rules work", async () => {
 });
 
 test("when context works", async () => {
-  const functionRegistry = buildFunctionRegistry();
+  const functionRegistry = await buildTestFunctionRegistry();
 
   let saveCount = 0;
   let savedContext = null;
-  functionRegistry.save(
+  functionRegistry._wrapped.save(
     function saveContext(state, whenContext, word) {
       saveCount += 1;
       savedContext = {
@@ -51,7 +51,7 @@ test("when context works", async () => {
     }
   );
 
-  await runSqrl(
+  await runSqrlTest(
     `
   
   LET Five := 5;
@@ -81,7 +81,7 @@ test("when context works", async () => {
   });
 
   // Try fire it manually (without whenContext)
-  await runSqrl('saveContext("manual!"); EXECUTE;', { functionRegistry });
+  await runSqrlTest('saveContext("manual!"); EXECUTE;', { functionRegistry });
   expect(saveCount).toEqual(2);
   expect(savedContext).toEqual({
     whenContext: null,

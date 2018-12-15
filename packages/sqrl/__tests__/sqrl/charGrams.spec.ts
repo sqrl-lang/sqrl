@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { runSqrl } from "../helpers/sqrlTest";
+import { runSqrlTest } from "../../src/testing/runSqrlTest";
 
 test("charGrams", async () => {
-  await runSqrl(`
+  await runSqrlTest(`
 LET ActorEmail := "abc123def";
 LET SimpleString := "abcdefghi";
 LET CharTriGrams := charGrams(SimpleString, 3);

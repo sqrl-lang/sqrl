@@ -1,5 +1,5 @@
 import { Writable, Readable } from "stream";
-import invariant from "sqrl/lib/jslib/invariant";
+import { invariant } from "sqrl-common";
 import { cliMain, CliArgs } from "../../src/cli/CliMain";
 import { CloseableGroup } from "../../src/jslib/Closeable";
 

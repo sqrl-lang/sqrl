@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { runSqrl } from "../helpers/sqrlTest";
+import { runSqrlTest } from "../../src/testing/runSqrlTest";
 
 test("works", async () => {
-  const { lastState } = await runSqrl(`
+  const { lastState } = await runSqrlTest(`
   LET One := 1;
   LET Six := 6;
   LET Zero := 0;
@@ -56,7 +56,7 @@ test("works", async () => {
   `);
 
   expect(
-    lastState.sourcePrinter.getHumanAllSource({
+    lastState.getSourcePrinter().getHumanAllSource({
       excludeSlotNumbers: true
     })
   ).toMatchSnapshot();

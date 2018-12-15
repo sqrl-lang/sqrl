@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "../function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
 import bluebird = require("bluebird");
 import vm = require("vm");
 
@@ -13,7 +13,7 @@ export class JsExecutionContext {
   private sandbox: vm.Context;
   private cache: { [js: string]: JsCallback } = {};
 
-  constructor(functionRegistry: FunctionRegistry) {
+  constructor(functionRegistry: SqrlFunctionRegistry) {
     this.sandbox = vm.createContext({
       console,
       functions: functionRegistry.functions,

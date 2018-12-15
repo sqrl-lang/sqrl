@@ -3,11 +3,23 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { runSqrl } from "../helpers/sqrlTest";
+import {
+  runSqrlTest,
+  buildTestFunctionRegistry
+} from "../../src/testing/runSqrlTest";
 import { jsonTemplate } from "../../src/jslib/jsonTemplate";
+import { registerTestFunctions } from "../helpers/TestFunctions";
 
 test("saves features", async () => {
-  await runSqrl(jsonTemplate`
+  const functionRegistry = await buildTestFunctionRegistry();
+  registerTestFunctions(functionRegistry._wrapped);
+  const librarySqrl = `
+  LET SqrlOutput := getSqrlOutput(SqrlExecutionComplete);
+  LET SqrlKafka := jsonValue(SqrlOutput, '$.kafka');
+  `;
+
+  await runSqrlTest(
+    jsonTemplate`
     LET SampleFeature := 5;
     LET HiPete := {
       "hello": "Pete!",
@@ -27,5 +39,10 @@ test("saves features", async () => {
         }
       }
     ]};
-  `);
+  `,
+    {
+      librarySqrl,
+      functionRegistry
+    }
+  );
 });

@@ -4,13 +4,13 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
-import { Manipulator } from "../platform/Manipulator";
+import { Manipulator } from "../api/Manipulator";
 import SqrlAst from "../ast/SqrlAst";
 import { SqrlParserState } from "../compile/SqrlParserState";
 
 import { StatementAst } from "../ast/Ast";
 import { parseSqrl } from "../parser/SqrlParse";
-import FunctionRegistry from "../function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
 import { JsExecutionContext } from "../execute/JsExecutionContext";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
@@ -43,7 +43,7 @@ export class SqrlTest {
   private filesystem: Filesystem;
 
   constructor(
-    private functionRegistry: FunctionRegistry,
+    private functionRegistry: SqrlFunctionRegistry,
     props: {
       files?: any;
       setFeatures?: FeatureMap;

@@ -3,11 +3,11 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "../function/FunctionRegistry";
+import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
 import { default as AT } from "../ast/AstTypes";
 import { Ast, CallAst } from "../ast/Ast";
 
-import { ComparisonFunctions } from "../function/ComparisonFunctions";
+import { AssertService, comparisonSymbols } from "sqrl-common";
 import SqrlAst from "../ast/SqrlAst";
 
 import { sqrlInvariant } from "../api/parse";
@@ -15,13 +15,8 @@ import { sqrlSourceArrow } from "../compile/sqrlSourceArrow";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 
-export interface AssertService {
-  compare(left: any, operator: string, right: any, arrow: string): void;
-  ok(value: any, arrow: string): void;
-}
-
 export function registerAssertFunctions(
-  registry: FunctionRegistry,
+  registry: SqrlFunctionRegistry,
   service: AssertService
 ) {
   registry.save(
@@ -97,9 +92,7 @@ export function registerAssertFunctions(
           ]);
         }
 
-        if (
-          ComparisonFunctions.symbolToFuncMap.hasOwnProperty(testAst.operator)
-        ) {
+        if (comparisonSymbols.has(testAst.operator)) {
           return SqrlAst.call("_assertCmp", [
             testAst.left,
             SqrlAst.constant(testAst.operator),

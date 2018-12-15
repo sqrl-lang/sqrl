@@ -3,14 +3,14 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import * as util from "util";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import SqrlAst from "../ast/SqrlAst";
 import { CallAst } from "../ast/Ast";
 import { default as AT } from "../ast/AstTypes";
-import { Manipulator } from "../platform/Manipulator";
+import { Manipulator } from "../api/Manipulator";
 
 export interface LogService {
   log(manipulator: Manipulator, message: string);
@@ -18,7 +18,7 @@ export interface LogService {
 }
 
 export function registerLogFunctions(
-  registry: FunctionRegistry,
+  registry: SqrlFunctionRegistry,
   service: LogService = null
 ) {
   registry.save(

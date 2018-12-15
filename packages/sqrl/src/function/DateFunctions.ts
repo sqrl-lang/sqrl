@@ -3,18 +3,17 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import FunctionRegistry from "./FunctionRegistry";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { Ast, CallAst } from "../ast/Ast";
 
 import { default as AT } from "../ast/AstTypes";
 import SqrlAst from "../ast/SqrlAst";
-import SqrlObject from "../object/SqrlObject";
+import { SqrlObject } from "../object/SqrlObject";
 import Moment = require("moment");
 import MomentTimezone = require("moment-timezone");
 
 import { SqrlParserState } from "../compile/SqrlParserState";
-import { sqrlInvariant } from "../api/parse";
-import { buildSqrlError } from "../api/parse";
+import { buildSqrlError, sqrlInvariant } from "../api/parse";
 import invariant from "../jslib/invariant";
 import SqrlDateTime from "../object/SqrlDateTime";
 
@@ -32,7 +31,7 @@ const ISO_8601_DURATION_REGEXES = [
   /^P([^T]+|.*T.+)$/
 ];
 
-export function registerDateFunctions(registry: FunctionRegistry) {
+export function registerDateFunctions(registry: SqrlFunctionRegistry) {
   registry.save(null, {
     name: "dateDiff",
     args: [AT.any, AT.any, AT.any.optional],

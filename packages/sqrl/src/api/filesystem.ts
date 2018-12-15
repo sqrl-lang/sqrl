@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { join } from "path";
+import { join, resolve } from "path";
 import { readFileSync, readdirSync } from "fs";
 
 /**
@@ -51,7 +51,7 @@ export class LocalFilesystem extends Filesystem {
   }
 
   tryRead(filename: string) {
-    const path = join(this.pwd, filename);
+    const path = resolve(this.pwd, filename);
     return readFileSync(path);
   }
 }

@@ -4,37 +4,38 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 // tslint:disable:no-console
-import { compileParserStateAst } from "sqrl/lib/compile/SqrlCompile";
-import { SqrlParserState } from "sqrl/lib/compile/SqrlParserState";
-import FunctionRegistry from "sqrl/lib/function/FunctionRegistry";
-import {
-  registerAllFunctions,
-  FunctionServices
-} from "sqrl/lib/function/registerAllFunctions";
-import { SqrlCompiledOutput } from "sqrl/lib/compile/SqrlCompiledOutput";
-import { SqrlExecutable } from "sqrl/lib/execute/SqrlExecutable";
-import invariant from "sqrl/lib/jslib/invariant";
+// tslint:disable:no-submodule-imports (@TODO)
+import { FunctionServices } from "sqrl/lib/function/registerAllFunctions";
 import { createSqrlServer } from "../SqrlServer";
 import { SqrlTest } from "sqrl/lib/testing/SqrlTest";
-import { SqrlRepl } from "sqrl/lib/repl/SqrlRepl";
+import { SqrlRepl } from "../repl/SqrlRepl";
 
 import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
 import { LocalFilesystem, Filesystem } from "sqrl/lib/api/filesystem";
 import * as path from "path";
 import * as waitForSigint from "wait-for-sigint";
-import { LabelerSpec } from "sqrl/lib/execute/LabelerSpec";
 import { SimpleBlockService } from "sqrl/lib/simple/SimpleBlockService";
-import { AssertService } from "sqrl/lib/function/AssertFunctions";
-import SqrlObject from "sqrl/lib/object/SqrlObject";
-import { sqrlCompare } from "sqrl/lib/function/ComparisonFunctions";
+import {
+  AssertService,
+  SqrlObject,
+  sqrlCompare,
+  FeatureMap,
+  executableFromSpec,
+  FunctionRegistry,
+  Executable,
+  compileFromFilesystem,
+  ExecutableCompiler,
+  ExecutableSpec
+} from "sqrl";
 import SqrlAst from "sqrl/lib/ast/SqrlAst";
 import { StatementAst } from "sqrl/lib/ast/Ast";
-import { buildServicesFromAddresses } from "sqrl/lib/helpers/ServiceHelpers";
 import {
-  executableFromSpec,
-  sourceOptionsFromPath,
-  sourceOptionsFromFilesystem
-} from "sqrl/lib/helpers/CompileHelpers";
+  register as registerRedis,
+  buildServices,
+  buildServicesWithMockRedis,
+  RedisServices
+} from "sqrl-redis-functions";
+import { sourceOptionsFromPath } from "sqrl/lib/helpers/CompileHelpers";
 import { createDefaultContext } from "sqrl/lib/helpers/ContextHelpers";
 import { SimpleLogService } from "sqrl/lib/simple/SimpleLogService";
 import { WatchedSourceTree } from "./WatchedSourceTree";
@@ -51,7 +52,6 @@ import {
   CliExprOutput,
   CliSlotJsOutput
 } from "./CliOutput";
-import { Context } from "sqrl/lib/api/ctx";
 import { getGlobalLogger } from "sqrl/lib/api/log";
 import { SimpleDatabaseSet } from "sqrl/lib/platform/DatabaseSet";
 import { SimpleContext } from "sqrl/lib/platform/Trace";
@@ -59,9 +59,11 @@ import { readFile } from "fs";
 import { promisify } from "util";
 import { Readable, Writable } from "stream";
 import { register as registerTextFunctions } from "sqrl-text-functions";
-import * as SQRL from "sqrl";
 import { CloseableGroup } from "../jslib/Closeable";
-import { FeatureMap } from "sqrl";
+
+// tslint:disable-next-line:no-duplicate-imports
+import * as SQRL from "sqrl";
+import { invariant } from "sqrl-common";
 
 const readFileAsync = promisify(readFile);
 
@@ -79,7 +81,6 @@ Options:
   --concurrency=<N>      Limit actions processed in parallel [default: 50]
   --compiled             Read compiled SQRL rather than source
   --only-blocked         Only show blocked actions
-  --ratelimit=<address>  Address of ratelimit server
   --redis=<address>      Address of redis server
   --output=<output>      Output format [default: pretty]
 `;
@@ -103,7 +104,6 @@ export interface CliArgs {
   "<feature>": string[];
   "<key=value>": string[];
   "--redis"?: string;
-  "--ratelimit"?: string;
   "--compiled"?: boolean;
   "--output": string;
   "--concurrency": string;
@@ -114,28 +114,6 @@ export class CliError extends Error {}
 async function readJsonFile(filename: string) {
   const data = await readFileAsync(filename, { encoding: "utf-8" });
   return JSON.parse(data);
-}
-
-async function createLabeler(
-  ctx: Context,
-  functionRegistry: FunctionRegistry,
-  sourceTree: Filesystem,
-  filename: string,
-  inputs: FeatureMap = {}
-) {
-  const parserState = new SqrlParserState({
-    ...(await sourceOptionsFromFilesystem(sourceTree, path.basename(filename))),
-    functionRegistry,
-    setInputs: inputs
-  });
-  compileParserStateAst(parserState);
-  const compiledOutput = new SqrlCompiledOutput(parserState);
-  const spec = await compiledOutput.buildLabelerSpec(ctx);
-  return {
-    executable: executableFromSpec(functionRegistry, spec),
-    compiledOutput,
-    spec
-  };
 }
 
 export function getCliOutput(
@@ -166,7 +144,7 @@ export function getCliOutput(
 }
 
 function getInputs(args: CliArgs) {
-  const inputs = {};
+  const inputs: FeatureMap = {};
   args["<key=value>"].forEach(pair => {
     const [key] = pair.split("=", 1);
     try {
@@ -196,31 +174,36 @@ class CliAssertService implements AssertService {
   }
 }
 
-const shutdown = [];
-
 function buildFunctionRegistry(
   args: CliArgs
 ): {
   functionRegistry: FunctionRegistry;
   services: FunctionServices;
 } {
-  const services: FunctionServices = buildServicesFromAddresses({
-    ratelimitAddress: args["--ratelimit"] || process.env.RATELIMIT,
-    redisAddress: args["--redis"] || process.env.REDIS,
-    inMemory: true
-  });
+  const redisAddress = args["--redis"] || process.env.REDIS;
+  let redisServices: RedisServices;
+  if (redisAddress) {
+    redisServices = buildServices(redisAddress);
+  } else {
+    redisServices = buildServicesWithMockRedis();
+  }
 
-  shutdown.push(services);
-
+  const services: FunctionServices = {};
   services.assert = new CliAssertService();
   services.block = new SimpleBlockService();
   services.log = new SimpleLogService();
+  services.uniqueId = redisServices.uniqueId;
 
-  const functionRegistry = new FunctionRegistry();
-  registerAllFunctions(functionRegistry, services);
+  const functionRegistry = SQRL.buildFunctionRegistry(services);
 
   // @TODO: Need to work on how these additional functions get loaded
-  registerTextFunctions(new SQRL.FunctionRegistry(functionRegistry));
+  if (redisAddress) {
+    // @TODO: shutdown.push(services);
+    registerRedis(functionRegistry, buildServices(redisAddress));
+  } else {
+    registerRedis(functionRegistry, buildServicesWithMockRedis());
+  }
+  registerTextFunctions(functionRegistry);
 
   return { functionRegistry, services };
 }
@@ -249,7 +232,7 @@ export async function cliMain(
       args["<filename>"]
     );
     const { functionRegistry, services } = buildFunctionRegistry(args);
-    const test = new SqrlTest(functionRegistry, {
+    const test = new SqrlTest(functionRegistry._wrapped, {
       filesystem,
       manipulatorFactory: () => new SimpleManipulator()
     });
@@ -273,9 +256,9 @@ export async function cliMain(
 
     const { functionRegistry } = buildFunctionRegistry(args);
     // <filename> is sqrl source code
-    let executable: SqrlExecutable | null = null;
-    let spec: LabelerSpec = null;
-    let compiledOutput: SqrlCompiledOutput = null;
+    let executable: Executable | null = null;
+    let spec: ExecutableSpec = null;
+    let compiler: ExecutableCompiler = null;
 
     let watchedSource: WatchedSourceTree = null;
     let sourceTree: Filesystem;
@@ -296,16 +279,14 @@ export async function cliMain(
         return {
           executable: executableFromSpec(functionRegistry, spec),
           spec: null,
-          compiledOutput: null
+          compiler: null
         };
       } else {
-        return createLabeler(
-          ctx,
-          functionRegistry,
-          sourceTree,
-          args["<filename>"],
-          inputs
-        );
+        return compileFromFilesystem(functionRegistry, sourceTree, {
+          context: ctx,
+          mainFile: args["<filename>"],
+          setInputs: inputs
+        });
       }
     }
 
@@ -331,7 +312,7 @@ export async function cliMain(
     }
 
     if (args["<filename>"]) {
-      ({ executable, spec, compiledOutput } = await loadSource());
+      ({ executable, spec, compiler } = await loadSource());
     }
 
     if (args.run) {
@@ -361,13 +342,13 @@ export async function cliMain(
 
       run.close();
     } else if (args.print) {
-      executable.sourcePrinter.printAllSource();
+      executable.getSourcePrinter().printAllSource();
     } else if (args.compile) {
       if (!(output instanceof CliCompileOutput)) {
         throw new Error("Output format not compatible with `compile`");
       }
-      invariant(compiledOutput, "Compile options must include a filename");
-      await output.compiled(spec, compiledOutput);
+      invariant(compiler, "Compile options must include a filename");
+      await output.compiled(spec, compiler);
     } else if (args.repl) {
       let filesystem: Filesystem = new LocalFilesystem(process.cwd());
       const statements: StatementAst[] = [];
@@ -375,7 +356,7 @@ export async function cliMain(
         ({ filesystem } = await sourceOptionsFromPath(args["<filename>"]));
         statements.push(SqrlAst.include(path.basename(args["<filename>"])));
       }
-      const test = new SqrlTest(functionRegistry, {
+      const test = new SqrlTest(functionRegistry._wrapped, {
         filesystem,
         manipulatorFactory: () => new SimpleManipulator()
       });

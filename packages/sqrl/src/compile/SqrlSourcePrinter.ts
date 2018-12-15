@@ -13,8 +13,8 @@ interface SourcePrintOptions {
 }
 
 export default class SqrlSourcePrinter {
-  slotNames: string[];
-  slotJs: string[];
+  private slotNames: string[];
+  private slotJs: string[];
 
   constructor(props: { slotNames: string[]; slotJs: string[] }) {
     this.slotNames = props.slotNames;
@@ -29,11 +29,13 @@ export default class SqrlSourcePrinter {
     if (this.slotJs[slot]) {
       return this.slotJs[slot];
     } else {
-      throw new Error("Slot does not have associated js (input?)");
+      throw new Error(
+        "Slot does not have associated js (perhaps it is an input?)"
+      );
     }
   }
 
-  findSlot(slotName: string): number {
+  findSlotIndex(slotName: string): number {
     const slot = this.slotNames.indexOf(slotName);
     invariant(slot >= 0, "Could not find slot: %s", slotName);
     return slot;
@@ -43,10 +45,10 @@ export default class SqrlSourcePrinter {
   }
 
   getJsForSlotName(slotName: string): string {
-    return this.getSlotJs(this.findSlot(slotName));
+    return this.getSlotJs(this.findSlotIndex(slotName));
   }
   getSourceForSlotName(slotName: string, props = {}) {
-    return this.getHumanSlotSource(this.findSlot(slotName), props);
+    return this.getHumanSlotSource(this.findSlotIndex(slotName), props);
   }
   getHumanSlotSource(slot, props = {}) {
     return this.transformSource(this.getSlotJs(slot), props);
@@ -90,7 +92,10 @@ export default class SqrlSourcePrinter {
     return output;
   }
 
-  transformSource(source?: string, props: SourcePrintOptions = {}): string {
+  private transformSource(
+    source?: string,
+    props: SourcePrintOptions = {}
+  ): string {
     // Replace common references to slots with their named counter-parts
     // ** This does not produce valid javascript code and is intended for
     //    testing and debugging only!

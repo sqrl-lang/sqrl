@@ -65,7 +65,7 @@ Object {
   "SqrlAssertionStatements": "function() {
   const p0 = bluebird.resolve(true);
   return this.load(
-    \`28:function() {
+    \`23:function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -76,7 +76,7 @@ Object {
     )
   );
 }\`,
-    \`29:function() {
+    \`24:function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -87,7 +87,7 @@ Object {
     )
   );
 }\`,
-    \`30:function() {
+    \`25:function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -98,7 +98,7 @@ Object {
     )
   );
 }\`,
-    \`31:function() {
+    \`26:function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -109,7 +109,7 @@ Object {
     )
   );
 }\`,
-    \`32:function() {
+    \`27:function() {
   const p0 = bluebird.resolve(\\"=\\");
   const p1 = bluebird.resolve({ a: 6 });
   const p2 = bluebird.resolve(
@@ -124,24 +124,10 @@ Object {
   "SqrlClock": "function() {
   return bluebird.resolve(functions.now());
 }",
-  "SqrlCountStatements": "function() {
-  return bluebird.resolve(true);
-}",
-  "SqrlCountUniqueStatements": "function() {
-  return bluebird.resolve(true);
-}",
   "SqrlExecutionComplete": "function() {
   return bluebird.resolve(true);
 }",
   "SqrlIsClassify": "function() {
-  return bluebird.resolve(true);
-}",
-  "SqrlKafka": "function() {
-  const f0 = () =>
-    bluebird.resolve(functions.attr(this.slots[\\"SqrlOutput\\"].value(), \\"kafka\\"));
-  return this.load(\\"SqrlOutput\\").then(f0);
-}",
-  "SqrlLabelStatements": "function() {
   return bluebird.resolve(true);
 }",
   "SqrlLogStatements": "function() {
@@ -152,9 +138,6 @@ Object {
 }",
   "SqrlNoopStatements": "function() {
   return bluebird.resolve(true);
-}",
-  "SqrlOutput": "function() {
-  return bluebird.resolve(functions.getSqrlOutput(this, true));
 }",
   "SqrlSaveStatements": "function() {
   return bluebird.resolve(true);
