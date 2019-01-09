@@ -89,6 +89,7 @@
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_expr_.listcomprehensionexpr.html" class="tsd-kind-icon">List<wbr>Comprehension<wbr>Expr</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_expr_.listexpr.html" class="tsd-kind-icon">List<wbr>Expr</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_expr_.loadexpr.html" class="tsd-kind-icon">Load<wbr>Expr</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/_expr_.serializedexpr.html" class="tsd-kind-icon">Serialized<wbr>Expr</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_expr_.slot.html" class="tsd-kind-icon">Slot</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_expr_.stateexpr.html" class="tsd-kind-icon">State<wbr>Expr</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_expr_.valueexpr.html" class="tsd-kind-icon">Value<wbr>Expr</a></li>
@@ -98,6 +99,12 @@
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_expr_.html#expr" class="tsd-kind-icon">Expr</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_expr_.html#serializeexpr" class="tsd-kind-icon">serialize<wbr>Expr</a></li>
 							</ul>
 						</section>
 					</div>
@@ -111,9 +118,35 @@
 					<div class="tsd-signature tsd-kind-icon">Expr<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_expr_.inputexpr.html" class="tsd-signature-type">InputExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.loadexpr.html" class="tsd-signature-type">LoadExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.constantexpr.html" class="tsd-signature-type">ConstantExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.valueexpr.html" class="tsd-signature-type">ValueExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.iteratorexpr.html" class="tsd-signature-type">IteratorExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.stateexpr.html" class="tsd-signature-type">StateExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.ifexpr.html" class="tsd-signature-type">IfExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.callexpr.html" class="tsd-signature-type">CallExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.listexpr.html" class="tsd-signature-type">ListExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.listcomprehensionexpr.html" class="tsd-signature-type">ListComprehensionExpr</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/expr.ts#L63">expr.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/expr.ts#L63">expr.ts:63</a></li>
 						</ul>
 					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="serializeexpr" class="tsd-anchor"></a>
+					<h3>serialize<wbr>Expr</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">serialize<wbr>Expr<span class="tsd-signature-symbol">(</span>expr<span class="tsd-signature-symbol">: </span><a href="_expr_.html#expr" class="tsd-signature-type">Expr</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_expr_.serializedexpr.html" class="tsd-signature-type">SerializedExpr</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/expr.ts#L81">expr.ts:81</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>expr: <a href="_expr_.html#expr" class="tsd-signature-type">Expr</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_expr_.serializedexpr.html" class="tsd-signature-type">SerializedExpr</a></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -124,10 +157,40 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="_argumentcheck_.html">"<wbr>Argument<wbr>Check"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_astbuilder_.html">"<wbr>Ast<wbr>Builder"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executablespec_.html">"<wbr>Executable<wbr>Spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_manipulator_.html">"<wbr>Manipulator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_sqrlboxed_.html">"<wbr>Sqrl<wbr>Boxed"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_uniqueid_.html">"<wbr>Unique<wbr>Id"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_uniqueidservice_.html">"<wbr>Unique<wbr>IdService"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_arg_.html">"arg"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="_ast_.html">"ast"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_ctx_.html">"ctx"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executable_.html">"executable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executablefrom_.html">"executable<wbr>From"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_execute_.html">"execute"</a>
@@ -142,7 +205,31 @@
 						<a href="_log_.html">"log"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="_object_.html">"object"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="_parse_.html">"parse"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simpleblockservice_.html">"simple/<wbr>Simple<wbr>Block<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simplelogservice_.html">"simple/<wbr>Simple<wbr>Log<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simplemanipulator_.html">"simple/<wbr>Simple<wbr>Manipulator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_testlogger_.html">"simple/<wbr>Test<wbr>Logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_runsqrltest_.html">"simple/run<wbr>Sqrl<wbr>Test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_test_.html">"test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_when_.html">"when"</a>
 					</li>
 				</ul>
 			</nav>
@@ -175,6 +262,9 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_expr_.loadexpr.html" class="tsd-kind-icon">Load<wbr>Expr</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/_expr_.serializedexpr.html" class="tsd-kind-icon">Serialized<wbr>Expr</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_expr_.slot.html" class="tsd-kind-icon">Slot</a>
 					</li>
@@ -186,6 +276,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 						<a href="_expr_.html#expr" class="tsd-kind-icon">Expr</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_expr_.html#serializeexpr" class="tsd-kind-icon">serialize<wbr>Expr</a>
 					</li>
 				</ul>
 			</nav>

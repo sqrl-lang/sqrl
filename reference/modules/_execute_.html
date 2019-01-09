@@ -72,7 +72,6 @@
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_execute_.executable.html" class="tsd-kind-icon">Executable</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_execute_.execution.html" class="tsd-kind-icon">Execution</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_execute_.functionregistry.html" class="tsd-kind-icon">Function<wbr>Registry</a></li>
 							</ul>
 						</section>
@@ -80,13 +79,15 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.executableoptions.html" class="tsd-kind-icon">Executable<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.execution.html" class="tsd-kind-icon">Execution</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.featuremap.html" class="tsd-kind-icon">Feature<wbr>Map</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.functionoptions.html" class="tsd-kind-icon">Function<wbr>Options</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_execute_.html#buildfunctionregistry" class="tsd-kind-icon">build<wbr>Function<wbr>Registry</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_execute_.html#executablefromstring" class="tsd-kind-icon">executable<wbr>From<wbr>String</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,13 +99,13 @@
 					<a name="buildfunctionregistry" class="tsd-anchor"></a>
 					<h3>build<wbr>Function<wbr>Registry</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">build<wbr>Function<wbr>Registry<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></li>
+						<li class="tsd-signature tsd-kind-icon">build<wbr>Function<wbr>Registry<span class="tsd-signature-symbol">(</span>services<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FunctionServices</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L25">execute.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/execute.ts#L32">execute.ts:32</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -112,39 +113,13 @@
 									<p>Build a function registry with the default functions included.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="executablefromstring" class="tsd-anchor"></a>
-					<h3>executable<wbr>From<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>String<span class="tsd-signature-symbol">(</span>sqrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_execute_.executableoptions.html" class="tsd-signature-type">ExecutableOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L33">execute.ts:33</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>This method creates an SQRL Executable given source code and a function
-									registry.</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>sqrl: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>options: <a href="../interfaces/_execute_.executableoptions.html" class="tsd-signature-type">ExecutableOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> services: <span class="tsd-signature-type">FunctionServices</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -157,10 +132,40 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="_argumentcheck_.html">"<wbr>Argument<wbr>Check"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_astbuilder_.html">"<wbr>Ast<wbr>Builder"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executablespec_.html">"<wbr>Executable<wbr>Spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_manipulator_.html">"<wbr>Manipulator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_sqrlboxed_.html">"<wbr>Sqrl<wbr>Boxed"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_uniqueid_.html">"<wbr>Unique<wbr>Id"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_uniqueidservice_.html">"<wbr>Unique<wbr>IdService"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_arg_.html">"arg"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="_ast_.html">"ast"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_ctx_.html">"ctx"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executable_.html">"executable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executablefrom_.html">"executable<wbr>From"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="_execute_.html">"execute"</a>
@@ -175,7 +180,31 @@
 						<a href="_log_.html">"log"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="_object_.html">"object"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="_parse_.html">"parse"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simpleblockservice_.html">"simple/<wbr>Simple<wbr>Block<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simplelogservice_.html">"simple/<wbr>Simple<wbr>Log<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simplemanipulator_.html">"simple/<wbr>Simple<wbr>Manipulator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_testlogger_.html">"simple/<wbr>Test<wbr>Logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_runsqrltest_.html">"simple/run<wbr>Sqrl<wbr>Test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_test_.html">"test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_when_.html">"when"</a>
 					</li>
 				</ul>
 			</nav>
@@ -185,19 +214,22 @@
 						<a href="../classes/_execute_.executable.html" class="tsd-kind-icon">Executable</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_execute_.execution.html" class="tsd-kind-icon">Execution</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/_execute_.functionregistry.html" class="tsd-kind-icon">Function<wbr>Registry</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_execute_.executableoptions.html" class="tsd-kind-icon">Executable<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_execute_.html#buildfunctionregistry" class="tsd-kind-icon">build<wbr>Function<wbr>Registry</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_execute_.execution.html" class="tsd-kind-icon">Execution</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_execute_.featuremap.html" class="tsd-kind-icon">Feature<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_execute_.functionoptions.html" class="tsd-kind-icon">Function<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_execute_.html#executablefromstring" class="tsd-kind-icon">executable<wbr>From<wbr>String</a>
+						<a href="_execute_.html#buildfunctionregistry" class="tsd-kind-icon">build<wbr>Function<wbr>Registry</a>
 					</li>
 				</ul>
 			</nav>

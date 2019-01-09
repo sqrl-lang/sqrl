@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Execution | sqrl</title>
+	<title>TestLogger | sqrl</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,33 +54,36 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_execute_.html">&quot;execute&quot;</a>
+					<a href="../modules/_simple_testlogger_.html">&quot;simple/TestLogger&quot;</a>
 				</li>
 				<li>
-					<a href="_execute_.execution.html">Execution</a>
+					<a href="_simple_testlogger_.testlogger.html">TestLogger</a>
 				</li>
 			</ul>
-			<h1>Class Execution</h1>
+			<h1>Class TestLogger</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>A SQRL Execution is the runtime representation of a single event executing
-						in the SQRL runtime.</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Execution</span>
+						<span class="tsd-signature-type">AbstractLogger</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">TestLogger</span>
+							</li>
+						</ul>
 					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implements</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../interfaces/_log_.logger.html" class="tsd-signature-type">Logger</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -88,40 +91,75 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_simple_testlogger_.testlogger.html#messages" class="tsd-kind-icon">messages</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.execution.html#debug" class="tsd-kind-icon">debug</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.execution.html#error" class="tsd-kind-icon">error</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.execution.html#fatal" class="tsd-kind-icon">fatal</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.execution.html#fetchfeature" class="tsd-kind-icon">fetch<wbr>Feature</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.execution.html#info" class="tsd-kind-icon">info</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.execution.html#trace" class="tsd-kind-icon">trace</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.execution.html#warn" class="tsd-kind-icon">warn</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_simple_testlogger_.testlogger.html#counterrors" class="tsd-kind-icon">count<wbr>Errors</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_simple_testlogger_.testlogger.html#debug" class="tsd-kind-icon">debug</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_simple_testlogger_.testlogger.html#error" class="tsd-kind-icon">error</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_simple_testlogger_.testlogger.html#fatal" class="tsd-kind-icon">fatal</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_simple_testlogger_.testlogger.html#info" class="tsd-kind-icon">info</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_simple_testlogger_.testlogger.html#log" class="tsd-kind-icon">log</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_simple_testlogger_.testlogger.html#poplatest" class="tsd-kind-icon">pop<wbr>Latest</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_simple_testlogger_.testlogger.html#trace" class="tsd-kind-icon">trace</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_simple_testlogger_.testlogger.html#warn" class="tsd-kind-icon">warn</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="messages" class="tsd-anchor"></a>
+					<h3>messages</h3>
+					<div class="tsd-signature tsd-kind-icon">messages<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/simple/TestLogger.ts#L6">simple/TestLogger.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="counterrors" class="tsd-anchor"></a>
+					<h3>count<wbr>Errors</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">count<wbr>Errors<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/simple/TestLogger.ts#L11">simple/TestLogger.ts:11</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="debug" class="tsd-anchor"></a>
 					<h3>debug</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">debug<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/_log_.logproperties.html" class="tsd-signature-type">LogProperties</a>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>param<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_log_.logger.html">Logger</a>.<a href="../interfaces/_log_.logger.html#debug">debug</a></p>
+								<p>Inherited from AbstractLogger.debug</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L132">execute.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/util/Logger.ts#L20">/Users/jyudaken/code/sqrl/packages/sqrl/src/util/Logger.ts:20</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Logs a message at the debug (second lowest) level</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -138,24 +176,21 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="error" class="tsd-anchor"></a>
 					<h3>error</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/_log_.logproperties.html" class="tsd-signature-type">LogProperties</a>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>param<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_log_.logger.html">Logger</a>.<a href="../interfaces/_log_.logger.html#error">error</a></p>
+								<p>Inherited from AbstractLogger.error</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L153">execute.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/util/Logger.ts#L29">/Users/jyudaken/code/sqrl/packages/sqrl/src/util/Logger.ts:29</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Logs a message at the error (high priority) level</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -172,24 +207,21 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="fatal" class="tsd-anchor"></a>
 					<h3>fatal</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">fatal<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/_log_.logproperties.html" class="tsd-signature-type">LogProperties</a>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>param<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_log_.logger.html">Logger</a>.<a href="../interfaces/_log_.logger.html#fatal">fatal</a></p>
+								<p>Inherited from AbstractLogger.fatal</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L160">execute.ts:160</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/util/Logger.ts#L32">/Users/jyudaken/code/sqrl/packages/sqrl/src/util/Logger.ts:32</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Logs a message at the fatal (highest priority) level</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -206,53 +238,21 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="fetchfeature" class="tsd-anchor"></a>
-					<h3>fetch<wbr>Feature</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">fetch<wbr>Feature<span class="tsd-signature-symbol">(</span>featureName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L118">execute.ts:118</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns a promise for the given feature name for the execution. If the
-									feature has not been calculated yet this will start the calculation.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>featureName: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="info" class="tsd-anchor"></a>
 					<h3>info</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">info<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/_log_.logproperties.html" class="tsd-signature-type">LogProperties</a>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>param<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_log_.logger.html">Logger</a>.<a href="../interfaces/_log_.logger.html#info">info</a></p>
+								<p>Inherited from AbstractLogger.info</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L139">execute.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/util/Logger.ts#L23">/Users/jyudaken/code/sqrl/packages/sqrl/src/util/Logger.ts:23</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Logs a message at the info (normal) level</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -269,24 +269,91 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="log" class="tsd-anchor"></a>
+					<h3>log</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">(</span>level<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><a href="../interfaces/_log_.logproperties.html" class="tsd-signature-type">LogProperties</a>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>param<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_log_.logger.html">Logger</a>.<a href="../interfaces/_log_.logger.html#log">log</a></p>
+								<p>Overrides AbstractLogger.log</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/simple/TestLogger.ts#L32">simple/TestLogger.ts:32</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>level: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <a href="../interfaces/_log_.logproperties.html" class="tsd-signature-type">LogProperties</a></h5>
+								</li>
+								<li>
+									<h5>format: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>param: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="poplatest" class="tsd-anchor"></a>
+					<h3>pop<wbr>Latest</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">pop<wbr>Latest<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/simple/TestLogger.ts#L22">simple/TestLogger.ts:22</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>props: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5>level<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>level<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="trace" class="tsd-anchor"></a>
 					<h3>trace</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">trace<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/_log_.logproperties.html" class="tsd-signature-type">LogProperties</a>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>param<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_log_.logger.html">Logger</a>.<a href="../interfaces/_log_.logger.html#trace">trace</a></p>
+								<p>Inherited from AbstractLogger.trace</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L125">execute.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/util/Logger.ts#L17">/Users/jyudaken/code/sqrl/packages/sqrl/src/util/Logger.ts:17</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Logs a message at the trace (lowest) level</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -303,24 +370,21 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="warn" class="tsd-anchor"></a>
 					<h3>warn</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon">warn<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><a href="../interfaces/_log_.logproperties.html" class="tsd-signature-type">LogProperties</a>, format<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>param<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/_log_.logger.html">Logger</a>.<a href="../interfaces/_log_.logger.html#warn">warn</a></p>
+								<p>Inherited from AbstractLogger.warn</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/execute.ts#L146">execute.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/util/Logger.ts#L26">/Users/jyudaken/code/sqrl/packages/sqrl/src/util/Logger.ts:26</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Logs a message at the warn (priority) level</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -346,12 +410,42 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_argumentcheck_.html">"<wbr>Argument<wbr>Check"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_astbuilder_.html">"<wbr>Ast<wbr>Builder"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_executablespec_.html">"<wbr>Executable<wbr>Spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_manipulator_.html">"<wbr>Manipulator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_sqrlboxed_.html">"<wbr>Sqrl<wbr>Boxed"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_uniqueid_.html">"<wbr>Unique<wbr>Id"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_uniqueidservice_.html">"<wbr>Unique<wbr>IdService"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_arg_.html">"arg"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ast_.html">"ast"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ctx_.html">"ctx"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_executable_.html">"executable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_executablefrom_.html">"executable<wbr>From"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_execute_.html">"execute"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -364,57 +458,75 @@
 						<a href="../modules/_log_.html">"log"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_object_.html">"object"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_parse_.html">"parse"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_simpleblockservice_.html">"simple/<wbr>Simple<wbr>Block<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_simplelogservice_.html">"simple/<wbr>Simple<wbr>Log<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_simplemanipulator_.html">"simple/<wbr>Simple<wbr>Manipulator"</a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="../modules/_simple_testlogger_.html">"simple/<wbr>Test<wbr>Logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_runsqrltest_.html">"simple/run<wbr>Sqrl<wbr>Test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_test_.html">"test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_when_.html">"when"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_execute_.executable.html" class="tsd-kind-icon">Executable</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_execute_.execution.html" class="tsd-kind-icon">Execution</a>
+						<a href="_simple_testlogger_.testlogger.html" class="tsd-kind-icon">Test<wbr>Logger</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_execute_.execution.html#debug" class="tsd-kind-icon">debug</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_simple_testlogger_.testlogger.html#messages" class="tsd-kind-icon">messages</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_execute_.execution.html#error" class="tsd-kind-icon">error</a>
+								<a href="_simple_testlogger_.testlogger.html#counterrors" class="tsd-kind-icon">count<wbr>Errors</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_simple_testlogger_.testlogger.html#debug" class="tsd-kind-icon">debug</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_simple_testlogger_.testlogger.html#error" class="tsd-kind-icon">error</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_simple_testlogger_.testlogger.html#fatal" class="tsd-kind-icon">fatal</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_simple_testlogger_.testlogger.html#info" class="tsd-kind-icon">info</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="_simple_testlogger_.testlogger.html#log" class="tsd-kind-icon">log</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_execute_.execution.html#fatal" class="tsd-kind-icon">fatal</a>
+								<a href="_simple_testlogger_.testlogger.html#poplatest" class="tsd-kind-icon">pop<wbr>Latest</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_execute_.execution.html#fetchfeature" class="tsd-kind-icon">fetch<wbr>Feature</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_simple_testlogger_.testlogger.html#trace" class="tsd-kind-icon">trace</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_execute_.execution.html#info" class="tsd-kind-icon">info</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_execute_.execution.html#trace" class="tsd-kind-icon">trace</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_execute_.execution.html#warn" class="tsd-kind-icon">warn</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="_simple_testlogger_.testlogger.html#warn" class="tsd-kind-icon">warn</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_execute_.functionregistry.html" class="tsd-kind-icon">Function<wbr>Registry</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_execute_.executableoptions.html" class="tsd-kind-icon">Executable<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="../modules/_execute_.html#buildfunctionregistry" class="tsd-kind-icon">build<wbr>Function<wbr>Registry</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="../modules/_execute_.html#executablefromstring" class="tsd-kind-icon">executable<wbr>From<wbr>String</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

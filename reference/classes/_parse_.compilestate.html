@@ -90,11 +90,14 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#addstatement" class="tsd-kind-icon">add<wbr>Statement</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#debug" class="tsd-kind-icon">debug</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#error" class="tsd-kind-icon">error</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#fatal" class="tsd-kind-icon">fatal</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#getfilesystem" class="tsd-kind-icon">get<wbr>Filesystem</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#info" class="tsd-kind-icon">info</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#setconstantslot" class="tsd-kind-icon">set<wbr>Constant<wbr>Slot</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#setglobal" class="tsd-kind-icon">set<wbr>Global</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#trace" class="tsd-kind-icon">trace</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#warn" class="tsd-kind-icon">warn</a></li>
 							</ul>
@@ -105,6 +108,37 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="addstatement" class="tsd-anchor"></a>
+					<h3>add<wbr>Statement</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Statement<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, slotAst<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ast_.slotast.html" class="tsd-signature-type">SlotAst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L116">parse.ts:116</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds a statement</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>slotAst: <a href="../interfaces/_ast_.slotast.html" class="tsd-signature-type">SlotAst</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="debug" class="tsd-anchor"></a>
 					<h3>debug</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -114,7 +148,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/parse.ts#L80">parse.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L130">parse.ts:130</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -148,7 +182,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/parse.ts#L101">parse.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L151">parse.ts:151</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -182,7 +216,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/parse.ts#L108">parse.ts:108</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L158">parse.ts:158</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -216,7 +250,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/parse.ts#L66">parse.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L90">parse.ts:90</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -238,7 +272,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/parse.ts#L87">parse.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L137">parse.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -263,6 +297,77 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setconstantslot" class="tsd-anchor"></a>
+					<h3>set<wbr>Constant<wbr>Slot</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Constant<wbr>Slot<span class="tsd-signature-symbol">(</span>sourceAst<span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a>, name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, initialValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_parse_.constantslot.html" class="tsd-signature-type">ConstantSlot</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L107">parse.ts:107</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new global slot if it doesn&#39;t already exist. Ensures that the
+										slot is a ConstantSlot and returns an object that can be used to update
+									the value.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>sourceAst: <a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h5>
+								</li>
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>initialValue: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_parse_.constantslot.html" class="tsd-signature-type">ConstantSlot</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setglobal" class="tsd-anchor"></a>
+					<h3>set<wbr>Global</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Global<span class="tsd-signature-symbol">(</span>sourceAst<span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a>, valueAst<span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a>, name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_ast_.slotast.html" class="tsd-signature-type">SlotAst</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L98">parse.ts:98</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a new global slot. If there is a problem creating the slot the
+									error message will point to the code in <code>sourceAst</code>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>sourceAst: <a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h5>
+								</li>
+								<li>
+									<h5>valueAst: <a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_ast_.slotast.html" class="tsd-signature-type">SlotAst</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="trace" class="tsd-anchor"></a>
 					<h3>trace</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -272,7 +377,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/parse.ts#L73">parse.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L123">parse.ts:123</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -306,7 +411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/parse.ts#L94">parse.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/parse.ts#L144">parse.ts:144</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -339,10 +444,40 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_argumentcheck_.html">"<wbr>Argument<wbr>Check"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_astbuilder_.html">"<wbr>Ast<wbr>Builder"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_executablespec_.html">"<wbr>Executable<wbr>Spec"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_manipulator_.html">"<wbr>Manipulator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_sqrlboxed_.html">"<wbr>Sqrl<wbr>Boxed"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_uniqueid_.html">"<wbr>Unique<wbr>Id"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_uniqueidservice_.html">"<wbr>Unique<wbr>IdService"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_arg_.html">"arg"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ast_.html">"ast"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ctx_.html">"ctx"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_executable_.html">"executable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_executablefrom_.html">"executable<wbr>From"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_execute_.html">"execute"</a>
@@ -356,8 +491,32 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_log_.html">"log"</a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_object_.html">"object"</a>
+					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_parse_.html">"parse"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_simpleblockservice_.html">"simple/<wbr>Simple<wbr>Block<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_simplelogservice_.html">"simple/<wbr>Simple<wbr>Log<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_simplemanipulator_.html">"simple/<wbr>Simple<wbr>Manipulator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_testlogger_.html">"simple/<wbr>Test<wbr>Logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_simple_runsqrltest_.html">"simple/run<wbr>Sqrl<wbr>Test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_test_.html">"test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_when_.html">"when"</a>
 					</li>
 				</ul>
 			</nav>
@@ -368,6 +527,9 @@
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_parse_.compilestate.html" class="tsd-kind-icon">Compile<wbr>State</a>
 						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_parse_.compilestate.html#addstatement" class="tsd-kind-icon">add<wbr>Statement</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_parse_.compilestate.html#debug" class="tsd-kind-icon">debug</a>
 							</li>
@@ -384,6 +546,12 @@
 								<a href="_parse_.compilestate.html#info" class="tsd-kind-icon">info</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_parse_.compilestate.html#setconstantslot" class="tsd-kind-icon">set<wbr>Constant<wbr>Slot</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_parse_.compilestate.html#setglobal" class="tsd-kind-icon">set<wbr>Global</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_parse_.compilestate.html#trace" class="tsd-kind-icon">trace</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -393,6 +561,9 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_parse_.constantslot.html" class="tsd-kind-icon">Constant<wbr>Slot</a>
+					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_parse_.sqrlasterror.html" class="tsd-kind-icon">Sqrl<wbr>Ast<wbr>Error</a>
 					</li>

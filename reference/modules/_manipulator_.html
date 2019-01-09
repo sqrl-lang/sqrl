@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AstBuilder | sqrl</title>
+	<title>&quot;Manipulator&quot; | sqrl</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,71 +54,73 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_ast_.html">&quot;ast&quot;</a>
-				</li>
-				<li>
-					<a href="_ast_.astbuilder.html">AstBuilder</a>
+					<a href="_manipulator_.html">&quot;Manipulator&quot;</a>
 				</li>
 			</ul>
-			<h1>Class AstBuilder</h1>
+			<h1>External module &quot;Manipulator&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Helper class to construct new Ast objects</p>
-					</div>
-				</div>
-			</section>
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">AstBuilder</span>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_ast_.astbuilder.html#constant" class="tsd-kind-icon">constant</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_manipulator_.manipulator.html" class="tsd-kind-icon">Manipulator</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_manipulator_.executionerrorproperties.html" class="tsd-kind-icon">Execution<wbr>Error<wbr>Properties</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="_manipulator_.html#manipulatorcallback" class="tsd-kind-icon">Manipulator<wbr>Callback</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="constant" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> constant</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">constant<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_ast_.constantast.html" class="tsd-signature-type">ConstantAst</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/7f24ebc/packages/sqrl/src/api/ast.ts#L10">ast.ts:10</a></li>
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
+					<a name="manipulatorcallback" class="tsd-anchor"></a>
+					<h3>Manipulator<wbr>Callback</h3>
+					<div class="tsd-signature tsd-kind-icon">Manipulator<wbr>Callback<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/3ee7758/packages/sqrl/src/api/Manipulator.ts#L14">Manipulator.ts:14</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ctx_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>value: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_ast_.constantast.html" class="tsd-signature-type">ConstantAst</a></h4>
-						</li>
-					</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>ctx: <a href="../interfaces/_ctx_.context.html" class="tsd-signature-type">Context</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -128,43 +130,94 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_argumentcheck_.html">"<wbr>Argument<wbr>Check"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_astbuilder_.html">"<wbr>Ast<wbr>Builder"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executablespec_.html">"<wbr>Executable<wbr>Spec"</a>
+					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_ast_.html">"ast"</a>
+						<a href="_manipulator_.html">"<wbr>Manipulator"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_ctx_.html">"ctx"</a>
+						<a href="_sqrlboxed_.html">"<wbr>Sqrl<wbr>Boxed"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_execute_.html">"execute"</a>
+						<a href="_uniqueid_.html">"<wbr>Unique<wbr>Id"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_expr_.html">"expr"</a>
+						<a href="_uniqueidservice_.html">"<wbr>Unique<wbr>IdService"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_filesystem_.html">"filesystem"</a>
+						<a href="_arg_.html">"arg"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_log_.html">"log"</a>
+						<a href="_ast_.html">"ast"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_parse_.html">"parse"</a>
+						<a href="_ctx_.html">"ctx"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executable_.html">"executable"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_executablefrom_.html">"executable<wbr>From"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_execute_.html">"execute"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_expr_.html">"expr"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_filesystem_.html">"filesystem"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_log_.html">"log"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_object_.html">"object"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_parse_.html">"parse"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simpleblockservice_.html">"simple/<wbr>Simple<wbr>Block<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simplelogservice_.html">"simple/<wbr>Simple<wbr>Log<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_simplemanipulator_.html">"simple/<wbr>Simple<wbr>Manipulator"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_testlogger_.html">"simple/<wbr>Test<wbr>Logger"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_simple_runsqrltest_.html">"simple/run<wbr>Sqrl<wbr>Test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_test_.html">"test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_when_.html">"when"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_ast_.astbuilder.html" class="tsd-kind-icon">Ast<wbr>Builder</a>
-						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_ast_.astbuilder.html#constant" class="tsd-kind-icon">constant</a>
-							</li>
-						</ul>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_manipulator_.manipulator.html" class="tsd-kind-icon">Manipulator</a>
 					</li>
-				</ul>
-				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_manipulator_.executionerrorproperties.html" class="tsd-kind-icon">Execution<wbr>Error<wbr>Properties</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="_manipulator_.html#manipulatorcallback" class="tsd-kind-icon">Manipulator<wbr>Callback</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
