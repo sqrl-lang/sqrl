@@ -1,11 +1,17 @@
+branches:
+  only:
+    master
 language: node_js
 env:
   global:
     - SQRL_TEST_REDIS=localhost:6379
-node_js:
-  - "node"
-  - "8"
-  - "10"
+matrix:
+  include:
+    - node_js: "node"
+    - node_js: "8"
+      if: branch = master
+    - node_js: "10"
+      if: branch = master
 services:
   - redis-server
 script:

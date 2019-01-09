@@ -9,7 +9,8 @@ timezone: UTC
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-# root: /
+url: https://twitter.github.io/sqrl/
+root: /sqrl/
 
 # Writing
 relative_link: false
@@ -17,7 +18,7 @@ relative_link: false
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: ../node_modules/hexo-theme-doc
+theme: ../../node_modules/hexo-theme-doc
 
 theme_config:
   favicon: images/favicon.ico
@@ -31,3 +32,4 @@ deploy:
   repo: git@github.com:twitter/sqrl
   branch: gh-pages
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}"
+  ignore_hidden: false

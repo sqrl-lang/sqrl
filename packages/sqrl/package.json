@@ -17,7 +17,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib && rimraf coverage",
-    "docs": "typedoc --out docs --ignoreCompilerErrors --stripInternal --excludeExternals src/api/",
+    "docs": "typedoc --out ../../website/public/reference --ignoreCompilerErrors --stripInternal --excludeExternals src/api/",
     "format": "prettier --write \"{src,__tests__}/**/*.ts\"",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build": "tsc --pretty",

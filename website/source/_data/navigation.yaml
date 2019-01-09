@@ -1,0 +1,15 @@
+logo:
+  text: SQRL Documentation
+  type: link
+  path: index.html
+
+main:
+  - text: SQRL Documentation
+    type: link
+    path: index.html
+  - text: Defining Functions
+    type: label
+    children:
+      - text: Defining Functions
+        type: link
+        path: defining-functions.html
