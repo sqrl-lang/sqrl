@@ -24,7 +24,7 @@
   </head>
   <body>
 
-   <script>window.__INITIAL_STATE__ = {"page":{"title":"SQRL","path":"index.html"},"data":{"navigation":{"logo":{"text":"SQRL Documentation","type":"link","path":"index.html"},"main":[{"text":"Navigation","type":"label"},{"text":"SQRL Documentation","type":"link","path":"index.html","children":[{"text":"Sample Page","type":"link","path":"hello-world.html"}]}]}},"config":{"timezone":"UTC","root":"/sqrl/","time_format":"HH:mm:ss","theme":"../../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"images/favicon.ico"}}}</script>
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"SQRL","path":"index.html"},"data":{"navigation":{"logo":{"text":"SQRL Documentation","type":"link","path":"index.html"},"main":[{"text":"Navigation","type":"label"},{"text":"SQRL Documentation","type":"link","path":"index.html"},{"text":"Defining Functions","type":"label","children":[{"text":"Defining Functions","type":"link","path":"defining-functions.html"}]}]}},"config":{"timezone":"UTC","root":"/sqrl/","time_format":"HH:mm:ss","theme":"../../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"images/favicon.ico"}}}</script>
 
     <div id="react-navigation-root"><div class="doc-navigation" data-reactroot=""><nav class="doc-navbar"><a href="/sqrl/index.html" class="doc-navbar__logo"><img src="/sqrl/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">SQRL Documentation</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"></ul></div></nav></div></div>
     <div class="doc-content">
@@ -32,11 +32,23 @@
     <div class="dc-card">
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
-        <h1 id="SQRL"><a href="#SQRL" class="headerlink" title="SQRL"></a>SQRL</h1><p>A Safe, Stateful Rules Language for Event Streams</p>
+        <h1 id="SQRL"><a href="#SQRL" class="headerlink" title="SQRL"></a>SQRL</h1><p><strong>A Safe, Stateful Rules Language for Event Streams</strong></p>
+<p>SQRL is a language and runtime designed to stop a variety of attacks on large social websites and marketplaces.</p>
+<p>It provides a simple language that reads like SQL, but allows analysts to quickly and safely deploy rules to stop abusive users.</p>
 <h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><p>To get started:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install</span><br><span class="line">$ ./examples/wikipedia/stream</span><br></pre></td></tr></table></figure>
 <p>Now look at the source that is being run</p>
 <p>open <code>examples/wikipedia/main.sqrl</code></p>
+<h2 id="Extending-SQRL-with-functions-and-counters"><a href="#Extending-SQRL-with-functions-and-counters" class="headerlink" title="Extending SQRL with functions and counters"></a>Extending SQRL with functions and counters</h2><p>The <code>sqrl</code> package inscludes a base set of functions that should be common to any application. None of them require any extrenal network access or databases, and fulfil the basic needs of mathematics and simple text analysis.</p>
+<p>The <code>sqrl-text-functions</code> includes some more advanced text analysis functions such as RE2 regular expression based pattern matching, and <code>simhash()</code> which returns similar values for similar text.</p>
+<p>The real power of SQRL comes with its streaming counters. While the <em>Redis database</em> is not the best choice for large production systems, it is one of the most wildly available and easy to set up choices. The <code>sqrl-redis-functions</code> builds a couple of common counters on top of this database:</p>
+<ul>
+<li>count()</li>
+<li>countUnique()</li>
+<li>rateLimit()</li>
+<li>sessionize()</li>
+</ul>
+<p>These packages are all designed as examples, we built SQRL to be extendable with functions you need, as well as new databases as you require.</p>
 <h2 id="API-Reference"><a href="#API-Reference" class="headerlink" title="API Reference"></a>API Reference</h2><p>For detailed information view the <a href="https://twitter.github.io/sqrl/reference/globals.html">API Reference</a>.</p>
 
         <div id="react-support-footer-root"></div>
