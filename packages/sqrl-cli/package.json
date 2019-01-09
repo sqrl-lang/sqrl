@@ -4,7 +4,7 @@
   "description": "> TODO: description",
   "homepage": "",
   "bin": {
-    "sqrl": "lib/cli.js"
+    "sqrl": "bin/cli.js"
   },
   "directories": {
     "lib": "lib",
@@ -27,7 +27,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib && rimraf coverage",
-    "cli": "ts-node src/cli.ts",
+    "cli": "ts-node bin/cli.js",
     "docs": "typedoc --out docs --ignoreCompilerErrors --stripInternal --excludeExternals src/api/",
     "format": "prettier --write \"{src,__tests__}/**/*.ts\"",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
