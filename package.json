@@ -1,19 +1,7 @@
 {
   "private": true,
   "name": "sqrl-monorepo",
-  "hexo": {
-    "version": "3.8.0"
-  },
   "dependencies": {
-    "hexo": "^3.3.8",
-    "hexo-cli": "^1.0.3",
-    "hexo-deployer-git": "^1.0.0",
-    "hexo-renderer-ejs": "^0.2.0",
-    "hexo-renderer-less": "^1.0.0",
-    "hexo-renderer-marked": "^0.2.10",
-    "hexo-renderer-sass": "^0.3.2",
-    "hexo-server": "^0.2.1",
-    "hexo-theme-doc": "^0.1.0",
     "lerna": "^3.6.0"
   },
   "devDependencies": {
@@ -37,6 +25,7 @@
     "sqrl-redis-functions": "file:packages/sqrl-redis-functions",
     "sqrl-test-utils": "file:packages/sqrl-test-utils",
     "sqrl-text-functions": "file:packages/sqrl-text-functions",
+    "sqrl-website": "file:website",
     "ts-jest": "^22.4.6",
     "ts-node": "^5.0.1",
     "ts-pegjs": "^0.2.1",
