@@ -2,8 +2,7 @@ import { SqrlTest } from "../testing/SqrlTest";
 
 export {
   buildTestServices,
-  buildTestFunctionRegistry,
-  runSqrlTest
+  buildTestFunctionRegistry
 } from "../testing/runSqrlTest";
 
 /**

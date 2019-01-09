@@ -3,12 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import {
-  runSqrlTest,
-  buildTestFunctionRegistry
-} from "../../src/testing/runSqrlTest";
+import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
 import { jsonTemplate } from "../../src/jslib/jsonTemplate";
 import { registerTestFunctions } from "../helpers/TestFunctions";
+import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
 
 test("saves features", async () => {
   const functionRegistry = await buildTestFunctionRegistry();

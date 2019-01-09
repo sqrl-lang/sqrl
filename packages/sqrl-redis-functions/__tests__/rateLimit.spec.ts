@@ -7,8 +7,7 @@ type autogen_any = any;
 
 import { jsonTemplate } from "sqrl-common";
 import { runSqrl, buildRedisTestFunctionRegistry } from "./helpers/runSqrl";
-import { TestLogger } from "sqrl/lib/testing/runSqrlTest";
-import { FunctionRegistry } from "sqrl";
+import { FunctionRegistry, TestLogger } from "sqrl";
 
 let functionRegistry: FunctionRegistry;
 beforeEach(async () => {

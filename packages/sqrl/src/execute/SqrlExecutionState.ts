@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Manipulator } from "../api/Manipulator";
+import { Manipulator, ExecutionErrorProperties } from "../api/Manipulator";
 import { SqrlObject } from "../object/SqrlObject";
 
 import bluebird = require("bluebird");
@@ -21,11 +21,6 @@ import { FeatureMap, Execution } from "../api/execute";
 import { SqrlBoxed } from "../api/SqrlBoxed";
 import { SourcePrinter } from "../api/executable";
 
-export interface SqrlExecutionErrorProps {
-  functionName?: string;
-  vitalError?: boolean;
-  [key: string]: any;
-}
 export interface SqrlExecutionOptions {
   featureTimeout: number;
   ruleSpecs: RuleSpecMap;
@@ -305,15 +300,11 @@ export class SqrlExecutionState implements Execution {
     this.ctx.warn({}, `CodedError during sqrl execution:: ${msg}`);
   }
 
-  logError(err: Error, props: SqrlExecutionErrorProps = {}): void {
+  logError(err: Error, props: ExecutionErrorProperties = {}): void {
     const errorType = (err as any).code || err.name || "other";
 
     if (this.manipulator) {
-      this.manipulator.logError({
-        functionName: props.functionName || null,
-        errorType,
-        timestamp: Date.now()
-      });
+      this.manipulator.logError(err, props);
     }
 
     let msg: string;
@@ -330,8 +321,8 @@ export class SqrlExecutionState implements Execution {
       },
       props
     );
-    if (props.vitalError) {
-      this.fatal(errorProps, "Vital error " + msg);
+    if (props.fatal) {
+      this.fatal(errorProps, "Fatal error: " + msg);
     } else {
       this.error(errorProps, msg);
     }

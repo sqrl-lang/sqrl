@@ -5,7 +5,6 @@
  */
 // tslint:disable:no-console
 
-import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
 import jsonStableStringify = require("fast-stable-stringify");
 import { Writable } from "stream";
 import {
@@ -14,7 +13,8 @@ import {
   Execution,
   ExecutableCompiler,
   ExecutableSpec,
-  createSimpleContext
+  createSimpleContext,
+  SimpleManipulator
 } from "sqrl";
 
 export interface CliOutputOptions {

@@ -9,11 +9,9 @@ import {
   fetchExecutableFeature,
   VirtualSourceTree
 } from "../helpers/runCompile";
-import {
-  runSqrlTest,
-  buildTestFunctionRegistry
-} from "../../src/testing/runSqrlTest";
+import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
 import { executableFromFilesystem } from "../../src";
+import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
 
 test("supports basic statements", async () => {
   await expect(

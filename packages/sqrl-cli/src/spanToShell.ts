@@ -22,7 +22,6 @@ export function spanToShell(span: RenderedSpan): string {
   } else {
     rv = span.text;
   }
-  console.log(span.class, color);
   if (color) {
     return chalk[color](rv);
   } else {

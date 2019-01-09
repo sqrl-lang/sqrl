@@ -8,11 +8,9 @@ import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlTest } from "../../src/testing/SqrlTest";
 import { JestAssertService } from "sqrl-test-utils";
-import {
-  runSqrlTest,
-  buildTestFunctionRegistry
-} from "../../src/testing/runSqrlTest";
+import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
 import { createSimpleContext } from "../../src";
+import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
 
 test("rules work", async () => {
   const functionRegistry = new SqrlFunctionRegistry();
@@ -81,7 +79,9 @@ test("when context works", async () => {
   });
 
   // Try fire it manually (without whenContext)
-  await runSqrlTest('saveContext("manual!"); EXECUTE;', { functionRegistry });
+  await runSqrlTest('saveContext("manual!"); EXECUTE;', {
+    functionRegistry
+  });
   expect(saveCount).toEqual(2);
   expect(savedContext).toEqual({
     whenContext: null,

@@ -12,20 +12,13 @@ import {
   FunctionServices,
   KafkaService
 } from "../function/registerAllFunctions";
-import { SimpleManipulator } from "../simple/SimpleManipulator";
-import { SqrlTest } from "./SqrlTest";
+import { SimpleManipulator } from "../api/simple/SimpleManipulator";
 import { UniqueId } from "../api/UniqueId";
-import util = require("util");
-import { LocalFilesystem, Filesystem } from "../api/filesystem";
-import * as path from "path";
 import { UniqueIdService } from "../api/UniqueIdService";
-import invariant from "../jslib/invariant";
-import { SimpleBlockService } from "../simple/SimpleBlockService";
-import { LogProperties, Logger } from "../api/log";
-import { AbstractLogger } from "../util/Logger";
-import { Context, createSimpleContext } from "../api/ctx";
+import { SimpleBlockService } from "../api/simple/SimpleBlockService";
+import { Context } from "../api/ctx";
 import { AssertService } from "sqrl-common";
-import { Execution, FunctionRegistry } from "../api/execute";
+import { FunctionRegistry } from "../api/execute";
 
 class SimpleId extends UniqueId {
   constructor(private timeMs: number, private remainder: number) {
@@ -52,52 +45,16 @@ class MockUniqueIdService implements UniqueIdService {
     /* do nothing yet */
   }
   async create(ctx: Context) {
-    return new SimpleId(this.time, this.remainder);
+    const remainder = this.remainder;
+    this.remainder += 1;
+    return new SimpleId(this.time, remainder);
   }
   async fetch(ctx: Context, type, key) {
     this.db[type] = this.db[type] || {};
     if (!this.db[type][key]) {
       this.db[type][key] = await this.create(ctx);
-      this.remainder += 1;
     }
     return this.db[type][key];
-  }
-}
-
-export class TestLogger extends AbstractLogger {
-  errors: {
-    msg: string;
-    level: string;
-  }[] = [];
-
-  countErrors() {
-    let errorCount = 0;
-    for (const { level } of this.errors) {
-      if (level === "trace" || level === "debug" || level === "info") {
-        continue;
-      }
-      errorCount += 1;
-    }
-    return errorCount;
-  }
-  popLatest(props: { level: string }) {
-    const { level } = props;
-    for (let idx = this.errors.length - 1; idx >= 0; idx--) {
-      if (this.errors[idx].level === level) {
-        return this.errors.splice(idx, 1)[0];
-      }
-    }
-    throw new Error("No log line found");
-  }
-  log(level: string, props: LogProperties, format: string, ...param: any[]) {
-    const message = util.format(format, ...param);
-    // tslint:disable-next-line
-    this.errors.push({
-      msg: message,
-      level
-    });
-    // tslint:disable-next-line:no-console
-    console.error(message);
   }
 }
 
@@ -175,55 +132,4 @@ export async function buildTestFunctionRegistry(
   const services = options.services || (await buildTestServices());
   registerAllFunctions(functionRegistry, services);
   return new FunctionRegistry(functionRegistry);
-}
-
-export async function runSqrlTest(
-  sqrl: string,
-  options: {
-    functionRegistry?: FunctionRegistry;
-    services?: FunctionServices;
-    logger?: Logger;
-    filesystem?: Filesystem;
-    librarySqrl?: string;
-  } = {}
-): Promise<{
-  codedErrors: Error[];
-  lastState: Execution;
-  lastManipulator: SimpleManipulator;
-}> {
-  let functionRegistry: FunctionRegistry;
-
-  let services: FunctionServices = {};
-  if (options.functionRegistry) {
-    invariant(
-      !options.services,
-      ".services not compatible with .functionRegistry"
-    );
-    functionRegistry = options.functionRegistry;
-  } else {
-    services = options.services || (await buildTestServices());
-    functionRegistry = await buildTestFunctionRegistry({ services });
-  }
-
-  const filesystem =
-    options.filesystem || new LocalFilesystem(path.join(__dirname, ".."));
-
-  const test = new SqrlTest(functionRegistry._wrapped, {
-    manipulatorFactory: () => new SimpleManipulator(),
-    filesystem
-  });
-  const ctx = createSimpleContext(options.logger);
-  if (options.librarySqrl) {
-    await test.run(ctx, options.librarySqrl);
-  }
-  const rv = await test.run(ctx, sqrl);
-
-  if (services.assert && services.assert.throwFirstError) {
-    services.assert.throwFirstError();
-  }
-
-  return {
-    ...rv,
-    lastManipulator: rv.lastState.manipulator as SimpleManipulator
-  };
 }

@@ -13,7 +13,7 @@ import invariant from "./invariant";
 import pendingPromise, { PendingPromise } from "./pendingPromise";
 
 import isPromise from "./isPromise";
-import { promiseFinally } from "./promiseFinally";
+import { promiseFinally } from "sqrl-common";
 
 const MAX_TIMEOUT = 30000;
 

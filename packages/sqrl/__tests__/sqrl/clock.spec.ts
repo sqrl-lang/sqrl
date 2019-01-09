@@ -1,9 +1,10 @@
+import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
+
 /**
  * Copyright 2018 Twitter, Inc.
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { runSqrlTest } from "../../src/testing/runSqrlTest";
 
 test("bad clock throws", async () => {
   await expect(

@@ -3,7 +3,6 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
 import { SqrlExecutionState } from "sqrl/lib//execute/SqrlExecutionState";
 import * as micro from "micro";
 import * as microQuery from "micro-query";
@@ -12,7 +11,7 @@ import * as dispatch from "micro-route/dispatch";
 import { IncomingMessage, ServerResponse } from "http";
 import SqrlExecutable from "sqrl/lib/execute/SqrlExecutable";
 import { FiredRule } from "sqrl/lib/function/WhenFunctions";
-import { Context, FeatureMap } from "sqrl";
+import { Context, FeatureMap, SimpleManipulator } from "sqrl";
 
 function userInvariant(cond, message) {
   if (!cond) {

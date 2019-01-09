@@ -10,11 +10,9 @@ import { createSqrlServer } from "../SqrlServer";
 import { SqrlTest } from "sqrl/lib/testing/SqrlTest";
 import { SqrlRepl } from "../repl/SqrlRepl";
 
-import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
 import { LocalFilesystem, Filesystem } from "sqrl/lib/api/filesystem";
 import * as path from "path";
 import * as waitForSigint from "wait-for-sigint";
-import { SimpleBlockService } from "sqrl/lib/simple/SimpleBlockService";
 import {
   AssertService,
   SqrlObject,
@@ -25,7 +23,10 @@ import {
   Executable,
   compileFromFilesystem,
   ExecutableCompiler,
-  ExecutableSpec
+  ExecutableSpec,
+  SimpleManipulator,
+  SimpleLogService,
+  SimpleBlockService
 } from "sqrl";
 import SqrlAst from "sqrl/lib/ast/SqrlAst";
 import { StatementAst } from "sqrl/lib/ast/Ast";
@@ -37,7 +38,6 @@ import {
 } from "sqrl-redis-functions";
 import { sourceOptionsFromPath } from "sqrl/lib/helpers/CompileHelpers";
 import { createDefaultContext } from "sqrl/lib/helpers/ContextHelpers";
-import { SimpleLogService } from "sqrl/lib/simple/SimpleLogService";
 import { WatchedSourceTree } from "./WatchedSourceTree";
 import { CliPrettyOutput } from "./CliPrettyOutput";
 import { CliRun } from "./CliRun";

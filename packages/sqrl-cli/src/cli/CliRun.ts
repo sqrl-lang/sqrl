@@ -5,13 +5,12 @@
  */
 // tslint:disable:no-console
 // tslint:disable:no-submodule-imports (@TODO)
-import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
 import Semaphore from "sqrl/lib/jslib/Semaphore";
 import * as split2 from "split2";
 import { CliActionOutput } from "./CliOutput";
 import { Context } from "sqrl/lib/api/ctx";
-import { promiseFinally } from "sqrl/lib/jslib/promiseFinally";
-import { FeatureMap, Executable, Execution } from "sqrl";
+import { promiseFinally } from "sqrl-common";
+import { FeatureMap, Executable, Execution, SimpleManipulator } from "sqrl";
 
 export class CliRun {
   constructor(

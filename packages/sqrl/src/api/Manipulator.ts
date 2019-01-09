@@ -6,6 +6,11 @@
 import { SqrlKey } from "../object/SqrlKey";
 import { Context } from "./ctx";
 
+export interface ExecutionErrorProperties {
+  functionName?: string;
+  fatal?: boolean;
+}
+
 export type ManipulatorCallback = (ctx: Context) => Promise<void>;
 export abstract class Manipulator {
   constructor() {
@@ -17,7 +22,7 @@ export abstract class Manipulator {
   abstract getCurrentHumanOutput(): any;
   abstract addCallback(cb: ManipulatorCallback);
   abstract mutate(ctx: Context): Promise<void>;
-  abstract logError(props): void;
+  abstract logError(err: Error, props: ExecutionErrorProperties): void;
 
   trackSqrlKey(key: SqrlKey): void {
     /* optional function, do nothing by default */

@@ -6,8 +6,8 @@
 import { RedisInterface, RedisService } from "../../src/services/RedisService";
 import { MockRedisService } from "../../src/mocks/MockRedisService";
 import * as bluebird from "bluebird";
-import invariant from "../../../sqrl/lib/jslib/invariant";
 import { createSimpleContext } from "sqrl";
+import { invariant } from "sqrl-common";
 
 export function redisTest(
   name: string,

@@ -8,7 +8,7 @@
 
 import { docopt } from "docopt";
 import { cliMain, CliDoc, getCliOutput } from "./cli/CliMain";
-import { promiseFinally } from "sqrl/lib/jslib/promiseFinally";
+import { promiseFinally } from "sqrl-common";
 import { CloseableGroup } from "./jslib/Closeable";
 
 export function runProcess() {

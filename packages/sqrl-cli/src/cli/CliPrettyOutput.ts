@@ -8,12 +8,11 @@
 import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
 import * as moment from "moment";
 import chalk from "chalk";
-import { SimpleManipulator } from "sqrl/lib/simple/SimpleManipulator";
 import { SqrlObject } from "sqrl/lib/object/SqrlObject";
 import * as util from "util";
 import { SqrlCompileError } from "sqrl/lib/api/parse";
 import { CliOutputOptions, CliActionOutput } from "./CliOutput";
-import { FeatureMap } from "sqrl";
+import { FeatureMap, SimpleManipulator } from "sqrl";
 import { spanToShell } from "../spanToShell";
 
 const CHECKMARK = "\u2713";

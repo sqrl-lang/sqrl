@@ -1,4 +1,4 @@
-import invariant from "sqrl/lib/jslib/invariant";
+import { invariant } from "sqrl-common";
 
 interface Closeable {
   close(): void;

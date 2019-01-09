@@ -3,12 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Manipulator, ManipulatorCallback } from "../api/Manipulator";
-import { kafkaBufferHumanJson } from "../jslib/kafkaBufferHumanJson";
-import mapObject from "../jslib/mapObject";
-import { SqrlKey } from "../object/SqrlKey";
-import { WhenCause, FiredRule } from "../function/WhenFunctions";
-import { FeatureMap } from "..";
+import { Manipulator, ManipulatorCallback } from "../Manipulator";
+import { kafkaBufferHumanJson } from "../../jslib/kafkaBufferHumanJson";
+import mapObject from "../../jslib/mapObject";
+import { SqrlKey } from "../../object/SqrlKey";
+import { WhenCause, FiredRule } from "../../function/WhenFunctions";
+import { FeatureMap } from "../execute";
 
 export class SimpleManipulator extends Manipulator {
   public sqrlKeys: Set<string> = new Set();
@@ -21,6 +21,7 @@ export class SimpleManipulator extends Manipulator {
   public blockedRules: FiredRule[] = [];
   public whitelistedRules: FiredRule[] = [];
 
+  readonly loggedErrors: Error[] = [];
   public loggedFeatures: FeatureMap = {};
   public logged: string[] = [];
 
@@ -65,8 +66,8 @@ export class SimpleManipulator extends Manipulator {
   logFeature(name: string, value: any) {
     this.loggedFeatures[name] = value;
   }
-  logError(props: any): void {
-    /* do nothing for now */
+  logError(err: Error): void {
+    this.loggedErrors.push(err);
   }
 
   async mutate(ctx): Promise<void> {

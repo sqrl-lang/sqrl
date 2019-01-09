@@ -3,9 +3,9 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { runSqrlTest } from "../../src/testing/runSqrlTest";
 import { LocalFilesystem } from "../../src/api/filesystem";
 import * as path from "path";
+import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
 
 test("Loading YAML works", async () => {
   const filesystem = new LocalFilesystem(path.join(__dirname, ".."));

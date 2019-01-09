@@ -12,10 +12,7 @@ import isPromise from "../jslib/isPromise";
 import invariant from "../jslib/invariant";
 import { sqrlInvariant } from "../api/parse";
 import { SqrlParserState } from "../compile/SqrlParserState";
-import {
-  SqrlExecutionErrorProps,
-  SqrlExecutionState
-} from "../execute/SqrlExecutionState";
+import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { nice } from "node-nice";
 import hrtimeToNs from "../jslib/hrtimeToNs";
 import { getGlobalLogger } from "../api/log";
@@ -24,6 +21,7 @@ import {
   StateArgument,
   ArgumentCheck
 } from "../api/ArgumentCheck";
+import { ExecutionErrorProperties } from "../api/Manipulator";
 
 const AsyncFunction = Object.getPrototypeOf(async function() {
   /* intentional */
@@ -81,9 +79,9 @@ function asyncSafetyNet(
   const wrapped: any = bluebird.method(fn);
   const { vital, stateArg } = config;
 
-  const errorProps: SqrlExecutionErrorProps = { functionName: name };
+  const errorProps: ExecutionErrorProperties = { functionName: name };
   if (vital) {
-    errorProps.vitalError = true;
+    errorProps.fatal = true;
   }
 
   invariant(
@@ -106,9 +104,9 @@ function syncSafetyNet(name: string, fn, config: SafetyNetConfig) {
   const wrapped = fn;
   const { stateArg, vital } = config;
   if (stateArg) {
-    const errorProps: SqrlExecutionErrorProps = { functionName: name };
+    const errorProps: ExecutionErrorProperties = { functionName: name };
     if (vital) {
-      errorProps.vitalError = true;
+      errorProps.fatal = true;
     }
     return function(state) {
       try {

@@ -37,6 +37,7 @@
   },
   "scripts": {
     "clean": "lerna run clean",
+    "deploy-website": "lerna run deploy-website",
     "test": "jest",
     "test:integration": "jest --config=jest.integration.config.js",
     "coverage": "jest --coverage",
