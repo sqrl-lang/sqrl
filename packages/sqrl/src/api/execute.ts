@@ -132,7 +132,11 @@ export class Executable {
       featureTimeoutMs?: number;
     } = {}
   ): Promise<Execution> {
-    return this._wrapped.startExecution(ctx, {});
+    return this._wrapped.startExecution(ctx, {
+      manipulator: options.manipulator,
+      inputs: options.inputs,
+      featureTimeoutMs: options.featureTimeoutMs
+    });
   }
 
   /**

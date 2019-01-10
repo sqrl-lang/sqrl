@@ -9,6 +9,7 @@ export * from "./api/ctx";
 export * from "./api/execute";
 export * from "./api/executableFrom";
 export * from "./api/expr";
+export * from "./api/feature";
 export * from "./api/filesystem";
 export * from "./api/log";
 export * from "./api/object";

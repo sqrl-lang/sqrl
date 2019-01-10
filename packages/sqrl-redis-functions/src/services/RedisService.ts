@@ -10,6 +10,7 @@ import * as Redis from "ioredis";
 import murmurhash = require("murmurhash-native");
 import { Context, DatabaseSet } from "sqrl";
 import { invariant } from "sqrl-common";
+import { rateLimitFetchLua } from "../lua/rateLimitFetchLua";
 
 export interface RateLimitOptions {
   maxAmount: number;
@@ -82,6 +83,10 @@ export class RedisService implements RedisInterface {
   constructor(address?: string) {
     const [host, port] = addressToHostPort(address || "localhost", 6379);
     this.conn = new Redis({ host, port });
+    this.conn.defineCommand("rateLimitFetch", {
+      lua: rateLimitFetchLua(),
+      numberOfKeys: 1
+    });
   }
 
   async ping(ctx: Context) {
@@ -147,25 +152,15 @@ export class RedisService implements RedisInterface {
     key: Buffer,
     opt: RateLimitOptions
   ): Promise<number> {
-    const LUA = `
-    local current = redis.call("get", KEYS[1]);
-    local remaining
-    local next
-    if current ~= nil then
-      remaining = ARGV[1]
-      next = ARGV[2]
-    else
-      remaining, next = struct.unpack("i8i8", current)
-    end
-
-    remaining = remaining - 1
-
-    redis.call("set", KEYS[1], struct.pack(
-      "i8i8", remaining, next
-    ))
-    return remaining
-    `;
-    return this.conn.eval(LUA, 1, key, opt.maxAmount, opt.at);
+    return this.conn.rateLimitFetch(
+      key,
+      opt.maxAmount,
+      opt.take,
+      opt.at,
+      opt.refillTimeMs,
+      opt.refillAmount,
+      opt.strict ? 1 : 0
+    );
   }
 
   close() {

@@ -16,6 +16,7 @@ import { SqrlParserState } from "../compile/SqrlParserState";
 import { buildSqrlError, sqrlInvariant } from "../api/parse";
 import invariant from "../jslib/invariant";
 import SqrlDateTime from "../object/SqrlDateTime";
+import { Execution } from "../api/execute";
 
 const VALID_TIMESPANS = {
   MS: 1,
@@ -184,15 +185,26 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
   );
 
   registry.save(
-    function timeMs(state, timeMs, timezone) {
-      timezone = timezone || null;
+    function timeMs(state: Execution, timeMs, timezone) {
+      if (timeMs === null) {
+        return null;
+      }
+
       if (timeMs instanceof SqrlObject) {
         timeMs = timeMs.tryGetTimeMs();
       }
-      if (typeof timeMs !== "number") {
-        return null;
+
+      if (typeof timeMs === "string") {
+        const moment = Moment(timeMs, Moment.ISO_8601);
+        if (moment.isValid()) {
+          timeMs = moment.valueOf();
+        }
       }
-      if (timezone === null) {
+      if (typeof timeMs !== "number") {
+        throw new Error("Invalid time value passed to timeMs");
+      }
+
+      if (!timezone) {
         return timeMs;
       }
       const unixTime = MomentTimezone(timeMs)
@@ -201,6 +213,7 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
       return unixTime ? unixTime * 1000 : null;
     },
     {
+      allowNull: true,
       allowSqrlObjects: true,
       args: [AT.state, AT.any, AT.any.optional.string]
     }

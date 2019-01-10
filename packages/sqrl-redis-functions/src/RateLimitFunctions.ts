@@ -101,7 +101,7 @@ function setupRateLimitAst(state: CompileState, ast) {
         refillTimeMs: AstBuilder.constant(args.refillTimeMs),
         refillAmount: AstBuilder.constant(args.refillAmount),
         take: takeAst,
-        at: AstBuilder.feature("SqrlClock"),
+        at: AstBuilder.call("timeMs", [AstBuilder.feature("SqrlClock")]),
         strict: AstBuilder.constant(args.strict)
       })
     ])

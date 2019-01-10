@@ -27,6 +27,7 @@ function ensure_container() {
 }
 
 export SQRL_TEST_REDIS="$(ensure_container sqrl_redis redis 6379)"
+export SQRL_REDIS="$(ensure_container sqrl_redis redis 6379)"
 
 ## Tests don't use ratelimit container any more.
 # export RATELIMIT="$(ensure_container sqrl_ratelimit authbox/ratelimit 9049)"

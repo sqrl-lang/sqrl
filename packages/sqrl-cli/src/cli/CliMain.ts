@@ -9,7 +9,6 @@ import { FunctionServices } from "sqrl/lib/function/registerAllFunctions";
 import { createSqrlServer } from "../SqrlServer";
 import { SqrlTest } from "sqrl/lib/testing/SqrlTest";
 import { SqrlRepl } from "../repl/SqrlRepl";
-
 import { LocalFilesystem, Filesystem } from "sqrl/lib/api/filesystem";
 import * as path from "path";
 import * as waitForSigint from "wait-for-sigint";
@@ -22,6 +21,7 @@ import {
   FunctionRegistry,
   Executable,
   compileFromFilesystem,
+  isValidFeatureName,
   ExecutableCompiler,
   ExecutableSpec,
   SimpleManipulator,
@@ -147,11 +147,24 @@ function getInputs(args: CliArgs) {
   const inputs: FeatureMap = {};
   args["<key=value>"].forEach(pair => {
     const [key] = pair.split("=", 1);
+    const valueString = pair.substring(key.length + 1);
+
+    if (!isValidFeatureName(key)) {
+      throw new CliError(
+        "Invalid feature name for input: " + JSON.stringify(key)
+      );
+    }
+
     try {
-      const value = JSON.parse(pair.substring(key.length + 1));
+      const value = JSON.parse(valueString);
       inputs[key] = value;
     } catch (err) {
-      throw new CliError(`Invalid JSON value for feature: ${key}`);
+      console.error(
+        `Warning: Invalid JSON value for ${key}, assuming string: ${JSON.stringify(
+          valueString
+        )}`
+      );
+      inputs[key] = valueString;
     }
   });
   return inputs;
@@ -180,7 +193,7 @@ function buildFunctionRegistry(
   functionRegistry: FunctionRegistry;
   services: FunctionServices;
 } {
-  const redisAddress = args["--redis"] || process.env.REDIS;
+  const redisAddress = args["--redis"] || process.env.SQRL_REDIS;
   let redisServices: RedisServices;
   if (redisAddress) {
     redisServices = buildServices(redisAddress);
@@ -284,7 +297,7 @@ export async function cliMain(
       } else {
         return compileFromFilesystem(functionRegistry, sourceTree, {
           context: ctx,
-          mainFile: args["<filename>"],
+          mainFile: path.basename(args["<filename>"]),
           setInputs: inputs
         });
       }
