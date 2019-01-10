@@ -14,10 +14,4 @@ export * from "./mapObject";
 export * from "./promiseFinally";
 export * from "./range";
 export * from "./sqrlCartesianProduct";
-
-export interface AssertService {
-  compare(left: any, operator: string, right: any, arrow: string): void;
-  ok(value: any, arrow: string): void;
-
-  throwFirstError?(): void;
-}
+export * from "./AssertService";

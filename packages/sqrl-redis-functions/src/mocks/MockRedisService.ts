@@ -6,31 +6,27 @@
 import { RedisInterface, RateLimitOptions } from "../services/RedisService";
 import { Context } from "sqrl";
 import { invariant } from "sqrl-common";
+import { MockRedisDatabase } from "./MockRedisDatabase";
+import { mockRateLimitFetch } from "../lua/rateLimitFetchLua";
 
-export class MockRedisService implements RedisInterface {
-  private db = {};
+export class MockRedisService implements RedisInterface, MockRedisDatabase {
+  db = {};
 
   async rateLimitFetch(
     ctx: Context,
     key: Buffer,
     opt: RateLimitOptions
   ): Promise<number> {
-    const {
-      maxAmount,
-      // refillTimeMs,
-      // refillAmount,
-      take
-      // at,
-      // strict
-    } = opt;
-
-    const stringKey = key.toString("hex");
-    if (!this.db.hasOwnProperty(stringKey)) {
-      this.db[stringKey] = maxAmount;
-    }
-    const rv = this.db[stringKey];
-    this.db[stringKey] = Math.max(0, this.db[stringKey] - take);
-    return rv;
+    return mockRateLimitFetch(
+      this,
+      key.toString("utf-8"),
+      opt.maxAmount,
+      opt.take,
+      opt.at,
+      opt.refillTimeMs,
+      opt.refillAmount,
+      opt.strict
+    );
   }
 
   async increment(ctx: Context, bufferKey: Buffer) {

@@ -7,37 +7,35 @@ import diff = require("jest-diff");
 import { AssertService, SqrlObject, sqrlCompare } from "sqrl-common";
 
 export class JestAssertService implements AssertService {
-  private firstError: Error;
-
-  private captureError(err: Error) {
-    this.firstError = this.firstError || err;
-
+  private captureError(manipulator: any, err: Error) {
     // tslint:disable-next-line:no-console
     console.log(err.message);
+
+    // Since we log out the error message, we don't need to print the same
+    // error twice. The stacktrace is also rather useless so skip it.
+    const manipulatorError = new Error("Assertion failed inside SQRL");
+    manipulatorError.stack = "";
+    manipulator.logError(manipulatorError);
   }
 
-  compare(left: any, operator: string, right: any, arrow: string) {
+  compare(
+    manipulator: any,
+    left: any,
+    operator: string,
+    right: any,
+    arrow: string
+  ) {
     try {
       (expect(left) as any).toSqrlCompare(operator, right, arrow);
     } catch (err) {
-      this.captureError(err);
+      this.captureError(manipulator, err);
     }
   }
-  ok(value: any, arrow: string) {
+  ok(manipulator: any, value: any, arrow: string) {
     try {
       (expect(value) as any).toBeSqrlTruthy(arrow);
     } catch (err) {
-      this.captureError(err);
-    }
-  }
-
-  throwFirstError() {
-    if (this.firstError) {
-      // @TODO: We could throw the original error, but we already console.log
-      // the message above. Just throw to ensure the test fails, but with no stacktrace.
-      const err = new Error("Assertion failed inside SQRL");
-      err.stack = "";
-      throw err;
+      this.captureError(manipulator, err);
     }
   }
 }

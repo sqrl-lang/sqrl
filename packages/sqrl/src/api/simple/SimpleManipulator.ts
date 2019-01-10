@@ -69,6 +69,11 @@ export class SimpleManipulator extends Manipulator {
   logError(err: Error): void {
     this.loggedErrors.push(err);
   }
+  throwFirstError() {
+    if (this.loggedErrors.length) {
+      throw this.loggedErrors[0];
+    }
+  }
 
   async mutate(ctx): Promise<void> {
     await Promise.all(this.callbacks.map(cb => cb(ctx)));

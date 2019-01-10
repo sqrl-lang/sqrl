@@ -8,7 +8,8 @@ import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
 
 test("dateAdd works", async () => {
   await runSqrlTest(`
-    LET DayOne := 1479410503000;
-    ASSERT timeMs(dateAdd(DayOne, "PT1S")) = 1479410504000;
+    LET DayOne := "2018-02-12T08:00:00Z";
+    ASSERT dateAdd(DayOne, "PT1S") = "2018-02-12T08:00:01.000Z";
+    ASSERT dateAdd(DayOne, "P1D") = "2018-02-13T08:00:00.000Z";
   `);
 });

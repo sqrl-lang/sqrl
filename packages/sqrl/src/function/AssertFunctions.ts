@@ -21,7 +21,7 @@ export function registerAssertFunctions(
 ) {
   registry.save(
     function _assert(state: SqrlExecutionState, value, arrow) {
-      service.ok(value, arrow);
+      service.ok(state.manipulator, value, arrow);
     },
     {
       lazyArguments: true,
@@ -40,7 +40,7 @@ export function registerAssertFunctions(
       right: any,
       arrow: string
     ) {
-      service.compare(left, operator, right, arrow);
+      service.compare(state.manipulator, left, operator, right, arrow);
     },
     {
       lazyArguments: true,

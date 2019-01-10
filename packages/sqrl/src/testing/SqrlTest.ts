@@ -86,15 +86,15 @@ export class SqrlTest {
     statements: StatementAst[]
   ): Promise<{
     codedErrors: any[];
-    lastState: SqrlExecutionState;
+    executions: SqrlExecutionState[];
   }> {
     let assertions = [];
     const codedErrors = [];
-    let lastState: SqrlExecutionState = null;
+    const executions: SqrlExecutionState[] = [];
 
     const execute = async (wait = false) => {
       const state = await this.executeStatements(ctx, assertions, wait);
-      lastState = state;
+      executions.push(state);
 
       codedErrors.push(...state.loggedCodedErrors);
       assertions = [];
@@ -141,13 +141,13 @@ export class SqrlTest {
       }
     }
 
-    if (assertions.length || !lastState) {
+    if (assertions.length || !executions.length) {
       await execute();
     }
 
     return {
       codedErrors,
-      lastState
+      executions
     };
   }
 

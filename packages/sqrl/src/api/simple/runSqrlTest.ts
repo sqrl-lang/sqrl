@@ -23,7 +23,8 @@ export async function runSqrlTest(
   } = {}
 ): Promise<{
   codedErrors: Error[];
-  lastState: Execution;
+  executions: Execution[];
+  lastExecution: Execution;
   lastManipulator: SimpleManipulator;
 }> {
   let functionRegistry: FunctionRegistry;
@@ -53,12 +54,13 @@ export async function runSqrlTest(
   }
   const rv = await test.run(ctx, sqrl);
 
-  if (services.assert && services.assert.throwFirstError) {
-    services.assert.throwFirstError();
-  }
+  const lastExecution = rv.executions[rv.executions.length - 1];
+  const lastManipulator = lastExecution.manipulator as SimpleManipulator;
+  lastManipulator.throwFirstError();
 
   return {
     ...rv,
-    lastManipulator: rv.lastState.manipulator as SimpleManipulator
+    lastExecution,
+    lastManipulator
   };
 }

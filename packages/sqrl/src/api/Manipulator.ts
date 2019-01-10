@@ -23,6 +23,7 @@ export abstract class Manipulator {
   abstract addCallback(cb: ManipulatorCallback);
   abstract mutate(ctx: Context): Promise<void>;
   abstract logError(err: Error, props: ExecutionErrorProperties): void;
+  abstract throwFirstError(): void;
 
   trackSqrlKey(key: SqrlKey): void {
     /* optional function, do nothing by default */

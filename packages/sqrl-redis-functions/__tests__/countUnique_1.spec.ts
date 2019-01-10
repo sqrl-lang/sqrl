@@ -202,9 +202,11 @@ LET UniquesByIp := countUnique(${countStatement} GROUP BY Ip LAST WEEK);
     `,
       { functionRegistry }
     );
-    await rv.lastState.fetchValue("SqrlExecutionComplete");
+
+    const state = rv.executions.shift();
+    await state.fetchValue("SqrlExecutionComplete");
     return {
-      state: rv.lastState,
+      state,
       manipulator: rv.lastManipulator
     };
   };

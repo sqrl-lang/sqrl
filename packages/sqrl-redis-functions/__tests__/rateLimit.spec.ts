@@ -15,8 +15,8 @@ beforeEach(async () => {
 });
 
 async function getResult(sqrl: string) {
-  return runSqrl(sqrl, { functionRegistry }).then(({ lastState }) => {
-    return lastState.fetchValue("Result");
+  return runSqrl(sqrl, { functionRegistry }).then(({ lastExecution }) => {
+    return lastExecution.fetchValue("Result");
   });
 }
 
@@ -29,6 +29,11 @@ test("Basic test works", async () => {
     ASSERT rateLimited(BY Ip MAX 2 EVERY DAY) = false;
     EXECUTE;
     ASSERT rateLimited(BY Ip MAX 2 EVERY DAY) = true;
+    EXECUTE;
+
+    LET SqrlClock := dateAdd(now(), "P1D");
+    ASSERT rateLimited(BY Ip MAX 2 EVERY DAY) = false;
+    EXECUTE;
     `,
     { functionRegistry }
   );
@@ -134,8 +139,8 @@ LET Value2 := ${JSON.stringify(machine)};
 LET Result := rateLimit(BY Value1, Value2 MAX 3 EVERY 60 SECOND);
     `,
       { functionRegistry, logger }
-    ).then(({ lastState }) => {
-      return lastState.fetchValue("Result");
+    ).then(({ lastExecution }) => {
+      return lastExecution.fetchValue("Result");
     });
   };
 

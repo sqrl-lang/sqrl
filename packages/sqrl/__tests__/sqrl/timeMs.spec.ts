@@ -8,9 +8,7 @@ import { sqrlTest } from "../helpers/sqrlTest";
 sqrlTest(
   "timeMs works",
   `
-  LET Now := 1506447462364;
-  LET NowTimeMs := timeMs(1506447462364);
-  LET NowTimeMsTimeZone := timeMs(1506447462364, "America/New_York");
-  ASSERT NowTimeMsTimeZone = 1506447462000;
+  LET Now := '2017-09-26T17:37:42.364Z';
+  ASSERT timeMs(Now)       = 1506447462364;
   `
 );

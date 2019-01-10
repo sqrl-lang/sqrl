@@ -7,7 +7,7 @@ import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
  */
 
 test("works", async () => {
-  const { lastState } = await runSqrlTest(`
+  const { executions } = await runSqrlTest(`
   LET One := 1;
   LET Six := 6;
   LET Zero := 0;
@@ -57,8 +57,11 @@ test("works", async () => {
   `);
 
   expect(
-    lastState.getSourcePrinter().getHumanAllSource({
-      excludeSlotNumbers: true
-    })
+    executions
+      .shift()
+      .getSourcePrinter()
+      .getHumanAllSource({
+        excludeSlotNumbers: true
+      })
   ).toMatchSnapshot();
 });

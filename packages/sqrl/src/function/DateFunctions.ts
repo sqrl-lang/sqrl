@@ -10,11 +10,9 @@ import { default as AT } from "../ast/AstTypes";
 import SqrlAst from "../ast/SqrlAst";
 import { SqrlObject } from "../object/SqrlObject";
 import Moment = require("moment");
-import MomentTimezone = require("moment-timezone");
 
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { buildSqrlError, sqrlInvariant } from "../api/parse";
-import invariant from "../jslib/invariant";
 import SqrlDateTime from "../object/SqrlDateTime";
 import { Execution } from "../api/execute";
 
@@ -32,6 +30,20 @@ const ISO_8601_DURATION_REGEXES = [
   /^P([^T]+|.*T.+)$/
 ];
 
+function timeMsForValue(value: any) {
+  if (value instanceof SqrlObject) {
+    return value.tryGetTimeMs();
+  }
+
+  if (typeof value === "string") {
+    const moment = Moment(value, Moment.ISO_8601);
+    if (moment.isValid()) {
+      return moment.valueOf();
+    }
+  }
+
+  throw new Error("Invalid time value passed to timeMs");
+}
 export function registerDateFunctions(registry: SqrlFunctionRegistry) {
   registry.save(null, {
     name: "dateDiff",
@@ -128,10 +140,7 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
 
   registry.save(
     function _dateAdd(time, duration) {
-      if (time instanceof SqrlObject) {
-        time = time.tryGetTimeMs();
-      }
-      invariant(typeof time === "number", "Expected numeric timeMs");
+      time = timeMsForValue(time);
       const value = Moment.utc(time)
         .add(Moment.duration(duration))
         .valueOf();
@@ -185,37 +194,12 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
   );
 
   registry.save(
-    function timeMs(state: Execution, timeMs, timezone) {
-      if (timeMs === null) {
-        return null;
-      }
-
-      if (timeMs instanceof SqrlObject) {
-        timeMs = timeMs.tryGetTimeMs();
-      }
-
-      if (typeof timeMs === "string") {
-        const moment = Moment(timeMs, Moment.ISO_8601);
-        if (moment.isValid()) {
-          timeMs = moment.valueOf();
-        }
-      }
-      if (typeof timeMs !== "number") {
-        throw new Error("Invalid time value passed to timeMs");
-      }
-
-      if (!timezone) {
-        return timeMs;
-      }
-      const unixTime = MomentTimezone(timeMs)
-        .tz(timezone)
-        .unix();
-      return unixTime ? unixTime * 1000 : null;
+    function timeMs(state: Execution, timeValue) {
+      return timeMsForValue(timeValue);
     },
     {
-      allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any.optional.string]
+      args: [AT.state, AT.any]
     }
   );
 }
