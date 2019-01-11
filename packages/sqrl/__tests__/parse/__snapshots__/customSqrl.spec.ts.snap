@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`works with example arguments 1`] = `"Expected \\"!=\\", \\"%\\", \\"*\\", \\"+\\", \\"-\\", \\"/\\", \\"<\\", \\"<=\\", \\"=\\", \\">\\", \\">=\\", \\"CONTAINS\\", \\"IN\\", \\"IS NOT\\", \\"IS\\", end of input, or whitespace but \\")\\" found."`;
+
+exports[`works with example arguments 2`] = `"Expected \\"!=\\", \\"%\\", \\"*\\", \\"+\\", \\"-\\", \\"/\\", \\"<\\", \\"<=\\", \\"=\\", \\">\\", \\">=\\", \\"CONTAINS\\", \\"IN\\", \\"IS NOT\\", \\"IS\\", end of input, or whitespace but \\"(\\" found."`;
+
+exports[`works with example arguments 3`] = `"Expected \\"!=\\", \\"%\\", \\"*\\", \\"+\\", \\"-\\", \\"/\\", \\"<\\", \\"<=\\", \\"=\\", \\">\\", \\">=\\", \\"AND\\", \\"CONTAINS\\", \\"IN\\", \\"IS NOT\\", \\"IS\\", \\"OR\\", or end of input but \\")\\" found."`;
+
+exports[`works with example arguments 4`] = `"Expected \\"!=\\", \\"%\\", \\"*\\", \\"+\\", \\"-\\", \\"/\\", \\"<\\", \\"<=\\", \\"=\\", \\">\\", \\">=\\", \\"CONTAINS\\", \\"IN\\", \\"IS NOT\\", \\"IS\\", end of input, or whitespace but \\")\\" found."`;
+
+exports[`works with example arguments 5`] = `"Expected \\"!=\\", \\"%\\", \\"*\\", \\"+\\", \\"-\\", \\"/\\", \\"<\\", \\"<=\\", \\"=\\", \\">\\", \\">=\\", \\"CONTAINS\\", \\"IN\\", \\"IS NOT\\", \\"IS\\", end of input, or whitespace but \\"\`\\" found."`;

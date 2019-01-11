@@ -9,14 +9,16 @@ import sqrlErrorWrap from "../compile/sqrlErrorWrap";
 import sqrl = require("../parser/sqrl");
 import { SqrlAstError } from "../api/parse";
 
+interface ParseOptions {
+  customFunctions?: Set<string>;
+  filename?: string;
+  location?: AstLocation;
+}
+
 export function parse(
   startRule: string,
   queryText: string,
-  options: {
-    customFunctions?: Set<string>;
-    filename?: string;
-    location?: AstLocation;
-  } = {}
+  options: ParseOptions = {}
 ): Ast {
   const customFunctions: Set<string> = options.customFunctions || new Set();
   const mergeLocation = (location: sqrl.IFileRange): AstLocation => {
@@ -44,8 +46,8 @@ export function parse(
   }
 }
 
-export function parseExpr(text: string): Ast {
-  let result: Ast = parse("SqrlExpr", text);
+export function parseExpr(text: string, options: ParseOptions = {}): Ast {
+  let result: Ast = parse("SqrlExpr", text, options);
   while (result.type === "expr") {
     result = result.expr;
   }
