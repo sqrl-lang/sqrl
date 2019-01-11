@@ -16,8 +16,11 @@ import {
   createSimpleContext,
   SimpleManipulator
 } from "sqrl";
-import { invariant, SqrlObject } from "sqrl-common";
+import { invariant, SqrlObject, mapObject } from "sqrl-common";
 import * as csvStringify from "csv-stringify";
+
+// @todo: This could be made a command line option
+const MAX_TABLE_ROWS = 50;
 
 export interface CliOutputOptions {
   stdout?: Writable;
@@ -144,5 +147,73 @@ export class CliCsvOutput extends CliActionOutput {
 
   close() {
     this.stringifier.end();
+  }
+}
+
+export class CliTableOutput extends CliActionOutput {
+  private rows: {
+    [key: string]: any;
+  }[] = [];
+  private features: string[];
+  private headers: Set<string> = new Set();
+  private streaming = false;
+  private includeLogMessages = false;
+
+  constructor(private options: CliOutputOptions) {
+    super(options.stdout || process.stdout);
+    invariant(
+      console.hasOwnProperty("table"),
+      "Table output requires a Node.js version with console.table support"
+    );
+    this.features = options.features;
+  }
+  startStream() {
+    this.streaming = true;
+  }
+  action(
+    manipulator: SimpleManipulator,
+    execution: Execution,
+    loggedFeatures: FeatureMap
+  ) {
+    if (this.options.onlyBlocked) {
+      if (manipulator.wasBlocked()) {
+        return;
+      }
+    }
+
+    if (this.includeLogMessages) {
+      manipulator.logged.forEach(message => {
+        console.error(message);
+      });
+    }
+
+    this.rows.push(mapObject(loggedFeatures, val => val.getBasicValue()));
+    Object.keys(loggedFeatures).forEach(name => {
+      this.headers.add(name);
+    });
+
+    if (!this.streaming || this.rows.length === MAX_TABLE_ROWS) {
+      this.writeTable();
+    }
+  }
+
+  private writeTable() {
+    // Put the selected features first, then any additional logged features sorted
+    const headers = this.features.concat(
+      Array.from(this.headers)
+        .filter(feature => !this.features.includes(feature))
+        .sort()
+    );
+
+    if (this.rows.length) {
+      (console as any).table(this.rows, headers);
+    }
+    this.rows = [];
+    this.headers = new Set();
+  }
+
+  close() {
+    this.writeTable();
+    this.streaming = false;
   }
 }

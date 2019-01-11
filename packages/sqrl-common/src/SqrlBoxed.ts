@@ -1,4 +1,4 @@
-import { SqrlObject } from "sqrl-common";
+import { SqrlObject } from "./SqrlObject";
 
 /**
  * Copyright 2018 Twitter, Inc.

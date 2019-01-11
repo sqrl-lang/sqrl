@@ -1,4 +1,5 @@
 export * from "./RenderedSpan";
+export * from "./SqrlBoxed";
 export * from "./SqrlObject";
 
 export * from "./compare";

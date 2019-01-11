@@ -50,7 +50,8 @@ import {
   CliOutput,
   CliCompileOutput,
   CliExprOutput,
-  CliSlotJsOutput
+  CliSlotJsOutput,
+  CliTableOutput
 } from "./CliOutput";
 import { getGlobalLogger } from "sqrl/lib/api/log";
 import { SimpleDatabaseSet } from "sqrl/lib/platform/DatabaseSet";
@@ -134,6 +135,8 @@ export function getCliOutput(
     }
   } else if (args["--output"] === "csv") {
     return new CliCsvOutput(outputOptions);
+  } else if (args["--output"] === "table") {
+    return new CliTableOutput(outputOptions);
   } else if (args["--output"] === "json") {
     return new CliJsonOutput(outputOptions);
   } else if (args["--output"] === "expr") {

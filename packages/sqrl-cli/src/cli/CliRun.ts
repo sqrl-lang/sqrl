@@ -9,7 +9,7 @@ import Semaphore from "sqrl/lib/jslib/Semaphore";
 import * as split2 from "split2";
 import { CliActionOutput } from "./CliOutput";
 import { Context } from "sqrl/lib/api/ctx";
-import { promiseFinally } from "sqrl-common";
+import { promiseFinally, SqrlObject } from "sqrl-common";
 import { FeatureMap, Executable, Execution, SimpleManipulator } from "sqrl";
 
 export class CliRun {
@@ -38,7 +38,10 @@ export class CliRun {
       manipulator
     });
 
-    const loggedFeatures = {};
+    const loggedFeatures: {
+      [featureName: string]: SqrlObject;
+    } = {};
+
     await Promise.all(
       features.map(async featureName => {
         const value = await execution.fetchFeature(featureName);

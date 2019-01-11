@@ -175,13 +175,16 @@ export class CliPrettyOutput extends CliActionOutput {
     Object.assign(loggedFeatures, manipulator.loggedFeatures);
     for (const key of Object.keys(loggedFeatures).sort()) {
       const value = loggedFeatures[key];
+
       if (value instanceof SqrlObject) {
-        this.line(
-          "%s=%s %s",
-          key,
-          JSON.stringify(value.getBasicValue()),
-          spanToShell(value.render()).trimRight()
-        );
+        const json = JSON.stringify(value.getBasicValue());
+        const rendered = value.render();
+
+        if (rendered.text && rendered.text.trimRight() === json) {
+          this.line("%s=%s", key, json);
+        } else {
+          this.line("%s=%s %s", key, json, spanToShell(rendered).trimRight());
+        }
       } else {
         this.line("%s=%s", key, JSON.stringify(value));
       }

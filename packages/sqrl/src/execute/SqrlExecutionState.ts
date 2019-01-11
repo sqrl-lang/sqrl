@@ -18,7 +18,7 @@ import * as moment from "moment";
 import { isValidFeatureName } from "../feature/FeatureName";
 import { DatabaseSet, Context } from "../api/ctx";
 import { FeatureMap, Execution } from "../api/execute";
-import { SqrlBoxed } from "../api/SqrlBoxed";
+import { SqrlBoxed } from "sqrl-common";
 import { SourcePrinter } from "../api/executable";
 
 export interface SqrlExecutionOptions {
