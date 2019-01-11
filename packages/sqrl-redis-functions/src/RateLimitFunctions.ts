@@ -41,7 +41,7 @@ export interface SessionProps extends RateLimitRefill {
 
 export interface RateLimitService {
   fetch(ctx: Context, props: RateLimitProps): Promise<number[]>;
-  sessionize(ctx: Context, props: SessionProps): Promise<[number, number]>;
+  sessionize(ctx: Context, props: SessionProps): Promise<number>;
 }
 
 function setupRateLimitAst(state: CompileState, ast) {
@@ -301,8 +301,7 @@ export function registerRateLimitFunctions(
       )
     );
 
-    // Result here is an array containing remaining quota and update time ms.
-    const redisResultsAst = state.setGlobal(
+    const sessionTimestampSlot = state.setGlobal(
       ast,
       AstBuilder.call("_fetchSession", [
         AstBuilder.props({
@@ -311,35 +310,14 @@ export function registerRateLimitFunctions(
           refillTimeMs: AstBuilder.constant(args.refillTimeMs),
           refillAmount: AstBuilder.constant(args.refillAmount),
           take: takeAst,
-          at: AstBuilder.feature("SqrlClock")
+          at: AstBuilder.call("timeMs", [AstBuilder.feature("SqrlClock")])
         })
       ])
     );
 
-    const remainingQuotaAst = AstBuilder.call("int", [
-      AstBuilder.call("first", [redisResultsAst])
+    return AstBuilder.call("_sessionize", [
+      keyAst, // Key for the session rate limit
+      sessionTimestampSlot
     ]);
-    const sessionStartMsAst = AstBuilder.call("last", [redisResultsAst]);
-    const singletonSessionAst = AstBuilder.call("cmpG", [
-      remainingQuotaAst,
-      tokenAmountAst
-    ]);
-    const emptyTokenAmountAst = AstBuilder.call("cmpE", [
-      AstBuilder.constant(0),
-      tokenAmountAst
-    ]);
-    const invalidSessionAst = AstBuilder.call("or", [
-      singletonSessionAst,
-      emptyTokenAmountAst
-    ]);
-
-    return AstBuilder.branch(
-      invalidSessionAst,
-      AstBuilder.constant(null),
-      AstBuilder.call("_sessionize", [
-        keyAst, // Key for the session rate limit
-        sessionStartMsAst
-      ])
-    );
   });
 }

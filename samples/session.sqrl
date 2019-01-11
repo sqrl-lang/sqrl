@@ -1,0 +1,6 @@
+LET RequestIp := input();
+LET Ip := node('Ip', RequestIp);
+LET SqrlMutate := true;
+
+LET Session := sessionize(BY Ip MAX 2 EVERY 5 SECONDS);
+logFeature(Session);

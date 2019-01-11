@@ -74,22 +74,15 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
       return SqrlAst.call("_dateDiff", [
         SqrlAst.constant(VALID_TIMESPANS[timeUnitAst.value]),
         startDateAst,
-        endDateAst || SqrlAst.call("nowMs", [])
+        endDateAst || SqrlAst.feature("SqrlClock")
       ]);
     }
   });
 
   registry.save(
     function _dateDiff(msConversion: number, start, end) {
-      if (start instanceof SqrlObject) {
-        start = start.tryGetTimeMs();
-      }
-      if (end instanceof SqrlObject) {
-        end = end.tryGetTimeMs();
-      }
-      if (typeof start !== "number" || typeof end !== "number") {
-        return null;
-      }
+      start = timeMsForValue(start);
+      end = timeMsForValue(end);
       return (end - start) / msConversion;
     },
     {

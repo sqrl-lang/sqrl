@@ -42,10 +42,18 @@ export class RedisRateLimit implements RateLimitService {
     );
   }
 
-  async sessionize(
-    ctx: Context,
-    props: SessionProps
-  ): Promise<[number, number]> {
-    return [0, 0];
+  async sessionize(ctx: Context, props: SessionProps): Promise<number> {
+    return this.redis.sessionize(
+      ctx,
+      Buffer.concat([this.prefix, props.key.getBuffer()]),
+      {
+        maxAmount: props.maxAmount,
+        refillTimeMs: props.refillTimeMs,
+        refillAmount: props.refillAmount,
+        take: props.take,
+        at: props.at,
+        strict: props.strict
+      }
+    );
   }
 }

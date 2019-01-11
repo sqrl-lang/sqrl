@@ -11,6 +11,7 @@ import murmurhash = require("murmurhash-native");
 import { Context, DatabaseSet } from "sqrl";
 import { invariant } from "sqrl-common";
 import { rateLimitFetchLua } from "../lua/rateLimitFetchLua";
+import { sessionizeLua } from "../lua/sessionizeLua";
 
 export interface RateLimitOptions {
   maxAmount: number;
@@ -27,6 +28,7 @@ export interface RedisInterface {
     key: Buffer,
     opt: RateLimitOptions
   ): Promise<number>;
+  sessionize(ctx: Context, key: Buffer, opt: RateLimitOptions): Promise<number>;
   increment(ctx: Context, key: Buffer, amount?: number): Promise<number>;
   get(ctx: Context, key: Buffer): Promise<Buffer>;
   del(ctx: Context, ...keys: Buffer[]): Promise<number>;
@@ -85,6 +87,10 @@ export class RedisService implements RedisInterface {
     this.conn = new Redis({ host, port });
     this.conn.defineCommand("rateLimitFetch", {
       lua: rateLimitFetchLua(),
+      numberOfKeys: 1
+    });
+    this.conn.defineCommand("sessionize", {
+      lua: sessionizeLua(),
       numberOfKeys: 1
     });
   }
@@ -160,6 +166,21 @@ export class RedisService implements RedisInterface {
       opt.refillTimeMs,
       opt.refillAmount,
       opt.strict ? 1 : 0
+    );
+  }
+
+  async sessionize(
+    ctx: Context,
+    key: Buffer,
+    opt: RateLimitOptions
+  ): Promise<number> {
+    return this.conn.sessionize(
+      key,
+      opt.maxAmount,
+      opt.take,
+      opt.at,
+      opt.refillTimeMs,
+      opt.refillAmount
     );
   }
 

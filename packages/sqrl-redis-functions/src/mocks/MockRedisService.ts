@@ -8,6 +8,7 @@ import { Context } from "sqrl";
 import { invariant } from "sqrl-common";
 import { MockRedisDatabase } from "./MockRedisDatabase";
 import { mockRateLimitFetch } from "../lua/rateLimitFetchLua";
+import { mockSessionize } from "../lua/sessionizeLua";
 
 export class MockRedisService implements RedisInterface, MockRedisDatabase {
   db = {};
@@ -26,6 +27,22 @@ export class MockRedisService implements RedisInterface, MockRedisDatabase {
       opt.refillTimeMs,
       opt.refillAmount,
       opt.strict
+    );
+  }
+
+  async sessionize(
+    ctx: Context,
+    key: Buffer,
+    opt: RateLimitOptions
+  ): Promise<number> {
+    return mockSessionize(
+      this,
+      key.toString("utf-8"),
+      opt.maxAmount,
+      opt.take,
+      opt.at,
+      opt.refillTimeMs,
+      opt.refillAmount
     );
   }
 
