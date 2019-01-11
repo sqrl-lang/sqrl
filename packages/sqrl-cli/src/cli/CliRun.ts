@@ -41,7 +41,7 @@ export class CliRun {
     const loggedFeatures = {};
     await Promise.all(
       features.map(async featureName => {
-        const value = await execution.fetchValue(featureName);
+        const value = await execution.fetchFeature(featureName);
         loggedFeatures[featureName] = value;
       })
     );

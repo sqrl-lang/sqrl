@@ -16,9 +16,12 @@ import {
   createSimpleContext,
   SimpleManipulator
 } from "sqrl";
+import { invariant, SqrlObject } from "sqrl-common";
+import * as csvStringify from "csv-stringify";
 
 export interface CliOutputOptions {
   stdout?: Writable;
+  features?: string[];
   onlyBlocked?: boolean;
 }
 
@@ -99,11 +102,21 @@ export class CliJsonOutput extends CliActionOutput {
 }
 
 export class CliCsvOutput extends CliActionOutput {
+  private features: string[];
+  private stringifier: csvStringify.Stringifier;
+
   constructor(private options: CliOutputOptions) {
     super(options.stdout || process.stdout);
+    invariant(
+      Array.isArray(options.features) && options.features.length,
+      "At-least one feature output required for CSV"
+    );
+    this.features = options.features;
   }
   startStream() {
-    /* perhaps write out the headers */
+    this.stringifier = csvStringify({});
+    this.stringifier.pipe(this.stdout);
+    this.stringifier.write(this.features);
   }
   action(
     manipulator: SimpleManipulator,
@@ -115,6 +128,21 @@ export class CliCsvOutput extends CliActionOutput {
         return;
       }
     }
-    throw new Error("CSV output is not implemented yet.");
+
+    const row = this.features.map(name => {
+      return SqrlObject.ensureBasic(loggedFeatures[name]);
+    });
+
+    if (this.stringifier) {
+      this.stringifier.write(row);
+    } else {
+      this.startStream();
+      this.stringifier.write(row);
+      this.close();
+    }
+  }
+
+  close() {
+    this.stringifier.end();
   }
 }

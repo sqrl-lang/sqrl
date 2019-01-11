@@ -53,6 +53,7 @@
     "@types/chokidar": "^1.7.5",
     "chalk": "^2.4.1",
     "chokidar": "^2.0.4",
+    "csv-stringify": "^5.1.2",
     "docopt": "^0.6.2",
     "eventemitter3": "^3.1.0",
     "expand-tilde": "^2.0.2",

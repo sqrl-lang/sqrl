@@ -77,6 +77,7 @@ Usage:
   sqrl [options] test <filename>
 
 Options:
+  --color=<when>         Force color in ouput. When can be \`never\`, \`always\`, or \`auto\`.
   --stream=<feature>     Stream inputs to the given feature from stdin as newline seperated json
   --concurrency=<N>      Limit actions processed in parallel [default: 50]
   --compiled             Read compiled SQRL rather than source
@@ -122,6 +123,7 @@ export function getCliOutput(
 ): CliOutput {
   const outputOptions: CliOutputOptions = {
     stdout,
+    features: args["<feature>"],
     onlyBlocked: args["--only-blocked"]
   };
   if (args["--output"] === "pretty") {
