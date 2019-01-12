@@ -5,197 +5,184 @@
   })();
 
   function loc(): AstLocation {
-    return options.mergeLocation(location());
+    return location();
+  }
+  function camelCase(string) {
+    // * Lowercase the string
+    // * Uppercase any letter at a word boundary
+    // * Remove all spaces
+    return string.toLowerCase().replace(/\b\w/g, function(chr, idx) {
+      return idx > 0 ? chr.toUpperCase() : chr;
+    }).replace(/\s+/g, '');
   }
 }
 
-SqrlScript = flag:FlagStatement? topStatements:SqrlClosedStatement* FinalWhitespace {
-  // @TODO: Get rid of sections
-  return {
-    type: 'script',
-    flag: flag || null,
-    statements: topStatements,
-    location: loc(),
-  };
-}
-
-SqrlRepl = _? topStatements:SqrlClosedStatement* last:(SqrlStatement / SqrlExpr)? _? ";"? FinalWhitespace {
-  return {
-    type: 'repl',
-    statements: [...topStatements, last].filter(f => f),
-    location: loc(),
-  };
-}
-
-SqrlExpr = _? expr:Expr _? {
-  return {
-    type: 'expr',
-    expr: expr,
-    location: loc(),
-  };
-}
-
-FlagStatement = "'use migrate';" {
-  return 'migrate';
-}
-
-SqrlClosedStatement = _? statement:SqrlStatement _? ";" {
-  return statement;
-}
-
-SqrlStatement = statement:(
-  AssertStatement /
-  ExecuteStatement /
-  IncludeStatement /
-  LetStatement /
-  RuleStatement /
-  WhenStatement /
-  ListComprehensionExpr /
-  CallStatement
-) {
-  return statement;
-}
-
-
-IncludeStatement = "INCLUDE"i _ library:("LIBRARY"i _)? filename:String where:WhereClause? {
+SumArguments =_? sumFeature:FeatureExpr _? "BY"i _ features:AliasFeatureList where:WhereClause? timespan:CountTimespanClause? _? {
   where = where || {'type': 'constant', value: true};
   return {
-    type: 'include',
-    filename: filename,
-    where: where,
-    library: !!library,
-    location: loc(),
-  };
-}
-
-AssertStatement = "ASSERT"i _ expr:Expr {
-  return {
-    type: 'assert',
-    expr: expr,
-    location: loc()
-  };
-}
-
-ExecuteStatement = "EXECUTE"i repeat:(_ Number _ "TIMES"i)? skipWait:SkipWaitClause? {
-  return {
-    type: 'execute',
-    repeat: repeat ? repeat[1] : 1,
-    skipWait: !!skipWait,
-    location: loc()
-  };
-}
-
-DefaultClause = _ "DEFAULT"i { return "default"; }
-
-SwitchClause = DefaultClause / WhereClause
-
-LetStatement = keyword:LetKeyword description:LetDescriptionClause? _ feature:Feature _? ":=" _? expr:Expr where:SwitchClause? {
-  const isDefaultCase = where === 'default';
-  if (isDefaultCase) {
-    where = { type: 'constant', value: null };
-  } else {
-    where = where || {'type': 'constant', value: true};
-  }
-
-  return {
-    type: 'let',
-
-    description,
-    expr,
-    feature,
-    final: keyword === 'final',
-    isDefaultCase,
-    location: loc(),
+    features,
+    sumFeature,
+    timespan: timespan || 'total',
     where,
   };
 }
 
-LetKeyword = ("DEFAULT"i / "LET"i / "FINAL"i) {
-  return text().toLowerCase();
+CountArguments = _? "BY"i _ features:AliasFeatureList where:WhereClause? timespan:CountTimespanClause? _? {
+  where = where || {'type': 'constant', value: true};
+  return {
+    features,
+    sumFeature: null,
+    timespan: timespan || 'total',
+    where
+  };
 }
 
-LetDescriptionClause = _ description:String {
-  return description;
+TrendingTimespanClause = _ timespan:(
+  "DAY OVER DAY"i /
+  "DAY OVER FULL WEEK"i /
+  "WEEK OVER WEEK"i
+) {
+  return camelCase(timespan);
 }
 
-RolloutClause = _ "ROLLOUT TO"i _ value:IntLiteral "%"{
+TrendingArguments = _?
+  features:AliasFeatureList
+  where:WhereClause?
+  minEvents:MinEventsClause?
+  timespan:TrendingTimespanClause
+  _? {
+  where = where || {'type': 'constant', value: true};
+  return {
+    features,
+    minEvents: minEvents || 1,
+    timespan,
+    where,
+  };
+}
+
+CountTimespanClause = _ timespan:(
+  "DAY OVER DAY"i /
+  "DAY OVER WEEK"i /
+  "LAST DAY"i /
+  "LAST EIGHT DAYS"i /
+  "LAST HOUR"i /
+  "LAST MONTH"i /
+  "LAST 180 DAYS"i /
+  "LAST TWO DAYS"i /
+  "LAST TWO WEEKS"i /
+  "LAST WEEK"i /
+  "TOTAL"i /
+  "WEEK OVER WEEK"i /
+
+  /* These are included for backwards compatibility but a bit ugly... */
+  "LAST 1 HOUR"i /
+  "LAST 1 DAY"i /
+  "LAST 1 WEEK"i /
+  "LAST 1 MONTH"i
+) {
+  // @TODO: We should improve numeric handling in this
+  timespan = timespan.replace(/ 1 /, ' ');
+
+  return camelCase(timespan);
+}
+
+CountPreviousArguments = _?
+  "BY"i _ features:AliasFeatureList where:WhereClause? 
+  _ previousTimespan:("LAST DAY"i / "LAST WEEK") _? 
+{
+  where = where || {'type': 'constant', value: true};
+  return {
+    features,
+    sumFeature: null,
+    timespan: camelCase('previous ' + previousTimespan),
+    where,
+  };
+}
+
+
+CountUniqueArguments = _?
+  uniques:AliasFeatureList
+  groups:(_ GroupBy _ groups:AliasFeatureList )?
+  setOperation:(_ ("INTERSECT"i / "UNION"i) _ AliasFeatureList )?
+  where:WhereClause?
+  windowMs:LastMsClause?
+  beforeAction:BeforeActionClause?
+  _?
+{
+  where = where || {'type': 'constant', value: true};
+  return {
+    uniques,
+    groups: groups ? groups[3] : [],
+    setOperation: setOperation ? {
+      operation: setOperation[1].toLowerCase(),
+      features: setOperation[3],
+    } : null,
+    windowMs: windowMs || null,
+    beforeAction: beforeAction === true,
+    where,
+  };
+}
+
+RateLimitArguments = _? "BY"i _ features:FeatureList _ max:("MAX"i _
+    maxAmount:IntLiteral _)? "EVERY"i _ refillTimeMs:DurationMsExpr refillAmount:RateLimitRefillClause?
+    tokenAmount:RateLimitTakeClause? strict:RateLimitStrictClause?
+    where:WhereClause? _? 
+{
+  const maxAmount = max ? max[2] : 1;
+  refillAmount = refillAmount || maxAmount;
+  tokenAmount = tokenAmount || {'type': 'constant', value: 1};
+  strict = strict || false;
+  where = where || {'type': 'constant', value: true};
+  return {
+    features,
+    maxAmount,
+    refillTimeMs,
+    refillAmount,
+    tokenAmount,
+    strict,
+    where,
+  };
+}
+
+RateLimitRefillClause = _ "REFILL"i _ value:IntLiteral {
   return value;
 }
 
-RuleStatement = keyword:("CREATE"i / "DEFAULT"i) description:LetDescriptionClause? _ rule:NewRuleClause {
-  return Object.assign({}, rule, {
-    description: description,
-    location: loc(),
-  });
+RateLimitTakeClause = _ "TAKE"i _ value:Expr {
+  return value;
 }
 
-WhenStatement = "WHEN"i _ rules:(NewRuleClause / RulesExpr) _ "THEN"i _ statements:WhenStatementList {
-  return {
-    type: 'when',
-    rules,
-    statements,
-    location: loc()
-  };
+RateLimitStrictClause = _ "STRICT"i {
+  return true;
 }
 
-NewRuleClause = sync:SyncClause? "RULE"i _ name:Feature alias:(_ "ALIAS"i _ alias:Feature)? where:WhereClause? reason:ReasonClause? rolloutPercent:RolloutClause? {
+PercentileArgsExpr = feature:Feature groupFeatures:(_ GroupBy _ groupFeatures:FeatureList )? where:WhereClause? {
   where = where || {'type': 'constant', value: true};
   return {
-    type: 'rule',
-    name,
+    groupFeatures: groupFeatures ? groupFeatures[3] : [],
+    feature,
     where,
-    reason,
-    sync: !!sync,
-    rolloutPercent: rolloutPercent || 0,
-    alias: alias ? alias[3] : null,
-    location: loc()
   };
 }
 
-SyncClause = value:("SYNC"i / "ASYNC"i) _ {
-  return value.toLowerCase() === 'sync';
+PercentileArguments = _? percentile:IntLiteral _? "," _? percentileArgs:PercentileArgsExpr _? {
+  return {
+    ...percentileArgs,
+    percentile,
+  };
 }
 
-// In future we could switch this to use CallStatement to allow for ` WHERE` clauses. That would
-// complicate the WHEN block significantly so leaving it out for now.
-WhenStatementList = first:CallExpr rest:(_? "," _? CallExpr)* {
-  return [first].concat(rest.map(item => item[1]));
+PercentileForCallArguments = _? percentileArgs:PercentileArgsExpr _? {
+  return percentileArgs;
 }
 
-RulesExpr = ("RULES"i _)? firstRule:FeatureExpr restRules:(_? "," _? FeatureExpr)* {
-  return {type: 'rules', rules: [firstRule].concat(restRules.map(arg => arg[3])), location: loc()};
-}
-
-CallStatement = call:CallExpr where:WhereClause? {
-  if (where) {
-    return {
-      type: 'call',
-      func: 'if',
-      args: [where, call]
-    };
-  }
-  return call;
-}
-
-CallExpr = (
-  CustomCallExpr /
-  SimpleCallExpr
-);
-
-CustomCallExpr = func:Func &{ 
-  return options.customFunctions.has(func);
-} _? "(" _? source:CustomCallSource _? ")" {
-  return {type: 'customCall', func, source, location: loc()};
-}
-
-CustomCallSource = $((String / (![()] .) / "(" CustomCallSource ")")*);
-
-SimpleCallExpr = func:Func _? "(" _? args:ExprList? _? ")" {
-  return {type: 'call', func: func, args: args || [], location: loc()};
-}
-
-ExprList = first:Expr rest:(_? "," _? Expr)* {
-  return [first].concat(rest.map(item => item[3]));
+StreamingStatsArguments = _? feature:Feature group:(_ GroupBy _ group:Feature )? where:WhereClause? _? {
+  where = where || {'type': 'constant', value: true};
+  return {
+    feature,
+    group: group ? group[3] : null,
+    where,
+  };
 }
 
 SubExpr = "(" _? expr:Expr _? ")" {
@@ -214,12 +201,45 @@ WhereClause = _ "WHERE"i _ expr:Expr {
   return expr;
 }
 
-ReasonClause = _ "WITH REASON"i _ string:String {
-  return string;
+MinEventsClause = _ "WITH MIN EVENTS"i _ numEvents:IntLiteral {
+  return numEvents;
 }
 
-SkipWaitClause = _ skipWait:("WITHOUT"i / "WITH"i) _ "WAIT"i {
-  return skipWait.toLowerCase() === 'without';
+LastMsClause = _ "LAST"i _ lastMs:DurationMsExpr {
+  return lastMs;
+}
+
+BeforeActionClause = _ "BEFORE ACTION"i {
+  return true;
+}
+
+TimespanSecondsExpr = timespan:(
+  "SECONDS"i / "SECOND"i /
+  "MINUTES"i / "MINUTE"i /
+  "HOURS"i / "HOUR"i /
+  "DAYS"i / "DAY"i /
+  "WEEKS"i / "WEEK"i /
+  "MONTHS"i / "MONTH"i
+) {
+  return {
+    second: 1,
+    seconds: 1,
+    minute: 60,
+    minutes: 60,
+    hour: 60 * 60,
+    hours: 60 * 60,
+    day: 60 * 60 * 24,
+    days: 60 * 60 * 24,
+    week: 60 * 60 * 24 * 7,
+    weeks: 60 * 60 * 24 * 7,
+    month: 60 * 60 * 24 * 30,
+    months: 60 * 60 * 24 * 30,
+  }[timespan.toLowerCase()];
+}
+
+DurationMsExpr = quantity:(IntLiteral _)? timespanSeconds:TimespanSecondsExpr {
+  quantity = quantity ? quantity[0] : 1;
+  return quantity * timespanSeconds * 1000;
 }
 
 DataObjectExpr = EmptyDataObjectExpr / NonEmptyDataObjectExpr;
@@ -267,38 +287,7 @@ DataObjectPair
     ]
   }
 
-ListExpr = EmptyListExpr / ListComprehensionExpr / NonEmptyListExpr;
-
-ListComprehensionExpr = "[" _? output:Expr _ "FOR"i _ feature:FeatureExpr _ "IN"i _ input:Expr where:WhereClause? _? "]" {
-  where = where || {'type': 'constant', value: true};
-  const iterator = feature.value;
-  const replaceIterator = (ast: Ast): Ast => {
-    if (ast.type === 'feature' && ast.value === iterator) {
-      return {
-        type: 'iterator',
-        name: iterator,
-        location: ast.location,
-      };
-    } else if (ast.type === 'customCall') {
-      throw buildSqrlError(ast, 'Expression is not valid during a list comprehension');
-    }
-    return ast;
-  };
-
-  return {
-    type: 'listComprehension',
-    output: mapAst(output, replaceIterator),
-    input: input,
-    iterator: {
-      type: 'iterator',
-      name: iterator,
-      location: feature.location,
-    },
-    where: mapAst(where, replaceIterator),
-    location: loc()
-  };
-
-}
+ListExpr = EmptyListExpr / NonEmptyListExpr;
 
 EmptyListExpr = "[" _? "]" {
   return {
@@ -350,10 +339,27 @@ HighArithmeticExpr = BinaryHighArithmeticExpr / HighArithmeticTerm
 BinaryHighArithmeticExpr = left:HighArithmeticTerm _? op:("*" / "/" / "%") _? right:HighArithmeticExpr {
   return {type: 'binary_expr', left: left, operator: op.toLowerCase(), right: right, location: loc()};
 }
-HighArithmeticTerm = EagerExpr / LazyExpr / CallExpr / DataObjectExpr / ListExpr / SubExpr / Literal / FeatureExpr
+HighArithmeticTerm = EagerExpr / LazyExpr / DataObjectExpr / ListExpr / SubExpr / Literal / FeatureExpr
 
 FeatureExpr = value:Feature {
   return {type: 'feature', value: value, location: loc()};
+}
+
+AliasFeature = value:Feature alias:(_ "AS"i _ alias:Feature)? {
+  return {
+    type: 'aliasFeature',
+    value,
+    alias: alias ? alias[3] : value,
+    location: loc()
+  };
+}
+
+AliasFeatureList = first:AliasFeature rest:(_? "," _? AliasFeature)* {
+  return [first].concat(rest.map(item => item[3]));
+}
+
+FeatureList = first:Feature rest:(_? "," _? Feature)* {
+  return [first].concat(rest.map(item => item[3]));
 }
 
 Feature "feature name" = Symbol ("." Symbol)* {
@@ -364,9 +370,7 @@ Symbol = [A-Za-z0-9_]+ {
   return text();
 }
 
-Func "function name" = [A-Za-z0-9_]+ {
-  return text();
-}
+GroupBy = ("GROUP"i _ )? "BY"i {}
 
 Literal = value:(Number / String / True / False / Null) {
   return {type: 'constant', value: value, location: loc()};
@@ -405,6 +409,7 @@ ZeroLiteral = "0" {
   return 0;
 }
 
+// Not sure if we want to allow -0.0; but this does.
 FloatLiteral = [-]?([0-9]+)? "." [0-9]+ {
   return parseFloat(text());
 }
@@ -412,8 +417,6 @@ FloatLiteral = [-]?([0-9]+)? "." [0-9]+ {
 String = first:QuoteString rest:(_ QuoteString)* {
   return first.concat(...rest.map(item => item[1]));
 }
-
-FinalWhitespace = _? UnterminatedComment?
 
 _ "whitespace" = (Whitespace / Comment)+
 

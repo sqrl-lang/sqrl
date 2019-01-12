@@ -77,7 +77,9 @@ export class SqrlTest {
   }
 
   async run(ctx: Context, sqrl: string) {
-    const statements = parseSqrl(sqrl).statements;
+    const statements = parseSqrl(sqrl, {
+      customFunctions: this.functionRegistry.customFunctions
+    }).statements;
     return this.runStatements(ctx, statements);
   }
 

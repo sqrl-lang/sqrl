@@ -12,15 +12,18 @@ import {
   Context,
   Execution,
   FunctionRegistry,
-  buildSqrlError,
   sqrlInvariant,
   CountValidTimespan,
   CallAst,
   CountArgsAst,
   Ast,
   AliasFeatureAst,
-  Manipulator
+  Manipulator,
+  CustomCallAst,
+  FeatureAst
 } from "sqrl";
+
+import { parse } from "./parser/sqrlRedisParser";
 
 import { MAX_TIME_WINDOW_MS } from "./services/BucketedKeys";
 import { invariant } from "sqrl-common";
@@ -161,17 +164,40 @@ export interface CountService {
   bump(manipulator: Manipulator, props: CountServiceBumpProps): void;
 }
 
-function interpretCountArgs(state: CompileState, ast: CallAst) {
+interface CountArguments {
+  features: AliasFeatureAst[];
+  sumFeature: FeatureAst | null;
+  timespan: string;
+  where: Ast;
+}
+interface TrendingArguments {
+  features: AliasFeatureAst[];
+  minEvents: number;
+  timespan: string;
+  where: Ast;
+}
+
+function interpretCounterWhere(
+  state: CompileState,
+  where: Ast
+): {
+  whereAst: Ast;
+  whereFeatures?: string[];
+  whereTruth?: string;
+} {
   // @TODO: _wrapped
-  const {
-    args,
-    whereAst,
-    whereFeatures,
-    whereTruth
-  } = state._wrapped.interpretCounterCallAst(ast);
-  if (args.type !== "countArgs") {
-    throw buildSqrlError(ast, "Function requires keyword arguments");
-  }
+  return state._wrapped.combineGlobalWhere(where);
+}
+
+function interpretCountArgs(
+  state: CompileState,
+  sourceAst: Ast,
+  args: CountArguments
+) {
+  const { whereAst, whereFeatures, whereTruth } = interpretCounterWhere(
+    state,
+    args.where
+  );
 
   const counterProps: {
     features: string[];
@@ -193,7 +219,7 @@ function interpretCountArgs(state: CompileState, ast: CallAst) {
   }
 
   const { nodeAst, nodeId } = state._wrapped.counterNode(
-    ast,
+    sourceAst,
     NODE_TYPE,
     counterProps
   );
@@ -204,7 +230,7 @@ function interpretCountArgs(state: CompileState, ast: CallAst) {
   const featureString = featuresAst.map(ast => ast.value).join("~");
   const keyedCounterName = `${nodeId.getIdString()}~${featureString}`;
   const keysAst = state.setGlobal(
-    ast,
+    sourceAst,
     AstBuilder.call("_getKeyList", [nodeAst, ...featuresAst]),
     `key(${keyedCounterName})`
   );
@@ -213,7 +239,6 @@ function interpretCountArgs(state: CompileState, ast: CallAst) {
   );
 
   return {
-    args,
     bumpByAst,
     hasAlias,
     keyedCounterName,
@@ -226,41 +251,48 @@ function interpretCountArgs(state: CompileState, ast: CallAst) {
   };
 }
 
-export function ensureCounterBump(state: CompileState, ast: CountCallAst) {
-  const interpretResult = interpretCountArgs(state, ast);
+export function ensureCounterBump(
+  state: CompileState,
+  sourceAst: Ast,
+  args: CountArguments
+) {
+  const interpretResult = interpretCountArgs(state, sourceAst, args);
+
   const {
-    args,
     hasAlias,
     whereAst,
     keyedCounterName,
     bumpByAst,
     keysAst
   } = interpretResult;
-  const timespanConfig = getTimespanConfig(args.timespan);
 
   // Only base the counter identity on features/where
-
-  if (!hasAlias) {
-    // Cache the bump flags on the function cache
-    const flagsSlot = state.setConstantSlot(
-      ast,
-      `flags(${keyedCounterName}`,
-      0
-    );
-    // tslint:disable-next-line:no-bitwise
-    flagsSlot.setValue(flagsSlot.getValue() | timespanConfig.flag);
-
-    const slotAst = state.setGlobal(
-      ast,
-      AstBuilder.call("_bumpCount", [
-        AstBuilder.branch(whereAst, keysAst, AstBuilder.constant(null)),
-        bumpByAst,
-        AstBuilder.slot(flagsSlot)
-      ]),
-      `bump(${keyedCounterName})`
-    );
-    state.addStatement("SqrlCountStatements", slotAst);
+  if (hasAlias) {
+    return interpretResult;
   }
+
+  const timespanConfig = getTimespanConfig(args.timespan);
+
+  // Cache the bump flags on the function cache
+  const flagsSlot = state.setConstantSlot(
+    sourceAst,
+    `flags(${keyedCounterName}`,
+    0
+  );
+  // tslint:disable-next-line:no-bitwise
+  flagsSlot.setValue(flagsSlot.getValue() | timespanConfig.flag);
+
+  const slotAst = state.setGlobal(
+    sourceAst,
+    AstBuilder.call("_bumpCount", [
+      AstBuilder.branch(whereAst, keysAst, AstBuilder.constant(null)),
+      bumpByAst,
+      AstBuilder.slot(flagsSlot)
+    ]),
+    `bump(${keyedCounterName})`
+  );
+  state.addStatement("SqrlCountStatements", slotAst);
+
   return interpretResult;
 }
 
@@ -315,24 +347,6 @@ export function registerCountFunctions(
     }
   );
 
-  function replaceTimespan(ast, timespan) {
-    invariant(
-      ast.type === "call" &&
-        ast.args.length > 0 &&
-        ast.args[0].type === "countArgs",
-      "Expected a count() ast to replace timespan in"
-    );
-    // Dive into the call ast and replace the timespan
-    return Object.assign({}, ast, {
-      args: [
-        Object.assign({}, ast.args[0], {
-          timespan
-        }),
-        ...ast.args.slice(1)
-      ]
-    });
-  }
-
   registry.register(
     async function fetchTrendingDetails(
       state,
@@ -385,14 +399,13 @@ export function registerCountFunctions(
     }
   );
 
-  registry.registerTransform(function trending(
+  registry.registerCustom(function trending(
     state: CompileState,
-    ast: CallAst
+    ast: CustomCallAst
   ): Ast {
-    const { args } = state._wrapped.interpretCounterCallAst(ast);
-    if (args.type !== "trendingArgs") {
-      throw buildSqrlError(ast, "Expected count() arguments");
-    }
+    const args: TrendingArguments = parse(ast.source, {
+      startRule: "TrendingArguments"
+    });
 
     sqrlInvariant(
       ast,
@@ -403,22 +416,25 @@ export function registerCountFunctions(
     );
 
     const timespanConfig = TRENDING_CONFIG[args.timespan];
-    const currentCountAst = AstBuilder.call("_fetchCounts", [
-      {
-        type: "countArgs",
-        features: args.features,
-        sumFeature: null,
-        timespan: timespanConfig.current
-      },
-      ast.args[1]
-    ]);
+    const currentCountArgs: CountArguments = {
+      features: args.features,
+      sumFeature: null,
+      timespan: timespanConfig.current,
+      where: args.where
+    };
 
-    const currentAndPreviousCountAst = replaceTimespan(
-      currentCountAst,
-      timespanConfig.currentAndPrevious
+    const currentCountAst = databaseCountTransform(
+      state,
+      ast,
+      currentCountArgs
     );
 
-    const { keysAst } = interpretCountArgs(state, currentCountAst);
+    const currentAndPreviousCountAst = databaseCountTransform(state, ast, {
+      ...currentCountArgs,
+      timespan: timespanConfig.currentAndPrevious
+    });
+
+    const { keysAst } = interpretCountArgs(state, ast, currentCountArgs);
 
     return AstBuilder.call("fetchTrendingDetails", [
       keysAst,
@@ -428,25 +444,28 @@ export function registerCountFunctions(
     ]);
   });
 
-  registry.registerTransform(function _fetchCounts(
+  function databaseCountTransform(
     state: CompileState,
-    ast: CallAst
+    sourceAst: Ast,
+    args: CountArguments
   ): Ast {
-    const { keysAst, args } = ensureCounterBump(state, ast as CountCallAst);
+    const { keysAst } = ensureCounterBump(state, sourceAst, args);
     const timespanConfig = getTimespanConfig(args.timespan);
     return AstBuilder.call("_fetchCountsFromDb", [
       keysAst,
       AstBuilder.constant(timespanConfig.suffix)
     ]);
-  });
+  }
 
-  registry.registerTransform(function count(
+  function classifyCountTransform(
     state: CompileState,
-    ast: CallAst
-  ): Ast {
-    const { args, hasAlias, keyedCounterName, whereAst } = interpretCountArgs(
+    ast: CustomCallAst,
+    args: CountArguments
+  ) {
+    const { hasAlias, keyedCounterName, whereAst } = interpretCountArgs(
       state,
-      ast
+      ast,
+      args
     );
 
     // Rewrite this count as a subtraction between other counts (whoah)
@@ -462,8 +481,14 @@ export function registerCountFunctions(
       //              = lastWeek - (lastTwoWeeks - lastWeek)
       //
       const resultAst = AstBuilder.call("subtract", [
-        replaceTimespan(ast, previousConfig.subtractLeft),
-        replaceTimespan(ast, previousConfig.subtractRight)
+        classifyCountTransform(state, ast, {
+          ...args,
+          timespan: previousConfig.subtractLeft
+        }),
+        classifyCountTransform(state, ast, {
+          ...args,
+          timespan: previousConfig.subtractRight
+        })
       ]);
 
       if (!previousConfig.allowNegativeValue) {
@@ -493,7 +518,7 @@ export function registerCountFunctions(
     const resultAst = AstBuilder.call("add", [
       hasAlias ? AstBuilder.constant(0) : addAst,
       AstBuilder.call("arrayMax", [
-        AstBuilder.call("_fetchCounts", ast.args),
+        databaseCountTransform(state, ast, args),
         AstBuilder.constant(0)
       ])
     ]);
@@ -502,6 +527,15 @@ export function registerCountFunctions(
       resultAst,
       `count(${args.timespan}:${keyedCounterName})`
     );
+  }
+  registry.registerCustom(function count(
+    state: CompileState,
+    ast: CustomCallAst
+  ): Ast {
+    const args = parse(ast.source, {
+      startRule: "CountArguments"
+    });
+    return classifyCountTransform(state, ast, args);
   });
 }
 

@@ -62,10 +62,7 @@ export function parseRepl(text: string, options = {}): ReplAst {
   return ast;
 }
 
-export function parseSqrl(
-  text: string,
-  options: { filename?: string } = {}
-): ScriptAst {
+export function parseSqrl(text: string, options: ParseOptions = {}): ScriptAst {
   const ast = parse("SqrlScript", text, options);
   if (ast.type !== "script") {
     throw new Error("Expected script return type");

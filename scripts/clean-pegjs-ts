@@ -1,0 +1,23 @@
+#!/bin/bash
+SRC="$1"
+
+if [ ! -e "$SRC" ] || [[ ! "$SRC" == src* ]]; then
+  echo "Usage: ./clean-pegjs-ts <filename (src/...)>" >&2
+  exit 1
+fi
+
+# @todo: Could use `sed` on linux
+GSED="gsed"
+
+###
+# @NOTE: These are some hacks to remove typescript errors from the generated file
+#        Please triple check produced diff when using it
+for line in `tsc | grep "^$SRC" | grep "'s1' is declared but its value is never read" | cut '-d(' -f2 | cut -d, -f1`; do
+  $GSED -i "${line}s/let s0, s1;/let s0;/" $SRC
+done
+
+for line in `tsc | grep "^$SRC" | grep "Cannot find name 's1'" | cut '-d(' -f2 | cut -d, -f1  | sort --reverse -n`; do
+  $GSED -i "${line}d" "$SRC"
+done
+
+prettier --write "$SRC"

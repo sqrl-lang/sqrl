@@ -7,7 +7,7 @@
 import { SqrlExecutable } from "../execute/SqrlExecutable";
 import { SqrlFunctionRegistry as _FunctionRegistry } from "../function/FunctionRegistry";
 import { Context } from "./ctx";
-import { Ast, CallAst } from "../ast/Ast";
+import { Ast, CallAst, CustomCallAst } from "../ast/Ast";
 import invariant from "../jslib/invariant";
 import { LogProperties } from "./log";
 import { CompileState } from "./parse";
@@ -93,6 +93,19 @@ export class FunctionRegistry {
       pure: options.pure || false,
       statement: true,
       args: options.args
+    });
+  }
+
+  registerCustom(transform: (state: CompileState, ast: CustomCallAst) => Ast) {
+    invariant(
+      transform.name,
+      "registerCustom() must be called with a named function"
+    );
+    return this._wrapped.save(null, {
+      name: transform.name,
+      customTransform: (state, ast) => {
+        return transform(new CompileState(state), ast);
+      }
     });
   }
   registerTransform(

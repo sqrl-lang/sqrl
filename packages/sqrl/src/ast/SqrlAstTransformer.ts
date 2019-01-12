@@ -18,6 +18,7 @@ import {
 } from "./Ast";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { sqrlInvariant } from "../api/parse";
+import { CustomCallAst } from "../api/ast";
 
 function invariantCb(condition, cb: () => string) {
   if (condition) {
@@ -58,6 +59,7 @@ export default class SqrlAstTransformer {
       binary_expr: this.transformProps.bind(this, ["left", "right"]),
       boolean_expr: this.transformProps.bind(this, ["left", "right"]),
       call: this.call.bind(this),
+      customCall: this.customCall.bind(this),
       feature: this.feature.bind(this),
       if: this.if.bind(this),
       label_side_effect: this.transformProps.bind(this, ["where", "features"]),
@@ -105,6 +107,14 @@ export default class SqrlAstTransformer {
     }
   }
 
+  customCall(ast: CustomCallAst) {
+    const { functionRegistry } = this.state;
+    const hasFunction = functionRegistry.has(ast.func);
+    sqrlInvariant(ast, hasFunction, "Function not found: " + ast.func);
+    const props = functionRegistry.getProps(ast.func);
+    const transformed = props.customTransform(this.state, ast);
+    return this.transform(transformed);
+  }
   call(ast: CallAst) {
     const { functionRegistry } = this.state;
 

@@ -1,5 +1,4 @@
 import { parseExpr } from "../../src/parser/SqrlParse";
-import { invariant } from "sqrl-common";
 
 test("parses as a custom call", () => {
   expect(parseExpr("myfunc()")).toMatchObject({

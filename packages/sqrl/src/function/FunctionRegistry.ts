@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { default as AT } from "../ast/AstTypes";
-import { Ast, CallAst } from "../ast/Ast";
+import { Ast, CallAst, CustomCallAst } from "../ast/Ast";
 import { SqrlObject } from "../object/SqrlObject";
 
 import bluebird = require("bluebird");
@@ -34,6 +34,7 @@ export interface SaveFunctionProperties {
   args?: ArgumentCheck[];
   async?: boolean;
   asyncSafe?: boolean;
+  customTransform?: (state: SqrlParserState, ast: CustomCallAst) => Ast;
   docstring?: string;
   name?: string;
   promiseArgs?: boolean;
@@ -146,6 +147,8 @@ function syncSafetyNet(name: string, fn, config: SafetyNetConfig) {
 export class SqrlFunctionRegistry {
   // Use integers for calculation
   static intCostMultiplier = 100000;
+
+  readonly customFunctions: Set<string> = new Set();
 
   /* functions before any statistics tracking/etc */
   pureFunction: { [name: string]: (...any) => any } = {};
@@ -278,12 +281,19 @@ export class SqrlFunctionRegistry {
     return this.functionProperties[name];
   }
 
-  save(fn?, props: SaveFunctionProperties = {}): void {
+  save(
+    fn: (...args: any[]) => any | null,
+    props: SaveFunctionProperties = {}
+  ): void {
     const name = props.name || fn.name;
-    invariant(
-      typeof fn === "function" || fn === null,
-      "expected fn or null for registry.save"
-    );
+
+    if (typeof fn === "function") {
+      invariant(
+        !props.transformAst && !props.customTransform,
+        "Functions cannot have both callback and transform: %s",
+        name
+      );
+    }
 
     let stateArg = props.stateArg;
     let whenContextArg = false;
@@ -332,13 +342,6 @@ export class SqrlFunctionRegistry {
       invariant(
         !!props.statementFeature,
         "statementFeature required for function %s",
-        name
-      );
-
-      // @TODO: This should be true if `fn` is set at all
-      invariant(
-        !props.transformAst,
-        "Statement functions cannot have both callback and transform: %s",
         name
       );
 
@@ -402,7 +405,7 @@ export class SqrlFunctionRegistry {
     if (Array.isArray(propsArgs) && propsArgs.some(p => !!p.runtimeChecker)) {
       invariant(fn !== null, "Runtime type check not valid without callback");
       invariant(
-        !props.transformAst,
+        !props.transformAst && !props.customTransform,
         `Runtime type check not valid on transformAst func:: %s`,
         name
       );
@@ -469,12 +472,19 @@ export class SqrlFunctionRegistry {
       // background functions.Because this uses nice() async required, but maybe
       // we can change that requirement later.
       invariant(!isAsync, "Background functions must be marked as sync");
-      invariant(fn !== null, "Background functions must be provied a function");
+      invariant(
+        fn !== null,
+        "Background functions must be provided a function"
+      );
       const wrapped = fn;
-      fn = function() {
-        return nice(() => wrapped.apply(null, arguments));
+      fn = function(...args) {
+        return nice(() => wrapped.apply(null, args));
       };
       isAsync = true;
+    }
+
+    if (props.customTransform) {
+      this.customFunctions.add(name);
     }
 
     /**
