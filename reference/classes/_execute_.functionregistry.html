@@ -91,6 +91,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#register" class="tsd-kind-icon">register</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#registercustom" class="tsd-kind-icon">register<wbr>Custom</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#registerstatement" class="tsd-kind-icon">register<wbr>Statement</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#registersync" class="tsd-kind-icon">register<wbr>Sync</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#registertransform" class="tsd-kind-icon">register<wbr>Transform</a></li>
@@ -111,7 +112,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/4c52d38/packages/sqrl/src/api/execute.ts#L61">execute.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/execute.ts#L85">execute.ts:85</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -149,6 +150,50 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="registercustom" class="tsd-anchor"></a>
+					<h3>register<wbr>Custom</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Custom<span class="tsd-signature-symbol">(</span>transform<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/execute.ts#L123">execute.ts:123</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>transform: <span class="tsd-signature-type">function</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><a href="_parse_.compilestate.html" class="tsd-signature-type">CompileState</a>, ast<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ast_.customcallast.html" class="tsd-signature-type">CustomCallAst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>state: <a href="_parse_.compilestate.html" class="tsd-signature-type">CompileState</a></h5>
+														</li>
+														<li>
+															<h5>ast: <a href="../interfaces/_ast_.customcallast.html" class="tsd-signature-type">CustomCallAst</a></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="registerstatement" class="tsd-anchor"></a>
 					<h3>register<wbr>Statement</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -158,7 +203,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/4c52d38/packages/sqrl/src/api/execute.ts#L83">execute.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/execute.ts#L107">execute.ts:107</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -208,7 +253,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/4c52d38/packages/sqrl/src/api/execute.ts#L74">execute.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/execute.ts#L98">execute.ts:98</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -252,7 +297,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/4c52d38/packages/sqrl/src/api/execute.ts#L98">execute.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/execute.ts#L135">execute.ts:135</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -298,31 +343,13 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_argumentcheck_.html">"<wbr>Argument<wbr>Check"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_astbuilder_.html">"<wbr>Ast<wbr>Builder"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_executablespec_.html">"<wbr>Executable<wbr>Spec"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_manipulator_.html">"<wbr>Manipulator"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_sqrlboxed_.html">"<wbr>Sqrl<wbr>Boxed"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_uniqueid_.html">"<wbr>Unique<wbr>Id"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_uniqueidservice_.html">"<wbr>Unique<wbr>IdService"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/_arg_.html">"arg"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ast_.html">"ast"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_compile_.html">"compile"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ctx_.html">"ctx"</a>
@@ -330,14 +357,14 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_executable_.html">"executable"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_executablefrom_.html">"executable<wbr>From"</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_execute_.html">"execute"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_expr_.html">"expr"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_feature_.html">"feature"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_filesystem_.html">"filesystem"</a>
@@ -352,19 +379,10 @@
 						<a href="../modules/_parse_.html">"parse"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_simpleblockservice_.html">"simple/<wbr>Simple<wbr>Block<wbr>Service"</a>
+						<a href="../modules/_services_.html">"services"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_simplelogservice_.html">"simple/<wbr>Simple<wbr>Log<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_simplemanipulator_.html">"simple/<wbr>Simple<wbr>Manipulator"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_testlogger_.html">"simple/<wbr>Test<wbr>Logger"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_runsqrltest_.html">"simple/run<wbr>Sqrl<wbr>Test"</a>
+						<a href="../modules/_spec_.html">"spec"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_test_.html">"test"</a>
@@ -388,6 +406,9 @@
 								<a href="_execute_.functionregistry.html#register" class="tsd-kind-icon">register</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_execute_.functionregistry.html#registercustom" class="tsd-kind-icon">register<wbr>Custom</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_execute_.functionregistry.html#registerstatement" class="tsd-kind-icon">register<wbr>Statement</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -400,6 +421,9 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_execute_.manipulator.html" class="tsd-kind-icon">Manipulator</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_execute_.executableoptions.html" class="tsd-kind-icon">Executable<wbr>Options</a>
 					</li>
@@ -407,10 +431,16 @@
 						<a href="../interfaces/_execute_.execution.html" class="tsd-kind-icon">Execution</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_execute_.executionerrorproperties.html" class="tsd-kind-icon">Execution<wbr>Error<wbr>Properties</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_execute_.featuremap.html" class="tsd-kind-icon">Feature<wbr>Map</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_execute_.functionoptions.html" class="tsd-kind-icon">Function<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/_execute_.html#manipulatorcallback" class="tsd-kind-icon">Manipulator<wbr>Callback</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_execute_.html#buildfunctionregistry" class="tsd-kind-icon">build<wbr>Function<wbr>Registry</a>

@@ -96,7 +96,7 @@
 					<div class="tsd-signature tsd-kind-icon">function<wbr>Registry<span class="tsd-signature-symbol">:</span> <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/4c52d38/packages/sqrl/src/api/execute.ts#L22">execute.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/execute.ts#L46">execute.ts:46</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -109,31 +109,13 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_argumentcheck_.html">"<wbr>Argument<wbr>Check"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_astbuilder_.html">"<wbr>Ast<wbr>Builder"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_executablespec_.html">"<wbr>Executable<wbr>Spec"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_manipulator_.html">"<wbr>Manipulator"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_sqrlboxed_.html">"<wbr>Sqrl<wbr>Boxed"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_uniqueid_.html">"<wbr>Unique<wbr>Id"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_uniqueidservice_.html">"<wbr>Unique<wbr>IdService"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/_arg_.html">"arg"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ast_.html">"ast"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_compile_.html">"compile"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ctx_.html">"ctx"</a>
@@ -141,14 +123,14 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_executable_.html">"executable"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_executablefrom_.html">"executable<wbr>From"</a>
-					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_execute_.html">"execute"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_expr_.html">"expr"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_feature_.html">"feature"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_filesystem_.html">"filesystem"</a>
@@ -163,19 +145,10 @@
 						<a href="../modules/_parse_.html">"parse"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_simpleblockservice_.html">"simple/<wbr>Simple<wbr>Block<wbr>Service"</a>
+						<a href="../modules/_services_.html">"services"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_simplelogservice_.html">"simple/<wbr>Simple<wbr>Log<wbr>Service"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_simplemanipulator_.html">"simple/<wbr>Simple<wbr>Manipulator"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_testlogger_.html">"simple/<wbr>Test<wbr>Logger"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_simple_runsqrltest_.html">"simple/run<wbr>Sqrl<wbr>Test"</a>
+						<a href="../modules/_spec_.html">"spec"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_test_.html">"test"</a>
@@ -193,6 +166,9 @@
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="../classes/_execute_.functionregistry.html" class="tsd-kind-icon">Function<wbr>Registry</a>
 					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_execute_.manipulator.html" class="tsd-kind-icon">Manipulator</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
@@ -209,10 +185,16 @@
 						<a href="_execute_.execution.html" class="tsd-kind-icon">Execution</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.executionerrorproperties.html" class="tsd-kind-icon">Execution<wbr>Error<wbr>Properties</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="_execute_.featuremap.html" class="tsd-kind-icon">Feature<wbr>Map</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="_execute_.functionoptions.html" class="tsd-kind-icon">Function<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/_execute_.html#manipulatorcallback" class="tsd-kind-icon">Manipulator<wbr>Callback</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_execute_.html#buildfunctionregistry" class="tsd-kind-icon">build<wbr>Function<wbr>Registry</a>
