@@ -90,7 +90,9 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#addhashednode" class="tsd-kind-icon">add<wbr>Hashed<wbr>Node</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#addstatement" class="tsd-kind-icon">add<wbr>Statement</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#combineglobalwhere" class="tsd-kind-icon">combine<wbr>Global<wbr>Where</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#debug" class="tsd-kind-icon">debug</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#error" class="tsd-kind-icon">error</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parse_.compilestate.html#fatal" class="tsd-kind-icon">fatal</a></li>
@@ -108,6 +110,53 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="addhashednode" class="tsd-anchor"></a>
+					<h3>add<wbr>Hashed<wbr>Node</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Hashed<wbr>Node<span class="tsd-signature-symbol">(</span>sourceAst<span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a>, nodeType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L117">parse.ts:117</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates a node with a hash of the given properties for a node type.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>sourceAst: <a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h5>
+								</li>
+								<li>
+									<h5>nodeType: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>props: <span class="tsd-signature-type">object</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-index-signature">
+											<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><span class="tsd-signature-type">any</span></h5>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>node<wbr>Ast<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ast_.slotast.html" class="tsd-signature-type">SlotAst</a></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>node<wbr>Id<span class="tsd-signature-symbol">: </span><a href="_node_.nodeid.html" class="tsd-signature-type">NodeId</a></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="addstatement" class="tsd-anchor"></a>
 					<h3>add<wbr>Statement</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -117,7 +166,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L116">parse.ts:116</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L148">parse.ts:148</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -139,6 +188,49 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="combineglobalwhere" class="tsd-anchor"></a>
+					<h3>combine<wbr>Global<wbr>Where</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">combine<wbr>Global<wbr>Where<span class="tsd-signature-symbol">(</span>where<span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L134">parse.ts:134</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Combines a WHERE statement with the current global WHERE state. Returns a
+									slot as well as hashable truth table for the boolean condition</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>where: <a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>combined<wbr>Ast<span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>where<wbr>Ast<span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>where<wbr>Features<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>where<wbr>Truth<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="debug" class="tsd-anchor"></a>
 					<h3>debug</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -148,7 +240,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L130">parse.ts:130</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L162">parse.ts:162</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -182,7 +274,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L151">parse.ts:151</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L183">parse.ts:183</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -216,7 +308,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L158">parse.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L190">parse.ts:190</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -250,7 +342,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L90">parse.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L91">parse.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -272,7 +364,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L137">parse.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L169">parse.ts:169</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -306,7 +398,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L107">parse.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L108">parse.ts:108</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -342,7 +434,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L98">parse.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L99">parse.ts:99</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -377,7 +469,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L123">parse.ts:123</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L155">parse.ts:155</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -411,7 +503,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/b5e2050/packages/sqrl/src/api/parse.ts#L144">parse.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/63d8011/packages/sqrl/src/api/parse.ts#L176">parse.ts:176</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -474,6 +566,9 @@
 						<a href="../modules/_log_.html">"log"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_node_.html">"node"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_object_.html">"object"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
@@ -501,7 +596,13 @@
 						<a href="_parse_.compilestate.html" class="tsd-kind-icon">Compile<wbr>State</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_parse_.compilestate.html#addhashednode" class="tsd-kind-icon">add<wbr>Hashed<wbr>Node</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_parse_.compilestate.html#addstatement" class="tsd-kind-icon">add<wbr>Statement</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_parse_.compilestate.html#combineglobalwhere" class="tsd-kind-icon">combine<wbr>Global<wbr>Where</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_parse_.compilestate.html#debug" class="tsd-kind-icon">debug</a>
