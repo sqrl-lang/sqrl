@@ -12,7 +12,6 @@ import {
   CallAst,
   ConstantAst,
   FeatureAst,
-  AliasFeatureAst,
   ListAst,
   AstLocation,
   LetAst,
@@ -200,25 +199,10 @@ const SqrlAst = {
       slotName: slot.name
     };
   },
-  aliasFeature(name: string, alias: string | null = null): AliasFeatureAst {
-    return {
-      type: "aliasFeature",
-      value: name,
-      alias: alias || name
-    };
-  },
-  feature(ast: string | AliasFeatureAst): FeatureAst {
-    let name;
-    if (typeof ast === "string") {
-      name = ast;
-    } else if (typeof ast === "object" && ast.type === "aliasFeature") {
-      name = ast.value;
-    } else {
-      throw new Error("SqrlAst.feature expects string/aliasFeature input");
-    }
+  feature(name: string): FeatureAst {
     return { type: "feature", value: name };
   },
-  features(...features: (string | AliasFeatureAst)[]): FeatureAst[] {
+  features(...features: string[]): FeatureAst[] {
     return features.map(SqrlAst.feature);
   },
   props(obj) {

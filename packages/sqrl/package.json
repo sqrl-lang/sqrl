@@ -19,6 +19,7 @@
     "clean": "rimraf lib && rimraf coverage",
     "docs": "typedoc --out ../../website/public/reference --ignoreCompilerErrors --stripInternal --excludeExternals src/api/",
     "format": "prettier --write \"{src,__tests__}/**/*.ts\"",
+    "generate-parser": "ts-node ./src/parser/generateParser.ts > ./src/parser/sqrl.ts && ../../scripts/clean-pegjs-ts src/parser/sqrl.ts",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build": "tsc --pretty",
     "test": "jest",

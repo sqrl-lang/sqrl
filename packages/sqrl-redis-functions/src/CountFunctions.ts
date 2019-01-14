@@ -14,19 +14,21 @@ import {
   FunctionRegistry,
   sqrlInvariant,
   CountValidTimespan,
-  CallAst,
-  CountArgsAst,
   Ast,
-  AliasFeatureAst,
   Manipulator,
-  CustomCallAst,
-  FeatureAst
+  CustomCallAst
 } from "sqrl";
 
 import { parse } from "./parser/sqrlRedisParser";
 
 import { MAX_TIME_WINDOW_MS } from "./services/BucketedKeys";
 import { invariant } from "sqrl-common";
+import { interpretCounterWhere } from "./interpretCounterWhere";
+import {
+  CountArguments,
+  TrendingArguments,
+  AliasedFeature
+} from "./parser/sqrlRedis";
 
 const NODE_TYPE = "Counter";
 
@@ -144,10 +146,6 @@ const TRENDING_CONFIG: {
   }
 };
 
-export interface CountCallAst extends CallAst {
-  args: [CountArgsAst, Ast];
-}
-
 export interface CountServiceBumpProps {
   at: number;
   keys: SqrlKey[];
@@ -162,31 +160,6 @@ export interface CountService {
     suffix: string
   ): Promise<number[]>;
   bump(manipulator: Manipulator, props: CountServiceBumpProps): void;
-}
-
-interface CountArguments {
-  features: AliasFeatureAst[];
-  sumFeature: FeatureAst | null;
-  timespan: string;
-  where: Ast;
-}
-interface TrendingArguments {
-  features: AliasFeatureAst[];
-  minEvents: number;
-  timespan: string;
-  where: Ast;
-}
-
-function interpretCounterWhere(
-  state: CompileState,
-  where: Ast
-): {
-  whereAst: Ast;
-  whereFeatures?: string[];
-  whereTruth?: string;
-} {
-  // @TODO: _wrapped
-  return state._wrapped.combineGlobalWhere(where);
 }
 
 function interpretCountArgs(
@@ -205,7 +178,7 @@ function interpretCountArgs(
     whereTruth?: string;
     sumFeature?: string;
   } = {
-    features: args.features.map((feature: AliasFeatureAst) => feature.alias),
+    features: args.features.map((feature: AliasedFeature) => feature.alias),
     whereFeatures,
     whereTruth
   };
@@ -225,7 +198,7 @@ function interpretCountArgs(
   );
 
   const featuresAst = args.features.map(aliasFeature =>
-    AstBuilder.feature(aliasFeature.value)
+    AstBuilder.feature(aliasFeature.feature.value)
   );
   const featureString = featuresAst.map(ast => ast.value).join("~");
   const keyedCounterName = `${nodeId.getIdString()}~${featureString}`;
@@ -235,7 +208,8 @@ function interpretCountArgs(
     `key(${keyedCounterName})`
   );
   const hasAlias = args.features.some(
-    (featureAst: AliasFeatureAst) => featureAst.value !== featureAst.alias
+    (featureAst: AliasedFeature) =>
+      featureAst.feature.value !== featureAst.alias
   );
 
   return {
@@ -532,7 +506,7 @@ export function registerCountFunctions(
     state: CompileState,
     ast: CustomCallAst
   ): Ast {
-    const args = parse(ast.source, {
+    const args: CountArguments = parse(ast.source, {
       startRule: "CountArguments"
     });
     return classifyCountTransform(state, ast, args);

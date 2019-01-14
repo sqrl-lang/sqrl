@@ -6,6 +6,8 @@ if [ ! -e "$SRC" ] || [[ ! "$SRC" == src* ]]; then
   exit 1
 fi
 
+export PATH="$(dirname $0)/../node_modules/.bin:$PATH"
+
 # @todo: Could use `sed` on linux
 GSED="gsed"
 

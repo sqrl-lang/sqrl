@@ -54,7 +54,7 @@ export function parseExpr(text: string, options: ParseOptions = {}): Ast {
   return result;
 }
 
-export function parseRepl(text: string, options = {}): ReplAst {
+export function parseRepl(text: string, options: ParseOptions = {}): ReplAst {
   const ast = parse("SqrlRepl", text, options);
   if (ast.type !== "repl") {
     throw new Error("Expected repl return type");

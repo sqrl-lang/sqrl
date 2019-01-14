@@ -15,13 +15,16 @@ import {
   SqrlKey,
   AT,
   Execution,
-  buildSqrlError,
   sqrlInvariant,
   SqrlSession,
-  SqrlObject
+  SqrlObject,
+  CustomCallAst
 } from "sqrl";
 
 import { flatten } from "sqrl-common";
+import { RateLimitArguments } from "./parser/sqrlRedis";
+import { parse } from "./parser/sqrlRedisParser";
+import { interpretCounterWhere } from "./interpretCounterWhere";
 
 export interface RateLimitRefill {
   maxAmount: number;
@@ -44,22 +47,20 @@ export interface RateLimitService {
   sessionize(ctx: Context, props: SessionProps): Promise<number>;
 }
 
-function setupRateLimitAst(state: CompileState, ast) {
-  const {
-    args,
-    whereAst,
-    whereFeatures,
-    whereTruth
-  } = state._wrapped.interpretCounterCallAst(ast);
-  if (args.type !== "rateLimitArgs") {
-    throw buildSqrlError(ast, "rate limit functions require keyword arguments");
-  }
+function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
+  const args: RateLimitArguments = parse(ast.source, {
+    startRule: "RateLimitArguments"
+  });
+  const { whereAst, whereFeatures, whereTruth } = interpretCounterWhere(
+    state,
+    args.where
+  );
 
   const tokenAmountAst = state.setGlobal(
     ast,
     AstBuilder.branch(
       whereAst,
-      AstBuilder.call("_getTokenAmount", [ast.args[0].tokenAmount]),
+      AstBuilder.call("_getTokenAmount", [args.tokenAmount]),
       AstBuilder.constant(0)
     )
   );
@@ -74,10 +75,7 @@ function setupRateLimitAst(state: CompileState, ast) {
 
   const keysAst = state.setGlobal(
     ast,
-    AstBuilder.call("_getKeyList", [
-      nodeAst,
-      ...args.features.map(feature => AstBuilder.feature(feature))
-    ]),
+    AstBuilder.call("_getKeyList", [nodeAst, ...args.features]),
     `key(${nodeId.getIdString()})`
   );
 
@@ -168,9 +166,9 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerTransform(function rateLimit(
+  registry.registerCustom(function rateLimit(
     state: CompileState,
-    ast: CallAst
+    ast: CustomCallAst
   ): Ast {
     const resultsAst = setupRateLimitAst(state, ast).resultsAst;
     return AstBuilder.call("listMin", [resultsAst]);
@@ -198,26 +196,27 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerTransform(function rateLimitedValues(
+  registry.registerCustom(function rateLimitedValues(
     state: CompileState,
-    ast: CallAst
+    ast: CustomCallAst
   ): Ast {
     const { resultsAst, keysAst } = setupRateLimitAst(state, ast);
     return AstBuilder.call("_rateLimitedValues", [keysAst, resultsAst]);
   });
 
-  registry.registerTransform(function rateLimited(
+  registry.registerCustom(function rateLimited(
     state: CompileState,
-    ast: CallAst
+    ast: CustomCallAst
   ): Ast {
-    const { args, whereAst } = state._wrapped.interpretCounterCallAst(ast);
-    if (args.type !== "rateLimitArgs") {
-      throw buildSqrlError(ast, "sessionize() requires keyword arguments");
-    }
+    const args: RateLimitArguments = parse(ast.source, {
+      startRule: "RateLimitArguments"
+    });
+    const { whereAst } = interpretCounterWhere(state, args.where);
 
+    const resultsAst = setupRateLimitAst(state, ast).resultsAst;
     const rateLimitValue = state.setGlobal(
       ast,
-      AstBuilder.call("rateLimit", ast.args)
+      AstBuilder.call("listMin", [resultsAst])
     );
 
     const tokenAmountAst = state.setGlobal(
@@ -249,19 +248,17 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerTransform(function sessionize(
+  registry.registerCustom(function sessionize(
     state: CompileState,
-    ast
+    ast: CustomCallAst
   ): Ast {
-    const {
-      args,
-      whereAst,
-      whereFeatures,
-      whereTruth
-    } = state._wrapped.interpretCounterCallAst(ast);
-    if (args.type !== "rateLimitArgs") {
-      throw buildSqrlError(ast, "sessionize() requires keyword arguments");
-    }
+    const args: RateLimitArguments = parse(ast.source, {
+      startRule: "RateLimitArguments"
+    });
+    const { whereAst, whereFeatures, whereTruth } = interpretCounterWhere(
+      state,
+      args.where
+    );
 
     const tokenAmountAst = state.setGlobal(
       ast,
@@ -283,10 +280,7 @@ export function registerRateLimitFunctions(
 
     const keyAst = state.setGlobal(
       ast,
-      AstBuilder.call("_buildKey40", [
-        nodeAst,
-        ...args.features.map(name => AstBuilder.feature(name))
-      ]),
+      AstBuilder.call("_buildKey40", [nodeAst, ...args.features]),
       `key(${nodeId.getIdString()})`
     );
 

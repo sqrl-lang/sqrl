@@ -85,30 +85,6 @@ jsonFields.rule = [
 recurseFields.list = ["exprs"];
 jsonFields.list = [];
 
-recurseFields.percentileArgs = [];
-jsonFields.percentileArgs = ["groupFeatures"];
-
-recurseFields.rateLimitArgs = ["tokenAmount"];
-jsonFields.rateLimitArgs = [
-  "features",
-  "maxAmount",
-  "refillTimeMs",
-  "refillAmount",
-  "strict"
-];
-
-recurseFields.countUniqueArgs = [];
-jsonFields.countUniqueArgs = [
-  "uniques",
-  "groups",
-  "setOperation",
-  "windowMs",
-  "beforeAction"
-];
-
-recurseFields.trendingArgs = [];
-jsonFields.trendingArgs = ["minEvents", "features", "timespan"];
-
 recurseFields.call = ["args"];
 jsonFields.call = ["func"];
 
@@ -123,9 +99,6 @@ jsonFields.state = [];
 
 recurseFields.whenContext = [];
 jsonFields.whenContext = ["slotName"];
-
-recurseFields.streamingStatArgs = [];
-jsonFields.streamingStatArgs = ["feature", "group"];
 
 recurseFields.not = ["expr"];
 jsonFields.not = [];
@@ -274,8 +247,6 @@ export function astSlotNames(root: Ast): string[] {
   const slotNames = new Set();
   walkAst(root, ast => {
     if (ast.type === "feature") {
-      slotNames.add(ast.value);
-    } else if (ast.type === "aliasFeature") {
       slotNames.add(ast.value);
     } else if (ast.type === "slot") {
       slotNames.add(ast.slotName);

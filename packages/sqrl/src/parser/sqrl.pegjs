@@ -184,7 +184,7 @@ CallExpr = (
 
 CustomCallExpr = func:Func &{ 
   return options.customFunctions.has(func);
-} _? "(" _? source:CustomCallSource _? ")" {
+} _? "(" source:CustomCallSource ")" {
   return {type: 'customCall', func, source, location: loc()};
 }
 

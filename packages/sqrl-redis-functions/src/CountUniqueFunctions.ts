@@ -6,11 +6,8 @@
 // tslint:disable:no-submodule-imports (@TODO)
 import stringify = require("fast-stable-stringify");
 import {
-  CallAst,
   Ast,
   AstBuilder,
-  AliasFeatureAst,
-  buildSqrlError,
   Context,
   Execution,
   FunctionRegistry,
@@ -18,12 +15,16 @@ import {
   SqrlObject,
   CompileState,
   AT,
-  Manipulator
+  Manipulator,
+  CustomCallAst
 } from "sqrl";
 import murmurhash = require("murmurhash-native");
 
 import { MAX_TIME_WINDOW_MS } from "./services/BucketedKeys";
 import { invariant, sqrlCartesianProduct } from "sqrl-common";
+import { parse } from "./parser/sqrlRedisParser";
+import { interpretCounterWhere } from "./interpretCounterWhere";
+import { CountUniqueArguments, AliasedFeature } from "./parser/sqrlRedis";
 
 // This hashes a value to match output from slidingd
 function slidingdHashHex(value) {
@@ -44,7 +45,7 @@ function isCountable(features) {
   });
 }
 
-function sortByAlias(features: AliasFeatureAst[]): AliasFeatureAst[] {
+function sortByAlias(features: AliasedFeature[]): AliasedFeature[] {
   return Array.from(features).sort((left, right) => {
     return left.alias.localeCompare(right.alias);
   });
@@ -218,40 +219,37 @@ export function registerCountUniqueFunctions(
     }
   );
 
-  registry.registerTransform(function countUnique(
+  registry.registerCustom(function countUnique(
     state: CompileState,
-    ast: CallAst
+    ast: CustomCallAst
   ): Ast {
-    const {
-      args,
-      whereAst,
-      whereFeatures,
-      whereTruth
-    } = state._wrapped.interpretCounterCallAst(ast);
-    if (args.type !== "countUniqueArgs") {
-      throw buildSqrlError(ast, "countUnique() requires keyword arguments");
-    }
-
-    const sortedUniques: AliasFeatureAst[] = sortByAlias(args.uniques);
-    const sortedGroup: AliasFeatureAst[] = sortByAlias(args.groups);
-
-    const uniquesAst = AstBuilder.list(
-      sortedUniques.map(f => AstBuilder.feature(f.value))
+    const args: CountUniqueArguments = parse(ast.source, {
+      startRule: "CountUniqueArguments"
+    });
+    const { whereAst, whereFeatures, whereTruth } = interpretCounterWhere(
+      state,
+      args.where
     );
 
+    const sortedUniques: AliasedFeature[] = sortByAlias(args.uniques);
+    const sortedGroup: AliasedFeature[] = sortByAlias(args.groups);
+
+    const uniquesAst = AstBuilder.list(sortedUniques.map(f => f.feature));
+
     const groupAliases = args.groups.map(feature => feature.alias);
-    const groupFeatures = args.groups.map(feature => feature.value);
-    const groupHasAliases = args.groups.some(f => f.value !== f.alias);
+    const groupFeatures = args.groups.map(feature => feature.feature.value);
+    const groupHasAliases = args.groups.some(f => f.feature.value !== f.alias);
     const sortedGroupAliases = sortedGroup.map(feature => feature.alias);
 
     const { nodeId, nodeAst } = state._wrapped.counterNode(
       ast,
       "UniqueCounter",
       {
-        whereFeatures,
-        whereTruth,
         groups: sortedGroupAliases,
-        uniques: sortedUniques.map(feature => feature.alias)
+        uniques: sortedUniques.map(feature => feature.alias),
+
+        // Only include the where clauses if they're non-empty
+        ...(whereTruth ? { whereFeatures, whereTruth } : {})
       }
     );
 
@@ -315,16 +313,14 @@ export function registerCountUniqueFunctions(
     ]);
 
     if (args.setOperation) {
-      invariant(
-        args === ast.args[0] && args.type === "countUniqueArgs",
-        "Expected countUniqueArgs for intersect transform"
-      );
-
+      throw new Error("@todo setOperation transform");
+      /*
       const { operation, features } = args.setOperation;
       const rightCountArgs = Object.assign({}, args, {
         groups: features,
         setOperation: null
       });
+
       const rightCall = state._wrapped.transform(
         Object.assign({}, ast, {
           args: [rightCountArgs, ...ast.args.slice(1)]
@@ -345,7 +341,7 @@ export function registerCountUniqueFunctions(
           func: "_fetchCountUniqueElements"
         }),
         Object.assign({}, rightCall, { func: "_fetchCountUniqueElements" })
-      ]);
+      ]);*/
     }
 
     return originalCall;

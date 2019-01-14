@@ -98,12 +98,6 @@ export interface FeatureAst extends BaseAst {
   value: string;
 }
 
-export interface AliasFeatureAst extends BaseAst {
-  type: "aliasFeature";
-  value: string;
-  alias: string;
-}
-
 export type CountValidTimespan =
   | "dayOverDay"
   | "dayOverWeek"
@@ -121,13 +115,6 @@ export type CountValidTimespan =
   | "previousLastWeek"
   | "dayWeekAgo";
 
-export interface CountArgsAst extends BaseAst {
-  type: "countArgs";
-  features: AliasFeatureAst[];
-  sumFeature?: FeatureAst;
-  timespan: CountValidTimespan;
-}
-
 export interface RulesAst extends BaseAst {
   type: "rules";
   rules: FeatureAst[];
@@ -144,45 +131,6 @@ export interface RuleAst extends BaseAst {
 export interface ListAst extends BaseAst {
   type: "list";
   exprs: Ast[];
-}
-
-export interface PercentileArgsAst extends BaseAst {
-  type: "percentileArgs";
-  groupFeatures?: string[];
-  feature: string;
-  percentile: number;
-}
-export interface RateLimitArgsAst extends BaseAst {
-  type: "rateLimitArgs";
-  features: string[];
-  maxAmount: number;
-  refillTimeMs: number;
-  refillAmount: number;
-  tokenAmount: Ast;
-  strict: boolean;
-}
-export interface CountUniqueArgsAst extends BaseAst {
-  type: "countUniqueArgs";
-  uniques: AliasFeatureAst[];
-  groups: AliasFeatureAst[];
-  setOperation: null | {
-    operation: string;
-    features: string[];
-  };
-  windowMs: number | null;
-  beforeAction: boolean;
-}
-
-export type TrendingValidTimespan =
-  | "dayOverDay"
-  | "weekOverWeek"
-  | "dayOverFullWeek";
-
-export interface TrendingArgsAst extends BaseAst {
-  type: "trendingArgs";
-  features: AliasFeatureAst[];
-  minEvents: number;
-  timespan: TrendingValidTimespan;
 }
 
 export interface CallAst extends BaseAst {
@@ -246,12 +194,6 @@ export interface IncludeAst extends BaseAst {
   where: Ast;
 }
 
-export interface StreamingStatArgsAst extends BaseAst {
-  type: "streamingStatArgs";
-  feature: string;
-  group: string;
-}
-
 export interface NotAst extends BaseAst {
   type: "not";
   expr: Ast;
@@ -290,22 +232,15 @@ export type Ast =
   | BinaryExprAst
   | ExprAst
   | IncludeAst
-  | CountArgsAst
   | NoopAst
   | RuleAst
   | ListAst
-  | PercentileArgsAst
-  | RateLimitArgsAst
-  | CountUniqueArgsAst
-  | TrendingArgsAst
   | RulesAst
   | CallAst
   | IfAst
   | SwitchAst
   | SwitchCaseAst
-  | StreamingStatArgsAst
   | RegisteredCallAst
-  | AliasFeatureAst
   | PriorityAst
   | ReplAst
   | WhenAst

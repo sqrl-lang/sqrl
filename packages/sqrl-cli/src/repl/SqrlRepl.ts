@@ -52,7 +52,9 @@ export class SqrlRepl extends EventEmitter {
     if (isValidFeatureName(input.trim())) {
       returnFeature = input.trim();
     } else {
-      const ast = parseRepl(input);
+      const ast = parseRepl(input, {
+        customFunctions: this.functionRegistry._wrapped.customFunctions
+      });
       const statements = ast.statements;
       if (!statements.length) {
         return;

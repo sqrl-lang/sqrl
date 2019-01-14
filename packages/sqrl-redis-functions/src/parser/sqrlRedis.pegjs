@@ -189,14 +189,6 @@ SubExpr = "(" _? expr:Expr _? ")" {
   return expr;
 }
 
-LazyExpr = Lazy _ expr:Expr {
-  return {type: 'priority', priority: 'lazy',  expr: expr, location: loc()};
-}
-
-EagerExpr = Eager _ expr:Expr {
-  return {type: 'priority', priority: 'eager', expr: expr, location: loc()};
-}
-
 WhereClause = _ "WHERE"i _ expr:Expr {
   return expr;
 }
@@ -241,51 +233,6 @@ DurationMsExpr = quantity:(IntLiteral _)? timespanSeconds:TimespanSecondsExpr {
   quantity = quantity ? quantity[0] : 1;
   return quantity * timespanSeconds * 1000;
 }
-
-DataObjectExpr = EmptyDataObjectExpr / NonEmptyDataObjectExpr;
-
-EmptyDataObjectExpr = "{" _? "}" {
-  return {
-    type: 'constant',
-    value: {},
-    location: loc()
-  };
-}
-
-NonEmptyDataObjectExpr = "{" _? firstPair:DataObjectPair restExprs:(_? "," _? DataObjectPair)* _? ","? _? "}" {
-  const args = firstPair.concat(...restExprs.map(e => e[3]));
-
-  if (args.every(arg => arg.type === 'constant')) {
-    const value = {};
-    for (let i = 0; i < args.length; i+=2) {
-      value[args[i].value] = args[i + 1].value;
-    }
-
-    return {
-      value,
-      type: 'constant',
-      location: loc()
-    };
-  }
-
-  return {
-    args,
-    type: 'call',
-    func: 'dataObject',
-    location: loc()
-  };
-}
-
-DataObjectPair
-  = key:ConstantString _? ":" _? val:Expr {
-    return [key, val];
-  }
-  / feature:Feature {
-    return [
-      {type: 'constant', value: feature, location: loc()},
-      {type: 'feature', value: feature, location: loc()},
-    ]
-  }
 
 ListExpr = EmptyListExpr / NonEmptyListExpr;
 
@@ -339,27 +286,28 @@ HighArithmeticExpr = BinaryHighArithmeticExpr / HighArithmeticTerm
 BinaryHighArithmeticExpr = left:HighArithmeticTerm _? op:("*" / "/" / "%") _? right:HighArithmeticExpr {
   return {type: 'binary_expr', left: left, operator: op.toLowerCase(), right: right, location: loc()};
 }
-HighArithmeticTerm = EagerExpr / LazyExpr / DataObjectExpr / ListExpr / SubExpr / Literal / FeatureExpr
+HighArithmeticTerm = ListExpr / SubExpr / Literal / FeatureExpr
 
-FeatureExpr = value:Feature {
-  return {type: 'feature', value: value, location: loc()};
-}
-
-AliasFeature = value:Feature alias:(_ "AS"i _ alias:Feature)? {
-  return {
-    type: 'aliasFeature',
-    value,
-    alias: alias ? alias[3] : value,
-    location: loc()
-  };
-}
 
 AliasFeatureList = first:AliasFeature rest:(_? "," _? AliasFeature)* {
   return [first].concat(rest.map(item => item[3]));
 }
 
-FeatureList = first:Feature rest:(_? "," _? Feature)* {
+FeatureList = first:FeatureExpr rest:(_? "," _? FeatureExpr)* {
   return [first].concat(rest.map(item => item[3]));
+}
+
+AliasFeature = feature:FeatureExpr alias:(_ "AS"i _ alias:Feature)? {
+  return {
+    type: 'aliasedFeature',
+    feature,
+    alias: alias ? alias[3] : feature.value,
+    location: loc()
+  };
+}
+
+FeatureExpr = feature:Feature {
+  return {type: 'feature', value: feature, location: loc()};
 }
 
 Feature "feature name" = Symbol ("." Symbol)* {
@@ -376,16 +324,9 @@ Literal = value:(Number / String / True / False / Null) {
   return {type: 'constant', value: value, location: loc()};
 }
 
-ConstantString = value:String {
-  return {type: 'constant', value: value, location: loc()};
-}
-
 NullExpr = "NULL"i {
   return {type: 'constant', value: null, location: loc()};
 }
-
-Eager "eager" = "EAGER"i
-Lazy "lazy" = "LAZY"i
 
 Null "null" = "null" {
   return null;

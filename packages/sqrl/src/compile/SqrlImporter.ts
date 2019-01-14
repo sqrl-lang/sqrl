@@ -13,7 +13,10 @@ import { sqrlInvariant } from "../api/parse";
 const DYNAMIC_INCLUDE_REGEX = /^(.*)\/\$\{([A-Za-z0-9_.]+)\}([^/]*)$/;
 
 export default class SqrlImporter {
-  constructor(public filesystem: Filesystem) {
+  constructor(
+    public filesystem: Filesystem,
+    private customFunctions: Set<string> = new Set()
+  ) {
     /* noting */
   }
 
@@ -21,7 +24,8 @@ export default class SqrlImporter {
     const source = this.filesystem.tryRead(path);
     sqrlInvariant(sourceAst, source, "Could not find sqrl file: " + path);
     return parseSqrl(source.toString("utf-8"), {
-      filename: path
+      filename: path,
+      customFunctions: this.customFunctions
     });
   }
 

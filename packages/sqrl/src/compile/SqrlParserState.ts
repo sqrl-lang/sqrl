@@ -103,7 +103,10 @@ export abstract class SqrlParseInfo extends AbstractLogger {
     this.functionRegistry = options.functionRegistry;
     this.allowReplaceInput = options.allowReplaceInput || false;
     this.filesystem = options.filesystem || new EmptyFilesystem();
-    this.importer = new SqrlImporter(this.filesystem);
+    this.importer = new SqrlImporter(
+      this.filesystem,
+      this.functionRegistry.customFunctions
+    );
     this.remainingInputs = Object.assign({}, options.setInputs || {});
   }
 
