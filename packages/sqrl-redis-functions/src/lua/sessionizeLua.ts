@@ -30,7 +30,6 @@ end
 
 if tokens < take then
   local refills = math.floor((at - lastRefill) / refillTime);
-  redis.log(redis.LOG_WARNING, "refill x", refills)
   lastRefill = lastRefill + refills * refillTime
   tokens = math.min(maxAmount, tokens + refills * refillAmount)
 end
