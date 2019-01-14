@@ -23,7 +23,6 @@ import { parse } from "./parser/sqrlRedisParser";
 
 import { MAX_TIME_WINDOW_MS } from "./services/BucketedKeys";
 import { invariant } from "sqrl-common";
-import { interpretCounterWhere } from "./interpretCounterWhere";
 import {
   CountArguments,
   TrendingArguments,
@@ -167,8 +166,7 @@ function interpretCountArgs(
   sourceAst: Ast,
   args: CountArguments
 ) {
-  const { whereAst, whereFeatures, whereTruth } = interpretCounterWhere(
-    state,
+  const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
     args.where
   );
 
@@ -191,7 +189,7 @@ function interpretCountArgs(
     bumpByAst = AstBuilder.call("getBumpBy", [args.sumFeature]);
   }
 
-  const { nodeAst, nodeId } = state._wrapped.counterNode(
+  const { nodeAst, nodeId } = state.addHashedNode(
     sourceAst,
     NODE_TYPE,
     counterProps

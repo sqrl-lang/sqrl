@@ -23,7 +23,6 @@ import murmurhash = require("murmurhash-native");
 import { MAX_TIME_WINDOW_MS } from "./services/BucketedKeys";
 import { invariant, sqrlCartesianProduct } from "sqrl-common";
 import { parse } from "./parser/sqrlRedisParser";
-import { interpretCounterWhere } from "./interpretCounterWhere";
 import { CountUniqueArguments, AliasedFeature } from "./parser/sqrlRedis";
 
 // This hashes a value to match output from slidingd
@@ -226,8 +225,7 @@ export function registerCountUniqueFunctions(
     const args: CountUniqueArguments = parse(ast.source, {
       startRule: "CountUniqueArguments"
     });
-    const { whereAst, whereFeatures, whereTruth } = interpretCounterWhere(
-      state,
+    const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
       args.where
     );
 
@@ -241,17 +239,13 @@ export function registerCountUniqueFunctions(
     const groupHasAliases = args.groups.some(f => f.feature.value !== f.alias);
     const sortedGroupAliases = sortedGroup.map(feature => feature.alias);
 
-    const { nodeId, nodeAst } = state._wrapped.counterNode(
-      ast,
-      "UniqueCounter",
-      {
-        groups: sortedGroupAliases,
-        uniques: sortedUniques.map(feature => feature.alias),
+    const { nodeId, nodeAst } = state.addHashedNode(ast, "UniqueCounter", {
+      groups: sortedGroupAliases,
+      uniques: sortedUniques.map(feature => feature.alias),
 
-        // Only include the where clauses if they're non-empty
-        ...(whereTruth ? { whereFeatures, whereTruth } : {})
-      }
-    );
+      // Only include the where clauses if they're non-empty
+      ...(whereTruth ? { whereFeatures, whereTruth } : {})
+    });
 
     const originalKeysAst = state.setGlobal(
       ast,
@@ -263,12 +257,14 @@ export function registerCountUniqueFunctions(
     );
 
     // Always bump the counter according to the original keys (aliases)
-    state._wrapped.pushStatement(
+    const slotAst = state.setGlobal(
+      ast,
       AstBuilder.call("_bumpCountUnique", [
         AstBuilder.branch(whereAst, originalKeysAst, AstBuilder.constant(null)),
         uniquesAst
       ])
     );
+    state.addStatement("SqrlCountUniqueStatements", slotAst);
 
     let keysAst = originalKeysAst;
     let countExtraUniques: Ast = AstBuilder.branch(

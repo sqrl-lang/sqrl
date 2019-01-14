@@ -24,7 +24,6 @@ import {
 import { flatten } from "sqrl-common";
 import { RateLimitArguments } from "./parser/sqrlRedis";
 import { parse } from "./parser/sqrlRedisParser";
-import { interpretCounterWhere } from "./interpretCounterWhere";
 
 export interface RateLimitRefill {
   maxAmount: number;
@@ -51,8 +50,7 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
   const args: RateLimitArguments = parse(ast.source, {
     startRule: "RateLimitArguments"
   });
-  const { whereAst, whereFeatures, whereTruth } = interpretCounterWhere(
-    state,
+  const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
     args.where
   );
 
@@ -64,7 +62,7 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
       AstBuilder.constant(0)
     )
   );
-  const { nodeId, nodeAst } = state._wrapped.counterNode(ast, "RateLimit", {
+  const { nodeId, nodeAst } = state.addHashedNode(ast, "RateLimit", {
     whereFeatures,
     whereTruth,
     features: args.features,
@@ -211,7 +209,7 @@ export function registerRateLimitFunctions(
     const args: RateLimitArguments = parse(ast.source, {
       startRule: "RateLimitArguments"
     });
-    const { whereAst } = interpretCounterWhere(state, args.where);
+    const { whereAst } = state.combineGlobalWhere(args.where);
 
     const resultsAst = setupRateLimitAst(state, ast).resultsAst;
     const rateLimitValue = state.setGlobal(
@@ -255,8 +253,7 @@ export function registerRateLimitFunctions(
     const args: RateLimitArguments = parse(ast.source, {
       startRule: "RateLimitArguments"
     });
-    const { whereAst, whereFeatures, whereTruth } = interpretCounterWhere(
-      state,
+    const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
       args.where
     );
 
@@ -269,7 +266,7 @@ export function registerRateLimitFunctions(
       )
     );
 
-    const { nodeId, nodeAst } = state._wrapped.counterNode(ast, "Sessionize", {
+    const { nodeId, nodeAst } = state.addHashedNode(ast, "Sessionize", {
       whereFeatures,
       whereTruth,
       features: args.features,

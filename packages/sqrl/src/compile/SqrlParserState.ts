@@ -703,7 +703,10 @@ export class SqrlParserState extends SqrlParseInfo {
     props: {
       [key: string]: any;
     }
-  ) {
+  ): {
+    nodeId: NodeId;
+    nodeAst: SlotAst;
+  } {
     const nodeKey = murmurhashJsonHexSync(props);
     const nodeId = new NodeId(nodeType, nodeKey);
     const nodeAst = this.constantNodeAst(sourceAst, nodeId.type, nodeId.key);

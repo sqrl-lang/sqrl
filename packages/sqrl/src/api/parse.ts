@@ -13,6 +13,7 @@ import util = require("util");
 import { sqrlSourceArrow } from "../compile/sqrlSourceArrow";
 import invariant from "../jslib/invariant";
 import { SqrlConstantSlot } from "../slot/SqrlSlot";
+import { NodeId } from "./node";
 
 /**
  * Return a SqrlCompileError that can be thrown. This function helps us work
@@ -108,6 +109,37 @@ export class CompileState {
     return new ConstantSlot(
       this._wrapped.ensureConstantSlot(sourceAst, name, initialValue)
     );
+  }
+
+  /**
+   * Creates a node with a hash of the given properties for a node type.
+   */
+  addHashedNode(
+    sourceAst: Ast,
+    nodeType: string,
+    props: {
+      [key: string]: any;
+    }
+  ): {
+    nodeId: NodeId;
+    nodeAst: SlotAst;
+  } {
+    return this._wrapped.counterNode(sourceAst, nodeType, props);
+  }
+
+  /**
+   * Combines a WHERE statement with the current global WHERE state. Returns a
+   * slot as well as hashable truth table for the boolean condition
+   */
+  combineGlobalWhere(
+    where: Ast
+  ): {
+    combinedAst: Ast;
+    whereAst: Ast;
+    whereFeatures: string[];
+    whereTruth: string;
+  } {
+    return this._wrapped.combineGlobalWhere(where);
   }
 
   /**
