@@ -3,14 +3,14 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { default as AT } from "../../src/ast/AstTypes";
+import { AstTypes as AT } from "../../src/ast/AstTypes";
 import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlTest } from "../../src/testing/SqrlTest";
 import { JestAssertService } from "sqrl-test-utils";
 import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
 import { createSimpleContext } from "../../src";
-import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
+import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
 test("rules work", async () => {
   const functionRegistry = new SqrlFunctionRegistry();

@@ -14,7 +14,7 @@ import SqrlExecutable from "../../src/execute/SqrlExecutable";
 import { createDefaultContext } from "../../src/helpers/ContextHelpers";
 import { Filesystem } from "../../src/api/filesystem";
 import { FeatureMap } from "../../src/api/execute";
-import { SimpleManipulator } from "../../src/api/simple/SimpleManipulator";
+import { SimpleManipulator } from "../../src/simple/SimpleManipulator";
 
 export class VirtualSourceTree extends Filesystem {
   constructor(

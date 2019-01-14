@@ -24,7 +24,7 @@ import {
   IncludeAst
 } from "./Ast";
 import { SqrlObject } from "../object/SqrlObject";
-import { AstBuilder } from "../api/AstBuilder";
+import { AstBuilder } from "../helpers/AstBuilder";
 
 function invariantAst(ast: Ast): void {
   invariant(

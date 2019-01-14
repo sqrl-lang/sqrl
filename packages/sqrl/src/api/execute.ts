@@ -12,11 +12,35 @@ import invariant from "../jslib/invariant";
 import { LogProperties } from "./log";
 import { CompileState } from "./parse";
 import { buildFunctionRegistryForServices } from "../helpers/FunctionRegistryHelpers";
-import { Manipulator } from "./Manipulator";
-import { ArgumentCheck } from "./ArgumentCheck";
+import { ArgumentCheck } from "./arg";
 import { SourcePrinter } from "./executable";
 import { FunctionServices } from "../function/registerAllFunctions";
 import { SqrlObject } from "sqrl-common";
+import { SqrlKey } from "./object";
+export interface ExecutionErrorProperties {
+  functionName?: string;
+  fatal?: boolean;
+}
+
+export type ManipulatorCallback = (ctx: Context) => Promise<void>;
+
+export abstract class Manipulator {
+  constructor() {
+    /* do nothing */
+  }
+  public codedWarnings: string[];
+  public codedErrors: string[];
+
+  abstract getCurrentHumanOutput(): any;
+  abstract addCallback(cb: ManipulatorCallback);
+  abstract mutate(ctx: Context): Promise<void>;
+  abstract logError(err: Error, props: ExecutionErrorProperties): void;
+  abstract throwFirstError(): void;
+
+  trackSqrlKey(key: SqrlKey): void {
+    /* optional function, do nothing by default */
+  }
+}
 
 export interface ExecutableOptions {
   functionRegistry: FunctionRegistry;

@@ -5,7 +5,7 @@
  */
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { FunctionServices } from "./registerAllFunctions";
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { DatabaseSet } from "../api/ctx";
 

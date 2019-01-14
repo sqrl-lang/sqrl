@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { UniqueId } from "../api/UniqueId";
+import { UniqueId } from "../api/services";
 import { SqrlObject } from "./SqrlObject";
 import SqrlUniqueId from "./SqrlUniqueId";
 

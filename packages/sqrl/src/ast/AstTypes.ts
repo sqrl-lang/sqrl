@@ -15,7 +15,7 @@ import {
   StateArgument,
   WhenContextArgument,
   ArgumentCheck
-} from "../api/ArgumentCheck";
+} from "./ArgumentCheck";
 
 // @TODO: The types in this file are pretty tough
 export type ArgsChecker = (ast: CallAst) => void;
@@ -275,4 +275,5 @@ function typeChecker(compileTimeCheck: CompileCheckCallback): TypeChecker {
   return o;
 }
 
-export default compileCheckers;
+const AstTypes = compileCheckers;
+export { AstTypes };

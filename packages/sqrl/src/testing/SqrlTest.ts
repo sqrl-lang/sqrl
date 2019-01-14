@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
-import { Manipulator } from "../api/Manipulator";
+import { FeatureMap, Manipulator } from "../api/execute";
 import SqrlAst from "../ast/SqrlAst";
 import { SqrlParserState } from "../compile/SqrlParserState";
 
@@ -16,7 +16,6 @@ import { JsExecutionContext } from "../execute/JsExecutionContext";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
 import { Filesystem } from "../api/filesystem";
 import { Context } from "../api/ctx";
-import { FeatureMap } from "../api/execute";
 
 const DEFAULT_FEATURE_TIMEOUT = 5000;
 

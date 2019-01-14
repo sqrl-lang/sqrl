@@ -1,7 +1,7 @@
 import { Executable, FunctionRegistry, FeatureMap } from "./execute";
 import { SqrlExecutable } from "../execute/SqrlExecutable";
 import { JsExecutionContext } from "../execute/JsExecutionContext";
-import { ExecutableSpec } from "./ExecutableSpec";
+import { ExecutableSpec } from "./spec";
 import { Context } from "./ctx";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
 import { StatementAst } from "./ast";

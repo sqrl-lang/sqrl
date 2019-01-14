@@ -9,8 +9,8 @@ import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import SqrlAst from "../ast/SqrlAst";
 import { CallAst } from "../ast/Ast";
-import { default as AT } from "../ast/AstTypes";
-import { Manipulator } from "../api/Manipulator";
+import { AstTypes as AT } from "../ast/AstTypes";
+import { Manipulator } from "../api/execute";
 
 export interface LogService {
   log(manipulator: Manipulator, message: string);

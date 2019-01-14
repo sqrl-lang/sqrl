@@ -11,7 +11,7 @@ import {
 } from "../helpers/runCompile";
 import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
 import { executableFromFilesystem } from "../../src";
-import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
+import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
 test("supports basic statements", async () => {
   await expect(

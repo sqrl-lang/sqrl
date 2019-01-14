@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { BlockService } from "../../function/BlockFunctions";
-import { Manipulator } from "../Manipulator";
-import { SimpleManipulator } from "../simple/SimpleManipulator";
-import { WhenCause } from "../../function/WhenFunctions";
+import { BlockService } from "../function/BlockFunctions";
+import { Manipulator } from "../api/execute";
+import { SimpleManipulator } from "./SimpleManipulator";
+import { WhenCause } from "../function/WhenFunctions";
 
 export class SimpleBlockService implements BlockService {
   block(manipulator: Manipulator, cause: WhenCause | null) {

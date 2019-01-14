@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 type autogen_any = any;
-import { default as AT } from "../../src/ast/AstTypes";
+import { AstTypes as AT } from "../../src/ast/AstTypes";
 import SqrlAst from "../../src/ast/SqrlAst";
 
 const func: autogen_any = "myCoolFunction";

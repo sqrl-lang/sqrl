@@ -7,7 +7,7 @@ import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
 import { FunctionCostData } from "../../src/function/FunctionRegistry";
 import { registerTestFunctions } from "../helpers/TestFunctions";
 import { FunctionRegistry } from "../../src/api/execute";
-import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
+import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
 test("works", async () => {
   let functionRegistry: FunctionRegistry;

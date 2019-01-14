@@ -6,8 +6,8 @@ import {
   IfAst,
   ListAst,
   FeatureAst
-} from "./ast";
-import { ConstantSlot } from "./parse";
+} from "../api/ast";
+import { ConstantSlot } from "../api/parse";
 import { invariant } from "sqrl-common";
 
 /**

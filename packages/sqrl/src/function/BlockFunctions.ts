@@ -3,10 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
-import { Manipulator } from "../api/Manipulator";
+import { Manipulator } from "../api/execute";
 import { WhenCause } from "./WhenFunctions";
 
 export interface BlockService {

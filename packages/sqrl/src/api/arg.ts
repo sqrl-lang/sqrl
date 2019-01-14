@@ -1,8 +1,13 @@
 /**
  * Shorthand for Argument Type
  */
-import AstTypes from "../ast/AstTypes";
-import { ArgumentCheck } from "./ArgumentCheck";
+import { AstTypes } from "../ast/AstTypes";
+import { ArgumentCheck } from "../ast/ArgumentCheck";
+export {
+  ArgumentCheck,
+  StateArgument,
+  WhenContextArgument
+} from "../ast/ArgumentCheck";
 
 interface OptArgumentCheck extends ArgumentCheck {
   optional: ArgumentCheck;

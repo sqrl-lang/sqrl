@@ -1,16 +1,16 @@
 import { SimpleManipulator } from "./SimpleManipulator";
-import { createSimpleContext } from "../ctx";
-import { SqrlTest } from "../../testing/SqrlTest";
-import { LocalFilesystem, Filesystem } from "../filesystem";
+import { createSimpleContext } from "../api/ctx";
+import { SqrlTest } from "../testing/SqrlTest";
+import { LocalFilesystem, Filesystem } from "../api/filesystem";
 import {
   buildTestFunctionRegistry,
   buildTestServices
-} from "../../testing/runSqrlTest";
+} from "../testing/runSqrlTest";
 import { invariant } from "sqrl-common";
-import { FunctionServices } from "../../function/registerAllFunctions";
-import { FunctionRegistry, Execution } from "../execute";
+import { FunctionServices } from "../function/registerAllFunctions";
+import { FunctionRegistry, Execution } from "../api/execute";
 import * as path from "path";
-import { Logger } from "../log";
+import { Logger } from "../api/log";
 
 export async function runSqrlTest(
   sqrl: string,

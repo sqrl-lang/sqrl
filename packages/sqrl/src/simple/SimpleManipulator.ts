@@ -3,12 +3,11 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Manipulator, ManipulatorCallback } from "../Manipulator";
-import { kafkaBufferHumanJson } from "../../jslib/kafkaBufferHumanJson";
-import mapObject from "../../jslib/mapObject";
-import { SqrlKey } from "../../object/SqrlKey";
-import { WhenCause, FiredRule } from "../../function/WhenFunctions";
-import { FeatureMap } from "../execute";
+import { FeatureMap, Manipulator, ManipulatorCallback } from "../api/execute";
+import { kafkaBufferHumanJson } from "../jslib/kafkaBufferHumanJson";
+import mapObject from "../jslib/mapObject";
+import { SqrlKey } from "../object/SqrlKey";
+import { WhenCause, FiredRule } from "../function/WhenFunctions";
 
 export class SimpleManipulator extends Manipulator {
   public sqrlKeys: Set<string> = new Set();

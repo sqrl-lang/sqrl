@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 
 import flatten from "../jslib/flatten";
 import invariant from "../jslib/invariant";

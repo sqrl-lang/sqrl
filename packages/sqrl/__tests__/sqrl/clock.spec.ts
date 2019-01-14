@@ -1,4 +1,4 @@
-import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
+import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
 /**
  * Copyright 2018 Twitter, Inc.

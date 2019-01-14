@@ -3,7 +3,6 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Manipulator, ExecutionErrorProperties } from "../api/Manipulator";
 import { SqrlObject } from "../object/SqrlObject";
 
 import bluebird = require("bluebird");
@@ -13,11 +12,16 @@ import isPromise from "../jslib/isPromise";
 import util = require("util");
 import { niceForEach } from "node-nice";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
-import { RuleSpecMap } from "../api/ExecutableSpec";
+import { RuleSpecMap } from "../api/spec";
 import * as moment from "moment";
 import { isValidFeatureName } from "../feature/FeatureName";
 import { DatabaseSet, Context } from "../api/ctx";
-import { FeatureMap, Execution } from "../api/execute";
+import {
+  Manipulator,
+  ExecutionErrorProperties,
+  FeatureMap,
+  Execution
+} from "../api/execute";
 import { SqrlBoxed } from "sqrl-common";
 import { SourcePrinter } from "../api/executable";
 

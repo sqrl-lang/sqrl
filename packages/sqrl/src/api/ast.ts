@@ -4,6 +4,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
+export { AstBuilder } from "../helpers/AstBuilder";
+
 /**
  * Indicates the location of the Ast within source code
  */

@@ -5,7 +5,7 @@
  */
 import { LocalFilesystem } from "../../src/api/filesystem";
 import * as path from "path";
-import { runSqrlTest } from "../../src/api/simple/runSqrlTest";
+import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
 test("Loading YAML works", async () => {
   const filesystem = new LocalFilesystem(path.join(__dirname, ".."));

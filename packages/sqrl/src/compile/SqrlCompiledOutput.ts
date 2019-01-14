@@ -12,7 +12,7 @@ import { SqrlInputSlot } from "../slot/SqrlSlot";
 import invariant from "../jslib/invariant";
 import { isValidFeatureName } from "../feature/FeatureName";
 import { compileParserStateAst } from "./SqrlCompile";
-import { ExecutableSpec } from "../api/ExecutableSpec";
+import { ExecutableSpec } from "../api/spec";
 import { Context } from "../api/ctx";
 import { buildSqrlError } from "../api/parse";
 

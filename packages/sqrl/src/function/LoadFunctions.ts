@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import { Ast, CallAst, ConstantAst } from "../ast/Ast";
 import SqrlAst from "../ast/SqrlAst";
 import { SqrlFunctionRegistry } from "./FunctionRegistry";

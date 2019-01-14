@@ -38,7 +38,7 @@ import { NodeId } from "../platform/NodeId";
 import { LABELER_FEATURE_FUNCTION } from "../function/StdlibFunctions";
 import { Filesystem, EmptyFilesystem } from "../api/filesystem";
 import SqrlRuleSlot from "../slot/SqrlRuleSlot";
-import { RuleSpec } from "../api/ExecutableSpec";
+import { RuleSpec } from "../api/spec";
 import { AbstractLogger } from "../util/Logger";
 import { LogProperties, getGlobalLogger } from "../api/log";
 import { buildSqrlError } from "./buildSqrlError";

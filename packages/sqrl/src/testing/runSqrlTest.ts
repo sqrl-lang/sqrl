@@ -12,10 +12,9 @@ import {
   FunctionServices,
   KafkaService
 } from "../function/registerAllFunctions";
-import { SimpleManipulator } from "../api/simple/SimpleManipulator";
-import { UniqueId } from "../api/UniqueId";
-import { UniqueIdService } from "../api/UniqueIdService";
-import { SimpleBlockService } from "../api/simple/SimpleBlockService";
+import { SimpleManipulator } from "../simple/SimpleManipulator";
+import { UniqueId, UniqueIdService } from "../api/services";
+import { SimpleBlockService } from "../simple/SimpleBlockService";
 import { Context } from "../api/ctx";
 import { AssertService } from "sqrl-common";
 import { FunctionRegistry } from "../api/execute";

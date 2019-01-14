@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { default as AT } from "./AstTypes";
+import { AstTypes as AT } from "./AstTypes";
 import SqrlAst from "./SqrlAst";
 
 import invariant from "../jslib/invariant";

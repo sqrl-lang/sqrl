@@ -6,7 +6,7 @@
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { Ast, CallAst, ConstantAst } from "../ast/Ast";
 
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import SqrlAst from "../ast/SqrlAst";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import SqrlNode from "../object/SqrlNode";
@@ -15,7 +15,7 @@ import bluebird = require("bluebird");
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { sqrlInvariant } from "../api/parse";
 import SqrlUniqueId from "../object/SqrlUniqueId";
-import { UniqueIdService } from "../api/UniqueIdService";
+import { UniqueIdService } from "../api/services";
 
 async function toNode(
   service: UniqueIdService,

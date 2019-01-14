@@ -1,5 +1,5 @@
-import { AbstractLogger } from "../../util/Logger";
-import { LogProperties } from "../log";
+import { AbstractLogger } from "../util/Logger";
+import { LogProperties } from "../api/log";
 import * as util from "util";
 
 export class TestLogger extends AbstractLogger {

@@ -6,7 +6,7 @@
 /* eslint-disable no-useless-escape */
 
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { CallAst, Ast } from "../ast/Ast";
 import SqrlAst from "../ast/SqrlAst";

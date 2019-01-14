@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import { Ast, CallAst, CustomCallAst } from "../ast/Ast";
 import { SqrlObject } from "../object/SqrlObject";
 
@@ -16,12 +16,8 @@ import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { nice } from "node-nice";
 import hrtimeToNs from "../jslib/hrtimeToNs";
 import { getGlobalLogger } from "../api/log";
-import {
-  WhenContextArgument,
-  StateArgument,
-  ArgumentCheck
-} from "../api/ArgumentCheck";
-import { ExecutionErrorProperties } from "../api/Manipulator";
+import { WhenContextArgument, StateArgument, ArgumentCheck } from "../api/arg";
+import { ExecutionErrorProperties } from "../api/execute";
 
 const AsyncFunction = Object.getPrototypeOf(async function() {
   /* intentional */

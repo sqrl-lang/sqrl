@@ -1,4 +1,4 @@
-import { Ast, CallAst } from "./ast";
+import { Ast, CallAst } from "../api/ast";
 
 export interface ArgumentCheck {
   readonly isOptional: boolean;

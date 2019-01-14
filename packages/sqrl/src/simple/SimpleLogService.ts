@@ -3,9 +3,9 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Manipulator } from "../Manipulator";
+import { Manipulator } from "../api/execute";
 import { SimpleManipulator } from "./SimpleManipulator";
-import { LogService } from "../../function/LogFunctions";
+import { LogService } from "../function/LogFunctions";
 
 export class SimpleLogService implements LogService {
   log(manipulator: Manipulator, message: string) {

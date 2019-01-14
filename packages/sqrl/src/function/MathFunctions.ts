@@ -5,7 +5,7 @@
  */
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import crypto = require("crypto");
 
 function sha256HexSync(data: Buffer | string): string {

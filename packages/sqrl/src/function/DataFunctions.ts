@@ -6,7 +6,7 @@
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { Ast } from "../ast/Ast";
 
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import SqrlAst from "../ast/SqrlAst";
 import { SqrlObject } from "../object/SqrlObject";
 

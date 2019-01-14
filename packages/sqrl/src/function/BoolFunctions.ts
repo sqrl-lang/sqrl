@@ -5,7 +5,7 @@
  */
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import { SqrlObject } from "../object/SqrlObject";
 
 function and(...args) {

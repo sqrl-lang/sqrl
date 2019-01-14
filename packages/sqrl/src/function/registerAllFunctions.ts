@@ -17,7 +17,7 @@ import { registerDataFunctions } from "./DataFunctions";
 import { registerStringFunctions } from "./StringFunctions";
 import { registerTimeFunctions } from "./TimeFunctions";
 import { registerSaveFunctions, ObjectService } from "./SaveFunctions";
-import { Manipulator } from "../api/Manipulator";
+import { Manipulator } from "../api/execute";
 import { registerSourceFunction } from "./SourceFunctions";
 import { BlockService, registerBlockFunctions } from "./BlockFunctions";
 import { registerAssertFunctions } from "./AssertFunctions";
@@ -25,7 +25,7 @@ import { registerLoadFunctions } from "./LoadFunctions";
 import { registerLogFunctions, LogService } from "./LogFunctions";
 import { registerWhenFunctions } from "./WhenFunctions";
 import { AssertService } from "sqrl-common";
-import { UniqueIdService } from "../api/UniqueIdService";
+import { UniqueIdService } from "../api/services";
 
 export abstract class KafkaService {
   abstract writeJson(manipulator: Manipulator, obj: any);

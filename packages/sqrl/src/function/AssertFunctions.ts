@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
-import { default as AT } from "../ast/AstTypes";
+import { AstTypes as AT } from "../ast/AstTypes";
 import { Ast, CallAst } from "../ast/Ast";
 
 import { AssertService, comparisonSymbols } from "sqrl-common";
