@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>SQRL |  </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/sqrl/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/sqrl/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"path":"language/where.html","title":""},"data":{"navigation":{"logo":{"text":"SQRL Documentation","type":"link","path":"index.html"},"main":[{"text":"Getting started","type":"link","path":"index.html"},{"text":"Examples","type":"label","children":[{"text":"Redis Database","type":"link","path":"examples/redis.html"},{"text":"REPL","type":"link","path":"examples/repl.html"},{"text":"Wikipedia","type":"link","path":"examples/wikipedia.html"}]},{"text":"Language","type":"label","children":[{"text":"Simple Counters","type":"link","path":"language/simple.html"},{"text":"Unique Counters","type":"link","path":"language/unique.html"},{"text":"Rate limiters","type":"link","path":"language/ratelimit.html"},{"text":"Sessionization","type":"link","path":"language/session.html"},{"text":"Text Pattern Matching","type":"link","path":"language/textpattern.html"},{"text":"Where Clauses","type":"link","path":"language/where.html"}]},{"text":"Defining Functions","type":"label","children":[{"text":"Simple Functions","type":"link","path":"functions/simple.html"},{"text":"Statements","type":"link","path":"functions/statement.html"},{"text":"When Clauses","type":"link","path":"functions/when.html"},{"text":"Custom Functions","type":"link","path":"functions/custom.html"}]},{"text":"Production Deployments","type":"label","children":[{"text":"Http Server","type":"link","path":"deployment/server.html"},{"text":"Async Queues","type":"link","path":"deployment/async.html"}]}]}},"config":{"timezone":"UTC","root":"/sqrl/","time_format":"HH:mm:ss","theme":"hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"images/favicon.ico"}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot=""><nav class="doc-navbar"><a href="/sqrl/index.html" class="doc-navbar__logo"><img src="/sqrl/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">SQRL Documentation</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <p>In order to get an in-depth understanding of SQRL it is vital that you understand how WHERE statements affect underlying counters and rules.</p>
+<p>Limitations on expressions in WHERE statements<br>In order to provide automatic counters and other similar features, we impose some limitations on the syntax you are allowed to use inside a where statement.</p>
+<p>This is restricted to the following operations:</p>
+<p>Feature truthness, and NOT (i.e. WHERE X, WHERE NOT Y)<br>Boolean AND/OR (i.e. WHERE X AND Y, WHERE (X AND Y) OR Z)<br>Equality / inequality with constants (i.e. WHERE X=”A”, WHERE Y!=”B”)<br>Implications in counter values<br>Smyte does not automatically track every counter you could possibly use in SQRL. The simple reason for this is cost savings… since keeping track of counters costs money, and since we allow an infinite set of different counters, we can’t afford to spend infinite money on them.</p>
+<p>For most counters we’ll only start tracking the counts when you first push the count(), countUnique(), checkPercentile()or similar call to our system. It is important to identify how counters are uniquely identified in our system to avoid unintentionally starting a new counter (and losing all previous values).</p>
+<p>For example the following two counters are maintained separately:</p>
+<p>rules/main.sqrl</p>
+<p>LET LoginCount := count(BY SessionActor WHERE ActionName=”login”);<br>LET PurchaseCount := count(BY SessionActor WHERE ActionName=”purchase”);</p>
+<p>This is to be expected. LoginCount is a count of logins, while PurchaseCount is a count of purchases. Internally we track the features used in the WHERE statement and use them to identify the counter.</p>
+<p>Using ActionName directly in count() is not recommended though, because in future you may wish to add a new action mobile_login, or perhaps change login to logged_in. Changing the constant ActionName would use a new set of counters.</p>
+<p>Instead we recommend you use additional feature:</p>
+<p>rules/main.sqrl</p>
+<p>LET IsLogin := ActionName = “login”; LET LoginCount := count(BY SessionActor WHERE IsLogin);</p>
+<p>With this change later we can safely update IsLogin.<br>rules/main.sqrl</p>
+<p>LET IsLogin := ActionName IN [“login”, “mobile_login”];<br>LET LoginCount := count(BY SessionActor WHERE IsLogin);</p>
+<p>In the above case since the body of the WHERE clause did not change any previous tracked counts under the “login”action will still exist.</p>
+<p>Implications in INCLUDE statements<br>When you include a file with a WHERE clause every statement in that file is included with that additional expression.</p>
+<p>This is most clearly demonstrated by taking the following combination of files:</p>
+<p>rules/purchase.sqrl</p>
+<p>LET NumPurchaseByActor := count(BY SessionActor); LET ManyPurchaseByActor := NumPurchaseByActor &gt; 5; CREATE RULE ManyPurchase WHERE ManyPurcaseByActor;</p>
+<p>rules/main.sqrl</p>
+<p>LET IsPurchase := ActionName = “purchase”; INCLUDE “purchase.sqrl” WHERE IsPurchase;</p>
+<p>To achieve the same thing in a single file, the equivalent SQRL code would be:<br>rules/main.sqrl</p>
+<p>LET IsPurchase := ActionName = “purchase”;<br>LET NumPurchaseByActor :=<br>  if(IsPurchase, count(BY SessionActor WHERE IsPurchase));<br>LET ManyPurchaseByActor :=<br>  if(IsPurchase, NumPurchaseByActor &gt; 5);<br>CREATE RULE ManyPurchases<br>  WHERE ManyPurcaseByActor AND IsPurchase;</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/sqrl/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

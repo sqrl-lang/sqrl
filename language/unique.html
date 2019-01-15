@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>SQRL |  </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/sqrl/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/sqrl/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"path":"language/unique.html","title":""},"data":{"navigation":{"logo":{"text":"SQRL Documentation","type":"link","path":"index.html"},"main":[{"text":"Getting started","type":"link","path":"index.html"},{"text":"Examples","type":"label","children":[{"text":"Redis Database","type":"link","path":"examples/redis.html"},{"text":"REPL","type":"link","path":"examples/repl.html"},{"text":"Wikipedia","type":"link","path":"examples/wikipedia.html"}]},{"text":"Language","type":"label","children":[{"text":"Simple Counters","type":"link","path":"language/simple.html"},{"text":"Unique Counters","type":"link","path":"language/unique.html"},{"text":"Rate limiters","type":"link","path":"language/ratelimit.html"},{"text":"Sessionization","type":"link","path":"language/session.html"},{"text":"Text Pattern Matching","type":"link","path":"language/textpattern.html"},{"text":"Where Clauses","type":"link","path":"language/where.html"}]},{"text":"Defining Functions","type":"label","children":[{"text":"Simple Functions","type":"link","path":"functions/simple.html"},{"text":"Statements","type":"link","path":"functions/statement.html"},{"text":"When Clauses","type":"link","path":"functions/when.html"},{"text":"Custom Functions","type":"link","path":"functions/custom.html"}]},{"text":"Production Deployments","type":"label","children":[{"text":"Http Server","type":"link","path":"deployment/server.html"},{"text":"Async Queues","type":"link","path":"deployment/async.html"}]}]}},"config":{"timezone":"UTC","root":"/sqrl/","time_format":"HH:mm:ss","theme":"hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"images/favicon.ico"}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot=""><nav class="doc-navbar"><a href="/sqrl/index.html" class="doc-navbar__logo"><img src="/sqrl/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">SQRL Documentation</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <p>Sometimes simple counters are not enough and you need more powerful counters. This is where unique counts, or time windowed set cardinalities, come into play.</p>
+<p>Your first unique counter<br>To get started we’re going to count the number of unique credit cards used over your entire account in the last twelve hours. While simple counters are restricted to a small number of windows, with our unique counters you can specify arbitrary time windows.</p>
+<p>rules/main.sqrl</p>
+<p>LET NumCreditCards := countUnique(CreditCard LAST 12 HOURS);</p>
+<p>Grouping unique counts<br>It is rare that you just want to count unique values across your whole dataset. More often than not, you will be interested in counting unique values grouped by another feature.</p>
+<p>Let’s say we wanted to create a rule that blocks payments from users who have a suspicious number of credit cards. We could accomplish that with the following rule.</p>
+<p>rules/main.sqrl</p>
+<p>LET NumCreditCards := countUnique(<br>  CreditCard BY SessionActor LAST 5 DAYS);<br>CREATE RULE SuspiciousNumCreditCards<br>  WHERE NumCreditCards &gt; 4;</p>
+<p>Now, rather than counting all the unique credit cards we have seen for everyone, we are counting the number of cards by each individual user.<br>Counting with conditions and groups<br>Let’s bring it together with an example that includes a WHERE condition as well. In this example we want to create a rule that picks up when a credit card is used in more than one risky country.</p>
+<p>We include the number of risky countries it has been seen in inside the rule reason. Finally we mark the rule as fully rolled out, and set it to both block the action and apply a bad_credit_card label to the card that was used.</p>
+<p>rules/main.sqrl</p>
+<p>LET NumRiskyCountries := countUnique(<br>  Country BY CreditCard WHERE RiskyCountry LAST 5 DAYS);<br>CREATE RULE MultiRiskyCountryCreditCard<br>  WHERE NumRiskyCountries &gt; 1<br>  WITH REASON “Credit card was used in ${NumRiskyCountries} risky “<br>              “countries in last 5 days.”<br>  ROLLOUT TO 100%;</p>
+<p>WHEN MultiRiskyCountryCreditCard<br>  BLOCK ACTION<br>  ADD “bad_credit_card” TO CreditCard;</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/sqrl/script/doc.js"></script>
+
+    
+
+  </body>
+</html>
