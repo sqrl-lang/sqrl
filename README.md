@@ -123,7 +123,7 @@ in all interactions with the community.
 
 ## Authors
 
-* Josh Yudaken
+* Josh Yudaken https://github.com/qix
 * Pete Hunt
 * Julian Tempelsman
 * Paul Mou

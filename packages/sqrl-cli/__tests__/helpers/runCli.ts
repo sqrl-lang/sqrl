@@ -1,3 +1,8 @@
+/**
+ * Copyright 2019 Twitter, Inc.
+ * Licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
 import { Writable, Readable } from "stream";
 import { invariant } from "sqrl-common";
 import { cliMain, CliArgs } from "../../src/cli/CliMain";

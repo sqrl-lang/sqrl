@@ -1,3 +1,8 @@
+/**
+ * Copyright 2019 Twitter, Inc.
+ * Licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
 /***
  * This implements https://github.com/tc39/proposal-promise-finally
  * Once our minimum Node.JS version meets this bar we can start using it.
