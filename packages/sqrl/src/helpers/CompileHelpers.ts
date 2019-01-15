@@ -10,19 +10,30 @@ import { parseSqrl } from "../parser/SqrlParse";
 import { StatementAst } from "../ast/Ast";
 import invariant from "../jslib/invariant";
 
-export function statementsFromString(source: string): StatementAst[] {
-  return parseSqrl(source).statements;
+export function statementsFromString(
+  source: string,
+  options: {
+    customFunctions?: Set<string>;
+  } = {}
+): StatementAst[] {
+  return parseSqrl(source, {
+    customFunctions: options.customFunctions
+  }).statements;
 }
 
 export function sourceOptionsFromFilesystem(
   filesystem: Filesystem,
-  mainFilename: string
+  mainFilename: string,
+  options: {
+    customFunctions?: Set<string>;
+  } = {}
 ) {
   const sourceBuffer = filesystem.tryRead(mainFilename);
   invariant(sourceBuffer, "Could not read main file source: %s", mainFilename);
   const source = sourceBuffer.toString("utf-8");
   const statements = parseSqrl(source, {
-    filename: mainFilename
+    filename: mainFilename,
+    customFunctions: options.customFunctions
   }).statements;
   return {
     statements,
@@ -30,9 +41,15 @@ export function sourceOptionsFromFilesystem(
     filesystem
   };
 }
-export function sourceOptionsFromPath(path: string): SqrlParserSourceOptions {
+export function sourceOptionsFromPath(
+  path: string,
+  options: {
+    customFunctions?: Set<string>;
+  } = {}
+): SqrlParserSourceOptions {
   return sourceOptionsFromFilesystem(
     new LocalFilesystem(dirname(path)),
-    basename(path)
+    basename(path),
+    options
   );
 }

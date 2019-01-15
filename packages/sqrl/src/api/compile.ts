@@ -91,11 +91,17 @@ export async function compileFromString(
 ) {
   let libraryStatements: StatementAst[] = [];
   if (options.librarySource) {
-    libraryStatements = [...statementsFromString(options.librarySource)];
+    libraryStatements = [
+      ...statementsFromString(options.librarySource, {
+        customFunctions: functionRegistry._wrapped.customFunctions
+      })
+    ];
   }
   const statements: StatementAst[] = [
     ...libraryStatements,
-    ...statementsFromString(source)
+    ...statementsFromString(source, {
+      customFunctions: functionRegistry._wrapped.customFunctions
+    })
   ];
   return compileFromStatements(functionRegistry, statements, options);
 }
@@ -128,7 +134,9 @@ export async function compileFromFilesystem(
   const mainFile = options.mainFile || "main.sqrl";
   const sqrlBuffer = filesystem.tryRead(mainFile);
   invariant(sqrlBuffer, "Expected to find main.sqrl in test fs");
-  const statements = statementsFromString(sqrlBuffer.toString("utf-8"));
+  const statements = statementsFromString(sqrlBuffer.toString("utf-8"), {
+    customFunctions: functionRegistry._wrapped.customFunctions
+  });
   return compileFromStatements(functionRegistry, statements, {
     filesystem,
     ...options
