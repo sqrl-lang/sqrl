@@ -34,15 +34,11 @@
       <div id="page-content" class="doc-formatting">
         <h1 id="Text-Patterns"><a href="#Text-Patterns" class="headerlink" title="Text Patterns"></a>Text Patterns</h1><p>Getting started<br>As new spam campaigns emerge and existing ones change, it is important to be able to quickly update content rules. Smyte allows you to easily add or modify custom text patterns on the fly &#x2013; we call this system Matchmaker.</p>
 <p>Creating rules that use Smyte Matchmaker is simple. Here&#x2019;s an example of a rule that blocks any comments using a blacklisted keyword.</p>
-<p>SQL</p>
-<p>CREATE RULE UsedBlacklistedKeyword WHERE patternMatches(&#x201C;BlacklistedKeywords&#x201D;);</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE RULE UsedBlacklistedKeyword WHERE patternMatches(&quot;BlacklistedKeywords&quot;);</span><br></pre></td></tr></table></figure>
 <p>The patternMatches returns back an array of extracted matches or an empty array if none are found (empty arrays evaluate to false in SQRL). Often times you would want to use the extracted matches in the rule&#x2019;s reason. We can easily do that by updating the code to the following.</p>
-<p>SQL</p>
-<p>LET BlacklistedKeywordMatches := patternMatches(&#x201C;BlacklistedKeywords&#x201D;); CREATE RULE UsedBlacklistedKeyword WHERE BlacklistedKeywordMatches WITH REASON &#x201C;Text used blacklisted keywords: ${BlacklistedKeywordMatches}&#x201D;;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LET BlacklistedKeywordMatches := patternMatches(&quot;BlacklistedKeywords&quot;); CREATE RULE UsedBlacklistedKeyword WHERE BlacklistedKeywordMatches WITH REASON &quot;Text used blacklisted keywords: ${BlacklistedKeywordMatches}&quot;;</span><br></pre></td></tr></table></figure>
 <p>Matching against specific text fields<br>By default patternMatches will execute the given pattern against the UserGeneratedText feature. Sometimes you might want to run this against another feature. This is accomplished by providing the feature you want to run against as a second parameter to patternMatches.</p>
-<p>SQL</p>
-<p>LET BlacklistedEmailMatches := patternMatches(&#x201C;BlacklistedEmail&#x201D;, ActorEmail); WHEN RULE UsedBlacklistedEmail WHERE BlacklistedEmailMatches WITH REASON &#x201C;Email contained blacklisted patterns: ${BlacklistedEmailMatches}&#x201D; BLOCK ACTION;</p>
-
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LET BlacklistedEmailMatches := patternMatches(&quot;BlacklistedEmail&quot;, ActorEmail); WHEN RULE UsedBlacklistedEmail WHERE BlacklistedEmailMatches WITH REASON &quot;Email contained blacklisted patterns: ${BlacklistedEmailMatches}&quot; BLOCK ACTION;</span><br></pre></td></tr></table></figure>
         <div id="react-support-footer-root"></div>
       </div>
     </div>
