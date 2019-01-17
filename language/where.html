@@ -35,27 +35,27 @@
         <h1 id="Where-Clauses"><a href="#Where-Clauses" class="headerlink" title="Where Clauses"></a>Where Clauses</h1><p>In order to get an in-depth understanding of SQRL it is vital that you understand how WHERE statements affect underlying counters and rules.</p>
 <p>Limitations on expressions in WHERE statements<br>In order to provide automatic counters and other similar features, we impose some limitations on the syntax you are allowed to use inside a where statement.</p>
 <p>This is restricted to the following operations:</p>
-<p>Feature truthness, and NOT (i.e. WHERE X, WHERE NOT Y)<br>Boolean AND/OR (i.e. WHERE X AND Y, WHERE (X AND Y) OR Z)<br>Equality / inequality with constants (i.e. WHERE X=”A”, WHERE Y!=”B”)<br>Implications in counter values<br>Smyte does not automatically track every counter you could possibly use in SQRL. The simple reason for this is cost savings… since keeping track of counters costs money, and since we allow an infinite set of different counters, we can’t afford to spend infinite money on them.</p>
-<p>For most counters we’ll only start tracking the counts when you first push the count(), countUnique(), checkPercentile()or similar call to our system. It is important to identify how counters are uniquely identified in our system to avoid unintentionally starting a new counter (and losing all previous values).</p>
+<p>Feature truthness, and NOT (i.e. WHERE X, WHERE NOT Y)<br>Boolean AND/OR (i.e. WHERE X AND Y, WHERE (X AND Y) OR Z)<br>Equality / inequality with constants (i.e. WHERE X=&#x201D;A&#x201D;, WHERE Y!=&#x201D;B&#x201D;)<br>Implications in counter values<br>Smyte does not automatically track every counter you could possibly use in SQRL. The simple reason for this is cost savings&#x2026; since keeping track of counters costs money, and since we allow an infinite set of different counters, we can&#x2019;t afford to spend infinite money on them.</p>
+<p>For most counters we&#x2019;ll only start tracking the counts when you first push the count(), countUnique(), checkPercentile()or similar call to our system. It is important to identify how counters are uniquely identified in our system to avoid unintentionally starting a new counter (and losing all previous values).</p>
 <p>For example the following two counters are maintained separately:</p>
 <p>rules/main.sqrl</p>
-<p>LET LoginCount := count(BY SessionActor WHERE ActionName=”login”);<br>LET PurchaseCount := count(BY SessionActor WHERE ActionName=”purchase”);</p>
+<p>LET LoginCount := count(BY SessionActor WHERE ActionName=&#x201D;login&#x201D;);<br>LET PurchaseCount := count(BY SessionActor WHERE ActionName=&#x201D;purchase&#x201D;);</p>
 <p>This is to be expected. LoginCount is a count of logins, while PurchaseCount is a count of purchases. Internally we track the features used in the WHERE statement and use them to identify the counter.</p>
 <p>Using ActionName directly in count() is not recommended though, because in future you may wish to add a new action mobile_login, or perhaps change login to logged_in. Changing the constant ActionName would use a new set of counters.</p>
 <p>Instead we recommend you use additional feature:</p>
 <p>rules/main.sqrl</p>
-<p>LET IsLogin := ActionName = “login”; LET LoginCount := count(BY SessionActor WHERE IsLogin);</p>
+<p>LET IsLogin := ActionName = &#x201C;login&#x201D;; LET LoginCount := count(BY SessionActor WHERE IsLogin);</p>
 <p>With this change later we can safely update IsLogin.<br>rules/main.sqrl</p>
-<p>LET IsLogin := ActionName IN [“login”, “mobile_login”];<br>LET LoginCount := count(BY SessionActor WHERE IsLogin);</p>
-<p>In the above case since the body of the WHERE clause did not change any previous tracked counts under the “login”action will still exist.</p>
+<p>LET IsLogin := ActionName IN [&#x201C;login&#x201D;, &#x201C;mobile_login&#x201D;];<br>LET LoginCount := count(BY SessionActor WHERE IsLogin);</p>
+<p>In the above case since the body of the WHERE clause did not change any previous tracked counts under the &#x201C;login&#x201D;action will still exist.</p>
 <p>Implications in INCLUDE statements<br>When you include a file with a WHERE clause every statement in that file is included with that additional expression.</p>
 <p>This is most clearly demonstrated by taking the following combination of files:</p>
 <p>rules/purchase.sqrl</p>
 <p>LET NumPurchaseByActor := count(BY SessionActor); LET ManyPurchaseByActor := NumPurchaseByActor &gt; 5; CREATE RULE ManyPurchase WHERE ManyPurcaseByActor;</p>
 <p>rules/main.sqrl</p>
-<p>LET IsPurchase := ActionName = “purchase”; INCLUDE “purchase.sqrl” WHERE IsPurchase;</p>
+<p>LET IsPurchase := ActionName = &#x201C;purchase&#x201D;; INCLUDE &#x201C;purchase.sqrl&#x201D; WHERE IsPurchase;</p>
 <p>To achieve the same thing in a single file, the equivalent SQRL code would be:<br>rules/main.sqrl</p>
-<p>LET IsPurchase := ActionName = “purchase”;<br>LET NumPurchaseByActor :=<br>  if(IsPurchase, count(BY SessionActor WHERE IsPurchase));<br>LET ManyPurchaseByActor :=<br>  if(IsPurchase, NumPurchaseByActor &gt; 5);<br>CREATE RULE ManyPurchases<br>  WHERE ManyPurcaseByActor AND IsPurchase;</p>
+<p>LET IsPurchase := ActionName = &#x201C;purchase&#x201D;;<br>LET NumPurchaseByActor :=<br>  if(IsPurchase, count(BY SessionActor WHERE IsPurchase));<br>LET ManyPurchaseByActor :=<br>  if(IsPurchase, NumPurchaseByActor &gt; 5);<br>CREATE RULE ManyPurchases<br>  WHERE ManyPurcaseByActor AND IsPurchase;</p>
 
         <div id="react-support-footer-root"></div>
       </div>

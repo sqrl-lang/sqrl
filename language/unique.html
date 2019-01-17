@@ -34,18 +34,18 @@
       <div id="page-content" class="doc-formatting">
         <h1 id="Unique-Counters"><a href="#Unique-Counters" class="headerlink" title="Unique Counters"></a>Unique Counters</h1><p>also known as: <strong>Time windowed set cardinality.</strong></p>
 <h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Sometimes simple counters are not enough and you need more powerful counters. This is where unique counts, or time windowed set cardinalities, come into play.</p>
-<p>Your first unique counter<br>To get started we’re going to count the number of unique credit cards used over your entire account in the last twelve hours. While simple counters are restricted to a small number of windows, with our unique counters you can specify arbitrary time windows.</p>
+<p>Your first unique counter<br>To get started we&#x2019;re going to count the number of unique credit cards used over your entire account in the last twelve hours. While simple counters are restricted to a small number of windows, with our unique counters you can specify arbitrary time windows.</p>
 <p>rules/main.sqrl</p>
 <p>LET NumCreditCards := countUnique(CreditCard LAST 12 HOURS);</p>
 <p>Grouping unique counts<br>It is rare that you just want to count unique values across your whole dataset. More often than not, you will be interested in counting unique values grouped by another feature.</p>
-<p>Let’s say we wanted to create a rule that blocks payments from users who have a suspicious number of credit cards. We could accomplish that with the following rule.</p>
+<p>Let&#x2019;s say we wanted to create a rule that blocks payments from users who have a suspicious number of credit cards. We could accomplish that with the following rule.</p>
 <p>rules/main.sqrl</p>
 <p>LET NumCreditCards := countUnique(<br>  CreditCard BY SessionActor LAST 5 DAYS);<br>CREATE RULE SuspiciousNumCreditCards<br>  WHERE NumCreditCards &gt; 4;</p>
-<p>Now, rather than counting all the unique credit cards we have seen for everyone, we are counting the number of cards by each individual user.<br>Counting with conditions and groups<br>Let’s bring it together with an example that includes a WHERE condition as well. In this example we want to create a rule that picks up when a credit card is used in more than one risky country.</p>
+<p>Now, rather than counting all the unique credit cards we have seen for everyone, we are counting the number of cards by each individual user.<br>Counting with conditions and groups<br>Let&#x2019;s bring it together with an example that includes a WHERE condition as well. In this example we want to create a rule that picks up when a credit card is used in more than one risky country.</p>
 <p>We include the number of risky countries it has been seen in inside the rule reason. Finally we mark the rule as fully rolled out, and set it to both block the action and apply a bad_credit_card label to the card that was used.</p>
 <p>rules/main.sqrl</p>
-<p>LET NumRiskyCountries := countUnique(<br>  Country BY CreditCard WHERE RiskyCountry LAST 5 DAYS);<br>CREATE RULE MultiRiskyCountryCreditCard<br>  WHERE NumRiskyCountries &gt; 1<br>  WITH REASON “Credit card was used in ${NumRiskyCountries} risky “<br>              “countries in last 5 days.”<br>  ROLLOUT TO 100%;</p>
-<p>WHEN MultiRiskyCountryCreditCard<br>  BLOCK ACTION<br>  ADD “bad_credit_card” TO CreditCard;</p>
+<p>LET NumRiskyCountries := countUnique(<br>  Country BY CreditCard WHERE RiskyCountry LAST 5 DAYS);<br>CREATE RULE MultiRiskyCountryCreditCard<br>  WHERE NumRiskyCountries &gt; 1<br>  WITH REASON &#x201C;Credit card was used in ${NumRiskyCountries} risky &#x201C;<br>              &#x201C;countries in last 5 days.&#x201D;<br>  ROLLOUT TO 100%;</p>
+<p>WHEN MultiRiskyCountryCreditCard<br>  BLOCK ACTION<br>  ADD &#x201C;bad_credit_card&#x201D; TO CreditCard;</p>
 
         <div id="react-support-footer-root"></div>
       </div>
