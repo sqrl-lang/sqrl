@@ -32,7 +32,11 @@
     <div class="dc-card">
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
-        <h1 id="Custom-functions"><a href="#Custom-functions" class="headerlink" title="Custom functions"></a>Custom functions</h1><h3 id="Example-custom-function"><a href="#Example-custom-function" class="headerlink" title="Example custom function"></a>Example custom function</h3>
+        <h1 id="Custom-functions"><a href="#Custom-functions" class="headerlink" title="Custom functions"></a>Custom functions</h1><h3 id="Example-custom-function"><a href="#Example-custom-function" class="headerlink" title="Example custom function"></a>Example custom function</h3><p>Once you&#x2019;re comfortable creating simple functions you can create a function with custom syntax. We use this functionality to provide our counters that have their own syntax.</p>
+<p>You can view our <a href="https://github.com/twitter/sqrl/tree/master/packages/sqrl-redis-functions" target="_blank" rel="noopener"><code>sqrl-redis-functions</code></a> package for examples on how they were defined.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">registry.registerCustom(function count(</span><br><span class="line">  state: CompileState,</span><br><span class="line">  ast: CustomCallAst</span><br><span class="line">): Ast {</span><br><span class="line">    /*</span><br><span class="line">      In here `ast.source` is the raw source of the argumets to the count() call.</span><br><span class="line">      For example count(BY Id) will give you `ast.source === &quot;BY Id&quot;`.</span><br><span class="line">    */</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<p>You are responsible for parsing the features and any values inside the provided argument source.</p>
+
         <div id="react-support-footer-root"></div>
       </div>
     </div>

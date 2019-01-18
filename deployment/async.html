@@ -32,7 +32,10 @@
     <div class="dc-card">
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
-        <h1 id="Running-on-an-async-queue"><a href="#Running-on-an-async-queue" class="headerlink" title="Running on an async queue"></a>Running on an async queue</h1><h3 id="Recommendations"><a href="#Recommendations" class="headerlink" title="Recommendations"></a>Recommendations</h3><h3 id="Creating-a-Kafka-Consumer"><a href="#Creating-a-Kafka-Consumer" class="headerlink" title="Creating a Kafka Consumer"></a>Creating a Kafka Consumer</h3>
+        <h1 id="Running-on-an-async-queue"><a href="#Running-on-an-async-queue" class="headerlink" title="Running on an async queue"></a>Running on an async queue</h1><h3 id="Recommendations"><a href="#Recommendations" class="headerlink" title="Recommendations"></a>Recommendations</h3><p>You&#x2019;ll often want to rule sets. One for blocking live actions (for example stopping a user from signing up at all), and one for processing actions asynchronously. Since the asynchronous queue will not block the user, you can do a lot more complicated work.</p>
+<h3 id="Creating-a-Kafka-Consumer"><a href="#Creating-a-Kafka-Consumer" class="headerlink" title="Creating a Kafka Consumer"></a>Creating a Kafka Consumer</h3><p>It is possible to run SQRL inside a standard queue consumer with Kafka, however you may see issues with this approach as often processing single actions take a large amount of time.</p>
+<p>Our recommendation here is to have a separate consumer that farms actions out to individual works and gathers their responses (or timeouts) before committing the messages as processed in Kafka.</p>
+
         <div id="react-support-footer-root"></div>
       </div>
     </div>
