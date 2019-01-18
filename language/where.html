@@ -36,12 +36,11 @@
 <p>Limitations on expressions in WHERE statements<br>In order to provide automatic counters and other similar features, we impose some limitations on the syntax you are allowed to use inside a where statement.</p>
 <p>This is restricted to the following operations:</p>
 <ul>
-<li>Feature truthness, and NOT (i.e. WHERE X, WHERE NOT Y)</li>
-<li>Boolean AND/OR (i.e. WHERE X AND Y, WHERE (X AND Y) OR Z)</li>
-<li>Equality / inequality with constants (i.e. WHERE X=&#x201D;A&#x201D;, WHERE Y!=&#x201D;B&#x201D;)</li>
+<li>Features, and unary <strong>NOT</strong> (i.e. WHERE X, WHERE NOT Y)</li>
+<li>Boolean <strong>AND</strong>/<strong>OR</strong> (i.e. WHERE X AND Y, WHERE (X AND Y) OR Z)</li>
+<li>Equality (<strong>=</strong>) / inequality (<strong>!=</strong>) with constants (i.e. WHERE X=&#x201D;A&#x201D;, WHERE Y!=&#x201D;B&#x201D;)</li>
 </ul>
-<h2 id="Counter-values"><a href="#Counter-values" class="headerlink" title="Counter values"></a>Counter values</h2><p>Smyte does not automatically track every counter you could possibly use in SQRL. The simple reason for this is cost savings&#x2026; since keeping track of counters costs money, and since we allow an infinite set of different counters, we can&#x2019;t afford to spend infinite money on them.</p>
-<p>For most counters we&#x2019;ll only start tracking the counts when you first push the count(), countUnique(), checkPercentile()or similar call to our system. It is important to identify how counters are uniquely identified in our system to avoid unintentionally starting a new counter (and losing all previous values).</p>
+<h2 id="Counter-values"><a href="#Counter-values" class="headerlink" title="Counter values"></a>Counter values</h2><p>For most counters we&#x2019;ll only start tracking the counts when you first push the count(), countUnique(). It is important to identify how counters are uniquely identified in SQRL to avoid unintentionally starting a new counter (and losing all previous values).</p>
 <p>For example the following two counters are maintained separately:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LET LoginCount := count(BY SessionActor WHERE ActionName=&quot;login&quot;);</span><br><span class="line">LET PurchaseCount := count(BY SessionActor WHERE ActionName=&quot;purchase&quot;);</span><br></pre></td></tr></table></figure>
 <p>This is to be expected. LoginCount is a count of logins, while PurchaseCount is a count of purchases. Internally we track the features used in the WHERE statement and use them to identify the counter.</p>
@@ -50,14 +49,14 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LET IsLogin := ActionName = &quot;login&quot;;</span><br><span class="line">LET LoginCount := count(BY SessionActor WHERE IsLogin);</span><br></pre></td></tr></table></figure>
 <p>With this change later we can safely update IsLogin.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LET IsLogin := ActionName IN [&quot;login&quot;, &quot;mobile_login&quot;];</span><br><span class="line">LET LoginCount := count(BY SessionActor WHERE IsLogin);</span><br></pre></td></tr></table></figure>
-<p>In the above case since the body of the WHERE clause did not change any previous tracked counts under the &#x201C;login&#x201D;action will still exist.</p>
+<p>In the above case since the body of the WHERE clause did not change any previous tracked counts under the &#x201C;login&#x201D; action will still exist.</p>
 <h2 id="INCLUDE-statements"><a href="#INCLUDE-statements" class="headerlink" title="INCLUDE statements"></a>INCLUDE statements</h2><p>When you include a file with a WHERE clause every statement in that file is included with that additional expression.</p>
 <p>This is most clearly demonstrated by taking the following combination of files:</p>
 <p><strong>rules/purchase.sqrl</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LET NumPurchaseByActor := count(BY SessionActor);</span><br><span class="line">LET ManyPurchaseByActor := NumPurchaseByActor &gt; 5;</span><br><span class="line">CREATE RULE ManyPurchase WHERE ManyPurcaseByActor;</span><br></pre></td></tr></table></figure>
 <p><strong>main.sqrl</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LET IsPurchase := ActionName = &quot;purchase&quot;;</span><br><span class="line">INCLUDE &quot;purchase.sqrl&quot; WHERE IsPurchase;</span><br></pre></td></tr></table></figure></p>
 <p>To achieve the same thing in a single file, the equivalent SQRL code would be:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LET IsPurchase := ActionName = &quot;purchase&quot;;</span><br><span class="line">LET NumPurchaseByActor := </span><br><span class="line">  if(IsPurchase, count(BY SessionActor WHERE IsPurchase));</span><br><span class="line">LET ManyPurchaseByActor := </span><br><span class="line">  if(IsPurchase, NumPurchaseByActor &gt; 5);</span><br><span class="line">CREATE RULE ManyPurchases </span><br><span class="line">  WHERE ManyPurcaseByActor AND IsPurchase;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LET IsPurchase := ActionName = &quot;purchase&quot;;</span><br><span class="line">LET NumPurchaseByActor := if(IsPurchase, count(BY SessionActor WHERE IsPurchase));</span><br><span class="line">LET ManyPurchaseByActor := if(IsPurchase, NumPurchaseByActor &gt; 5);</span><br><span class="line">CREATE RULE ManyPurchases WHERE ManyPurcaseByActor AND IsPurchase;</span><br></pre></td></tr></table></figure>
         <div id="react-support-footer-root"></div>
       </div>
     </div>
