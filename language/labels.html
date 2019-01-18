@@ -32,11 +32,11 @@
     <div class="dc-card">
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
-        <h1 id="Labels"><a href="#Labels" class="headerlink" title="Labels"></a>Labels</h1><p>You&#x2019;ll often want to keep a little bit of additional information attached to the various<br><a href="nodes.html">nodes</a> in your system.</p>
+        <h1 id="Labels"><a href="#Labels" class="headerlink" title="Labels"></a>Labels</h1><p>You&#x2019;ll often want to keep a little bit of additional information attached to the various <a href="nodes.html">nodes</a> in your system.</p>
 <p>Usually these labels are applied as a result of rules, for example:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE RULE SignupFromTor WHERE isTorExitNode(Ip);</span><br><span class="line">WHEN SignupFromTor THEN</span><br><span class="line">    addLabel(User, &quot;tor_signup&quot;);</span><br></pre></td></tr></table></figure>
 <p>This will let you later keep track of users that were created via Tor and apply stricter ratelimits.</p>
-<p><em>Note</em> The <code>isTorExitNode</code> function is not included in this package. You can define it yourself<br>though. See <a href="../functions/simple.html">definiting functions</a> to get started!</p>
+<p><em>Note</em> The <code>isTorExitNode</code> function is not included in this package. You can define it yourself though. See <a href="../functions/simple.html">definiting functions</a> to get started!</p>
 
         <div id="react-support-footer-root"></div>
       </div>
