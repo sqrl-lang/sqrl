@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
     <meta charset="utf-8">
 
     <title>SQRL | Statement Functions </title>
@@ -32,11 +32,15 @@
     <div class="dc-card">
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
-        <h1 id="Statement-functions"><a href="#Statement-functions" class="headerlink" title="Statement functions"></a>Statement functions</h1><p>Statement functions allow you to register functions that can act as entire statements.</p>
-<h3 id="Example-statement-definition"><a href="#Example-statement-definition" class="headerlink" title="Example statement definition"></a>Example statement definition</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">const writeFileAsync = util.promisify(fs.writeFile);</span><br><span class="line"></span><br><span class="line">registry.registerStatement(</span><br><span class="line">  &quot;SqrlFileStatements&quot;,</span><br><span class="line">  async function writeToFile(</span><br><span class="line">    state: Execution,</span><br><span class="line">    filename: string,</span><br><span class="line">    contents: string</span><br><span class="line">  ) {</span><br><span class="line">    await fs.writeFileAsync(filename, contents);</span><br><span class="line">  }</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+        <html><head><meta name="generator" content="Hexo 3.8.0"></head><body><h1 id="Statement-functions"><a href="#Statement-functions" class="headerlink" title="Statement functions"></a>Statement functions</h1><p>By default SQRL functions cannot be used as statements. They need to either be used in calculating a feature or a rule.</p>
+<p>Statement functions allow you to register functions that can act as entire statements. For example you might want to implement a statement that writes out a file during SQRL execution:</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">writeFile(&quot;last-username.txt&quot;, Username);</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="Execution-of-statements"><a href="#Execution-of-statements" class="headerlink" title="Execution of statements"></a>Execution of statements</h3><p>By default when you start up a SQRL execution <em>nothing</em> is run. Calling <code>execution.fetchFeature</code> will start calculating that feature and any dependant ones.</p>
+<p>Running statements uses special <em>Statement Features</em> such as <code>SqrlFileStatements</code> below. These features <strong>always</strong> evaluate to <code>true</code>, however their promise will only be resolved once all the statements have been run. If you want an execution to run <em>all</em> statements you can fetch the magic feature <code>SqrlExecutionComplete</code>.</p>
+<h3 id="Example-statement-definition"><a href="#Example-statement-definition" class="headerlink" title="Example statement definition"></a>Example statement definition</h3><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">const writeFileAsync = util.promisify(fs.writeFile);</span><br><span class="line"></span><br><span class="line">registry.registerStatement(</span><br><span class="line">  &quot;SqrlFileStatements&quot;,</span><br><span class="line">  async function writeFile(</span><br><span class="line">    state: Execution,</span><br><span class="line">    filename: string,</span><br><span class="line">    contents: string</span><br><span class="line">  ) {</span><br><span class="line">    await fs.writeFileAsync(filename, contents);</span><br><span class="line">  }</span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="Statement-features"><a href="#Statement-features" class="headerlink" title="Statement features"></a>Statement features</h3><p>By default in a SQRL execution <strong>no</strong> statements are run.</p>
 <p>In the example above <code>execution.fetchFeature(&apos;SqrlFileStatements&apos;)</code> will cause <strong>all</strong> writeToFile statements to be called. By default <code>SqrlExecutionComplete</code> includes all the special statement features, and that is loaded before any mutations are run.</p>
-
+</body></html>
         <div id="react-support-footer-root"></div>
       </div>
     </div>
