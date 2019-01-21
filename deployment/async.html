@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><meta name="generator" content="Hexo 3.8.0">
+  <head>
     <meta charset="utf-8">
 
     <title>SQRL | Async Queues </title>
@@ -32,10 +32,11 @@
     <div class="dc-card">
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
-        <h1 id="Running-on-an-async-queue"><a href="#Running-on-an-async-queue" class="headerlink" title="Running on an async queue"></a>Running on an async queue</h1><h3 id="Recommendations"><a href="#Recommendations" class="headerlink" title="Recommendations"></a>Recommendations</h3><p>You&#x2019;ll often want to rule sets. One for blocking live actions (for example stopping a user from signing up at all), and one for processing actions asynchronously. Since the asynchronous queue will not block the user, you can do a lot more complicated work.</p>
-<h3 id="Creating-a-Kafka-Consumer"><a href="#Creating-a-Kafka-Consumer" class="headerlink" title="Creating a Kafka Consumer"></a>Creating a Kafka Consumer</h3><p>It is possible to run SQRL inside a standard queue consumer with Kafka, however you may see issues with this approach as often processing single actions take a large amount of time.</p>
-<p>Our recommendation here is to have a separate consumer that farms actions out to individual works and gathers their responses (or timeouts) before committing the messages as processed in Kafka.</p>
-
+        <html><head><meta name="generator" content="Hexo 3.8.0"></head><body><h1 id="Running-on-an-async-queue"><a href="#Running-on-an-async-queue" class="headerlink" title="Running on an async queue"></a>Running on an async queue</h1><p>Production deployments of rule systems often have <strong>two</strong> rule sets.</p>
+<p>The <strong>sync</strong> ruleset is used to affect live actions. It is evaluated while the user is still waiting for a response, and as such needs to be <em>fast</em>. Exactly how fast on what you want your response times to be. A social networks might want less than <em>100ms</em>, but in the case of payments even <em>5000ms</em> is acceptable for improved accuracy. Results of rules firing here might mean blocked signups, displaying captchas or phone verification.</p>
+<p>A slower <strong>async</strong> ruleset is used especially when the required response time of the <strong>sync</strong> ruleset is very low. These rules scan events <em>after</em> they have happened and do more complicated analysis. The actions that may be taken here are putting the content up for manual review, and adding labels that the <strong>sync</strong> ruleset may use to block future actions.</p>
+<h3 id="SQRL-Kafka-Consumers"><a href="#SQRL-Kafka-Consumers" class="headerlink" title="SQRL Kafka Consumers"></a>SQRL Kafka Consumers</h3><p>It is possible to run SQRL inside a standard queue consumer with Kafka, however you may see issues with this approach as often processing single actions take a large amount of time. Our recommendation here is to have a separate event scheduler that consumes from Kafka, farms the work out to a number of different workers and then gathers their responses (or timeouts) before committing the results back to Kafka.</p>
+</body></html>
         <div id="react-support-footer-root"></div>
       </div>
     </div>
