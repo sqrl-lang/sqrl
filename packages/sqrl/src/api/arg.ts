@@ -11,7 +11,7 @@ import { ArgumentCheck } from "../ast/ArgumentCheck";
 export {
   ArgumentCheck,
   StateArgument,
-  WhenContextArgument
+  WhenCauseArgument
 } from "../ast/ArgumentCheck";
 
 interface OptArgumentCheck extends ArgumentCheck {
@@ -29,7 +29,7 @@ interface OptArgumentCheckWithRuntime extends ArgumentCheckWithRuntime {
 
 export const AT: {
   state: ArgumentCheck;
-  whenContext: ArgumentCheck;
+  whenCause: ArgumentCheck;
   any: OptArgumentCheckWithRuntime;
   feature: OptArgumentCheckWithRuntime;
   constant: {

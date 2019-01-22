@@ -12,7 +12,7 @@ import { WhenCause, FiredRule } from "../api/when";
 export { WhenCause, FiredRule };
 export function registerWhenFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
-    function _buildWhenContext(
+    function _buildWhenCause(
       state: SqrlExecutionState,
       ruleNames: string[],
       ruleFeatures: any[][]

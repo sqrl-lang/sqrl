@@ -15,9 +15,9 @@ export function compileWhenBlock(state: SqrlParserState, ast: WhenAst) {
   }
 
   const ruleNames = ast.rules.rules.map(feature => feature.value);
-  const whenContextAst = state.newGlobal(
+  const whenCauseAst = state.newGlobal(
     ast,
-    SqrlAst.call("_buildWhenContext", [
+    SqrlAst.call("_buildWhenCause", [
       SqrlAst.constant(ruleNames),
       SqrlAst.list(
         ...ruleNames.map(name => {
@@ -47,7 +47,7 @@ export function compileWhenBlock(state: SqrlParserState, ast: WhenAst) {
 
     const args = props.args;
     if (!Array.isArray(args)) {
-      // This is just to check if it has whenContext added
+      // This is just to check if it has whenCause added
       throw new Error(
         "Statements used in WHEN blocks must have defined arguments"
       );
@@ -57,25 +57,25 @@ export function compileWhenBlock(state: SqrlParserState, ast: WhenAst) {
     invariant(
       statement.args.length >= 2 &&
         statement.args[0].type === "state" &&
-        whenArg.type === "whenContext" &&
+        whenArg.type === "whenCause" &&
         !whenArg.slotName,
-      "Expected whenContext to automatically be inserted by AstTransformer"
+      "Expected whenCause to automatically be inserted by AstTransformer"
     );
 
     sqrlInvariant(
       statement,
       state.functionRegistry.isStatement(func) &&
         props.stateArg &&
-        props.whenContextArg,
+        props.whenCauseArg,
       `Function '${func}' must have a state and when context argument for use in a WHEN block`
     );
 
     state.pushStatement(
       SqrlAst.branch(
-        whenContextAst,
+        whenCauseAst,
         SqrlAst.call(func, [
           { type: "state" },
-          { type: "whenContext", slotName: whenContextAst.slotName },
+          { type: "whenCause", slotName: whenCauseAst.slotName },
           ...statement.args.slice(2)
         ])
       )

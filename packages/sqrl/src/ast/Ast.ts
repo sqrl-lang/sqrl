@@ -98,8 +98,8 @@ jsonFields.if = [];
 recurseFields.state = [];
 jsonFields.state = [];
 
-recurseFields.whenContext = [];
-jsonFields.whenContext = ["slotName"];
+recurseFields.whenCause = [];
+jsonFields.whenCause = ["slotName"];
 
 recurseFields.not = ["expr"];
 jsonFields.not = [];

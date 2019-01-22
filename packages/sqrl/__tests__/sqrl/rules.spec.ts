@@ -34,17 +34,17 @@ test("when context works", async () => {
   let saveCount = 0;
   let savedContext = null;
   functionRegistry._wrapped.save(
-    function saveContext(state, whenContext, word) {
+    function saveContext(state, whenCause, word) {
       saveCount += 1;
       savedContext = {
-        whenContext,
+        whenCause,
         word
       };
     },
     {
       statement: true,
       statementFeature: "SqrlSaveFunctions",
-      args: [AT.state, AT.whenContext, AT.any],
+      args: [AT.state, AT.whenCause, AT.any],
       allowNull: true
     }
   );
@@ -69,7 +69,7 @@ test("when context works", async () => {
   // We expect saveContext to only fire once
   expect(saveCount).toEqual(1);
   expect(savedContext).toEqual({
-    whenContext: {
+    whenCause: {
       firedRules: [
         { name: "RuleOne", reason: "" },
         { name: "RuleThree", reason: "5" }
@@ -78,13 +78,13 @@ test("when context works", async () => {
     word: "bloop"
   });
 
-  // Try fire it manually (without whenContext)
+  // Try fire it manually (without whenCause)
   await runSqrlTest('saveContext("manual!"); EXECUTE;', {
     functionRegistry
   });
   expect(saveCount).toEqual(2);
   expect(savedContext).toEqual({
-    whenContext: null,
+    whenCause: null,
     word: "manual!"
   });
 
@@ -103,7 +103,7 @@ test("when context works", async () => {
   );
   expect(saveCount).toEqual(3);
   expect(savedContext).toEqual({
-    whenContext: {
+    whenCause: {
       firedRules: [{ name: "RuleX", reason: "Got your 5 here!" }]
     },
     word: "fire!"

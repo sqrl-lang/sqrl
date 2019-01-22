@@ -13,7 +13,7 @@ import SqrlNode from "../object/SqrlNode";
 import { ensureArray } from "sqrl-common";
 import {
   StateArgument,
-  WhenContextArgument,
+  WhenCauseArgument,
   ArgumentCheck
 } from "./ArgumentCheck";
 
@@ -97,7 +97,7 @@ const compileCheckers = {
   feature: ensureAstType("feature"),
   list: ensureAstType("list"),
   state: new StateArgument(),
-  whenContext: new WhenContextArgument(),
+  whenCause: new WhenCauseArgument(),
   custom: typeChecker,
 
   compileTypesInvariant,

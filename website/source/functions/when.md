@@ -17,7 +17,7 @@ registry.registerStatement(
   {
     args: [
       AT.state,
-      AT.whenContext,
+      AT.whenCause,
       /* your own arguments go here */
     ],
     allowNull: true

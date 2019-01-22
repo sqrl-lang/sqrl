@@ -164,8 +164,8 @@ export interface StateAst extends BaseAst {
   type: "state";
 }
 
-export interface WhenContextAst extends BaseAst {
-  type: "whenContext";
+export interface WhenCauseAst extends BaseAst {
+  type: "whenCause";
   slotName?: string;
 }
 
@@ -246,4 +246,4 @@ export type Ast =
   | PriorityAst
   | ReplAst
   | WhenAst
-  | WhenContextAst;
+  | WhenCauseAst;

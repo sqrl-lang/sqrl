@@ -53,7 +53,7 @@ export function registerLabelFunctions(
     {
       args: [
         AT.state,
-        AT.whenContext,
+        AT.whenCause,
         AT.any.sqrlNodeOrNodes,
         AT.constant.string
       ],
@@ -79,7 +79,7 @@ export function registerLabelFunctions(
     {
       args: [
         AT.state,
-        AT.whenContext,
+        AT.whenCause,
         AT.any.sqrlNodeOrNodes,
         AT.constant.string
       ],

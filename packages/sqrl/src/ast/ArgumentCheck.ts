@@ -19,7 +19,7 @@ export class StateArgument implements ArgumentCheck {
   }
 }
 
-export class WhenContextArgument implements ArgumentCheck {
+export class WhenCauseArgument implements ArgumentCheck {
   readonly repeated = false;
   readonly isOptional = false;
   compileTimeCheck() {

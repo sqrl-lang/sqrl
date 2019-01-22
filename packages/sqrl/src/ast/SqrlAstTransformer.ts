@@ -41,7 +41,7 @@ const ignoreTypes = [
   "state",
   "value",
   "verdict_side_effect",
-  "whenContext"
+  "whenCause"
 ];
 
 const entriesToObj = (o, [k, v]) => Object.assign(o, { [k]: v });
@@ -153,15 +153,15 @@ export default class SqrlAstTransformer {
     if (props.stateArg) {
       const astArgs: Ast[] = [...ast.args];
 
-      if (props.whenContextArg) {
-        // Remove any state arguments before checking the whenContext
+      if (props.whenCauseArg) {
+        // Remove any state arguments before checking the whenCause
         if (astArgs.length > 0 && astArgs[0].type === "state") {
           astArgs.shift();
         }
 
-        if (astArgs.length === 0 || astArgs[0].type !== "whenContext") {
+        if (astArgs.length === 0 || astArgs[0].type !== "whenCause") {
           astArgs.unshift({
-            type: "whenContext"
+            type: "whenCause"
           });
         }
       }

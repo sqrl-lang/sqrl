@@ -324,7 +324,7 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
         return slotExpr(state, ast.slotName);
       } else if (ast.type === "state") {
         return { type: "state" };
-      } else if (ast.type === "whenContext") {
+      } else if (ast.type === "whenCause") {
         if (ast.slotName) {
           return slotExpr(state, ast.slotName);
         } else {

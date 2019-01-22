@@ -16,7 +16,7 @@ import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { nice } from "node-nice";
 import hrtimeToNs from "../jslib/hrtimeToNs";
 import { getGlobalLogger } from "../api/log";
-import { WhenContextArgument, StateArgument, ArgumentCheck } from "../api/arg";
+import { WhenCauseArgument, StateArgument, ArgumentCheck } from "../api/arg";
 import { ExecutionErrorProperties } from "../api/execute";
 
 const AsyncFunction = Object.getPrototypeOf(async function() {
@@ -53,7 +53,7 @@ export interface SaveFunctionProperties {
 }
 
 export interface FunctionProperties extends SaveFunctionProperties {
-  whenContextArg: boolean;
+  whenCauseArg: boolean;
 
   /* cost per million executions * intCostMultiplier */
   cost?: number;
@@ -292,7 +292,7 @@ export class SqrlFunctionRegistry {
     }
 
     let stateArg = props.stateArg;
-    let whenContextArg = false;
+    let whenCauseArg = false;
     if (props.args && Array.isArray(props.args)) {
       // If args are set, stateArg should be set as one of them
       invariant(
@@ -303,20 +303,20 @@ export class SqrlFunctionRegistry {
         if (arg instanceof StateArgument) {
           invariant(idx === 0, "State argument must be the first argument");
           stateArg = true;
-        } else if (arg instanceof WhenContextArgument) {
+        } else if (arg instanceof WhenCauseArgument) {
           invariant(
             idx === 1 && stateArg === true,
-            "WhenContext argument must be the second argument, with state as the first"
+            "WhenCause argument must be the second argument, with state as the first"
           );
-          whenContextArg = true;
+          whenCauseArg = true;
         }
       });
     }
 
-    if (whenContextArg) {
+    if (whenCauseArg) {
       invariant(
         props.allowNull,
-        "allowNull should be set with whenContextArg as the function may be called outside of a when block"
+        "allowNull should be set with whenCauseArg as the function may be called outside of a when block"
       );
     }
 
@@ -504,7 +504,7 @@ export class SqrlFunctionRegistry {
       lazyArguments,
       async: isAsync,
       stateArg,
-      whenContextArg
+      whenCauseArg
     });
   }
 }

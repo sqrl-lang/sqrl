@@ -25,7 +25,7 @@ export function registerBlockFunctions(
     },
     {
       statement: true,
-      args: [AT.state, AT.whenContext],
+      args: [AT.state, AT.whenCause],
       allowNull: true,
       statementFeature: "SqrlSaveStatements"
     }
@@ -37,7 +37,7 @@ export function registerBlockFunctions(
     },
     {
       statement: true,
-      args: [AT.state, AT.whenContext],
+      args: [AT.state, AT.whenCause],
       allowNull: true,
       statementFeature: "SqrlSaveStatements"
     }
