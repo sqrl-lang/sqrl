@@ -3,15 +3,19 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlExecutionState } from "sqrl/lib//execute/SqrlExecutionState";
 import * as micro from "micro";
 import * as microQuery from "micro-query";
 // tslint:disable-next-line:no-submodule-imports (it is the documented suggestion)
 import * as dispatch from "micro-route/dispatch";
 import { IncomingMessage, ServerResponse } from "http";
-import SqrlExecutable from "sqrl/lib/execute/SqrlExecutable";
-import { FiredRule } from "sqrl/lib/function/WhenFunctions";
-import { Context, FeatureMap, SimpleManipulator } from "sqrl";
+import {
+  Context,
+  FeatureMap,
+  SimpleManipulator,
+  Executable,
+  Execution,
+  FiredRule
+} from "sqrl";
 
 function userInvariant(cond, message) {
   if (!cond) {
@@ -43,7 +47,7 @@ interface ApiResponse {
 
 async function run(
   ctx: Context,
-  labeler: SqrlExecutable,
+  executable: Executable,
   req: IncomingMessage,
   res: ServerResponse
 ) {
@@ -54,13 +58,13 @@ async function run(
   const inputs = await micro.json(req, { limit: "128mb" });
 
   const manipulator = new SimpleManipulator();
-  const execution: SqrlExecutionState = await labeler.startExecution(ctx, {
+  const execution: Execution = await executable.execute(ctx, {
     manipulator,
     inputs,
     featureTimeoutMs
   });
 
-  await execution.fetchBasicByName("SqrlExecutionComplete");
+  await execution.fetchFeature("SqrlExecutionComplete");
 
   const rules: ApiRulesResponse = {};
   function ruleToName(rule: FiredRule) {
@@ -85,9 +89,7 @@ async function run(
       rv.features = {};
       await Promise.all(
         featureNames.map(async featureName => {
-          rv.features[featureName] = await execution.fetchBasicByName(
-            featureName
-          );
+          rv.features[featureName] = await execution.fetchValue(featureName);
         })
       );
     } catch (e) {
@@ -115,9 +117,9 @@ async function deleteRoute(
   throw micro.createError(500, "Not implemented\n");
 }
 
-export function createSqrlServer(ctx, labeler) {
+export function createSqrlServer(ctx: Context, executable: Executable) {
   const router = dispatch()
-    .dispatch("/run", ["POST"], (req, res) => run(ctx, labeler, req, res))
+    .dispatch("/run", ["POST"], (req, res) => run(ctx, executable, req, res))
     .dispatch("/delete", ["POST"], (req, res) => deleteRoute(ctx, req, res))
     .otherwise(async (req, res) => {
       throw micro.createError(404, "Route not found\n");

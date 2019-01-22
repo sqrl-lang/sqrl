@@ -4,12 +4,18 @@ logo:
   path: index.html
 
 main:
-  - text: SQRL Documentation
+  - text: Getting started
     type: link
     path: index.html
   - text: Defining Functions
     type: label
     children:
-      - text: Defining Functions
+      - text: Simple Functions
         type: link
-        path: defining-functions.html
+        path: functions/simple.html
+  - text: Production Deployments
+    type: label
+    children:
+      - text: Http Server
+        type: link
+        path: server.html

@@ -226,10 +226,13 @@ function buildFunctionRegistry(
   return { functionRegistry, services };
 }
 
+type FunctionRegistrator = (registry: FunctionRegistry) => void;
+
 export async function cliMain(
   args: CliArgs,
   closeables: CloseableGroup,
   options: {
+    registerFunctions?: FunctionRegistrator;
     output?: CliOutput;
     stdin?: Readable;
     stdout?: Writable;
@@ -250,6 +253,10 @@ export async function cliMain(
       args["<filename>"]
     );
     const { functionRegistry, services } = buildFunctionRegistry(args);
+    if (options.registerFunctions) {
+      options.registerFunctions(functionRegistry);
+    }
+
     const test = new SqrlTest(functionRegistry._wrapped, {
       filesystem,
       manipulatorFactory: () => new SimpleManipulator()
@@ -273,6 +280,10 @@ export async function cliMain(
     const ctx = defaultTrc;
 
     const { functionRegistry } = buildFunctionRegistry(args);
+    if (options.registerFunctions) {
+      options.registerFunctions(functionRegistry);
+    }
+
     // <filename> is sqrl source code
     let executable: Executable | null = null;
     let spec: ExecutableSpec = null;

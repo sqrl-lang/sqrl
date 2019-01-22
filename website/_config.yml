@@ -18,7 +18,7 @@ relative_link: false
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: ../../node_modules/hexo-theme-doc
+theme: ../../../hexo-theme-doc
 
 theme_config:
   favicon: images/favicon.ico

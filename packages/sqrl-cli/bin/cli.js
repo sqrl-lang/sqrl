@@ -5,4 +5,4 @@
 
 "use strict";
 
-require("../lib/runProcess").runProcess();
+require("../lib/index").run();
