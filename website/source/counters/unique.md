@@ -3,11 +3,7 @@ title: Unique Counters
 
 # Unique Counters
 
-also known as: **Time windowed set cardinality.**
-
-### Introduction
-
-Sometimes simple counters are not enough and you need more powerful counters. This is where unique counts, or time windowed set cardinalities, come into play.
+Sometimes simple counters are not enough and you need more powerful counters. This is where unique counts, or **time windowed set cardinalities**, come into play.
 
 ### Your first unique counter
 
@@ -24,10 +20,8 @@ It is rare that you just want to count unique values across your whole dataset. 
 Let's say we wanted to create a rule that blocks payments from users who have a suspicious number of credit cards. We could accomplish that with the following rule.
 
 ```
-LET NumCreditCards := countUnique(
-  CreditCard BY SessionActor LAST 5 DAYS);
-CREATE RULE SuspiciousNumCreditCards
-  WHERE NumCreditCards > 4;
+LET NumCreditCards := countUnique(CreditCard BY SessionActor LAST 5 DAYS);
+CREATE RULE SuspiciousNumCreditCards WHERE NumCreditCards > 4;
 ```
 
 Now, rather than counting all the unique credit cards we have seen for everyone, we are counting the number of cards by each individual user.
@@ -39,12 +33,9 @@ Let's bring it together with an example that includes a WHERE condition as well.
 We include the number of risky countries it has been seen in inside the rule reason. Finally we mark the rule as fully rolled out, and set it to both block the action and apply a bad_credit_card label to the card that was used.
 
 ```
-LET NumRiskyCountries := countUnique(
-  Country BY CreditCard WHERE RiskyCountry LAST 5 DAYS);
-CREATE RULE MultiRiskyCountryCreditCard
-  WHERE NumRiskyCountries > 1
-  WITH REASON "Credit card was used in ${NumRiskyCountries} risky "
-              "countries in last 5 days.";
+LET NumRiskyCountries := countUnique(Country BY CreditCard WHERE RiskyCountry LAST 5 DAYS);
+CREATE RULE MultiRiskyCountryCreditCard WHERE NumRiskyCountries > 1
+  WITH REASON "Credit card was used in ${NumRiskyCountries} risky countries in last 5 days.";
   
 WHEN MultiRiskyCountryCreditCard
   blockAction(),

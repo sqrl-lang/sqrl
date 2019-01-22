@@ -12,7 +12,7 @@ test("repl works", async () => {
       ...defaultCliArgs,
       compile: true,
       "--output": "expr",
-      "<filename>": __dirname + "/../../../../samples/hello.sqrl"
+      "<filename>": __dirname + "/../../../../examples/hello.sqrl"
     },
     ""
   );

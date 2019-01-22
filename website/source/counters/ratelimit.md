@@ -5,7 +5,8 @@ title: Rate limiters
 
 One of the most powerful ways to stop abuse is to create rate limiters. Rate limiters limit the number of times an action can be performed over a certain time period. By combining multiple features together, rate limiters become quite powerful.
 
-Your first rate limiter
+### Your first rate limiter
+
 A good first rate limiter is limiting the number of signups that can come from an individual IP address. You can begin by editing rules/actions/signup.sqrl (or the equivalent rules file for your signup action) and adding a rate limiter:
 
 ```
@@ -15,14 +16,15 @@ CREATE RULE QuickSignupsByIp
  
 The rateLimited function checks if the ratelimit has been hit. It has quite a few different options available. The ones in use here are:
 
-BY - The features to ratelimit by. Specifying multiple features (Ip, Machine) will group by each specific pair.
-MAX - The maximum number of actions allowed during the time period. In this case the first three events will not be ratelimited, but the fourth and onwards will.
-EVERY - How often the ratelimit will be reset. Valid timespan units are MONTHS, WEEKS, DAYS, HOURS, MINUTES, SECONDS.
-In this example, we're rate limiting by Ip address, and allow a maximum of three signups every ten minutes. If a given Ipaddress is used in an action four or more times in a 10 minutes window, then we mark the Ip address that is used with a "possible_bot" label.
+**BY** - The features to ratelimit by. Specifying multiple features (Ip, Machine) will group by each specific pair.
+**MAX** - The maximum number of actions allowed during the time period. In this case the first three events will not be ratelimited, but the fourth and onwards will.
+**EVERY** - How often the ratelimit will be reset. Valid timespan units are MONTHS, WEEKS, DAYS, HOURS, MINUTES, SECONDS.
+
+In this example, we're rate limiting by Ip address, and allow a maximum of three signups every ten minutes. If a given IP is used in an action four or more times in a 10 minutes window, then we mark the address that is used with a "possible_bot" label.
 
 ## Feature combinations
 
-Our previous rate limiter does a decent job of slowing down bots, but it's prone to false positives if an IP is shared amongst lots of users (like a university wifi access point). To reduce the false positive rate, we can increase the maxAmount for our existing NumSignups_TenMinutes_Ip rate limiter, and create a more strict rate limiter on a combination of features.
+Our previous rate limiter does a decent job of slowing down bots, but it's prone to false positives if an IP is shared amongst lots of users (like a university wifi access point). To reduce the false positive rate, we can increase the `maxAmount` for our existing `NumSignups_TenMinutes_Ip` rate limiter, and create a more strict rate limiter on a combination of features.
 
 For example, let's make a new rate limiter that limits how often the actions may be taken on the pair (Ip, UserAgent). To implement this, every unique user agent appearing on a given IP gets its own quota. With our previous rate limiter, all user agents appearing on a given IP share a single quota.
 
@@ -44,7 +46,8 @@ CREATE RULE MultipleHighValuePurchasesByActorDay WHERE
   rateLimited(BY Actor MAX 2 EVERY DAY WHERE IsHighDollarPaymentAmount);
 ```
  
-A strikes system example
+### A strikes system example
+
 You can use rate limiters to build advanced policies, such as a strikes system for rules.
 
 If you already have a rule in place and you want to give the user (or IP, or any combination of features) "3 strikes", simply do the following:
@@ -70,6 +73,7 @@ CREATE RULE MultipleHighValuePurchasesByActorDay
 The statement above will allow each Actor to make a maximum of 2 payments for $100 or above each DAY. Once a specific Actor has made the two payments in one day the rate limit will be triggered and any future payments (even if they are less than $100) will be flagged.
 
 ### Conditions inside and outside of the rateLimited clause
+
 The position of the IsHighDollarPaymentAmount inside or outside of the rateLimited() function changes the behavior.
 
 As an example, within one twenty-four hour period a user made the following payments in order: $110, $30, $10, $120, $200, $50.

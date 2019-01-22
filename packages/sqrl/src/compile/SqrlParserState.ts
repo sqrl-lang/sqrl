@@ -35,7 +35,6 @@ import SqrlFeatureSlot from "../slot/SqrlFeatureSlot";
 import { reduceTruthTable } from "./SqrlTruthTable";
 import { murmurhashJsonHexSync } from "../jslib/murmurhashJson";
 import { NodeId } from "../platform/NodeId";
-import { LABELER_FEATURE_FUNCTION } from "../function/StdlibFunctions";
 import { Filesystem, EmptyFilesystem } from "../api/filesystem";
 import SqrlRuleSlot from "../slot/SqrlRuleSlot";
 import { RuleSpec } from "../api/spec";
@@ -44,6 +43,7 @@ import { LogProperties, getGlobalLogger } from "../api/log";
 import { buildSqrlError } from "./buildSqrlError";
 import { sqrlInvariant } from "../api/parse";
 import { FeatureMap } from "../api/execute";
+import { INPUT_FUNCTION } from "../function/StdlibFunctions";
 
 export interface SqrlParserSourceOptions {
   statements: StatementAst[];
@@ -234,10 +234,7 @@ export class SqrlParserState extends SqrlParseInfo {
       "ParserState push statement not set"
     );
     if (ast.type === "let") {
-      if (
-        ast.expr.type === "call" &&
-        ast.expr.func === LABELER_FEATURE_FUNCTION
-      ) {
+      if (ast.expr.type === "call" && ast.expr.func === INPUT_FUNCTION) {
         if (!this.slotIsEmpty(ast.feature)) {
           throw buildSqrlError(ast, "Multiple definitions of feature");
         }

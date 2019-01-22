@@ -10,15 +10,13 @@ In order to provide automatic counters and other similar features, we impose som
 
 This is restricted to the following operations:
 
-* Feature truthness, and NOT (i.e. WHERE X, WHERE NOT Y)
-* Boolean AND/OR (i.e. WHERE X AND Y, WHERE (X AND Y) OR Z)
-* Equality / inequality with constants (i.e. WHERE X="A", WHERE Y!="B")
+* Features, and unary **NOT** (i.e. WHERE X, WHERE NOT Y)
+* Boolean **AND**/**OR** (i.e. WHERE X AND Y, WHERE (X AND Y) OR Z)
+* Equality (**=**) / inequality (**!=**) with constants (i.e. WHERE X="A", WHERE Y!="B")
 
 ## Counter values
 
-Smyte does not automatically track every counter you could possibly use in SQRL. The simple reason for this is cost savings... since keeping track of counters costs money, and since we allow an infinite set of different counters, we can't afford to spend infinite money on them.
-
-For most counters we'll only start tracking the counts when you first push the count(), countUnique(), checkPercentile()or similar call to our system. It is important to identify how counters are uniquely identified in our system to avoid unintentionally starting a new counter (and losing all previous values).
+For most counters we'll only start tracking the counts when you first push the count(), countUnique(). It is important to identify how counters are uniquely identified in SQRL to avoid unintentionally starting a new counter (and losing all previous values).
 
 For example the following two counters are maintained separately:
 
@@ -45,7 +43,7 @@ LET IsLogin := ActionName IN ["login", "mobile_login"];
 LET LoginCount := count(BY SessionActor WHERE IsLogin);
 ```
 
-In the above case since the body of the WHERE clause did not change any previous tracked counts under the "login"action will still exist.
+In the above case since the body of the WHERE clause did not change any previous tracked counts under the "login" action will still exist.
 
 ## INCLUDE statements
 
@@ -72,10 +70,7 @@ To achieve the same thing in a single file, the equivalent SQRL code would be:
 
 ```
 LET IsPurchase := ActionName = "purchase";
-LET NumPurchaseByActor := 
-  if(IsPurchase, count(BY SessionActor WHERE IsPurchase));
-LET ManyPurchaseByActor := 
-  if(IsPurchase, NumPurchaseByActor > 5);
-CREATE RULE ManyPurchases 
-  WHERE ManyPurcaseByActor AND IsPurchase;
+LET NumPurchaseByActor := if(IsPurchase, count(BY SessionActor WHERE IsPurchase));
+LET ManyPurchaseByActor := if(IsPurchase, NumPurchaseByActor > 5);
+CREATE RULE ManyPurchases WHERE ManyPurcaseByActor AND IsPurchase;
 ```

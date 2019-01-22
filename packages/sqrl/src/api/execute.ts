@@ -17,6 +17,7 @@ import { SourcePrinter } from "./executable";
 import { FunctionServices } from "../function/registerAllFunctions";
 import { SqrlObject } from "sqrl-common";
 import { SqrlKey } from "./object";
+import { isValidFeatureName } from "../feature/FeatureName";
 export interface ExecutionErrorProperties {
   functionName?: string;
   fatal?: boolean;
@@ -181,6 +182,20 @@ export class Executable {
    */
   getSourcePrinter(): SourcePrinter {
     return this._wrapped.sourcePrinter;
+  }
+
+  /**
+   * Get all the slot names that are available
+   */
+  getFeatures(): string[] {
+    return this._wrapped.getNames().filter(name => isValidFeatureName(name));
+  }
+
+  /**
+   * Get the required features
+   */
+  getRequiredFeatures(): string[] {
+    return this._wrapped.getRequiredSlotNames();
   }
 }
 

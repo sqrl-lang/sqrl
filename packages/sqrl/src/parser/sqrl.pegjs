@@ -159,7 +159,7 @@ SyncClause = value:("SYNC"i / "ASYNC"i) _ {
 // In future we could switch this to use CallStatement to allow for ` WHERE` clauses. That would
 // complicate the WHEN block significantly so leaving it out for now.
 WhenStatementList = first:CallExpr rest:(_? "," _? CallExpr)* {
-  return [first].concat(rest.map(item => item[1]));
+  return [first].concat(rest.map(item => item[3]));
 }
 
 RulesExpr = ("RULES"i _)? firstRule:FeatureExpr restRules:(_? "," _? FeatureExpr)* {

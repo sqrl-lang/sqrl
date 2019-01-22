@@ -108,6 +108,10 @@ export class SqrlExecutable {
   getNames() {
     return this.slotNames;
   }
+
+  getRequiredSlotNames() {
+    return this.requiredSlots.map(idx => this.slotNames[idx]);
+  }
 }
 
 export default SqrlExecutable;

@@ -5,14 +5,11 @@ services:
     ports:
      - "2288:2288"
     volumes:
-     - ./samples:/sqrl
+     - ./examples:/sqrl
     command:
      - sqrl
-     - --ratelimit=ratelimit:9049
      - --redis=redis:6379
      - serve
      - /sqrl/main.sqrl
   redis:
     image: "redis:alpine"
-  ratelimit:
-    image: "authbox/ratelimit"

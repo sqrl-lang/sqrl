@@ -37,6 +37,10 @@ export class ExecutableCompiler {
   buildExprs(ctx: Context) {
     return this._wrapped.fetchBuildOutput(ctx);
   }
+
+  getUsedFunctions(ctx: Context): string[] {
+    return this._wrapped.getUsedFunctions(ctx);
+  }
 }
 
 /**

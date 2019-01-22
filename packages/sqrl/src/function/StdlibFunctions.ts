@@ -12,7 +12,7 @@ import { sqrlInvariant, buildSqrlError } from "../api/parse";
 import SqrlAst from "../ast/SqrlAst";
 import { SqrlObject } from "../object/SqrlObject";
 
-export const LABELER_FEATURE_FUNCTION = "input";
+export const INPUT_FUNCTION = "input";
 
 export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
   registry.save(function functionList() {
@@ -37,7 +37,7 @@ export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
   });
 
   registry.save(null, {
-    name: LABELER_FEATURE_FUNCTION,
+    name: INPUT_FUNCTION,
     transformAst(state, ast: CallAst) {
       throw new Error(
         "This is a language feature, should not be called in runtime"

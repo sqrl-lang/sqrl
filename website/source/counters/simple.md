@@ -13,7 +13,7 @@ Here's an example of a simple counter that counts the number of action by a give
 LET NumMessages := count(BY User LAST WEEK);
 ```
 
-## Understanding the BY clause
+## Pairwise features
 
 You can create a counter by one or more features. In the above example for each unique **User** we have created another counter of the number of actions performed in the last week.
 
@@ -40,11 +40,11 @@ The list of available timespans are:
 * LAST DAY
 * LAST HOUR
 
-**Note:** *TOTAL* counts will still expire after 90 days if they have not been seen.
+**Note:** *TOTAL* counts will still expire after 90 days if they have not been seen for that period.
 
-## Counting with conditions
+## Conditions
 
-In the previous example we were only counting actions `WHERE ActionName="message"`. It is very easy to create more interesting counters by passing in a WHERE statement as well.
+It is very easy to create more interesting counters by passing in a WHERE statement as well.
 
 Let's imagine you were interested in tracking users who had a high percentage of messages with profanity. We could easily accomplish this by tracking two counts.
 
@@ -53,13 +53,13 @@ LET NumMessagesWithProfanity := count(BY User WHERE TextWithStrongProfanity LAST
 LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK); 
 ```
 
-Here we have set up two counters – NumMessagesWithProfanity will be increased when the text contains profanity, otherwise NumMessagesWithoutProfanity will be increased. Both counters are available to be read on every action.
+Here we have set up two counters – `NumMessagesWithProfanity` will be increased when the text contains profanity, otherwise `NumMessagesWithoutProfanity` will be increased. Both counters are available to be read on every action.
 
 ### Restrictions on conditions in WHERE clauses
 
 For reasons discussed under where expressions in our advanced documentation there are strict restrictions on what you can put in a WHERE clause. Anything other than simple equality, **AND**, **OR**, and **NOT** is not allowed.
 
-Since ActorAgeDays < 10 is invalid inside a counter where statement, if you wanted to only count messages by new actors you'll need to create another feature.
+Since `ActorAgeDays < 10` is invalid inside a counter where statement, if you wanted to only count messages by new actors you'll need to create another feature.
 
 The example below creates IsYoungActor and uses that in order to count how many messages were sent on the current ip address by users created in the last ten days.
 
@@ -68,7 +68,8 @@ LET IsYoungActor := ActorAgeDays < 10;
 LET NumMessagesByYoungActorsOnIp := count(BY Ip WHERE IsYoungActor);
 ```
  
-Labeling users that use a high percentage of profanity
+### Labeling users that use a high percentage of profanity
+
 To tie it all together we could create a rule for flagging users who have a high percentage of messages containing profanity.
 
 ``` 

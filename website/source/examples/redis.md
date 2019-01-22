@@ -14,11 +14,10 @@ $ source ./scripts/setup-sqrl-db-local-docker-env.sh
 
 $ cat > ratelimit.sqrl
 LET Ip := input();
-LET SqrlMutate := true;
 LET Remaining := rateLimit(BY Ip MAX 2 EVERY 30 SECONDS);
 
 CREATE RULE BlockedByRateLimit WHERE Remaining = 0;
-WHEN BlockedByRateLimit BLOCK ACTION;
+WHEN BlockedByRateLimit THEN blockAction();
 
 # Add an environment variable, could also use the `--redis=<>` option
 $ export SQRL_REDIS=localhost:6379

@@ -176,7 +176,3 @@ CREATE RULE 99PercentilePaymentVelocity
   WHERE IsPaymentVelocity99Percentile
   WITH REASON “User is in the 99th percentile for payment velocity: ${PaymentVelocity}”;
 ```
-
-## Conclusion
-
-As you can see, sessionization is a powerful tool to detect all sorts of malicious behavior - ranging from fake accounts, payment fraud, to bots and spam. At Smyte, we believe that taking a holistic approach; bringing back a human in the loop; and taking advantage of advances in stream processing are the keys to successfully combating abuse. Rather than solely relying on machine learning, we can use the abuse primitives Smyte provides in combination and create more powerful, transparent classifiers. If you are interested in learning more and would like a demo please reach out to sales@smyte.com.

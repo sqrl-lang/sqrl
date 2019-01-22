@@ -6,6 +6,7 @@
 import stringify = require("fast-stable-stringify");
 import { isValidFeatureName } from "../feature/FeatureName";
 import { Ast } from "../api/ast";
+import { buildSqrlError } from "../api/parse";
 export * from "../api/ast";
 
 const recurseFields: { [astType: string]: string[] } = {};
@@ -226,7 +227,7 @@ export function mapAst(ast: Ast, mapCallback: (node: Ast) => Ast): Ast {
   if (recurseFields.hasOwnProperty(ast.type)) {
     ast = mapFields(ast, recurseFields[ast.type], mapCallback);
   } else {
-    throw new Error("mapAst not defined for: " + ast.type);
+    throw buildSqrlError(ast, "mapAst not defined for: %s", ast.type);
   }
   return mapCallback(ast);
 }

@@ -239,6 +239,20 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     );
   }
 
+  getUsedFunctions(ctx: Context) {
+    const { slotExprs } = this.fetchBuildOutput(ctx);
+
+    const functions: Set<string> = new Set();
+    for (const expr of slotExprs) {
+      walkExpr(expr, node => {
+        if (node.type === "call") {
+          functions.add(node.func);
+        }
+      });
+    }
+    return Array.from(functions).sort();
+  }
+
   fetchBuildOutput(ctx: Context) {
     if (!this.built) {
       this.performBuild(ctx);

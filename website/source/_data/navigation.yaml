@@ -22,6 +22,12 @@ main:
   - text: Language
     type: label
     children:
+      - text: Nodes
+        type: link
+        path: language/nodes.html
+      - text: Labels
+        type: link
+        path: language/labels.html
       - text: Simple Counters
         type: link
         path: counters/simple.html

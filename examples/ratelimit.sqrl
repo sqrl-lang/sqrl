@@ -1,8 +1,9 @@
 LET RequestIp := input();
 LET Ip := node('Ip', RequestIp);
-LET SqrlMutate := true;
 
+# Note: You could use `WHERE rateLimited(BY ...)` instead of using `rateLimit()` and
+# checking the remaining tokens are empty.
 LET Remaining := rateLimit(BY Ip MAX 2 EVERY 30 SECONDS);
-
 CREATE RULE BlockedByRateLimit WHERE Remaining = 0;
+
 WHEN BlockedByRateLimit THEN blockAction();

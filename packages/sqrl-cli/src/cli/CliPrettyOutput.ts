@@ -14,6 +14,7 @@ import { SqrlCompileError } from "sqrl/lib/api/parse";
 import { CliOutputOptions, CliActionOutput } from "./CliOutput";
 import { FeatureMap, SimpleManipulator } from "sqrl";
 import { spanToShell } from "../spanToShell";
+import { CliError } from "./CliMain";
 
 const CHECKMARK = "\u2713";
 const CROSS = "\u2717";
@@ -89,6 +90,12 @@ export class CliPrettyOutput extends CliActionOutput {
         source: true,
         stacktrace: false
       });
+    } else if (err instanceof CliError) {
+      let output = chalk.redBright("Error: ") + err.message;
+      if (err.suggestion) {
+        output += "\n" + " ".repeat("Error: ".length) + err.suggestion;
+      }
+      return output;
     } else {
       return err.stack;
     }
@@ -102,7 +109,7 @@ export class CliPrettyOutput extends CliActionOutput {
     }
   }
 
-  compileError(err: Error) {
+  error(err: Error) {
     this.line(this.errorText(err));
   }
 

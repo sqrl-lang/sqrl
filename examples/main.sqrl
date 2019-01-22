@@ -1,0 +1,20 @@
+LET EventName := input();
+LET RequestIp := input();
+
+LET Ip := node('Ip', RequestIp);
+LET IsSignup := EventName IN ["signup", "new_account"];
+LET PreviouslyRateLimited := hasLabel(Ip, "rate_limited");
+
+# Limit user to three signups every 30 seconds, but only one if they previously
+# hit a ratelimit.
+CREATE RULE SignupRateLimit
+  WHERE IsSignup AND (
+    rateLimited(BY Ip MAX 3 EVERY 30 SECONDS WHERE IsSignup) OR
+    rateLimited(BY Ip MAX 1 EVERY 30 SECONDS WHERE IsSignup AND PreviouslyRateLimited)
+  );
+
+CREATE RULE ActionRateLimit WHERE rateLimited(BY Ip MAX 5 EVERY 30 SECONDS);
+
+WHEN ActionRateLimit, SignupRateLimit THEN
+  blockAction(),
+  addLabel(Ip, "rate_limited");

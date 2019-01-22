@@ -10,14 +10,13 @@ One way of running SQRL in production is by running it as a stateless server:
 ```
 $ cat > ratelimit.sqrl
 LET Ip := input();
-LET SqrlMutate := true;
 LET Remaining := rateLimit(BY Ip MAX 2 EVERY 30 SECONDS);
 
 CREATE RULE BlockedByRateLimit WHERE Remaining = 0;
 WHEN BlockedByRateLimit BLOCK ACTION;
 
-$ ./sqrl serve --port=2288 samples/ratelimit.sqrl
-Serving samples/ratelimit.sqrl on port 2288
+$ ./sqrl serve --port=2288 examples/ratelimit.sqrl
+Serving examples/ratelimit.sqrl on port 2288
 ```
 
 Once your server is up and running, it will serve traffic over HTTP. You can test it out with the `curl` command line tool, sending it a sample request from the IP address **1.2.3.4**:

@@ -18,6 +18,7 @@ import {
 } from "sqrl";
 import { invariant, SqrlObject, mapObject } from "sqrl-common";
 import * as csvStringify from "csv-stringify";
+import { CliError } from "./CliMain";
 
 // @todo: This could be made a command line option
 const MAX_TABLE_ROWS = 50;
@@ -33,8 +34,12 @@ export abstract class CliOutput {
   close() {
     return;
   }
-  compileError(err: Error) {
-    console.error("Compile failed: " + err.toString());
+  error(err: Error) {
+    if (err instanceof CliError) {
+      console.error("Error: " + err.message);
+    } else {
+      console.error(err.stack);
+    }
   }
   sourceRecompiling() {
     return;

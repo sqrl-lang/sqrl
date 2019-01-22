@@ -9,10 +9,16 @@ Once you start getting a feel for SQRL and want to try play around in realtime, 
 
 ```
 $ ./sqrl repl
-sqrl> LET ActionData := {"name": "hi"};
-{ name: 'hi' }
+sqrl> LET ActionData := {"name": "hi", "user_id": "1.2.3.4"};
+{ name: 'hi', user_id: '1.2.3.4' }
 sqrl> LET ActionName := jsonValue(ActionData, "$.name")
 'hi'
+sqrl> LET UserId := jsonValue(ActionData, "$.user_id")
+'1234'
+sqrl > LET User := node('User', UserId)
+node<User/1234> {
+  uniqueId<2019-01-18T03:58:57.834Z@1>
+}
 sqrl> printSource(ActionName);
 function() {
   const f0 = () =>

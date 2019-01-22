@@ -68,6 +68,8 @@ import { invariant } from "sqrl-common";
 
 const readFileAsync = promisify(readFile);
 
+const STATEFUL_FUNCTIONS = ["_fetchRateLimit", "_fetchSession", "_node"];
+
 export const CliDoc = `
 Usage:
   sqrl [options] print <filename> [(-s <key=value>)...]
@@ -111,7 +113,18 @@ export interface CliArgs {
   "--concurrency": string;
 }
 
-export class CliError extends Error {}
+export class CliError extends Error {
+  readonly suggestion: string | null;
+  constructor(
+    message: string,
+    options: {
+      suggestion?: string;
+    } = {}
+  ) {
+    super(message);
+    this.suggestion = options.suggestion || null;
+  }
+}
 
 async function readJsonFile(filename: string) {
   const data = await readFileAsync(filename, { encoding: "utf-8" });
@@ -144,7 +157,7 @@ export function getCliOutput(
   } else if (args["--output"] === "slot-js") {
     return new CliSlotJsOutput(stdout);
   } else {
-    throw new Error("Unknown output type: " + args["--output"]);
+    throw new CliError("Unknown output type: " + args["--output"]);
   }
 }
 
@@ -193,15 +206,17 @@ class CliAssertService implements AssertService {
 }
 
 function buildFunctionRegistry(
-  args: CliArgs
+  args: CliArgs,
+  options: {
+    redisAddress?: string;
+  }
 ): {
   functionRegistry: FunctionRegistry;
   services: FunctionServices;
 } {
-  const redisAddress = args["--redis"] || process.env.SQRL_REDIS;
   let redisServices: RedisServices;
-  if (redisAddress) {
-    redisServices = buildServices(redisAddress);
+  if (options.redisAddress) {
+    redisServices = buildServices(options.redisAddress);
   } else {
     redisServices = buildServicesWithMockRedis();
   }
@@ -215,9 +230,9 @@ function buildFunctionRegistry(
   const functionRegistry = SQRL.buildFunctionRegistry(services);
 
   // @TODO: Need to work on how these additional functions get loaded
-  if (redisAddress) {
+  if (options.redisAddress) {
     // @TODO: shutdown.push(services);
-    registerRedis(functionRegistry, buildServices(redisAddress));
+    registerRedis(functionRegistry, buildServices(options.redisAddress));
   } else {
     registerRedis(functionRegistry, buildServicesWithMockRedis());
   }
@@ -248,11 +263,15 @@ export async function cliMain(
     closeables.add(output);
   }
 
+  const redisAddress = args["--redis"] || process.env.SQRL_REDIS;
+
   if (args.test) {
     const { filesystem, source } = await sourceOptionsFromPath(
       args["<filename>"]
     );
-    const { functionRegistry, services } = buildFunctionRegistry(args);
+    const { functionRegistry, services } = buildFunctionRegistry(args, {
+      redisAddress
+    });
     if (options.registerFunctions) {
       options.registerFunctions(functionRegistry);
     }
@@ -279,7 +298,7 @@ export async function cliMain(
   ) {
     const ctx = defaultTrc;
 
-    const { functionRegistry } = buildFunctionRegistry(args);
+    const { functionRegistry } = buildFunctionRegistry(args, { redisAddress });
     if (options.registerFunctions) {
       options.registerFunctions(functionRegistry);
     }
@@ -342,11 +361,37 @@ export async function cliMain(
 
     if (args["<filename>"]) {
       ({ executable, spec, compiler } = await loadSource());
+
+      for (const feature of executable.getRequiredFeatures()) {
+        if (!inputs.hasOwnProperty(feature)) {
+          throw new CliError("Required input was not provided: " + feature, {
+            suggestion: `Try add: -s ${feature}=<value>`
+          });
+        }
+      }
+
+      const allFeatures = executable.getFeatures();
+      for (const feature of [...args["<feature>"], ...Object.keys(inputs)]) {
+        if (!allFeatures.includes(feature)) {
+          throw new CliError("Feature not defined: " + feature);
+        }
+      }
+
+      if (compiler && !redisAddress) {
+        for (const func of compiler.getUsedFunctions(ctx)) {
+          if (STATEFUL_FUNCTIONS.includes(func)) {
+            console.error(
+              "Warning: Using stateful functions but `--redis` flag was not provided. State will be in-memory only."
+            );
+            break;
+          }
+        }
+      }
     }
 
     if (args.run) {
       if (!(output instanceof CliActionOutput)) {
-        throw new Error("Output format not compatible with `run`");
+        throw new CliError("Output format not compatible with `run`");
       }
       run = new CliRun(executable, output);
       compilingLock.release();
@@ -374,7 +419,7 @@ export async function cliMain(
       executable.getSourcePrinter().printAllSource();
     } else if (args.compile) {
       if (!(output instanceof CliCompileOutput)) {
-        throw new Error("Output format not compatible with `compile`");
+        throw new CliError("Output format not compatible with `compile`");
       }
       invariant(compiler, "Compile options must include a filename");
       await output.compiled(spec, compiler);
