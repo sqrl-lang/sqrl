@@ -39,30 +39,30 @@
     "watch:test:integration": "npm run test:integration -- --watch"
   },
   "devDependencies": {
-    "@types/jest": "^22.0.1",
+    "@types/jest": "^23.3.13",
     "@types/node": "^8.10.38",
-    "jest": "^22.4.4",
-    "ts-jest": "^22.4.6",
-    "ts-node": "^5.0.1",
-    "typescript": "^3.1.6"
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.4"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "dependencies": {
     "@types/chokidar": "^1.7.5",
-    "chalk": "^2.4.1",
+    "chalk": "^2.4.2",
     "chokidar": "^2.0.4",
-    "csv-stringify": "^5.1.2",
+    "csv-stringify": "^5.2.0",
     "docopt": "^0.6.2",
     "eventemitter3": "^3.1.0",
     "expand-tilde": "^2.0.2",
     "fast-stable-stringify": "^1.0.0",
-    "micro": "^9.3.2",
+    "micro": "^9.3.3",
     "micro-query": "^0.3.0",
     "micro-route": "^2.5.0",
-    "moment": "^2.22.2",
-    "split2": "^3.0.0",
+    "moment": "^2.23.0",
+    "split2": "^3.1.0",
     "sqrl": "file:../sqrl",
     "sqrl-common": "file:../sqrl-common",
     "sqrl-redis-functions": "file:../sqrl-redis-functions",

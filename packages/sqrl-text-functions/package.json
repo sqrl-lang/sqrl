@@ -35,19 +35,19 @@
     "watch:test:integration": "npm run test:integration -- --watch"
   },
   "devDependencies": {
-    "@types/jest": "^22.0.1",
+    "@types/jest": "^23.3.13",
     "@types/node": "^8.10.38",
-    "jest": "^22.4.4",
-    "ts-jest": "^22.4.6",
-    "ts-node": "^5.0.1",
-    "typescript": "^3.1.6"
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.4"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "dependencies": {
     "node-nice": "0.0.1",
-    "re2": "^1.8.3",
+    "re2": "^1.8.4",
     "simhash-js": "^1.0.0",
     "sqrl": "file:../sqrl"
   }
