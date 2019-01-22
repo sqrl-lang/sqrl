@@ -36,6 +36,11 @@ class RegisteredPattern {
   }
 }
 
+/**
+ * This is a simple class that runs regular expressions in the same process.
+ * For production scale use cases it is recommended to split this off into a
+ * separate process or service so that it does not block the event loop.
+ */
 export class InProcessPatternService implements PatternService {
   private patterns: {
     [source: string]: RegisteredPattern;

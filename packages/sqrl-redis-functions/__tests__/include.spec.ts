@@ -4,15 +4,14 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 // tslint:disable:no-submodule-imports (@TODO)
-import { VirtualSourceTree } from "sqrl/__tests__/helpers/runCompile";
 import { buildRedisTestFunctionRegistry } from "./helpers/runSqrl";
-import { executableFromFilesystem } from "sqrl";
+import { executableFromFilesystem, VirtualFilesystem } from "sqrl";
 
 test("works with counts", async () => {
   const functionRegistry = await buildRedisTestFunctionRegistry();
   const executable = await executableFromFilesystem(
     functionRegistry,
-    new VirtualSourceTree({
+    new VirtualFilesystem({
       "x.sqrl": `
   LET Count := count(BY Ip);
     `,

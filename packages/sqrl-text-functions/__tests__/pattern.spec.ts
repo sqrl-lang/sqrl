@@ -3,16 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { VirtualSourceTree } from "../../sqrl/__tests__/helpers/runCompile";
-import { register } from "../src";
-import { buildTestFunctionRegistry, runSqrlTest } from "sqrl";
+import { VirtualFilesystem } from "sqrl";
+import { textSqrlTest } from "./helpers/textSqrlTest";
 
-test("patternMatches works", async () => {
-  const functionRegistry = await buildTestFunctionRegistry();
-  register(functionRegistry);
-
-  await runSqrlTest(
-    `
+textSqrlTest(
+  "works",
+  `
 LET Text := ["hello world"];
 ASSERT patternMatches('BlacklistedKeywords.txt', Text) = []; # no hello
 
@@ -34,11 +30,9 @@ ASSERT patternMatches('./BlacklistedKeywords.txt', Bar) = [
 ];
 
     `,
-    {
-      functionRegistry,
-      filesystem: new VirtualSourceTree({
-        "BlacklistedKeywords.txt": "badkeyword\n" + "/ba+d2/\n"
-      })
-    }
-  );
-});
+  {
+    filesystem: new VirtualFilesystem({
+      "BlacklistedKeywords.txt": "badkeyword\n" + "/ba+d2/\n"
+    })
+  }
+);

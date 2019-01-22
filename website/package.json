@@ -14,7 +14,7 @@
     "hexo-renderer-marked": "^0.2.10",
     "hexo-renderer-sass": "^0.3.2",
     "hexo-server": "^0.2.1",
-    "hexo-theme-doc": "^0.1.0"
+    "hexo-theme-doc": "file:themes/hexo-theme-doc"
   },
   "scripts": {
     "deploy-website": "hexo deploy --generate"

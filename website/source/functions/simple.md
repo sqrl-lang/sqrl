@@ -1,11 +1,11 @@
-title: SQRL - Simple Functions
+title: Simple Functions
 ---
 
 # Defining simple functions
 
 ### Creating a package that uses SQRL
 
-We recommend developing SQRL functions using (TypeScript)[https://www.typescriptlang.org]. Getting set up with TypeScript is out of scope for this tutorial, but as a prerequisite you should be comfortable running TypeScript code on the command line.
+We recommend developing SQRL functions using [TypeScript](https://www.typescriptlang.org). Getting set up with TypeScript is out of scope for this tutorial, but as a prerequisite you should be comfortable running TypeScript code on the command line.
 
 First install the `sqrl` package. We'll also install the `sqrl-cli` package which makes it easy to create a command line application to test with.
 
@@ -33,7 +33,7 @@ import { run } from "sqrl-cli";
 run({ registerFunctions });
 ```
 
-Now if you run your TypeScript file, you should get the standard SQRL command line interface with your function included. We use (ts-node)[https://github.com/TypeStrong/ts-node] so that you don't have to recompile each time.
+Now if you run your TypeScript file, you should get the standard SQRL command line interface with your function included. We use [ts-node](https://github.com/TypeStrong/ts-node) so that you don't have to recompile each time.
 
 ```
 $ ts-node src/cli.ts repl

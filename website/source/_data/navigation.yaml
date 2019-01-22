@@ -4,18 +4,63 @@ logo:
   path: index.html
 
 main:
-  - text: Getting started
+  - text: Documentation
     type: link
     path: index.html
+  - text: Examples
+    type: label
+    children:
+      - text: Redis Database
+        type: link
+        path: examples/redis.html
+      - text: REPL
+        type: link
+        path: examples/repl.html
+      - text: Wikipedia
+        type: link
+        path: examples/wikipedia.html
+  - text: Language
+    type: label
+    children:
+      - text: Simple Counters
+        type: link
+        path: counters/simple.html
+      - text: Unique Counters
+        type: link
+        path: counters/unique.html
+      - text: Rate limiters
+        type: link
+        path: counters/ratelimit.html
+      - text: Sessionization
+        type: link
+        path: counters/session.html
+      - text: Text Pattern Matching
+        type: link
+        path: language/textpattern.html
+      - text: Where Clauses
+        type: link
+        path: language/where.html
   - text: Defining Functions
     type: label
     children:
       - text: Simple Functions
         type: link
         path: functions/simple.html
+      - text: Statements
+        type: link
+        path: functions/statement.html
+      - text: When Clauses
+        type: link
+        path: functions/when.html
+      - text: Custom Functions
+        type: link
+        path: functions/custom.html
   - text: Production Deployments
     type: label
     children:
       - text: Http Server
         type: link
-        path: server.html
+        path: deployment/server.html
+      - text: Async Queues
+        type: link
+        path: deployment/async.html

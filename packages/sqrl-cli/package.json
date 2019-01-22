@@ -2,7 +2,7 @@
   "name": "sqrl-cli",
   "version": "0.5.0",
   "description": "> TODO: description",
-  "homepage": "",
+  "homepage": "https://twitter.github.io/sqrl",
   "bin": {
     "sqrl": "bin/cli.js"
   },

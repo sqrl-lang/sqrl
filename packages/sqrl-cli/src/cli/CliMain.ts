@@ -38,7 +38,7 @@ import {
 } from "sqrl-redis-functions";
 import { sourceOptionsFromPath } from "sqrl/lib/helpers/CompileHelpers";
 import { createDefaultContext } from "sqrl/lib/helpers/ContextHelpers";
-import { WatchedSourceTree } from "./WatchedSourceTree";
+import { WatchedFilesystem } from "./WatchedFilesystem";
 import { CliPrettyOutput } from "./CliPrettyOutput";
 import { CliRun } from "./CliRun";
 import Semaphore from "sqrl/lib/jslib/Semaphore";
@@ -289,13 +289,13 @@ export async function cliMain(
     let spec: ExecutableSpec = null;
     let compiler: ExecutableCompiler = null;
 
-    let watchedSource: WatchedSourceTree = null;
-    let sourceTree: Filesystem;
+    let watchedSource: WatchedFilesystem = null;
+    let filesystem: Filesystem;
     if (args["--stream"]) {
-      watchedSource = new WatchedSourceTree(path.dirname(args["<filename>"]));
-      sourceTree = watchedSource;
+      watchedSource = new WatchedFilesystem(path.dirname(args["<filename>"]));
+      filesystem = watchedSource;
     } else if (args["<filename>"]) {
-      sourceTree = new LocalFilesystem(path.dirname(args["<filename>"]));
+      filesystem = new LocalFilesystem(path.dirname(args["<filename>"]));
     }
 
     /***
@@ -311,7 +311,7 @@ export async function cliMain(
           compiler: null
         };
       } else {
-        return compileFromFilesystem(functionRegistry, sourceTree, {
+        return compileFromFilesystem(functionRegistry, filesystem, {
           context: ctx,
           mainFile: path.basename(args["<filename>"]),
           setInputs: inputs

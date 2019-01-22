@@ -55,3 +55,32 @@ export class LocalFilesystem extends Filesystem {
     return readFileSync(path);
   }
 }
+
+export class VirtualFilesystem extends Filesystem {
+  constructor(
+    private source: {
+      [path: string]: string;
+    }
+  ) {
+    super();
+  }
+
+  tryList(folder: string) {
+    // Return null if the path pointed to a file
+    if (this.source[folder]) {
+      return null;
+    }
+    return Object.keys(this.source)
+      .filter(path => path.startsWith(folder + "/"))
+      .map(path => path.substring((folder + "/").length));
+  }
+  tryRead(path: string) {
+    if (this.source[path]) {
+      return Buffer.from(this.source[path]);
+    }
+    return null;
+  }
+  tryResolve(path: string) {
+    return path;
+  }
+}

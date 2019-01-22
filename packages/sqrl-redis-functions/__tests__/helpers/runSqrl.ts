@@ -32,11 +32,15 @@ export async function runSqrl(
   options: {
     functionRegistry?: FunctionRegistry;
     logger?: Logger;
+    startMs?: number;
   } = {}
 ) {
   return runLibSqrl(sqrl, {
     functionRegistry:
-      options.functionRegistry || (await buildRedisTestFunctionRegistry()),
+      options.functionRegistry ||
+      (await buildRedisTestFunctionRegistry({
+        startMs: options.startMs
+      })),
     logger: options.logger
   });
 }

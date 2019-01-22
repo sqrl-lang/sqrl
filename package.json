@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "sqrl-monorepo",
+  "homepage": "https://twitter.github.io/sqrl",
   "dependencies": {
     "lerna": "^3.6.0"
   },

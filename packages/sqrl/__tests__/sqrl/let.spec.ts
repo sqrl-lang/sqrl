@@ -6,11 +6,10 @@
 import {
   runCompile,
   compileToExecution,
-  fetchExecutableFeature,
-  VirtualSourceTree
+  fetchExecutableFeature
 } from "../helpers/runCompile";
 import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
-import { executableFromFilesystem } from "../../src";
+import { executableFromFilesystem, VirtualFilesystem } from "../../src";
 import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
 test("supports basic statements", async () => {
@@ -95,7 +94,7 @@ test("supports where default values", async () => {
   await expect(
     executableFromFilesystem(
       await buildTestFunctionRegistry(),
-      new VirtualSourceTree({
+      new VirtualFilesystem({
         "main.sqrl": `
     LET Act := "b";
     INCLUDE "a.sqrl" WHERE Act="a";
@@ -112,7 +111,7 @@ test("supports where default values", async () => {
 
   const executable = await executableFromFilesystem(
     await buildTestFunctionRegistry(),
-    new VirtualSourceTree({
+    new VirtualFilesystem({
       "main.sqrl": `
     LET Choose := input();
     INCLUDE "default.sqrl";

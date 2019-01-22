@@ -12,38 +12,8 @@ import { statementsFromString } from "../../src/helpers/CompileHelpers";
 import { JsExecutionContext } from "../../src/execute/JsExecutionContext";
 import SqrlExecutable from "../../src/execute/SqrlExecutable";
 import { createDefaultContext } from "../../src/helpers/ContextHelpers";
-import { Filesystem } from "../../src/api/filesystem";
 import { FeatureMap } from "../../src/api/execute";
 import { SimpleManipulator } from "../../src/simple/SimpleManipulator";
-
-export class VirtualSourceTree extends Filesystem {
-  constructor(
-    private source: {
-      [path: string]: string;
-    }
-  ) {
-    super();
-  }
-
-  tryList(folder: string) {
-    // Return null if the path pointed to a file
-    if (this.source[folder]) {
-      return null;
-    }
-    return Object.keys(this.source)
-      .filter(path => path.startsWith(folder + "/"))
-      .map(path => path.substring((folder + "/").length));
-  }
-  tryRead(path: string) {
-    if (this.source[path]) {
-      return Buffer.from(this.source[path]);
-    }
-    return null;
-  }
-  tryResolve(path: string) {
-    return path;
-  }
-}
 
 export async function runCompile(sqrl: string) {
   const functionRegistry = new SqrlFunctionRegistry();

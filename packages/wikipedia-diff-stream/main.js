@@ -5,7 +5,6 @@
 
 var EventSource = require("eventsource");
 var request = require("request-promise-native");
-var jsdiff = require("diff");
 var WtfWikipedia = require("wtf_wikipedia");
 var diffMatchPatch = require("diff-match-patch-node")();
 
@@ -28,12 +27,9 @@ function diffAdded(r1, r2) {
     .join("\n");
 }
 
-var one = "beep boop";
-var other = "beep boob blah";
-
 var url = "https://stream.wikimedia.org/v2/stream/recentchange";
 
-function usage(message) {
+function usage() {
   console.error("Usage: wikipedia-json <wiki domain>");
   console.error("Example: wikipedia-json en.wikipedia.org");
   process.exit(1);

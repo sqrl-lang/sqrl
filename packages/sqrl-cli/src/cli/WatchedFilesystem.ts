@@ -7,7 +7,7 @@ import { Filesystem, LocalFilesystem } from "sqrl";
 import * as chokidar from "chokidar";
 import { join } from "path";
 
-export class WatchedSourceTree extends Filesystem {
+export class WatchedFilesystem extends Filesystem {
   private watcher: chokidar.FSWatcher;
   private fs: LocalFilesystem;
   constructor(private pwd: string) {

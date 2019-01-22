@@ -1,11 +1,11 @@
-title: SQRL - Introduction
+title: Introduction
 ---
 
 # SQRL
 
 **A Safe, Stateful Rules Language for Event Streams**
 
-### This is a **beta release**.
+### :boom: This is a **beta release**. :boom:
 
 The code here *was* used by Smyte pre-acquisition but has not been tested in a production since it was extracted from the code base. We plan to work with the community on making it production ready, but we want to set expectations correctly. We hope you find it useful. :squirrel:
 
@@ -15,24 +15,30 @@ At Smyte we needed a solution that would allow our customers to write their own 
 
 ## Getting Started
 
-To get started:
+**SQRL** is designed to be used as a library, but the easiest way to see what it can do is to try out the command line interface.
 
-```bash
-$ npm install
-$ ./examples/wikipedia/stream
+```
+$ npm install --global sqrl-cli
+$ cat > simple.sqrl
+LET ActionData := input();
+LET ActionName := jsonValue(ActionData, '$.name');
+
+$ sqrl run simple.sqrl -s 'ActionData={"name":"login"}' ActionName
+✓ 2019-01-14 15:09 action was allowed.
+ActionName="login"
 ```
 
-Now look at the source that is being run
+Once you've got that running, you can dive into our example section:
+* Set up external state storage in [Redis](examples/redis.html)
+* See a real-life use case on [Wikipedia](examples/wikipedia.html)
 
-open `examples/wikipedia/main.sqrl`
+### Extending SQRL with functions and counters
 
-## Extending SQRL with functions and counters
+The [`sqrl`](https://github.com/twitter/sqrl/tree/master/packages/sqrl) package includes a base set of functions that should be common to any application. None of them require any external network access or databases, and should fulfill your basic.
 
-The `sqrl` package inscludes a base set of functions that should be common to any application. None of them require any extrenal network access or databases, and fulfil the basic needs of mathematics and simple text analysis.
+We've included [`sqrl-text-functions`](https://github.com/twitter/sqrl/tree/master/packages/sqrl-text-functions) which has more advanced text analysis functions such as RE2 regular expression based pattern matching, and `simhash()` which returns similar values for similar text.
 
-The `sqrl-text-functions` includes some more advanced text analysis functions such as RE2 regular expression based pattern matching, and `simhash()` which returns similar values for similar text.
-
-The real power of SQRL comes with its streaming counters. While the *Redis database* is not the best choice for large production systems, it is one of the most wildly available and easy to set up choices. The `sqrl-redis-functions` builds a couple of common counters on top of this database:
+The real power of SQRL comes with its streaming counters. While the *Redis database* is not the best choice for large production systems, it is one of the most wildly available and easy to set up choices. The [`sqrl-redis-functions`](https://github.com/twitter/sqrl/tree/master/packages/sqrl-redis-functions) builds a couple of common counters on top of this database:
 * count()
 * countUnique()
 * rateLimit()

@@ -3,17 +3,17 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
+import { runExecutable, fetchExecutableFeature } from "../helpers/runCompile";
 import {
-  runExecutable,
-  fetchExecutableFeature,
-  VirtualSourceTree
-} from "../helpers/runCompile";
-import { executableFromFilesystem, buildTestFunctionRegistry } from "../../src";
+  executableFromFilesystem,
+  buildTestFunctionRegistry,
+  VirtualFilesystem
+} from "../../src";
 
 test("supports include statements", async () => {
   const executable = await executableFromFilesystem(
     await buildTestFunctionRegistry(),
-    new VirtualSourceTree({
+    new VirtualFilesystem({
       "sample.sqrl": `
     LET A := "Hello ";
       `,
@@ -56,7 +56,7 @@ LET NullMessage := concat(A, B, C);
 test("supports dynamic include", async () => {
   const executable = await executableFromFilesystem(
     await buildTestFunctionRegistry(),
-    new VirtualSourceTree({
+    new VirtualFilesystem({
       "features/foo_action.sqrl": `
 LET Thing := "from foo action";
   `,
@@ -97,7 +97,7 @@ INCLUDE "features/\${Action}.sqrl";
   await expect(
     executableFromFilesystem(
       await buildTestFunctionRegistry(),
-      new VirtualSourceTree({
+      new VirtualFilesystem({
         "features/foo_action.sqrl": `
 LET Thing := "from foo action";
   `,
