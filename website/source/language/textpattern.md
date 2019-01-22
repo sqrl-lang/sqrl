@@ -26,6 +26,5 @@ This feature is also useful for maintaining blacklists, in this example of email
 ```
 LET BlacklistedEmailMatches := patternMatches("BlacklistedEmail.txt", ActorEmail);
 CREATE RULE UsedBlacklistedEmail WHERE BlacklistedEmailMatches
-  WITH REASON "Email contained blacklisted patterns: "
-              "${BlacklistedEmailMatches}";
+  WITH REASON "Email contained blacklisted patterns: ${BlacklistedEmailMatches}";
 ```

@@ -70,3 +70,8 @@ main:
       - text: Async Queues
         type: link
         path: deployment/async.html
+  - text: External Resources
+    type: label
+  - text: View on GitHub
+    type: link
+    path: https://github.com/twitter/sqrl

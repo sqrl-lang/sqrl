@@ -1,28 +1,51 @@
-title: When Clause Functions
+title: When Cause Functions
 ---
 
-# When clause functions
+# When cause functions
 
-### Functions on WHEN clauses
+One of the advantages of using a rules language like **SQRL** is that the actions taken by the system can easily be explained and understood.
+
+```
+CREATE RULE SimilarTextIpSpam WHERE
+  rateLimited(BY TextSimhash MAX 10 EVERY MINUTE)
+  WITH REASON "Used similar text (${TextSimhash}) more than ten times in a single minute.";
+
+WHEN SimilarTextIpSpam THEN addUserToReviewQueue("spam");
+```
+
+The function `addUserToReviewQueue` does not exist in the standard library, but if you were implementing it you can access the rules that triggered the call and their reasons.
+
+In the case above the cause may be:
+```
+{
+  "firedRules": [{
+    "name": "SimilarTextIpSpam",
+    "reason": "Used similar text (cf112e11) more than ten times in a single minute."
+  }]
+}
+```
+
+### Creating Statements with WHEN causes
 
 ```
 registry.registerStatement(
-  "SqrlBlockStatements",
-  async function blockAction(
+  "SqrlReviewQueueStatements",
+  async function addUserToReviewQueue(
     state: Execution,
-    cause: WhenCause
+    cause: WhenCause,
+    queue: string
   ) {
-    // Mark the action as blocked somehow.
+    // Add to the queue somehow, and save the rule reason string.
   },
   {
     args: [
       AT.state,
       AT.whenCause,
-      /* your own arguments go here */
+      AT.any.string
     ],
     allowNull: true
   }
 );
 ```
 
-Your `blockAction` function will be provided with additional context about why the action was blocked. For more information about exactly what is included see the [`WhenCause`](https://twitter.github.io/sqrl/reference/interfaces/_when_.whencause.html) reference documentation.
+Your `addUserToReviewQueue` function will be provided with additional context about why it was triggered. For more information about exactly what is included see the [`WhenCause`](https://twitter.github.io/sqrl/reference/interfaces/_when_.whencause.html) reference documentation.

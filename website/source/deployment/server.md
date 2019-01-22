@@ -41,7 +41,7 @@ $ curl -d '{"RequestIp": "1.2.3.4"}' \
 
 ### State storage and scalability
  
-By default the command line tool stores all state in memory. Enabling [Redis](../examples/redis.html) state storage will give you a stateless server that you can scale horizontally.
+By default the command line tool stores all state in memory. Enabling [Redis](../examples/redis.html) (or any external database) state storage will give you a stateless server that you can scale horizontally.
 
 ### Sync and Async Paths
  

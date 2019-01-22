@@ -3,7 +3,7 @@ title: Nodes
 
 # Nodes
 
-Nodes are a core concept of **SQRL**. They represent a single entity that we might want to label, count against, or track in any way. They are represented by the string &lt;type&gt;/&lt;key&gt;. For example `Ip/1.2.3.4`, `Email/josh@example.com`, or `User/1234`.
+Nodes are a core concept of **SQRL**. They represent a single entity that we might want to label, count against, or track in any way. They are represented by the string `<type>/<key>`. For example `Ip/1.2.3.4`, <code>Email/josh&#64;example.com</code>, or `User/1234`.
 
 The first time we see a node, they are assigned a unique id based on the current time. Creating a node in the SQRL repl is as easy as running:
 
