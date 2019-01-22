@@ -362,11 +362,14 @@ export async function cliMain(
     if (args["<filename>"]) {
       ({ executable, spec, compiler } = await loadSource());
 
-      for (const feature of executable.getRequiredFeatures()) {
-        if (!inputs.hasOwnProperty(feature)) {
-          throw new CliError("Required input was not provided: " + feature, {
-            suggestion: `Try add: -s ${feature}=<value>`
-          });
+      if (!args.compile && !args.repl) {
+        // Outside of compile/repl mode, make sure we have all required inputs
+        for (const feature of executable.getRequiredFeatures()) {
+          if (!inputs.hasOwnProperty(feature)) {
+            throw new CliError("Required input was not provided: " + feature, {
+              suggestion: `Try add: -s ${feature}=<value>`
+            });
+          }
         }
       }
 
