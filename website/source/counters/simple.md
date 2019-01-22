@@ -33,13 +33,14 @@ The LAST clause specifies the timespan we want to count by. For simple counters 
 The list of available timespans are:
 
 * TOTAL
-* LAST 180 DAYS
 * LAST MONTH
 * LAST TWO WEEKS
 * LAST EIGHT DAYS
 * LAST TWO DAYS
 * LAST DAY
 * LAST HOUR
+
+**Note:** *TOTAL* counts will still expire after 90 days if they have not been seen.
 
 ## Counting with conditions
 

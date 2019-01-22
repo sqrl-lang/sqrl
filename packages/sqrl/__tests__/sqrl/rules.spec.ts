@@ -87,4 +87,25 @@ test("when context works", async () => {
     whenContext: null,
     word: "manual!"
   });
+
+  // Ensure multiple strings as reasons work
+  await runSqrlTest(
+    `
+  LET Five := 5;
+  CREATE RULE RuleX WHERE Five > 3 WITH REASON "Got your "
+                                               "\${Five} "
+                                               "here!";
+
+  WHEN RuleX THEN saveContext("fire!");
+  EXECUTE;
+  `,
+    { functionRegistry }
+  );
+  expect(saveCount).toEqual(3);
+  expect(savedContext).toEqual({
+    whenContext: {
+      firedRules: [{ name: "RuleX", reason: "Got your 5 here!" }]
+    },
+    word: "fire!"
+  });
 });

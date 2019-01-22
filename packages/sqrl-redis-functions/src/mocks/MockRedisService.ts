@@ -144,6 +144,7 @@ export class MockRedisService implements RedisInterface, MockRedisDatabase {
   ): Promise<void> {
     // no-op in mock mode
   }
+
   async mgetNumbers(ctx: Context, bufferKeys: Buffer[]): Promise<number[]> {
     return bufferKeys.map(
       bufferKey => this.db[bufferKey.toString("hex")] || null

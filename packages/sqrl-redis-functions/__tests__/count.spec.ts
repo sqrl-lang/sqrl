@@ -117,18 +117,65 @@ test("decaying works", async () => {
     LET CountTotal := count(BY Actor TOTAL);
 
     ASSERT CountDay = 1;
+    ASSERT CountWeek = 1;
+    ASSERT CountMonth = 1;
     ASSERT CountTotal = 1;
     EXECUTE;
 
     LET SqrlClock := dateAdd(StartClock, "PT1H");
     ASSERT CountDay = 2;
     ASSERT CountWeek = 2;
-    ASSERT CountTotal = 3;
+    ASSERT CountMonth = 2;
+    ASSERT CountTotal = 2;
     EXECUTE;
 
     LET SqrlClock := dateAdd(StartClock, "PT30H");
     ASSERT CountDay = 1;
+    ASSERT CountWeek = 3;
+    ASSERT CountMonth = 3;
+    ASSERT CountTotal = 3;
+    EXECUTE;
+
+    LET SqrlClock := dateAdd(StartClock, "P2D");
+    ASSERT CountDay = 2;
+    ASSERT CountWeek = 4;
+    ASSERT CountMonth = 4;
+    ASSERT CountTotal = 4;
+    EXECUTE;
+
+    LET SqrlClock := dateAdd(StartClock, "P10D");
+    ASSERT CountDay = 1;
+    ASSERT CountWeek = 1;
+    ASSERT CountMonth = 5;
+    ASSERT CountTotal = 5;
     EXECUTE;
     
+    LET SqrlClock := dateAdd(StartClock, "P30D");
+    ASSERT CountDay = 1;
+    ASSERT CountWeek = 1;
+    ASSERT CountMonth = 5;
+    ASSERT CountTotal = 6;
+    EXECUTE;
+
+    LET SqrlClock := dateAdd(StartClock, "P35D");
+    ASSERT CountDay = 1;
+    ASSERT CountWeek = 2;
+    ASSERT CountMonth = 3;
+    ASSERT CountTotal = 7;
+    EXECUTE;
+
+    LET SqrlClock := dateAdd(StartClock, "P90D");
+    ASSERT CountDay = 1;
+    ASSERT CountWeek = 1;
+    ASSERT CountMonth = 1;
+    ASSERT CountTotal = 8;
+    EXECUTE;
+
+    LET SqrlClock := dateAdd(StartClock, "P4Y");
+    ASSERT CountDay = 1;
+    ASSERT CountWeek = 1;
+    ASSERT CountMonth = 1;
+    ASSERT CountTotal = 9;
+    EXECUTE;
   `);
 });

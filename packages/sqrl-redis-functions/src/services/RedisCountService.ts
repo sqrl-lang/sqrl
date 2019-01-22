@@ -10,24 +10,32 @@ import {
   CountServiceBumpProps
 } from "../CountFunctions";
 import { Context, SqrlKey, Manipulator } from "sqrl";
-import { RedisSingleWindowApproxCountService } from "./RedisApproxCount";
+import {
+  RedisSingleWindowApproxCountService,
+  RedisTotalCountService,
+  RedisBucketCountInterface
+} from "./RedisBucketedCount";
 import { foreachObject } from "sqrl-common";
 
 const NUM_BUCKETS = 10;
 
 export class RedisCountService implements CountService {
   private suffixToWindow: {
-    [suffix: string]: RedisSingleWindowApproxCountService;
+    [suffix: string]: RedisBucketCountInterface;
   };
   constructor(redis: RedisInterface, prefix: string) {
     this.suffixToWindow = {};
     foreachObject(TIMESPAN_CONFIG, ({ suffix, windowMs }, key) => {
-      this.suffixToWindow[suffix] = new RedisSingleWindowApproxCountService(
-        redis,
-        prefix,
-        windowMs,
-        NUM_BUCKETS
-      );
+      if (windowMs === null) {
+        this.suffixToWindow[suffix] = new RedisTotalCountService(redis, prefix);
+      } else {
+        this.suffixToWindow[suffix] = new RedisSingleWindowApproxCountService(
+          redis,
+          prefix,
+          windowMs,
+          NUM_BUCKETS
+        );
+      }
     });
   }
   async fetch(

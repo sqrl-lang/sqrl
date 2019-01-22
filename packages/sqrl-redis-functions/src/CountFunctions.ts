@@ -21,7 +21,6 @@ import {
 
 import { parse } from "./parser/sqrlRedisParser";
 
-import { MAX_TIME_WINDOW_MS } from "./services/BucketedKeys";
 import { invariant } from "sqrl-common";
 import {
   CountArguments,
@@ -55,7 +54,7 @@ export const TIMESPAN_CONFIG = {
   total: {
     suffix: "T",
     flag: 16,
-    windowMs: MAX_TIME_WINDOW_MS
+    windowMs: null
   },
   lastTwoDays: {
     suffix: "D2",
@@ -71,11 +70,6 @@ export const TIMESPAN_CONFIG = {
     suffix: "D8",
     flag: 128,
     windowMs: 3600000 * 24 * 8
-  },
-  last180Days: {
-    suffix: "M6",
-    flag: 256,
-    windowMs: MAX_TIME_WINDOW_MS
   }
 };
 

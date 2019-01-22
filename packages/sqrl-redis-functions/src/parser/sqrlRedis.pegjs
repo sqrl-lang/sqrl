@@ -67,7 +67,6 @@ CountTimespanClause = _ timespan:(
   "LAST EIGHT DAYS"i /
   "LAST HOUR"i /
   "LAST MONTH"i /
-  "LAST 180 DAYS"i /
   "LAST TWO DAYS"i /
   "LAST TWO WEEKS"i /
   "LAST WEEK"i /

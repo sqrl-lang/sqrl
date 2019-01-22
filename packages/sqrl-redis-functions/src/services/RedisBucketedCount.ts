@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { Context, SqrlKey } from "sqrl";
-import { RedisInterface } from "./RedisService";
+import { RedisInterface, redisKey } from "./RedisService";
 import {
   getBucketSize,
   getBucketTimeForTimeMs,
@@ -14,7 +14,72 @@ import {
   getWindowStart
 } from "./BucketedKeys";
 
-export class RedisSingleWindowApproxCountService {
+/**
+ * By default expire total counts if they haven't been seen in 90 days
+ */
+export const TOTAL_COUNT_EXPIRY_SEC = 90 * 24 * 3600;
+
+export interface RedisBucketCountInterface {
+  bump(
+    ctx: Context,
+    props: {
+      at: number;
+      key: SqrlKey;
+      amount: number;
+    }
+  ): Promise<void>;
+  count(
+    ctx: Context,
+    props: {
+      key: SqrlKey;
+      at: number;
+    }
+  ): Promise<number>;
+}
+
+export class RedisTotalCountService implements RedisBucketCountInterface {
+  constructor(private redis: RedisInterface, private prefix: string) {
+    /* nothing else */
+  }
+  async bump(
+    ctx: Context,
+    props: {
+      at: number;
+      key: SqrlKey;
+      amount: number;
+    }
+  ): Promise<void> {
+    const key = redisKey(
+      ctx.requireDatabaseSet(),
+      this.prefix,
+      props.key.getHex()
+    );
+
+    await Promise.all([
+      this.redis.increment(ctx, key, props.amount),
+      this.redis.expire(ctx, key, TOTAL_COUNT_EXPIRY_SEC)
+    ]);
+  }
+
+  async count(
+    ctx: Context,
+    props: {
+      key: SqrlKey;
+      at: number;
+    }
+  ): Promise<number> {
+    const key = redisKey(
+      ctx.requireDatabaseSet(),
+      this.prefix,
+      props.key.getHex()
+    );
+    const values = await this.redis.mgetNumbers(ctx, [key]);
+    return values[0];
+  }
+}
+
+export class RedisSingleWindowApproxCountService
+  implements RedisBucketCountInterface {
   constructor(
     private redis: RedisInterface,
     private prefix: string,
