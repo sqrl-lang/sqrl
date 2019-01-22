@@ -6,6 +6,7 @@
 // tslint:disable:no-submodule-imports (@TODO)
 import { buildRedisTestFunctionRegistry } from "./helpers/runSqrl";
 import { executableFromFilesystem, VirtualFilesystem } from "sqrl";
+import "jest-extended";
 
 test("works with counts", async () => {
   const functionRegistry = await buildRedisTestFunctionRegistry();

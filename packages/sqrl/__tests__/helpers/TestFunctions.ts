@@ -6,7 +6,7 @@
 import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
 import { AstTypes as AT } from "../../src/ast/AstTypes";
 import { SqrlExecutionState } from "../../src/execute/SqrlExecutionState";
-import { Manipulator } from "../../src/api/Manipulator";
+import { Manipulator } from "../../src/api/execute";
 
 export function registerTestFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
