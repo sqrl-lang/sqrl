@@ -1,6 +1,6 @@
 {
-  "private": true,
   "name": "sqrl-monorepo",
+  "private": true,
   "homepage": "https://twitter.github.io/sqrl",
   "dependencies": {
     "lerna": "^3.10.5"
@@ -27,6 +27,7 @@
     "sqrl-test-utils": "file:packages/sqrl-test-utils",
     "sqrl-text-functions": "file:packages/sqrl-text-functions",
     "sqrl-website": "file:website",
+    "sqrl-hexo-theme-doc": "file:website/themes/sqrl-hexo-theme-doc",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",
     "ts-pegjs": "^0.2.2",
