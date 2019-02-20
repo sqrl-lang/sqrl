@@ -11,7 +11,7 @@ The code here *was* used by Smyte pre-acquisition but has not been tested in a p
 
 ### Why SQRL
 
-At Smyte we needed a solution that would allow our customers to write their own rules to fight spam on their websites. We wanted to provide a powerful tool but with a simple language that reads like SQL. SQRL is a language and runtime that has been used to stop a variety of attacks on large social websites and marketplaces.
+At Smyte we needed a solution that would allow our customers to write their own rules to fight spam on their websites. We wanted to provide a powerful tool but with a simple language that reads like SQL. **SQRL** (Smyte Query & Rules Language) is a language and runtime that has been used to stop a variety of attacks on large social websites and marketplaces.
 
 ## Getting Started
 

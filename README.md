@@ -8,7 +8,7 @@ The code here *was* used by Smyte pre-acquisition but has not been tested in a p
 
 ## Documentation
 
-You can find the SQRL documentation [on the website](https://twitter.github.io/sqrl).
+You can find the **SQRL** (Smyte Query & Rules Language) documentation [on the website](https://twitter.github.io/sqrl).
 
 The documentation is divided into several sections:
 
