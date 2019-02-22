@@ -126,9 +126,23 @@ export class CliError extends Error {
   }
 }
 
-async function readJsonFile(filename: string) {
-  const data = await readFileAsync(filename, { encoding: "utf-8" });
-  return JSON.parse(data);
+async function readJsonFile(path: string) {
+  let data: Buffer;
+  try {
+    data = await readFileAsync(path);
+  } catch (err) {
+    if (err.code === "ENOENT") {
+      throw new CliError("Could not find file: " + path);
+    } else {
+      throw err;
+    }
+  }
+
+  try {
+    return JSON.parse(data.toString("utf-8"));
+  } catch (err) {
+    throw new CliError("File did not contain JSON-encoded data: " + path);
+  }
 }
 
 export function getCliOutput(
@@ -161,9 +175,9 @@ export function getCliOutput(
   }
 }
 
-function getInputs(args: CliArgs) {
+async function getInputs(args: CliArgs) {
   const inputs: FeatureMap = {};
-  args["<key=value>"].forEach(pair => {
+  for (const pair of args["<key=value>"]) {
     const [key] = pair.split("=", 1);
     const valueString = pair.substring(key.length + 1);
 
@@ -171,6 +185,12 @@ function getInputs(args: CliArgs) {
       throw new CliError(
         "Invalid feature name for input: " + JSON.stringify(key)
       );
+    }
+
+    if (valueString.startsWith("@")) {
+      const path = valueString.substring(1);
+      inputs[key] = await readJsonFile(path);
+      continue;
     }
 
     try {
@@ -184,7 +204,7 @@ function getInputs(args: CliArgs) {
       );
       inputs[key] = valueString;
     }
-  });
+  }
   return inputs;
 }
 
@@ -254,7 +274,7 @@ export async function cliMain(
   } = {}
 ) {
   const defaultTrc = createDefaultContext();
-  const inputs = getInputs(args);
+  const inputs = await getInputs(args);
   let output: CliOutput;
   if (options.output) {
     output = options.output;
@@ -435,7 +455,8 @@ export async function cliMain(
       }
       const test = new SqrlTest(functionRegistry._wrapped, {
         filesystem,
-        manipulatorFactory: () => new SimpleManipulator()
+        manipulatorFactory: () => new SimpleManipulator(),
+        inputs
       });
       await test.runStatements(ctx, statements);
       const repl = new SqrlRepl(functionRegistry, test, {

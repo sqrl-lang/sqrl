@@ -35,7 +35,7 @@ export class SqrlTest {
   extendTimeout: () => void;
   allowPrivate: boolean;
   calculateCost: boolean;
-  setFeatures;
+  inputs: FeatureMap;
   mutate: MutationCallback | null;
   featureTimeout: number;
   manipulatorFactory: (() => Manipulator) | null;
@@ -45,7 +45,7 @@ export class SqrlTest {
     private functionRegistry: SqrlFunctionRegistry,
     props: {
       files?: any;
-      setFeatures?: FeatureMap;
+      inputs?: FeatureMap;
       allowPrivate?: boolean;
       extendTimeout?: () => void;
       calculateCost?: boolean;
@@ -68,7 +68,7 @@ export class SqrlTest {
     this.mutate = props.mutate || null;
     this.allowPrivate = props.allowPrivate || false;
     this.calculateCost = props.calculateCost || false;
-    this.setFeatures = props.setFeatures;
+    this.inputs = props.inputs || {};
     this.filesystem = props.filesystem || null;
 
     // Keep track of the actual sqrl statements being run
@@ -198,7 +198,7 @@ export class SqrlTest {
         featureTimeout: this.featureTimeout,
         ruleSpecs: processed.ruleSpec
       },
-      this.setFeatures
+      this.inputs
     );
 
     await state.fetchClock();
