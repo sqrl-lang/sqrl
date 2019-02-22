@@ -15,11 +15,17 @@ import { SqrlObject } from "../object/SqrlObject";
 export const INPUT_FUNCTION = "input";
 
 export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
-  registry.save(function functionList() {
-    return Object.keys(registry.functionProperties).filter(
-      func => !func.startsWith("_")
-    );
-  });
+  registry.save(
+    function functionList() {
+      return Object.keys(registry.functionProperties).filter(
+        func => !func.startsWith("_")
+      );
+    },
+    {
+      argstring: "",
+      docstring: "Returns the list of available functions"
+    }
+  );
 
   registry.save(null, {
     name: "if",
@@ -33,7 +39,10 @@ export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
 
       const elseValue = ast.args[2] || SqrlAst.constant(null);
       return SqrlAst.branch(ast.args[0], ast.args[1], elseValue);
-    }
+    },
+    argstring: "condition, true_result, false_result",
+    docstring:
+      "Returns either the true_result or false_result based on the condition"
   });
 
   registry.save(null, {
@@ -55,7 +64,9 @@ export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       statement: true,
-      statementFeature: "SqrlNoopStatements"
+      statementFeature: "SqrlNoopStatements",
+      argstring: "",
+      docstring: "A statement that does nothing (no operation)"
     }
   );
 
@@ -71,7 +82,10 @@ export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
           return SqrlAst.slotName(arg.value);
         })
       );
-    }
+    },
+    argstring: "feature, ...",
+    docstring:
+      "Function that returns once all of the input features have been calculated"
   });
 
   registry.save(

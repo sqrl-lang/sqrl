@@ -17,6 +17,7 @@
     "sqrl-hexo-theme-doc": "file:themes/sqrl-hexo-theme-doc"
   },
   "scripts": {
-    "deploy-website": "hexo deploy --generate"
+    "deploy-website": "hexo deploy --generate",
+    "serve-website": "hexo serve"
   }
 }

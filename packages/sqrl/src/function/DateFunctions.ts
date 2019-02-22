@@ -192,7 +192,10 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowSqrlObjects: true,
-      args: [AT.state, AT.any]
+      args: [AT.state, AT.any],
+      argstring: "date",
+      docstring:
+        "Returns the count of milliseconds since the unix epoch for the provided value"
     }
   );
 }

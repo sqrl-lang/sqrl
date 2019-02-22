@@ -13,8 +13,10 @@ export function registerTimeFunctions(registry: SqrlFunctionRegistry) {
       return new Date().toISOString();
     },
     {
-      argCount: 0,
-      safe: true
+      args: [],
+      safe: true,
+      argstring: "",
+      docstring: "Returns the current time as an ISO 8601 string"
     }
   );
 
@@ -23,8 +25,11 @@ export function registerTimeFunctions(registry: SqrlFunctionRegistry) {
       return Date.now();
     },
     {
-      argCount: 0,
-      safe: true
+      args: [],
+      safe: true,
+      argstring: "",
+      docstring:
+        "Returns the current time as a count of milliseconds since the unix epoch"
     }
   );
 
@@ -35,7 +40,10 @@ export function registerTimeFunctions(registry: SqrlFunctionRegistry) {
     {
       allowNull: true,
       args: [AT.state, AT.any, AT.any],
-      async: true
+      async: true,
+      argstring: "ms, value",
+      docstring:
+        "Returns the given value after delaying for the specified number of milliseconds"
     }
   );
 }

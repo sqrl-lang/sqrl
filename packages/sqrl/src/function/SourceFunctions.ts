@@ -16,7 +16,9 @@ export function registerSourceFunction(registry: SqrlFunctionRegistry) {
       return state.sourcePrinter.getHumanAllSource(props);
     },
     {
-      args: [AT.state, AT.any.optional]
+      args: [AT.state, AT.any.optional],
+      argstring: "",
+      docstring: "Returns all of the source code for this execution"
     }
   );
 
@@ -26,19 +28,17 @@ export function registerSourceFunction(registry: SqrlFunctionRegistry) {
       return state.sourcePrinter.getHumanSlotSource(slot, props);
     },
     {
-      args: [AT.state, AT.constant.string, AT.any.optional]
+      args: [AT.state, AT.constant.string, AT.any.optional],
+      argstring: "feature",
+      docstring: "Returns the source code for the given feature"
     }
   );
 
   registry.save(
     function _printSource(state: SqrlExecutionState, featureName?: string) {
-      if (featureName) {
-        const slot = state.getSlot(featureName);
-        // tslint:disable-next-line:no-console
-        console.log(state.sourcePrinter.getHumanSlotSource(slot));
-      } else {
-        state.sourcePrinter.printAllSource();
-      }
+      const slot = state.getSlot(featureName);
+      // tslint:disable-next-line:no-console
+      console.log(state.sourcePrinter.getHumanSlotSource(slot));
     },
     {
       args: [AT.state, AT.constant.string.optional],
@@ -47,19 +47,32 @@ export function registerSourceFunction(registry: SqrlFunctionRegistry) {
     }
   );
 
+  registry.save(
+    function printAllSource(state: SqrlExecutionState) {
+      state.sourcePrinter.printAllSource();
+    },
+    {
+      args: [],
+      statement: true,
+      statementFeature: "SqrlLogStatements",
+      argstring: "",
+      docstring: "Prints the SQRL execution source"
+    }
+  );
+
   registry.save(null, {
     name: "printSource",
-    args: [AT.feature.optional],
+    args: [AT.feature],
     statement: true,
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
-      const args: Ast[] = ast.args.map(arg => {
-        if (arg.type !== "feature") {
-          throw new Error("Expected feature arguments");
-        }
-        return SqrlAst.constant(arg.value);
-      });
-      return SqrlAst.call("_printSource", args);
-    }
+      const arg = ast.args[0];
+      if (arg.type !== "feature") {
+        throw new Error("Expected feature arguments");
+      }
+      return SqrlAst.call("_printSource", [SqrlAst.constant(arg.value)]);
+    },
+    argstring: "feature",
+    docstring: "Prints the SQRL source of the given feature"
   });
 
   registry.save(null, {
@@ -74,6 +87,8 @@ export function registerSourceFunction(registry: SqrlFunctionRegistry) {
         SqrlAst.constant(feature.value),
         ...ast.args.slice(1)
       ]);
-    }
+    },
+    argstring: "feature",
+    docstring: "Returns the source code of the given feature"
   });
 }

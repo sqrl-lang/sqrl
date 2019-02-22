@@ -100,8 +100,8 @@ sqrlTest(
   ASSERT length(StringSix) = 3;
   ASSERT 0 - 0.005 = -0.005;
   ASSERT 100 * -0.05 = -5;
-  ASSERT hasNumber(StringSix) = true;
-  ASSERT hasNumber(Hello) = false;
+  ASSERT hasDigit(StringSix) = true;
+  ASSERT hasDigit(Hello) = false;
   ASSERT length(EmptyList) = 0;
   ASSERT length(IntList) = 3;
   ASSERT length(NullFeature) = null;
@@ -156,7 +156,7 @@ sqrlTest(
   ASSERT if(false, null, 6) = 6;
   ASSERT if(false, 6, null) = null;
   ASSERT if([1], true, false) = true;
-  ASSERT encodeURIComponent(":/?") = "%3A%2F%3F";
+  ASSERT escapeURI(":/?") = "%3A%2F%3F";
   ASSERT (null = null) IS null;
   ASSERT (NullFeature = null) IS null;
   ASSERT (NullFeature = NullFeature) IS null;

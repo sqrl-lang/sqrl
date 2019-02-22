@@ -40,7 +40,9 @@ export function registerMathFunctions(registry: SqrlFunctionRegistry) {
       return isNaN(result) ? null : result;
     },
     {
-      args: [AT.any.number]
+      args: [AT.any.number],
+      argstring: "number",
+      docstring: "Returns the absolute (non-negative) value of the given number"
     }
   );
 
@@ -50,29 +52,43 @@ export function registerMathFunctions(registry: SqrlFunctionRegistry) {
       return isNaN(result) ? null : result;
     },
     {
-      args: [AT.any.number]
+      args: [AT.any.number],
+      argstring: "number",
+      docstring: "Returns the rounded value of the given number"
     }
   );
 
   const arrayMax = arrayMath.bind(null, Math.max.bind(Math));
-  registry.save(arrayMax, { name: "arrayMax" });
+  registry.save(arrayMax, {
+    name: "arrayMax",
+    argstring: "numbers",
+    docstring: "Returns the maximum value of the numbers provided"
+  });
   registry.save(
     function max(...values) {
       return arrayMax(values);
     },
     {
-      allowNull: true
+      allowNull: true,
+      argstring: "number, ...",
+      docstring: "Returns the maximum value of the arguments provided"
     }
   );
 
   const arrayMin = arrayMath.bind(null, Math.min.bind(Math));
-  registry.save(arrayMin, { name: "arrayMin" });
+  registry.save(arrayMin, {
+    name: "arrayMin",
+    argstring: "numbers",
+    docstring: "Returns the minimum value of the numbers provided"
+  });
   registry.save(
     function min(...values) {
       return arrayMin(values);
     },
     {
-      allowNull: true
+      allowNull: true,
+      argstring: "number, ...",
+      docstring: "Returns the minimum value of the arguments provided"
     }
   );
 
@@ -85,28 +101,51 @@ export function registerMathFunctions(registry: SqrlFunctionRegistry) {
       return isNaN(result) ? null : result;
     },
     {
-      argCount: 1
+      args: [AT.any.number],
+      argstring: "number",
+      docstring: "Returns the base 10 logarithm of the given number"
     }
   );
 
-  registry.save(function add(left, right) {
-    if (typeof left !== "number" || typeof right !== "number") {
-      return null;
+  registry.save(
+    function add(left, right) {
+      if (typeof left !== "number" || typeof right !== "number") {
+        return null;
+      }
+      return left + right;
+    },
+    {
+      ...safeMathOpts,
+      argstring: "number, number",
+      docstring: "Returns the sum of the given numbers"
     }
-    return left + right;
-  }, safeMathOpts);
-  registry.save(function subtract(left, right) {
-    if (typeof left !== "number" || typeof right !== "number") {
-      return null;
+  );
+  registry.save(
+    function subtract(left, right) {
+      if (typeof left !== "number" || typeof right !== "number") {
+        return null;
+      }
+      return left - right;
+    },
+    {
+      ...safeMathOpts,
+      argstring: "number, number",
+      docstring: "Returns the difference of the given numbers"
     }
-    return left - right;
-  }, safeMathOpts);
-  registry.save(function multiply(left, right) {
-    if (typeof left !== "number" || typeof right !== "number") {
-      return null;
+  );
+  registry.save(
+    function multiply(left, right) {
+      if (typeof left !== "number" || typeof right !== "number") {
+        return null;
+      }
+      return left * right;
+    },
+    {
+      ...safeMathOpts,
+      argstring: "number, number",
+      docstring: "Returns the product of the given numbers"
     }
-    return left * right;
-  }, safeMathOpts);
+  );
 
   // modulo is special due to division by zero error
   registry.save(
@@ -145,6 +184,8 @@ export function registerMathFunctions(registry: SqrlFunctionRegistry) {
     args: [AT.any],
     name: "sha256",
     pure: true,
-    background: true
+    background: true,
+    argstring: "value",
+    docstring: "Returns the sha256 hash of the given value as hex"
   });
 }

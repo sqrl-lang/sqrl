@@ -149,8 +149,8 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
       return arr.join(by);
     },
     {
-      allowNull: true,
-      argCount: 2,
+      args: [AT.any, AT.any],
+      argstring: "list, string",
       docstring: "Joins the provided list together using a string"
     }
   );

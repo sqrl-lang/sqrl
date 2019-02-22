@@ -39,7 +39,9 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
     {
       allowNull: true,
       allowSqrlObjects: true,
-      argCount: 2
+      argCount: 2,
+      argstring: "object, key",
+      docstring: "Returns the given attribute off the data"
     }
   );
 
@@ -56,7 +58,9 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowNull: true,
-      argCount: 2
+      argCount: 2,
+      argstring: "object, key",
+      docstring: "Returns true if the given attribute is set on the data"
     }
   );
 

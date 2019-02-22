@@ -27,7 +27,8 @@ export function registerBlockFunctions(
       statement: true,
       args: [AT.state, AT.whenCause],
       allowNull: true,
-      statementFeature: "SqrlSaveStatements"
+      statementFeature: "SqrlSaveStatements",
+      docstring: "Mark the current action as blocked"
     }
   );
 
@@ -39,7 +40,8 @@ export function registerBlockFunctions(
       statement: true,
       args: [AT.state, AT.whenCause],
       allowNull: true,
-      statementFeature: "SqrlSaveStatements"
+      statementFeature: "SqrlSaveStatements",
+      docstring: "Mark the current action as whitelisted"
     }
   );
 
@@ -50,7 +52,8 @@ export function registerBlockFunctions(
     {
       statement: true,
       args: [AT.state, AT.feature],
-      statementFeature: "SqrlSaveStatements"
+      statementFeature: "SqrlSaveStatements",
+      docstring: "Check if the current action was marked as blocked"
     }
   );
 }

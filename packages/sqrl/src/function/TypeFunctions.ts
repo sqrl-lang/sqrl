@@ -69,7 +69,9 @@ export function registerTypeFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowSqrlObjects: true,
-      pure: true
+      pure: true,
+      argstring: "value, ...",
+      docstring: "Returns a list of the provided values"
     }
   );
 
@@ -85,17 +87,21 @@ export function registerTypeFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       argCount: 1,
-      pure: true
+      pure: true,
+      argstring: "value",
+      docstring: "Creates a string representation of the given value"
     }
   );
 
   registry.save(
-    function data(value) {
+    function basic(value) {
       return value;
     },
     {
       argCount: 1,
-      pure: true
+      pure: true,
+      argstring: "value",
+      docstring: "Returns the basic representation of the given value"
     }
   );
 

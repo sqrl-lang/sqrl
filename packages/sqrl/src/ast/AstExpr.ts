@@ -10,7 +10,7 @@ import invariant from "../jslib/invariant";
 import sqrlErrorWrap from "../compile/sqrlErrorWrap";
 import { sqrlInvariant } from "../api/parse";
 import { Ast, jsonAst } from "./Ast";
-import { Expr, ConstantExpr, walkExpr, Slot } from "../expr/Expr";
+import { Expr, ConstantExpr, walkExpr, Slot, CallExpr } from "../expr/Expr";
 import { SqrlSlot } from "../slot/SqrlSlot";
 import { SqrlObject } from "../object/SqrlObject";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
@@ -28,8 +28,6 @@ const binaryOperatorToFunction = {
   "%": "modulo",
   or: "or",
   and: "and",
-  is: "is",
-  "is not": "isNot",
   contains: "contains"
 };
 
@@ -113,21 +111,12 @@ function _astToExprList(
   props: Expr,
   lazy = false
 ) {
-  const load = new Set();
-  const exprs = exprAsts.map(exprAst => {
-    const expr = _astToExpr(exprAst, state);
-    if (expr.load && !lazy) {
-      expr.load.forEach(slot => load.add(slot));
-    }
-    return expr;
-  });
-  return Object.assign(
-    {
-      load: Array.from(load),
-      exprs
-    },
-    props
-  );
+  const exprs = exprAsts.map(exprAst => _astToExpr(exprAst, state));
+  return {
+    load: lazy ? [] : exprLoad(exprs),
+    exprs,
+    ...props
+  };
 }
 
 function slotExpr(state: AstExprState, name: string): Expr {
@@ -159,6 +148,16 @@ function nonNullBoolExpr(state: AstExprState, expr: Expr): Expr {
     func: "nonNullBool",
     exprs: [expr]
   };
+}
+
+function exprLoad(exprs: Expr[]): Slot[] {
+  const load: Set<Slot> = new Set();
+  for (const expr of exprs) {
+    if (expr.load) {
+      expr.load.forEach(slot => load.add(slot));
+    }
+  }
+  return Array.from(load);
 }
 
 function exprOrderedMinimalLoad(exprs: Expr[]): Slot[] {
@@ -243,11 +242,22 @@ function orExpr(state: AstExprState, args: Ast[]): Expr {
   }
 
   const sortedExprs = state.sortExprsByCostAsc(exprs);
+  return makeCall(
+    "_orSequential",
+    [{ type: "state" }, ...sortedExprs],
+    exprOrderedMinimalLoad(sortedExprs)
+  );
+}
+
+function makeCall(func: string, exprs: Expr[], load?: Slot[]): CallExpr {
+  if (!load) {
+    load = exprLoad(exprs);
+  }
   return {
     type: "call",
-    func: "_orSequential",
-    exprs: [{ type: "state" }, ...sortedExprs],
-    load: exprOrderedMinimalLoad(sortedExprs)
+    func,
+    exprs,
+    load
   };
 }
 
@@ -405,6 +415,16 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
           return orExpr(state, args);
         } else if (ast.operator === "and") {
           return andExpr(state, args);
+        } else if (ast.operator === "is" || ast.operator === "is not") {
+          invariant(
+            args.length === 2 && SqrlAst.isConstantNull(args[1]),
+            "Expected `null` value for right-hand side of IS"
+          );
+          let expr = callExpr(state, "isNull", [args[0]]);
+          if (ast.operator === "is not") {
+            expr = makeCall("not", [expr]);
+          }
+          return expr;
         } else {
           invariant(
             binaryOperatorToFunction.hasOwnProperty(ast.operator),

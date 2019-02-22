@@ -11,10 +11,33 @@ export function registerComparisonFunctions(registry: SqrlFunctionRegistry) {
     argCount: 2,
     pure: true
   };
-  registry.save(cmpE, compareOpts);
-  registry.save(cmpNE, compareOpts);
-  registry.save(cmpG, compareOpts);
-  registry.save(cmpGE, compareOpts);
-  registry.save(cmpL, compareOpts);
-  registry.save(cmpLE, compareOpts);
+  registry.save(cmpE, {
+    ...compareOpts,
+    docstring:
+      "Returns true if the first argument is equal to the second argument"
+  });
+  registry.save(cmpNE, {
+    ...compareOpts,
+    docstring:
+      "Returns true if the first argument is not equal to the second argument"
+  });
+  registry.save(cmpG, {
+    ...compareOpts,
+    docstring:
+      "Returns true if the first argument is greater than second argument"
+  });
+  registry.save(cmpGE, {
+    ...compareOpts,
+    docstring:
+      "Returns true if the first argument is greater than or equal to second argument"
+  });
+  registry.save(cmpL, {
+    ...compareOpts,
+    docstring: "Returns true if the first argument is less than second argument"
+  });
+  registry.save(cmpLE, {
+    ...compareOpts,
+    docstring:
+      "Returns true if the first argument is less than or equal to second argument"
+  });
 }

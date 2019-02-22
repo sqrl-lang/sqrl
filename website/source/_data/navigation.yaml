@@ -19,7 +19,7 @@ main:
       - text: Wikipedia
         type: link
         path: examples/wikipedia.html
-  - text: Language
+  - text: Concepts
     type: label
     children:
       - text: Nodes
@@ -46,6 +46,12 @@ main:
       - text: Where Clauses
         type: link
         path: language/where.html
+  - text: Standard Library
+    type: label
+    children:
+      - text: Array Functions
+        type: link
+        path: stdlib/array.html
   - text: Defining Functions
     type: label
     children:

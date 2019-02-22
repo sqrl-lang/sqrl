@@ -31,7 +31,6 @@ export interface SaveFunctionProperties {
   async?: boolean;
   asyncSafe?: boolean;
   customTransform?: (state: SqrlParserState, ast: CustomCallAst) => Ast;
-  docstring?: string;
   name?: string;
   promiseArgs?: boolean;
   callbackArgs?: boolean;
@@ -44,6 +43,12 @@ export interface SaveFunctionProperties {
   jsonCache?: boolean;
 
   lazyArguments?: boolean;
+
+  /* list of arguments the function takes as a string */
+  argstring?: string;
+
+  /* single sentence documenting what the function does */
+  docstring?: string;
 
   /* function should not error out, and sqrl request should be retried if it does */
   vital?: boolean;

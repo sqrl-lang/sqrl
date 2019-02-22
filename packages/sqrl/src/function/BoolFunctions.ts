@@ -3,9 +3,9 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
 
 import { AstTypes as AT } from "../ast/AstTypes";
+import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { SqrlObject } from "../object/SqrlObject";
 
 function and(...args) {
@@ -21,13 +21,17 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
   registry.save(and, {
     safe: true,
     allowSqrlObjects: true,
-    allowNull: true
+    allowNull: true,
+    docstring:
+      "Return true if all of the input values are truthy, false otherwise (even if there are null values)"
   });
 
   registry.save(and, {
     name: "andOrNull",
     safe: true,
-    allowSqrlObjects: true
+    allowSqrlObjects: true,
+    docstring:
+      "Return true if all of the input values are truthy, false otherwise"
   });
 
   registry.save(
@@ -44,7 +48,8 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
       argCount: 1,
       safe: true,
       allowNull: true,
-      pure: true
+      pure: true,
+      docstring: "Return false if the value is truthy, true if it is falsy"
     }
   );
 
@@ -71,24 +76,14 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
   );
 
   registry.save(
-    function is(left, right) {
-      return left === right;
+    function isNull(value) {
+      return value === null;
     },
     {
       allowNull: true,
-      argCount: 2,
-      args: [AT.any, AT.constant.null]
-    }
-  );
-
-  registry.save(
-    function isNot(left, right) {
-      return left !== right;
-    },
-    {
-      allowNull: true,
-      argCount: 2,
-      args: [AT.any, AT.constant.null]
+      args: [AT.any],
+      argstring: "value",
+      docstring: "Returns true if the given value is null, false otherwise"
     }
   );
 
@@ -108,7 +103,9 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
       allowSqrlObjects: true,
       allowNull: true,
       safe: true,
-      asyncSafe: true
+      asyncSafe: true,
+      docstring:
+        "Returns the first truthy argument, otherwise the final argument."
     }
   );
 
@@ -123,7 +120,8 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowSqrlObjects: true,
-      allowNull: true
+      allowNull: true,
+      docstring: "Returns the first argument that is not null"
     }
   );
 
@@ -139,7 +137,9 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
     {
       allowSqrlObjects: true,
       safe: true,
-      allowNull: true
+      allowNull: true,
+      docstring:
+        "Returns true if any of the arguments are truthy, false otherwise"
     }
   );
 

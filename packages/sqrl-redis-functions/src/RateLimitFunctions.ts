@@ -277,7 +277,7 @@ export function registerRateLimitFunctions(
 
     const keyAst = state.setGlobal(
       ast,
-      AstBuilder.call("_buildKey40", [nodeAst, ...args.features]),
+      AstBuilder.call("_buildKey", [nodeAst, ...args.features]),
       `key(${nodeId.getIdString()})`
     );
 

@@ -100,59 +100,45 @@ export function registerNodeFunctions(
   );
 
   registry.save(
-    function uniqueIdNumber(state: SqrlExecutionState, uniqueId: SqrlNode) {
+    function uniqueId(state: SqrlExecutionState, uniqueId: SqrlNode) {
       return uniqueId.getNumberString();
     },
     {
       allowSqrlObjects: true,
-      args: [AT.state, AT.any.sqrlNode]
+      args: [AT.state, AT.any.sqrlNode],
+      argstring: "node",
+      docstring: "Returns the unique id of the node as a string"
     }
   );
 
   registry.save(
-    function nodeIdString(state: SqrlExecutionState, node: SqrlNode) {
+    function nodeId(state: SqrlExecutionState, node: SqrlNode) {
       return node.nodeId.getIdString();
     },
     {
       allowSqrlObjects: true,
-      args: [AT.state, AT.any.sqrlNode]
+      args: [AT.state, AT.any.sqrlNode],
+      argstring: "node",
+      docstring: "Returns the node id of the node"
     }
   );
-
-  registry.save(null, {
-    name: "nodeTypeFromIdString",
-    args: [AT.any],
-    transformAst(state: SqrlParserState, ast: CallAst): Ast {
-      return SqrlAst.call("nodeType", [
-        SqrlAst.call("nodeFromIdString", ast.args)
-      ]);
-    }
-  });
 
   registry.save(null, {
     name: "node",
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
       return SqrlAst.call("_node", ast.args);
     },
-    args: [AT.constant.string, AT.any]
+    args: [AT.constant.string, AT.any],
+    argstring: "type, key",
+    docstring: "Create a node of the given type"
   });
 
   registry.save(null, {
     name: "nodeList",
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
       return SqrlAst.call("_nodeList", ast.args);
-    }
-  });
-
-  registry.save(null, {
-    name: "jsonNode",
-    transformAst(state: SqrlParserState, ast: CallAst): Ast {
-      const [nodeTypeAst, dataAst, pathAst] = ast.args;
-      return SqrlAst.call("node", [
-        nodeTypeAst,
-        SqrlAst.call("jsonValue", [dataAst, pathAst])
-      ]);
     },
-    args: [AT.any, AT.any, AT.any]
+    argstring: "type, keys",
+    docstring: "Create a list of nodes of the given type"
   });
 }

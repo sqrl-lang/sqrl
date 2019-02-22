@@ -61,7 +61,8 @@ export function registerAssertFunctions(
   );
 
   registry.save(null, {
-    name: "sampleTestResults"
+    name: "sampleTestResults",
+    docstring: "Save a snapshot of results for comparison during testing"
   });
 
   registry.save(null, {
@@ -102,6 +103,7 @@ export function registerAssertFunctions(
         }
       }
       return SqrlAst.call("_assert", [testAst, sourceArrowAst]);
-    }
+    },
+    docstring: "Assert that an expected condition is true"
   });
 }

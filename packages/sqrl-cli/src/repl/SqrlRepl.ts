@@ -108,8 +108,13 @@ export class SqrlRepl extends EventEmitter {
       this.functionRegistry._wrapped.functionProperties
     ).sort()) {
       if (!name.startsWith("_")) {
+        let args = "";
+        if (props.argstring) {
+          args = `(${props.argstring})`;
+        }
         console.log(
-          `${name}: ${props.docstring || chalk.gray("<no docstring provided>")}`
+          `${chalk.bold.white(name)}${args}: ${props.docstring ||
+            chalk.gray("<no docstring provided>")}`
         );
       }
     }

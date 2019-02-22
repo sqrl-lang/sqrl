@@ -37,7 +37,7 @@ By default SQRL will run in an in-memory only mode, which means state is not per
 For this to work you should be running a local redis server, if you are not the easiest way to start one up is with the [Docker](https://www.docker.com/) command `docker run -d -p 6379:6379 redis`
 
 ```
-$ source ./scripts/setup-sqrl-db-local-docker-env.sh
+$ export SQRL_REDIS=127.0.0.1:6379
 
 $ cat > ratelimit.sqrl
 LET Ip := input();
