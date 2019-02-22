@@ -93,13 +93,20 @@ export class SqrlTest {
     const codedErrors = [];
     const executions: SqrlExecutionState[] = [];
 
-    const execute = async (wait = false) => {
-      const state = await this.executeStatements(ctx, assertions, wait);
-      executions.push(state);
+    const prevStatements = [...this.statements];
 
-      codedErrors.push(...state.loggedCodedErrors);
-      assertions = [];
-      return state;
+    const execute = async (wait = false) => {
+      try {
+        const state = await this.executeStatements(ctx, assertions, wait);
+        executions.push(state);
+        codedErrors.push(...state.loggedCodedErrors);
+        assertions = [];
+        return state;
+      } catch (err) {
+        // If we hit an error, don't save the statements that caused the error.
+        this.statements = prevStatements;
+        throw err;
+      }
     };
 
     for (const statement of statements) {
