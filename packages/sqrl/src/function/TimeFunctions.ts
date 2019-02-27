@@ -3,11 +3,11 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { AstTypes as AT } from "../ast/AstTypes";
 import bluebird = require("bluebird");
 
-export function registerTimeFunctions(registry: SqrlFunctionRegistry) {
+export function registerTimeFunctions(registry: StdlibRegistry) {
   registry.save(
     function now() {
       return new Date().toISOString();

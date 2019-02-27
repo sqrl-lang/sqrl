@@ -63,25 +63,18 @@ TrendingArguments = _?
 CountTimespanClause = _ timespan:(
   "DAY OVER DAY"i /
   "DAY OVER WEEK"i /
-  "LAST DAY"i /
-  "LAST EIGHT DAYS"i /
-  "LAST HOUR"i /
-  "LAST MONTH"i /
-  "LAST TWO DAYS"i /
-  "LAST TWO WEEKS"i /
-  "LAST WEEK"i /
+  "LAST DAY"i / "LAST 1 DAY"i /
+  "LAST EIGHT DAYS"i / "LAST 8 DAYS"i /
+  "LAST HOUR"i / "LAST 1 HOUR"i /
+  "LAST MONTH"i / "LAST 1 MONTH"i /
+  "LAST TWO DAYS"i / "LAST 2 DAYS"i /
+  "LAST TWO WEEKS"i / "LAST 2 WEEKS"i /
+  "LAST WEEK"i / "LAST 1 WEEK"i /
   "TOTAL"i /
-  "WEEK OVER WEEK"i /
-
-  /* These are included for backwards compatibility but a bit ugly... */
-  "LAST 1 HOUR"i /
-  "LAST 1 DAY"i /
-  "LAST 1 WEEK"i /
-  "LAST 1 MONTH"i
+  "WEEK OVER WEEK"i
 ) {
-  // @TODO: We should improve numeric handling in this
-  timespan = timespan.replace(/ 1 /, ' ');
-
+  // Some digits are allowed, replace them with the string representations
+  timespan = timespan.replace(/ 1 /, ' ').replace(/ 2 /, ' TWO ').replace(/ 8 /, ' EIGHT ');
   return camelCase(timespan);
 }
 
@@ -192,7 +185,7 @@ WhereClause = _ "WHERE"i _ expr:Expr {
   return expr;
 }
 
-MinEventsClause = _ "WITH MIN EVENTS"i _ numEvents:IntLiteral {
+MinEventsClause = _ "WITH MIN "i _ numEvents:IntLiteral _ "EVENTS"i  {
   return numEvents;
 }
 

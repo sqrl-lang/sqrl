@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { Ast } from "../ast/Ast";
 
 import { AstTypes as AT } from "../ast/AstTypes";
@@ -18,7 +18,7 @@ import { sqrlInvariant } from "../api/parse";
 // $[ (digits / single quoted string / double quoted string) ] (anything)
 const JSON_BRAKET_REGEX = /^\$\[([0-9]+|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")\](.*)$/;
 
-export function registerDataFunctions(registry: SqrlFunctionRegistry) {
+export function registerDataFunctions(registry: StdlibRegistry) {
   registry.save(
     function attr(data: any, key: string | number): any {
       if (data instanceof SqrlObject) {

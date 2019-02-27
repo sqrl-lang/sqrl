@@ -58,7 +58,9 @@ export function registerLabelFunctions(
         AT.constant.string
       ],
       allowNull: true,
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
+      argstring: "entity | entity list, label",
+      docstring: "Adds the provided label to the specified entities"
     }
   );
 
@@ -84,7 +86,9 @@ export function registerLabelFunctions(
         AT.constant.string
       ],
       allowNull: true,
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
+      argstring: "entity | entity list, label",
+      docstring: "Removes the provided label to the specified entities"
     }
   );
 
@@ -98,7 +102,9 @@ export function registerLabelFunctions(
     },
     {
       args: [AT.state, AT.any.sqrlEntity, AT.constant.string],
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
+      argstring: "entity, label",
+      docstring: "Returns true if the provided entity has the given label"
     }
   );
 }

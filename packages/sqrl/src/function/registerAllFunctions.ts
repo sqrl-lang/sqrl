@@ -44,32 +44,47 @@ export function registerAllFunctions(
   functionRegistry: SqrlFunctionRegistry,
   services: FunctionServices = {}
 ) {
-  registerTypeFunctions(functionRegistry);
-  registerBoolFunctions(functionRegistry);
-  registerComparisonFunctions(functionRegistry);
-  registerMathFunctions(functionRegistry);
-  registerLogFunctions(functionRegistry, services.log);
-  registerLoadFunctions(functionRegistry);
-  registerStdlibFunctions(functionRegistry);
+  registerTypeFunctions(functionRegistry.createStdlibRegistry("type"));
+  registerBoolFunctions(functionRegistry.createStdlibRegistry("bool"));
+  registerComparisonFunctions(functionRegistry.createStdlibRegistry("compare"));
+  registerMathFunctions(functionRegistry.createStdlibRegistry("math"));
+  registerLogFunctions(
+    functionRegistry.createStdlibRegistry("log"),
+    services.log
+  );
+  registerLoadFunctions(functionRegistry.createStdlibRegistry("load"));
+  registerStdlibFunctions(functionRegistry.createStdlibRegistry("language"));
   registerWhenFunctions(functionRegistry);
 
   if (services.assert) {
-    registerAssertFunctions(functionRegistry, services.assert);
+    registerAssertFunctions(
+      functionRegistry.createStdlibRegistry("assert"),
+      services.assert
+    );
   }
   if (services.block) {
-    registerBlockFunctions(functionRegistry, services.block);
+    registerBlockFunctions(
+      functionRegistry.createStdlibRegistry("block"),
+      services.block
+    );
   }
 
   if (services.uniqueId) {
-    registerEntityFunctions(functionRegistry, services.uniqueId);
+    registerEntityFunctions(
+      functionRegistry.createStdlibRegistry("entity"),
+      services.uniqueId
+    );
   }
 
-  registerSaveFunctions(functionRegistry, services);
-  registerKeyFunctions(functionRegistry);
-  registerArrayFunctions(functionRegistry);
-  registerDataFunctions(functionRegistry);
-  registerDateFunctions(functionRegistry);
-  registerTimeFunctions(functionRegistry);
-  registerStringFunctions(functionRegistry);
-  registerSourceFunction(functionRegistry);
+  registerSaveFunctions(
+    functionRegistry.createStdlibRegistry("type"),
+    services
+  );
+  registerKeyFunctions(functionRegistry.createStdlibRegistry("key"));
+  registerArrayFunctions(functionRegistry.createStdlibRegistry("array"));
+  registerDataFunctions(functionRegistry.createStdlibRegistry("data"));
+  registerDateFunctions(functionRegistry.createStdlibRegistry("date"));
+  registerTimeFunctions(functionRegistry.createStdlibRegistry("time"));
+  registerStringFunctions(functionRegistry.createStdlibRegistry("string"));
+  registerSourceFunction(functionRegistry.createStdlibRegistry("source"));
 }

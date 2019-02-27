@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { FunctionServices } from "./registerAllFunctions";
 import { AstTypes as AT } from "../ast/AstTypes";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
@@ -18,7 +18,7 @@ export interface ObjectService {
   ): void;
 }
 export function registerSaveFunctions(
-  registry: SqrlFunctionRegistry,
+  registry: StdlibRegistry,
   services: FunctionServices
 ) {
   if (services.saveFeatures) {

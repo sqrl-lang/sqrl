@@ -17,10 +17,17 @@ import { SimHash } from "simhash-js";
 
 export function register(registry: FunctionRegistry) {
   const jsSimhash = new SimHash();
-  registry.registerSync(function simhash(text: string) {
-    const hashHex: string = jsSimhash.hash(text).toString(16);
-    return hashHex.padStart(8, "0");
-  });
+  registry.registerSync(
+    function simhash(text: string) {
+      const hashHex: string = jsSimhash.hash(text).toString(16);
+      return hashHex.padStart(8, "0");
+    },
+    {
+      args: [AT.any.string],
+      argstring: "text",
+      docstring: "Return the simhash of the given text"
+    }
+  );
 
   registry.registerSync(
     function _charGrams(string, gramSize) {
@@ -45,17 +52,21 @@ export function register(registry: FunctionRegistry) {
       return AstBuilder.call("_charGrams", ast.args);
     },
     {
-      args: [AT.any, AT.constant.number]
+      args: [AT.any, AT.constant.number],
+      argstring: "text, size",
+      docstring: "Returns all the chargrams of a given size from the text"
     }
   );
 
-  // TODO: could precompile these regexes at parse time
   registry.registerSync(
     function regexMatch(state, regex, string) {
       return string.match(new RegExp(regex, "g"));
     },
     {
-      args: [AT.state, AT.any.string, AT.any.string]
+      args: [AT.state, AT.any.string, AT.any.string],
+      argstring: "regex, string",
+      docstring:
+        "Returns the matches of the given regular expression against the string"
     }
   );
 
@@ -64,16 +75,22 @@ export function register(registry: FunctionRegistry) {
       return new RegExp(regex, "g").test(string);
     },
     {
-      args: [AT.state, AT.any.string, AT.any.string]
+      args: [AT.state, AT.any.string, AT.any.string],
+      argstring: "regex, string",
+      docstring:
+        "Returns true if the given regular expression matches the string"
     }
   );
 
   registry.registerSync(
-    function regexReplace(state, regex, string, replaceWith) {
-      return string.replace(new RegExp(regex, "g"), replaceWith);
+    function regexReplace(state, regex, replacement, string) {
+      return string.replace(new RegExp(regex, "g"), replacement);
     },
     {
-      args: [AT.state, AT.any.string, AT.any.string, AT.any]
+      args: [AT.state, AT.any.string, AT.any.string, AT.any],
+      argstring: "regex, replacement, string",
+      docstring:
+        "Replaces each match of the given regular expression in the string"
     }
   );
 
@@ -85,7 +102,9 @@ export function register(registry: FunctionRegistry) {
       return handle.split("+")[0].replace(RE_EMAIL, "") + "@" + domain;
     },
     {
-      args: [AT.state, AT.any.string]
+      args: [AT.state, AT.any.string],
+      argstring: "email",
+      docstring: "Returns the normalized form of the given email address"
     }
   );
 

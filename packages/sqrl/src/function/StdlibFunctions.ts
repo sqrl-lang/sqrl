@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { Ast, CallAst } from "../ast/Ast";
 import { AstTypes as AT } from "../ast/AstTypes";
 
@@ -15,10 +15,10 @@ import { SqrlObject } from "../object/SqrlObject";
 
 export const INPUT_FUNCTION = "input";
 
-export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
+export function registerStdlibFunctions(registry: StdlibRegistry) {
   registry.save(
     function functionList() {
-      return Object.keys(registry.functionProperties).filter(
+      return Object.keys(registry.wrapped.functionProperties).filter(
         func => !func.startsWith("_")
       );
     },

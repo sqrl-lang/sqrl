@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { Ast, CallAst } from "../ast/Ast";
 
 import { AstTypes as AT } from "../ast/AstTypes";
@@ -36,7 +36,7 @@ async function toEntity(
 }
 
 export function registerEntityFunctions(
-  registry: SqrlFunctionRegistry,
+  registry: StdlibRegistry,
   service: UniqueIdService
 ) {
   registry.save(

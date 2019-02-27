@@ -5,7 +5,7 @@
  */
 
 import { AstTypes as AT } from "../ast/AstTypes";
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { SqrlObject } from "../object/SqrlObject";
 
 function and(...args) {
@@ -17,7 +17,7 @@ function and(...args) {
   return true;
 }
 
-export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
+export function registerBoolFunctions(registry: StdlibRegistry) {
   registry.save(and, {
     safe: true,
     allowSqrlObjects: true,

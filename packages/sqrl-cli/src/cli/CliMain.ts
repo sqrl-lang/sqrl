@@ -243,7 +243,7 @@ async function requirePackage(
     typeof imported.register === "function",
     "Required package did not include a `register` function: " + name
   );
-  await imported.register(functionRegistry);
+  await imported.register(functionRegistry.createPackageRegistry(name));
 }
 
 async function buildFunctionRegistry(
@@ -271,12 +271,11 @@ async function buildFunctionRegistry(
   const functionRegistry = SQRL.buildFunctionRegistry(services);
 
   if (!args["--skip-default-requires"]) {
-    if (options.redisAddress) {
-      // @TODO: shutdown.push(services);
-      registerRedis(functionRegistry, buildServices(options.redisAddress));
-    } else {
-      registerRedis(functionRegistry, buildServicesWithMockRedis());
-    }
+    registerRedis(
+      functionRegistry.createPackageRegistry("sqrl-redis-functions"),
+      redisServices
+    );
+
     await requirePackage("sqrl-text-functions", functionRegistry);
   }
 

@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import * as util from "util";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { SqrlParserState } from "../compile/SqrlParserState";
@@ -18,7 +18,7 @@ export interface LogService {
 }
 
 export function registerLogFunctions(
-  registry: SqrlFunctionRegistry,
+  registry: StdlibRegistry,
   service: LogService = null
 ) {
   registry.save(

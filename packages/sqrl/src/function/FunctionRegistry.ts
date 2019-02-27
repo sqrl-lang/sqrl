@@ -43,6 +43,12 @@ export interface SaveFunctionProperties {
 
   lazyArguments?: boolean;
 
+  /* was this function defined as part of the standard library, if so package is the group of function */
+  stdlib?: boolean;
+
+  /* name of the package that provided this function */
+  package?: string;
+
   /* list of arguments the function takes as a string */
   argstring?: string;
 
@@ -144,6 +150,24 @@ function syncSafetyNet(name: string, fn, config: SafetyNetConfig) {
   }
 }
 
+export class StdlibRegistry {
+  constructor(
+    public wrapped: SqrlFunctionRegistry,
+    public packageName: string
+  ) {}
+
+  save(
+    fn: (...args: any[]) => any | null,
+    props: SaveFunctionProperties = {}
+  ): void {
+    return this.wrapped.save(fn, {
+      package: this.packageName,
+      stdlib: true,
+      ...props
+    });
+  }
+}
+
 export class SqrlFunctionRegistry {
   // Use integers for calculation
   static intCostMultiplier = 100000;
@@ -218,6 +242,10 @@ export class SqrlFunctionRegistry {
         return rv;
       };
     }
+  }
+
+  createStdlibRegistry(packageName: string) {
+    return new StdlibRegistry(this, packageName);
   }
 
   getCost(funcName: string) {

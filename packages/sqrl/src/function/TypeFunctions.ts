@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlObject } from "../object/SqrlObject";
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { AstTypes as AT } from "../ast/AstTypes";
 
 const FLOAT_REGEX = /^-?[0-9]*(\.[0-9]+)?$/;
@@ -37,7 +37,7 @@ function int(value: any): number | null {
 
   return Math.floor(value);
 }
-export function registerTypeFunctions(registry: SqrlFunctionRegistry) {
+export function registerTypeFunctions(registry: StdlibRegistry) {
   registry.save(int, {
     args: [AT.any],
     pure: true,

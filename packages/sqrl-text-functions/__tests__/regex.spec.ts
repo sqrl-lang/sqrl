@@ -13,6 +13,6 @@ textSqrlTest(
   ASSERT regexMatch("123", Phone) = null;
   ASSERT regexMatch("4444", Phone) = ["4444"];
   ASSERT regexTest("^[\\\\d()-]+$", Phone) = true;
-  ASSERT regexReplace("\\\\d", Phone, "X") = "X(XXX)XXX-XXXX";
+  ASSERT regexReplace("\\\\d", "X", Phone) = "X(XXX)XXX-XXXX";
 `
 );

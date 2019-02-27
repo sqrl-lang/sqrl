@@ -19,5 +19,6 @@ export * from "./jsonTemplate";
 export * from "./mapObject";
 export * from "./promiseFinally";
 export * from "./range";
+export * from "./removeIndent";
 export * from "./sqrlCartesianProduct";
 export * from "./AssertService";

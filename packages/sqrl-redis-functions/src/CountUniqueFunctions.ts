@@ -218,103 +218,107 @@ export function registerCountUniqueFunctions(
     }
   );
 
-  registry.registerCustom(function countUnique(
-    state: CompileState,
-    ast: CustomCallAst
-  ): Ast {
-    const args: CountUniqueArguments = parse(ast.source, {
-      startRule: "CountUniqueArguments"
-    });
-    const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
-      args.where
-    );
+  registry.registerCustom(
+    function countUnique(state: CompileState, ast: CustomCallAst): Ast {
+      const args: CountUniqueArguments = parse(ast.source, {
+        startRule: "CountUniqueArguments"
+      });
+      const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
+        args.where
+      );
 
-    const sortedUniques: AliasedFeature[] = sortByAlias(args.uniques);
-    const sortedGroup: AliasedFeature[] = sortByAlias(args.groups);
+      const sortedUniques: AliasedFeature[] = sortByAlias(args.uniques);
+      const sortedGroup: AliasedFeature[] = sortByAlias(args.groups);
 
-    const uniquesAst = AstBuilder.list(sortedUniques.map(f => f.feature));
+      const uniquesAst = AstBuilder.list(sortedUniques.map(f => f.feature));
 
-    const groupAliases = args.groups.map(feature => feature.alias);
-    const groupFeatures = args.groups.map(feature => feature.feature.value);
-    const groupHasAliases = args.groups.some(f => f.feature.value !== f.alias);
-    const sortedGroupAliases = sortedGroup.map(feature => feature.alias);
+      const groupAliases = args.groups.map(feature => feature.alias);
+      const groupFeatures = args.groups.map(feature => feature.feature.value);
+      const groupHasAliases = args.groups.some(
+        f => f.feature.value !== f.alias
+      );
+      const sortedGroupAliases = sortedGroup.map(feature => feature.alias);
 
-    const { entityId, entityAst } = state.addHashedEntity(
-      ast,
-      "UniqueCounter",
-      {
-        groups: sortedGroupAliases,
-        uniques: sortedUniques.map(feature => feature.alias),
+      const { entityId, entityAst } = state.addHashedEntity(
+        ast,
+        "UniqueCounter",
+        {
+          groups: sortedGroupAliases,
+          uniques: sortedUniques.map(feature => feature.alias),
 
-        // Only include the where clauses if they're non-empty
-        ...(whereTruth ? { whereFeatures, whereTruth } : {})
-      }
-    );
+          // Only include the where clauses if they're non-empty
+          ...(whereTruth ? { whereFeatures, whereTruth } : {})
+        }
+      );
 
-    const originalKeysAst = state.setGlobal(
-      ast,
-      AstBuilder.call("_getKeyList", [
-        entityAst,
-        ...groupAliases.map(alias => AstBuilder.feature(alias))
-      ]),
-      `key(${entityId.getIdString()})`
-    );
-
-    // Always bump the counter according to the original keys (aliases)
-    const slotAst = state.setGlobal(
-      ast,
-      AstBuilder.call("_bumpCountUnique", [
-        AstBuilder.branch(whereAst, originalKeysAst, AstBuilder.constant(null)),
-        uniquesAst
-      ])
-    );
-    state.addStatement("SqrlCountUniqueStatements", slotAst);
-
-    let keysAst = originalKeysAst;
-    let countExtraUniques: Ast = AstBuilder.branch(
-      whereAst,
-      uniquesAst,
-      AstBuilder.constant([])
-    );
-
-    if (groupHasAliases) {
-      keysAst = state.setGlobal(
+      const originalKeysAst = state.setGlobal(
         ast,
         AstBuilder.call("_getKeyList", [
           entityAst,
-          ...groupFeatures.map(feature => AstBuilder.feature(feature))
+          ...groupAliases.map(alias => AstBuilder.feature(alias))
         ]),
-        `key(${entityId.getIdString()}:${groupFeatures.join(",")})`
+        `key(${entityId.getIdString()})`
       );
 
-      // If we're using aliases we only count the uniques in this request if
-      // they exactly match the aliases that we used
-      const aliasesEqualAst = AstBuilder.call("cmpE", [
-        AstBuilder.list(groupAliases.map(alias => AstBuilder.feature(alias))),
-        AstBuilder.list(
-          groupFeatures.map(feature => AstBuilder.feature(feature))
-        )
-      ]);
-      countExtraUniques = AstBuilder.branch(
-        aliasesEqualAst,
-        countExtraUniques,
+      // Always bump the counter according to the original keys (aliases)
+      const slotAst = state.setGlobal(
+        ast,
+        AstBuilder.call("_bumpCountUnique", [
+          AstBuilder.branch(
+            whereAst,
+            originalKeysAst,
+            AstBuilder.constant(null)
+          ),
+          uniquesAst
+        ])
+      );
+      state.addStatement("SqrlCountUniqueStatements", slotAst);
+
+      let keysAst = originalKeysAst;
+      let countExtraUniques: Ast = AstBuilder.branch(
+        whereAst,
+        uniquesAst,
         AstBuilder.constant([])
       );
-    }
 
-    if (args.beforeAction) {
-      countExtraUniques = AstBuilder.constant([]);
-    }
+      if (groupHasAliases) {
+        keysAst = state.setGlobal(
+          ast,
+          AstBuilder.call("_getKeyList", [
+            entityAst,
+            ...groupFeatures.map(feature => AstBuilder.feature(feature))
+          ]),
+          `key(${entityId.getIdString()}:${groupFeatures.join(",")})`
+        );
 
-    const originalCall = AstBuilder.call("_fetchCountUnique", [
-      keysAst,
-      AstBuilder.constant(args.windowMs || MAX_TIME_WINDOW_MS),
-      countExtraUniques
-    ]);
+        // If we're using aliases we only count the uniques in this request if
+        // they exactly match the aliases that we used
+        const aliasesEqualAst = AstBuilder.call("cmpE", [
+          AstBuilder.list(groupAliases.map(alias => AstBuilder.feature(alias))),
+          AstBuilder.list(
+            groupFeatures.map(feature => AstBuilder.feature(feature))
+          )
+        ]);
+        countExtraUniques = AstBuilder.branch(
+          aliasesEqualAst,
+          countExtraUniques,
+          AstBuilder.constant([])
+        );
+      }
 
-    if (args.setOperation) {
-      throw new Error("@todo setOperation transform");
-      /*
+      if (args.beforeAction) {
+        countExtraUniques = AstBuilder.constant([]);
+      }
+
+      const originalCall = AstBuilder.call("_fetchCountUnique", [
+        keysAst,
+        AstBuilder.constant(args.windowMs || MAX_TIME_WINDOW_MS),
+        countExtraUniques
+      ]);
+
+      if (args.setOperation) {
+        throw new Error("@todo setOperation transform");
+        /*
       const { operation, features } = args.setOperation;
       const rightCountArgs = Object.assign({}, args, {
         groups: features,
@@ -342,10 +346,16 @@ export function registerCountUniqueFunctions(
         }),
         Object.assign({}, rightCall, { func: "_fetchCountUniqueElements" })
       ]);*/
-    }
+      }
 
-    return originalCall;
-  });
+      return originalCall;
+    },
+    {
+      argstring:
+        "Feature, ... [GROUP BY Feature, ...] [WHERE Condition] [LAST Duration] [BEFORE ACTION]",
+      docstring: "Performs a sliding window unique set count"
+    }
+  );
 
   async function fetchCount(
     ctx: Context,

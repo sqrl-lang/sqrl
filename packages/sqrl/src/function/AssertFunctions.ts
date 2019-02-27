@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
+import { StdlibRegistry } from "../function/FunctionRegistry";
 import { AstTypes as AT } from "../ast/AstTypes";
 import { Ast, CallAst } from "../ast/Ast";
 
@@ -16,7 +16,7 @@ import { SqrlParserState } from "../compile/SqrlParserState";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 
 export function registerAssertFunctions(
-  registry: SqrlFunctionRegistry,
+  registry: StdlibRegistry,
   service: AssertService
 ) {
   registry.save(

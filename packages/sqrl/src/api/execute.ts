@@ -61,11 +61,19 @@ export function buildFunctionRegistry(services: FunctionServices = {}) {
 /**
  * Options for registering a new function
  */
-export interface FunctionOptions {
+export interface MinimalFunctionOptions {
+  argstring?: string;
+  docstring?: string;
+}
+
+export interface FunctionOptions extends MinimalFunctionOptions {
+  args?: ArgumentCheck[];
+}
+
+export interface ImplementedFunctionOptions extends FunctionOptions {
   allowNull?: boolean;
   allowSqrlObjects?: boolean;
   pure?: boolean;
-  args?: ArgumentCheck[];
 }
 
 /**
@@ -80,35 +88,56 @@ export class FunctionRegistry {
     /**
      * @hidden
      */
-    public _wrapped: _FunctionRegistry
+    public _wrapped: _FunctionRegistry,
+    /**
+     * @hidden
+     */
+    private pkg: string = null
   ) {}
+
+  createPackageRegistry(name: string) {
+    invariant(
+      this.pkg === null,
+      "Function registry is already linked to package: " + this.pkg
+    );
+    return new FunctionRegistry(this._wrapped, name);
+  }
 
   register(
     func: (state: Execution, ...args: any) => Promise<any>,
-    options: FunctionOptions = {}
+    options: ImplementedFunctionOptions = {}
   ) {
     this._wrapped.save(func, {
       async: true,
       allowNull: options.allowNull || false,
       allowSqrlObjects: options.allowSqrlObjects || false,
       pure: options.pure || false,
-      args: options.args
+      args: options.args,
+      package: this.pkg,
+      argstring: options.argstring,
+      docstring: options.docstring
     });
   }
 
-  registerSync(func: (...args: any) => any, options: FunctionOptions = {}) {
+  registerSync(
+    func: (...args: any) => any,
+    options: ImplementedFunctionOptions = {}
+  ) {
     this._wrapped.save(func, {
       allowNull: options.allowNull || false,
       allowSqrlObjects: options.allowSqrlObjects || false,
       pure: options.pure || false,
-      args: options.args
+      args: options.args,
+      package: this.pkg,
+      argstring: options.argstring,
+      docstring: options.docstring
     });
   }
 
   registerStatement(
     statementFeature: string,
     func: (state: Execution, ...args: any) => Promise<any>,
-    options: FunctionOptions = {}
+    options: ImplementedFunctionOptions = {}
   ) {
     this._wrapped.save(func, {
       statementFeature,
@@ -117,11 +146,17 @@ export class FunctionRegistry {
       allowSqrlObjects: options.allowSqrlObjects || false,
       pure: options.pure || false,
       statement: true,
-      args: options.args
+      args: options.args,
+      package: this.pkg,
+      argstring: options.argstring,
+      docstring: options.docstring
     });
   }
 
-  registerCustom(transform: (state: CompileState, ast: CustomCallAst) => Ast) {
+  registerCustom(
+    transform: (state: CompileState, ast: CustomCallAst) => Ast,
+    options: MinimalFunctionOptions = {}
+  ) {
     invariant(
       transform.name,
       "registerCustom() must be called with a named function"
@@ -130,12 +165,16 @@ export class FunctionRegistry {
       name: transform.name,
       customTransform: (state, ast) => {
         return transform(new CompileState(state), ast);
-      }
+      },
+      package: this.pkg,
+      argstring: options.argstring,
+      docstring: options.docstring
     });
   }
+
   registerTransform(
     transform: (state: CompileState, ast: CallAst) => Ast,
-    options?: {}
+    options: FunctionOptions = {}
   ) {
     invariant(
       transform.name,
@@ -145,7 +184,11 @@ export class FunctionRegistry {
       name: transform.name,
       transformAst: (state, ast) => {
         return transform(new CompileState(state), ast);
-      }
+      },
+      package: this.pkg,
+      args: options.args,
+      argstring: options.argstring,
+      docstring: options.docstring
     });
   }
 }

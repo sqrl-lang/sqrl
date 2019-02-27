@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { AstTypes as AT } from "../ast/AstTypes";
 
 import flatten from "../jslib/flatten";
@@ -21,7 +21,7 @@ function tryEnsureNumberArray(arr?) {
   return arr.filter((value?) => typeof value === "number");
 }
 
-export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
+export function registerArrayFunctions(registry: StdlibRegistry) {
   registry.save(
     function dedupe(arr) {
       if (!Array.isArray(arr)) {

@@ -32,7 +32,10 @@ export function registerPatternFunctions(
       ]);
     },
     {
-      args: [AT.constant.string, AT.any]
+      args: [AT.constant.string, AT.any],
+      argstring: "filename, text",
+      docstring:
+        "Match a list of patterns in the given file against the provided text"
     }
   );
 

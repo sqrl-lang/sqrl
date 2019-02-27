@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 
 import { SqrlKey } from "../object/SqrlKey";
 
@@ -72,7 +72,7 @@ async function getKeyList(
   );
 }
 
-export function registerKeyFunctions(registry: SqrlFunctionRegistry) {
+export function registerKeyFunctions(registry: StdlibRegistry) {
   registry.save(
     async function buildKeySqrl(
       state: SqrlExecutionState,

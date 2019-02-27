@@ -160,19 +160,23 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerCustom(function rateLimit(
-    state: CompileState,
-    ast: CustomCallAst
-  ): Ast {
-    const resultsAst = setupRateLimitAst(state, ast).resultsAst;
-    return AstBuilder.call("listMin", [resultsAst]);
-  });
+  registry.registerCustom(
+    function rateLimit(state: CompileState, ast: CustomCallAst): Ast {
+      const resultsAst = setupRateLimitAst(state, ast).resultsAst;
+      return AstBuilder.call("listMin", [resultsAst]);
+    },
+    {
+      argstring:
+        "BY Feature, ... [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
+      docstring:
+        "Returns the number of tokens left in the token bucket ratelimiter before decrementing"
+    }
+  );
 
   registry.registerSync(
     function _rateLimitedValues(state, keys, results) {
       if (keys.length !== results.length) {
-        state.error({}, "Mismatched # of keys and results");
-        return null;
+        throw new Error("Mismatched # of keys and results");
       }
       return flatten(
         results
@@ -190,47 +194,57 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerCustom(function rateLimitedValues(
-    state: CompileState,
-    ast: CustomCallAst
-  ): Ast {
-    const { resultsAst, keysAst } = setupRateLimitAst(state, ast);
-    return AstBuilder.call("_rateLimitedValues", [keysAst, resultsAst]);
-  });
+  registry.registerCustom(
+    function rateLimitedValues(state: CompileState, ast: CustomCallAst): Ast {
+      const { resultsAst, keysAst } = setupRateLimitAst(state, ast);
+      return AstBuilder.call("_rateLimitedValues", [keysAst, resultsAst]);
+    },
+    {
+      argstring:
+        "BY Feature, ... [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
+      docstring:
+        "Returns the values that were rate limited by the token bucket rate limiter"
+    }
+  );
 
-  registry.registerCustom(function rateLimited(
-    state: CompileState,
-    ast: CustomCallAst
-  ): Ast {
-    const args: RateLimitArguments = parse(ast.source, {
-      startRule: "RateLimitArguments"
-    });
-    const { whereAst } = state.combineGlobalWhere(args.where);
+  registry.registerCustom(
+    function rateLimited(state: CompileState, ast: CustomCallAst): Ast {
+      const args: RateLimitArguments = parse(ast.source, {
+        startRule: "RateLimitArguments"
+      });
+      const { whereAst } = state.combineGlobalWhere(args.where);
 
-    const resultsAst = setupRateLimitAst(state, ast).resultsAst;
-    const rateLimitValue = state.setGlobal(
-      ast,
-      AstBuilder.call("listMin", [resultsAst])
-    );
+      const resultsAst = setupRateLimitAst(state, ast).resultsAst;
+      const rateLimitValue = state.setGlobal(
+        ast,
+        AstBuilder.call("listMin", [resultsAst])
+      );
 
-    const tokenAmountAst = state.setGlobal(
-      ast,
-      AstBuilder.branch(
-        whereAst,
-        AstBuilder.call("_getTokenAmount", [args.tokenAmount]),
-        AstBuilder.constant(0)
-      )
-    );
+      const tokenAmountAst = state.setGlobal(
+        ast,
+        AstBuilder.branch(
+          whereAst,
+          AstBuilder.call("_getTokenAmount", [args.tokenAmount]),
+          AstBuilder.constant(0)
+        )
+      );
 
-    return AstBuilder.branch(
-      // if tokenAmount > 0
-      AstBuilder.call("cmpG", [tokenAmountAst, AstBuilder.constant(0)]),
-      // then return rateLimit < tokenAmount
-      AstBuilder.call("cmpL", [rateLimitValue, tokenAmountAst]),
-      // else return rateLimit <= 0
-      AstBuilder.call("cmpLE", [rateLimitValue, AstBuilder.constant(0)])
-    );
-  });
+      return AstBuilder.branch(
+        // if tokenAmount > 0
+        AstBuilder.call("cmpG", [tokenAmountAst, AstBuilder.constant(0)]),
+        // then return rateLimit < tokenAmount
+        AstBuilder.call("cmpL", [rateLimitValue, tokenAmountAst]),
+        // else return rateLimit <= 0
+        AstBuilder.call("cmpLE", [rateLimitValue, AstBuilder.constant(0)])
+      );
+    },
+    {
+      argstring:
+        "BY Feature, ... [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
+      docstring:
+        "Returns true if the token bucket rate limiter has no tokens left, false otherwise"
+    }
+  );
 
   registry.registerSync(
     function _sessionize(key, startMs) {
@@ -242,69 +256,73 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerCustom(function sessionize(
-    state: CompileState,
-    ast: CustomCallAst
-  ): Ast {
-    const args: RateLimitArguments = parse(ast.source, {
-      startRule: "RateLimitArguments"
-    });
-    const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
-      args.where
-    );
+  registry.registerCustom(
+    function sessionize(state: CompileState, ast: CustomCallAst): Ast {
+      const args: RateLimitArguments = parse(ast.source, {
+        startRule: "RateLimitArguments"
+      });
+      const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
+        args.where
+      );
 
-    const tokenAmountAst = state.setGlobal(
-      ast,
-      AstBuilder.branch(
-        whereAst,
-        AstBuilder.call("_getTokenAmount", [args.tokenAmount]),
-        AstBuilder.constant(0)
-      )
-    );
+      const tokenAmountAst = state.setGlobal(
+        ast,
+        AstBuilder.branch(
+          whereAst,
+          AstBuilder.call("_getTokenAmount", [args.tokenAmount]),
+          AstBuilder.constant(0)
+        )
+      );
 
-    const { entityId, entityAst } = state.addHashedEntity(ast, "Sessionize", {
-      whereFeatures,
-      whereTruth,
-      features: args.features,
-      maxAmount: args.maxAmount,
-      refillTimeMs: args.refillTimeMs,
-      refillAmount: args.refillAmount
-    });
+      const { entityId, entityAst } = state.addHashedEntity(ast, "Sessionize", {
+        whereFeatures,
+        whereTruth,
+        features: args.features,
+        maxAmount: args.maxAmount,
+        refillTimeMs: args.refillTimeMs,
+        refillAmount: args.refillAmount
+      });
 
-    const keyAst = state.setGlobal(
-      ast,
-      AstBuilder.call("_buildKey", [entityAst, ...args.features]),
-      `key(${entityId.getIdString()})`
-    );
+      const keyAst = state.setGlobal(
+        ast,
+        AstBuilder.call("_buildKey", [entityAst, ...args.features]),
+        `key(${entityId.getIdString()})`
+      );
 
-    // Convert the amount to be taken into a new global, this allows the
-    // entire array below to be pre-computed.
-    const takeAst = state.setGlobal(
-      ast,
-      AstBuilder.branch(
-        AstBuilder.feature("SqrlMutate"),
-        tokenAmountAst,
-        AstBuilder.constant(0)
-      )
-    );
+      // Convert the amount to be taken into a new global, this allows the
+      // entire array below to be pre-computed.
+      const takeAst = state.setGlobal(
+        ast,
+        AstBuilder.branch(
+          AstBuilder.feature("SqrlMutate"),
+          tokenAmountAst,
+          AstBuilder.constant(0)
+        )
+      );
 
-    const sessionTimestampSlot = state.setGlobal(
-      ast,
-      AstBuilder.call("_fetchSession", [
-        AstBuilder.props({
-          key: keyAst,
-          maxAmount: AstBuilder.constant(args.maxAmount),
-          refillTimeMs: AstBuilder.constant(args.refillTimeMs),
-          refillAmount: AstBuilder.constant(args.refillAmount),
-          take: takeAst,
-          at: AstBuilder.call("timeMs", [AstBuilder.feature("SqrlClock")])
-        })
-      ])
-    );
+      const sessionTimestampSlot = state.setGlobal(
+        ast,
+        AstBuilder.call("_fetchSession", [
+          AstBuilder.props({
+            key: keyAst,
+            maxAmount: AstBuilder.constant(args.maxAmount),
+            refillTimeMs: AstBuilder.constant(args.refillTimeMs),
+            refillAmount: AstBuilder.constant(args.refillAmount),
+            take: takeAst,
+            at: AstBuilder.call("timeMs", [AstBuilder.feature("SqrlClock")])
+          })
+        ])
+      );
 
-    return AstBuilder.call("_sessionize", [
-      keyAst, // Key for the session rate limit
-      sessionTimestampSlot
-    ]);
-  });
+      return AstBuilder.call("_sessionize", [
+        keyAst, // Key for the session rate limit
+        sessionTimestampSlot
+      ]);
+    },
+    {
+      argstring:
+        "BY Feature, ... [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
+      docstring: "Creates a new session using a token bucket rate limiter"
+    }
+  );
 }

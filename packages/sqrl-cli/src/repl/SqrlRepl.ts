@@ -23,6 +23,10 @@ import Semaphore from "sqrl/lib/jslib/Semaphore";
 import { invariant } from "sqrl-common";
 import { spanToShell } from "../spanToShell";
 
+interface FunctionDescriptions {
+  [func: string]: string;
+}
+
 export class SqrlRepl extends EventEmitter {
   private traceFactory: () => Context;
   private server: repl.REPLServer | null = null;
@@ -104,19 +108,59 @@ export class SqrlRepl extends EventEmitter {
   }
 
   private printHelp() {
+    const stdlib: {
+      [name: string]: FunctionDescriptions;
+    } = {};
+    const packages: {
+      [name: string]: FunctionDescriptions;
+    } = {};
     for (const [name, props] of Object.entries(
       this.functionRegistry._wrapped.functionProperties
     ).sort()) {
       if (!name.startsWith("_")) {
         let args = "";
-        if (props.argstring) {
-          args = `(${props.argstring})`;
+        if (typeof props.argstring === "string") {
+          args = `${chalk.yellow("(")}${props.argstring}${chalk.yellow(")")}`;
         }
-        console.log(
-          `${chalk.bold.white(name)}${args}: ${props.docstring ||
-            chalk.gray("<no docstring provided>")}`
-        );
+
+        let docstring = chalk.gray("<no docstring provided>");
+        if (props.docstring) {
+          docstring = props.docstring.split("\n")[0];
+        }
+
+        const description = `${chalk.bold.yellow(name)}${args}${chalk.grey(
+          ":"
+        )} ${docstring}`;
+
+        const group = props.stdlib ? stdlib : packages;
+        group[props.package] = group[props.package] || {};
+        group[props.package][name] = description;
       }
+    }
+
+    let first = true;
+    const printPackageHelp = (
+      group: string,
+      name: string,
+      descs: FunctionDescriptions
+    ) => {
+      if (first) {
+        first = false;
+      } else {
+        console.log();
+      }
+      console.log(chalk.bold.white(name) + " " + chalk.blue(`(${group})`));
+      for (const func of Object.keys(descs).sort()) {
+        console.log("  " + descs[func]);
+      }
+    };
+
+    for (const pkg of Object.keys(stdlib).sort()) {
+      printPackageHelp("stdlib", pkg, stdlib[pkg]);
+    }
+
+    for (const pkg of Object.keys(packages).sort()) {
+      printPackageHelp("package", pkg, packages[pkg]);
     }
   }
 

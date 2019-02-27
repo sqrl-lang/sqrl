@@ -21,7 +21,7 @@ import {
 
 import { parse } from "./parser/sqrlRedisParser";
 
-import { invariant } from "sqrl-common";
+import { invariant, removeIndent } from "sqrl-common";
 import {
   CountArguments,
   TrendingArguments,
@@ -180,7 +180,7 @@ function interpretCountArgs(
   let bumpByAst: Ast = AstBuilder.constant(1);
   if (args.sumFeature) {
     counterProps.sumFeature = args.sumFeature.value;
-    bumpByAst = AstBuilder.call("getBumpBy", [args.sumFeature]);
+    bumpByAst = AstBuilder.call("_getBumpBy", [args.sumFeature]);
   }
 
   const { entityAst, entityId } = state.addHashedEntity(
@@ -267,7 +267,7 @@ export function registerCountFunctions(
   service: CountService
 ) {
   registry.registerSync(
-    function getBumpBy(bumpBy: number) {
+    function _getBumpBy(bumpBy: number) {
       if (typeof bumpBy !== "number") {
         return null;
       }
@@ -314,7 +314,7 @@ export function registerCountFunctions(
   );
 
   registry.register(
-    async function fetchTrendingDetails(
+    async function _fetchTrendingDetails(
       state,
       keys,
       currentCounts,
@@ -365,50 +365,53 @@ export function registerCountFunctions(
     }
   );
 
-  registry.registerCustom(function trending(
-    state: CompileState,
-    ast: CustomCallAst
-  ): Ast {
-    const args: TrendingArguments = parse(ast.source, {
-      startRule: "TrendingArguments"
-    });
+  registry.registerCustom(
+    function trending(state: CompileState, ast: CustomCallAst): Ast {
+      const args: TrendingArguments = parse(ast.source, {
+        startRule: "TrendingArguments"
+      });
 
-    sqrlInvariant(
-      ast,
-      args.timespan === "dayOverDay" ||
-        args.timespan === "weekOverWeek" ||
-        args.timespan === "dayOverFullWeek",
-      "Invalid timespan for trending. Expecting `DAY OVER DAY` or `WEEK OVER WEEK` or `DAY OVER FULL WEEK`"
-    );
+      sqrlInvariant(
+        ast,
+        args.timespan === "dayOverDay" ||
+          args.timespan === "weekOverWeek" ||
+          args.timespan === "dayOverFullWeek",
+        "Invalid timespan for trending. Expecting `DAY OVER DAY` or `WEEK OVER WEEK` or `DAY OVER FULL WEEK`"
+      );
 
-    const timespanConfig = TRENDING_CONFIG[args.timespan];
-    const currentCountArgs: CountArguments = {
-      features: args.features,
-      sumFeature: null,
-      timespan: timespanConfig.current,
-      where: args.where
-    };
+      const timespanConfig = TRENDING_CONFIG[args.timespan];
+      const currentCountArgs: CountArguments = {
+        features: args.features,
+        sumFeature: null,
+        timespan: timespanConfig.current,
+        where: args.where
+      };
 
-    const currentCountAst = databaseCountTransform(
-      state,
-      ast,
-      currentCountArgs
-    );
+      const currentCountAst = databaseCountTransform(
+        state,
+        ast,
+        currentCountArgs
+      );
 
-    const currentAndPreviousCountAst = databaseCountTransform(state, ast, {
-      ...currentCountArgs,
-      timespan: timespanConfig.currentAndPrevious
-    });
+      const currentAndPreviousCountAst = databaseCountTransform(state, ast, {
+        ...currentCountArgs,
+        timespan: timespanConfig.currentAndPrevious
+      });
 
-    const { keysAst } = interpretCountArgs(state, ast, currentCountArgs);
+      const { keysAst } = interpretCountArgs(state, ast, currentCountArgs);
 
-    return AstBuilder.call("fetchTrendingDetails", [
-      keysAst,
-      currentCountAst,
-      currentAndPreviousCountAst,
-      AstBuilder.constant(args.minEvents)
-    ]);
-  });
+      return AstBuilder.call("_fetchTrendingDetails", [
+        keysAst,
+        currentCountAst,
+        currentAndPreviousCountAst,
+        AstBuilder.constant(args.minEvents)
+      ]);
+    },
+    {
+      argstring:
+        "Feature, [...] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK)"
+    }
+  );
 
   function databaseCountTransform(
     state: CompileState,
@@ -494,15 +497,25 @@ export function registerCountFunctions(
       `count(${args.timespan}:${keyedCounterName})`
     );
   }
-  registry.registerCustom(function count(
-    state: CompileState,
-    ast: CustomCallAst
-  ): Ast {
-    const args: CountArguments = parse(ast.source, {
-      startRule: "CountArguments"
-    });
-    return classifyCountTransform(state, ast, args);
-  });
+
+  registry.registerCustom(
+    function count(state: CompileState, ast: CustomCallAst): Ast {
+      const args: CountArguments = parse(ast.source, {
+        startRule: "CountArguments"
+      });
+      return classifyCountTransform(state, ast, args);
+    },
+    {
+      argstring: "BY Feature[, ...] [WHERE Condition] [LAST Timespan]",
+      docstring: removeIndent(`
+      Returns the streaming count
+      
+      Timespans: LAST DAY, LAST EIGHT DAYS, LAST HOUR, LAST MONTH, LAST TWO DAYS, LAST TWO WEEKS, LAST WEEK
+                 DAY OVER DAY, DAY OVER WEEK, WEEK OVER WEEK
+                 TOTAL
+      `)
+    }
+  );
 }
 
 export function getTimespanConfig(timespan) {

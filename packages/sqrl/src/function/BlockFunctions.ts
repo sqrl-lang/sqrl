@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { AstTypes as AT } from "../ast/AstTypes";
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
 import { Manipulator } from "../api/execute";
 import { WhenCause } from "./WhenFunctions";
@@ -16,7 +16,7 @@ export interface BlockService {
 }
 
 export function registerBlockFunctions(
-  registry: SqrlFunctionRegistry,
+  registry: StdlibRegistry,
   blockService: BlockService
 ) {
   registry.save(

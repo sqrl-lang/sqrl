@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { Ast, CallAst } from "../ast/Ast";
 
 import { AstTypes as AT } from "../ast/AstTypes";
@@ -44,7 +44,7 @@ function timeMsForValue(value: any) {
 
   throw new Error("Invalid time value passed to timeMs");
 }
-export function registerDateFunctions(registry: SqrlFunctionRegistry) {
+export function registerDateFunctions(registry: StdlibRegistry) {
   registry.save(null, {
     name: "dateDiff",
     args: [AT.constant.string, AT.any, AT.any.optional],

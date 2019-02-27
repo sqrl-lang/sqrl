@@ -3,11 +3,11 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { cmpE, cmpNE, cmpG, cmpGE, cmpL, cmpLE } from "sqrl-common";
 import { AstTypes as AT } from "../ast/AstTypes";
 
-export function registerComparisonFunctions(registry: SqrlFunctionRegistry) {
+export function registerComparisonFunctions(registry: StdlibRegistry) {
   const compareOpts = {
     args: [AT.any, AT.any],
     pure: true,

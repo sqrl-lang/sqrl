@@ -5,11 +5,11 @@
  */
 /* eslint-disable no-useless-escape */
 
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 import { AstTypes as AT } from "../ast/AstTypes";
 import { SqrlObject } from "../object/SqrlObject";
 
-export function registerStringFunctions(registry: SqrlFunctionRegistry) {
+export function registerStringFunctions(registry: StdlibRegistry) {
   registry.save(
     function concat(...strings) {
       for (const string of strings) {

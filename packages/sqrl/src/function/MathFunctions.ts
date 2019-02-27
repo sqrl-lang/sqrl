@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./FunctionRegistry";
 
 import { AstTypes as AT } from "../ast/AstTypes";
 import crypto = require("crypto");
@@ -30,7 +30,7 @@ function arrayMath(callback, values, defaultValue = null) {
   return isNaN(result) ? null : result;
 }
 
-export function registerMathFunctions(registry: SqrlFunctionRegistry) {
+export function registerMathFunctions(registry: StdlibRegistry) {
   const safeMathOpts = {
     args: [AT.any, AT.any],
     pure: true,
@@ -154,15 +154,18 @@ export function registerMathFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
     function modulo(state, left, right) {
       if (right === 0) {
-        state.logError(new Error("modulo by zero"));
+        state.logError(new Error("Modulo by zero"));
         return null;
       }
       return left % right;
     },
-    Object.assign({}, safeMathOpts, {
+    {
+      ...safeMathOpts,
       args: [AT.state, AT.any.number, AT.any.number],
-      pure: false
-    })
+      pure: false,
+      argstring: "dividend, divisor",
+      docstring: "Return the remainder of the division"
+    }
   );
 
   // Divide is special due to division by zero error
@@ -176,7 +179,14 @@ export function registerMathFunctions(registry: SqrlFunctionRegistry) {
       }
       return left / right;
     },
-    { ...safeMathOpts, args: [AT.state, AT.any, AT.any], pure: false }
+    {
+      ...safeMathOpts,
+      args: [AT.state, AT.any, AT.any],
+      pure: false,
+
+      argstring: "dividend, divisor",
+      docstring: "Return the floating point result of the division"
+    }
   );
 
   registry.save(sha256HexSync, {
