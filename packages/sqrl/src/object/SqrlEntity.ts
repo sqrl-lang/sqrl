@@ -8,7 +8,7 @@ import { SqrlObject } from "./SqrlObject";
 import SqrlUniqueId from "./SqrlUniqueId";
 
 import invariant from "../jslib/invariant";
-import { NodeId } from "../platform/NodeId";
+import { EntityId } from "../platform/EntityId";
 import { Context } from "../api/ctx";
 import { SqrlKey } from "./SqrlKey";
 import { nice } from "node-nice";
@@ -16,8 +16,8 @@ import { murmurhashJsonBuffer } from "../jslib/murmurhashJson";
 import { sqrlCartesianProduct, RenderedSpan } from "sqrl-common";
 import { mkSpan, indentSpan } from "./span";
 
-export default class SqrlNode extends SqrlObject {
-  public nodeId: NodeId;
+export default class SqrlEntity extends SqrlObject {
+  public entityId: EntityId;
 
   constructor(
     public uniqueId: SqrlUniqueId,
@@ -30,15 +30,15 @@ export default class SqrlNode extends SqrlObject {
     }
     invariant(
       typeof value === "string" && value.length > 0,
-      "SqrlNode value expected non-empty string"
+      "SqrlEntity value expected non-empty string"
     );
 
-    this.nodeId = new NodeId(type, value);
+    this.entityId = new EntityId(type, value);
     this.uniqueId = uniqueId;
   }
 
-  getNodeId(): NodeId {
-    return this.nodeId;
+  getEntityId(): EntityId {
+    return this.entityId;
   }
 
   getBasicValue(): string {
@@ -55,13 +55,13 @@ export default class SqrlNode extends SqrlObject {
   }
 
   render(): RenderedSpan {
-    return mkSpan("type:node", [
-      mkSpan("type:name", "node"),
+    return mkSpan("type:entity", [
+      mkSpan("type:name", "entity"),
       mkSpan("type:syntax", "<"),
-      mkSpan("value:nodeId", [
-        mkSpan("nodeId:type", this.nodeId.type),
+      mkSpan("value:entityId", [
+        mkSpan("entityId:type", this.entityId.type),
         mkSpan("value:separator", "/"),
-        mkSpan("nodeId:key", this.nodeId.key)
+        mkSpan("entityId:key", this.entityId.key)
       ]),
       mkSpan("type:syntax", "> {\n"),
       indentSpan(this.uniqueId.render(), 2),
@@ -88,7 +88,7 @@ export default class SqrlNode extends SqrlObject {
       return null;
     }
 
-    // Search through all the values for Node/UniqueId
+    // Search through all the values for Entity/UniqueId
     let timeMs = this.uniqueId.getTimeMs();
     for (const value of featureValues) {
       if (value instanceof SqrlObject) {

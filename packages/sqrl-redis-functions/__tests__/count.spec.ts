@@ -10,8 +10,8 @@ test("multi aliases work", async () => {
   const { lastManipulator } = await runSqrl(
     `
     LET SqrlIsClassify := true;
-    LET SessionActor := node("User", "josh");
-    LET Target := node("User", "julian");
+    LET SessionActor := entity("User", "josh");
+    LET Target := entity("User", "julian");
     LET ActionName := "report";
 
     LET NumTimesReported := count(BY SessionActor AS Target WHERE ActionName = "report" LAST WEEK);
@@ -28,8 +28,8 @@ test("multi aliases work", async () => {
     EXECUTE;
 
     # Flip Actor and julian
-    LET SessionActor := node("User", "julian");
-    LET Target := node("User", "josh");
+    LET SessionActor := entity("User", "julian");
+    LET Target := entity("User", "josh");
 
     # Now that Julian is reporting Josh they should both have one report
 
@@ -64,7 +64,7 @@ LET SqrlIsClassify := true;
 LET SomeCondition := true;
 
 LET UserGeneratedTextTriGrams := [
-  node("TriGrams", "a trending trigram"),
+  entity("TriGrams", "a trending trigram"),
 ];
 
 # One bump from standard count to show they use same keys
@@ -74,8 +74,8 @@ EXECUTE;
 LET TrendingTriGramsDayOverDay := trending(UserGeneratedTextTriGrams ${where} DAY OVER DAY );
 # 0 -> 10 is enough to trigger a trending hit.
 ${range(9)
-        .map(() => "EXECUTE;")
-        .join("\n")}
+  .map(() => "EXECUTE;")
+  .join("\n")}
 ASSERT TrendingTriGramsDayOverDay = [
   {
     "key": [

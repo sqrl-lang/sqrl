@@ -5,7 +5,7 @@
  */
 import { RedisSingleWindowApproxCountUniqueService } from "../src/services/RedisApproxCountUnique";
 import { RedisUniqueIdService } from "../src/services/RedisUniqueId";
-import { SqrlKey, SqrlNode, SqrlUniqueId, createSimpleContext } from "sqrl";
+import { SqrlKey, SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl";
 import { redisTest } from "./helpers/redisTest";
 
 redisTest("works", async redis => {
@@ -21,9 +21,11 @@ redisTest("works", async redis => {
   );
 
   async function getKeyForIp(ip): Promise<SqrlKey> {
-    const nodeUniqueId = new SqrlUniqueId(await uniqueId.fetch(ctx, "Ip", ip));
-    const nodeId = new SqrlNode(nodeUniqueId, "Ip", ip);
-    return nodeId.buildCounterKey(ctx);
+    const entityUniqueId = new SqrlUniqueId(
+      await uniqueId.fetch(ctx, "Ip", ip)
+    );
+    const entityId = new SqrlEntity(entityUniqueId, "Ip", ip);
+    return entityId.buildCounterKey(ctx);
   }
 
   const key = await getKeyForIp("1.2.3.4");

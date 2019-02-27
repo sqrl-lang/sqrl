@@ -13,7 +13,7 @@ import util = require("util");
 import { sqrlSourceArrow } from "../compile/sqrlSourceArrow";
 import invariant from "../jslib/invariant";
 import { SqrlConstantSlot } from "../slot/SqrlSlot";
-import { NodeId } from "./node";
+import { EntityId } from "./entity";
 
 /**
  * Return a SqrlCompileError that can be thrown. This function helps us work
@@ -114,17 +114,17 @@ export class CompileState {
   /**
    * Creates a node with a hash of the given properties for a node type.
    */
-  addHashedNode(
+  addHashedEntity(
     sourceAst: Ast,
-    nodeType: string,
+    entityType: string,
     props: {
       [key: string]: any;
     }
   ): {
-    nodeId: NodeId;
-    nodeAst: SlotAst;
+    entityId: EntityId;
+    entityAst: SlotAst;
   } {
-    return this._wrapped.counterNode(sourceAst, nodeType, props);
+    return this._wrapped.counterEntity(sourceAst, entityType, props);
   }
 
   /**

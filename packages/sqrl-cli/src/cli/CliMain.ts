@@ -67,7 +67,7 @@ import { invariant } from "sqrl-common";
 
 const readFileAsync = promisify(readFile);
 
-const STATEFUL_FUNCTIONS = ["_fetchRateLimit", "_fetchSession", "_node"];
+const STATEFUL_FUNCTIONS = ["_fetchRateLimit", "_fetchSession", "_entity"];
 
 export const CliDoc = `
 Usage:

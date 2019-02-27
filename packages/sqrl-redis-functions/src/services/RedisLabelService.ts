@@ -5,7 +5,7 @@
  */
 import { LabelService } from "../LabelFunctions";
 import { RedisInterface, redisKey } from "./RedisService";
-import { Context, Manipulator, SqrlNode, WhenCause } from "sqrl";
+import { Context, Manipulator, SqrlEntity, WhenCause } from "sqrl";
 
 const EXPIRY = 60 * 60 * 24 * 30;
 
@@ -14,7 +14,7 @@ export class RedisLabelService implements LabelService {
 
   addLabel(
     manipulator: Manipulator,
-    node: SqrlNode,
+    entity: SqrlEntity,
     label: string,
     cause: WhenCause
   ) {
@@ -23,7 +23,7 @@ export class RedisLabelService implements LabelService {
         ctx.requireDatabaseSet(),
         this.prefix,
         "label",
-        node.getNumberString(),
+        entity.getNumberString(),
         label
       );
       await this.redis.set(ctx, key, "1");
@@ -32,7 +32,7 @@ export class RedisLabelService implements LabelService {
   }
   removeLabel(
     manipulator: Manipulator,
-    node: SqrlNode,
+    entity: SqrlEntity,
     label: string,
     cause: WhenCause
   ) {
@@ -41,7 +41,7 @@ export class RedisLabelService implements LabelService {
         ctx.requireDatabaseSet(),
         this.prefix,
         "label",
-        node.getNumberString(),
+        entity.getNumberString(),
         label
       );
       await this.redis.del(ctx, key);
@@ -49,7 +49,7 @@ export class RedisLabelService implements LabelService {
   }
   async hasLabel(
     ctx: Context,
-    node: SqrlNode,
+    entity: SqrlEntity,
     label: string
   ): Promise<boolean> {
     const rv = await this.redis.get(
@@ -58,7 +58,7 @@ export class RedisLabelService implements LabelService {
         ctx.requireDatabaseSet(),
         this.prefix,
         "label",
-        node.getNumberString(),
+        entity.getNumberString(),
         label
       )
     );

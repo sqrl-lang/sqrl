@@ -6,7 +6,7 @@
 import { RedisSingleWindowApproxCountService } from "../src/services/RedisBucketedCount";
 import { RedisInterface } from "../src/services/RedisService";
 import { RedisUniqueIdService } from "../src/services/RedisUniqueId";
-import { SqrlNode, SqrlUniqueId, createSimpleContext } from "sqrl";
+import { SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl";
 import { redisTest } from "./helpers/redisTest";
 
 redisTest("works", async (redis: RedisInterface) => {
@@ -23,9 +23,11 @@ redisTest("works", async (redis: RedisInterface) => {
   );
 
   async function getKeyForIp(ip) {
-    const nodeUniqueId = new SqrlUniqueId(await uniqueId.fetch(ctx, "Ip", ip));
-    const nodeId = new SqrlNode(nodeUniqueId, "Ip", ip);
-    const key = await nodeId.buildCounterKey(ctx);
+    const entityUniqueId = new SqrlUniqueId(
+      await uniqueId.fetch(ctx, "Ip", ip)
+    );
+    const entityId = new SqrlEntity(entityUniqueId, "Ip", ip);
+    const key = await entityId.buildCounterKey(ctx);
 
     return key;
   }

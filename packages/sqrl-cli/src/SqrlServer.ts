@@ -113,7 +113,7 @@ async function deleteRoute(
   req: IncomingMessage,
   res: ServerResponse
 ) {
-  // @TODO: Delete node
+  // @TODO: Delete entity
   throw micro.createError(500, "Not implemented\n");
 }
 

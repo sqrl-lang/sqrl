@@ -15,7 +15,7 @@ test("repl works", async () => {
     `
     LET X := 5;
     LET Y := X + 3;
-    LET Ip := node('Ip', '1.2.3.4');
+    LET Ip := entity('Ip', '1.2.3.4');
     LET Session := sessionize(BY Ip MAX 3 EVERY HOUR); LET Count := count(BY Session LAST HOUR);
     `
       .trim()

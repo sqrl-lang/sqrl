@@ -105,13 +105,13 @@ test("works with retries", () =>
 test("returns rate limited multi values", () =>
   runSqrl(
     `
-  LET TriGrams := nodeList("TriGrams", ["julian ate food", "lunch was good"]);
+  LET TriGrams := entityList("TriGrams", ["julian ate food", "lunch was good"]);
   LET RateLimitedTriGrams := rateLimited(BY TriGrams MAX 1 EVERY 1 DAY);
   LET RateLimitedTriGramsValues := rateLimitedValues(BY TriGrams MAX 1 EVERY 1 DAY);
   ASSERT RateLimitedTriGrams = false;
   ASSERT RateLimitedTriGramsValues = [];
 
-  LET TriGrams := nodeList("TriGrams", [
+  LET TriGrams := entityList("TriGrams", [
     "julian ate food",
     "julian ate food",
     "lunch was good",
@@ -297,7 +297,7 @@ test(
       const sqrl: autogen_any = (values: autogen_any = {}): autogen_any => `
 LET Abc := ${JSON.stringify(values.Abc || null)};
 LET Ip := ip(${JSON.stringify(values.Ip || '1.2.3.4')});
-LET Machine := node('Machine', ${JSON.stringify(values.Machine || null)});
+LET Machine := entity('Machine', ${JSON.stringify(values.Machine || null)});
     `;
       await test.setCustomerData(
         'rules/main.sqrl',
@@ -358,9 +358,9 @@ LET Machine := node('Machine', ${JSON.stringify(values.Machine || null)});
             'key(RateLimit/3e1befb7be5cd8b451feebcef44765b1)',
             'key(RateLimit/5449578839f0cf8ca9977c96176d4c1d)',
             'key(RateLimit/d6d71123c0a686d2d7b7e7759e27bd66)',
-            'node(RateLimit/3e1befb7be5cd8b451feebcef44765b1)',
-            'node(RateLimit/5449578839f0cf8ca9977c96176d4c1d)',
-            'node(RateLimit/d6d71123c0a686d2d7b7e7759e27bd66)',
+            'entity(RateLimit/3e1befb7be5cd8b451feebcef44765b1)',
+            'entity(RateLimit/5449578839f0cf8ca9977c96176d4c1d)',
+            'entity(RateLimit/d6d71123c0a686d2d7b7e7759e27bd66)',
           ],
           {
             expectedResultFile: 'rateLimitSource.json',

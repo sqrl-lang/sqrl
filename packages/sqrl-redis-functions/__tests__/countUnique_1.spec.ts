@@ -10,26 +10,26 @@ import { runSqrl, buildRedisTestFunctionRegistry } from "./helpers/runSqrl";
 
 test("debug", async () =>
   runSqrl(`
-LET Ip := node("Ip", "1.2.3.4");
+LET Ip := entity("Ip", "1.2.3.4");
 LET SessionActor := null;
 LET UniquesByIp := countUnique(SessionActor GROUP BY Ip LAST HOUR);
 LET UniquesByIpTotal := countUnique(SessionActor BY Ip);
 
 # Test a unique by josh (without executing)
-LET SessionActor := node("Object", "user/josh");
+LET SessionActor := entity("Object", "user/josh");
 ASSERT UniquesByIp = 1;
 
 # Another unique by greg (without executing) should still be one
-LET SessionActor := node("Object", "user/greg");
+LET SessionActor := entity("Object", "user/greg");
 ASSERT UniquesByIp = 1;
 EXECUTE;
 
 # After execution greg reads 1
-LET SessionActor := node("Object", "user/greg");
+LET SessionActor := entity("Object", "user/greg");
 ASSERT UniquesByIp = 1;
 
 # But a hit from josh reads 2
-LET SessionActor := node("Object", "user/josh");
+LET SessionActor := entity("Object", "user/josh");
 ASSERT UniquesByIp = 2; # josh 2
 EXECUTE;
 `));
@@ -37,30 +37,30 @@ EXECUTE;
 test("clears as expected", async () =>
   runSqrl(jsonTemplate`
 LET SqrlClock := ${moment().toISOString()};
-LET Ip := node("Ip", "1.2.3.4");
+LET Ip := entity("Ip", "1.2.3.4");
 LET SessionActor := null;
 LET UniquesByIp := countUnique(SessionActor GROUP BY Ip LAST HOUR);
 LET UniquesByIpTotal := countUnique(SessionActor BY Ip);
 
 # Test a unique by josh (without executing)
-LET SessionActor := node("Object", "user/josh");
+LET SessionActor := entity("Object", "user/josh");
 ASSERT UniquesByIp = 1;
 
 # Another unique by greg (without executing) should still be one
-LET SessionActor := node("Object", "user/greg");
+LET SessionActor := entity("Object", "user/greg");
 ASSERT UniquesByIp = 1;
 EXECUTE;
 
 # After execution greg reads 1
-LET SessionActor := node("Object", "user/greg");
+LET SessionActor := entity("Object", "user/greg");
 ASSERT UniquesByIp = 1;
 
 # But a hit from josh reads 2
-LET SessionActor := node("Object", "user/josh");
+LET SessionActor := entity("Object", "user/josh");
 ASSERT UniquesByIp = 2; # josh 2
 EXECUTE;
 
-LET SessionActor := node("Object", "user/tim");
+LET SessionActor := entity("Object", "user/tim");
 ASSERT UniquesByIp = 3; # ... and tim=3
 EXECUTE;
 
@@ -80,13 +80,13 @@ ASSERT UniquesByIpTotal = 3; # total is still 3
 /*
 test("intersects uniques", async () =>
   runSqrlTest(`
-LET IpA := node("Ip", "1.2.3.4");
-LET IpB := node("Ip", "1.2.3.5");
-LET IpC := node("Ip", "1.2.3.6");
-LET IpD := node("Ip", "1.2.3.7");
-LET UserA := node("Object", "user/josh");
-LET UserB := node("Object", "user/greg");
-LET UserC := node("Object", "user/tim");
+LET IpA := entity("Ip", "1.2.3.4");
+LET IpB := entity("Ip", "1.2.3.5");
+LET IpC := entity("Ip", "1.2.3.6");
+LET IpD := entity("Ip", "1.2.3.7");
+LET UserA := entity("Object", "user/josh");
+LET UserB := entity("Object", "user/greg");
+LET UserC := entity("Object", "user/tim");
 LET Ip := null;
 LET User := null;
 
@@ -146,39 +146,39 @@ ASSERT UniquesByBoth = 1;
 
 test("unique aliases dont bump aliased", async () =>
   runSqrl(`
-LET Ip := node("Ip", "1.2.3.4");
+LET Ip := entity("Ip", "1.2.3.4");
 LET Actor := null;
 LET Target := null;
 LET UniquesIpByActorAsTarget := countUnique(Ip GROUP BY Actor AS Target LAST WEEK);
 
-LET Actor := node("Object", "user/josh");
-LET Target := node("Object", "user/greg");
+LET Actor := entity("Object", "user/josh");
+LET Target := entity("Object", "user/greg");
 
 # Unique ip's when greg was the target is now 1
 EXECUTE;
 
 # Unique ip's when greg was the target is now 2
-LET Ip := node("Ip", "1.2.3.5");
+LET Ip := entity("Ip", "1.2.3.5");
 EXECUTE;
 
 # Unique ip's when greg was the target is now 3
-LET Ip := node("Ip", "1.2.3.6");
+LET Ip := entity("Ip", "1.2.3.6");
 EXECUTE;
 
 # With josh as the target is still 0
 ASSERT UniquesIpByActorAsTarget = 0;
 
-LET Actor := node("Object", "user/greg");
-LET Target := node("Object", "user/josh");
+LET Actor := entity("Object", "user/greg");
+LET Target := entity("Object", "user/josh");
 ASSERT UniquesIpByActorAsTarget = 3;
 
-LET Ip := node("Ip", "1.2.3.5");
+LET Ip := entity("Ip", "1.2.3.5");
 ASSERT UniquesIpByActorAsTarget = 3;
 
-LET Ip := node("Ip", "1.2.3.7");
+LET Ip := entity("Ip", "1.2.3.7");
 ASSERT UniquesIpByActorAsTarget = 3;
 
-LET Target := node("Object", "user/greg");
+LET Target := entity("Object", "user/greg");
 ASSERT UniquesIpByActorAsTarget = 4;
 `));
 

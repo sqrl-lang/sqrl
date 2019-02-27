@@ -22,9 +22,9 @@ main:
   - text: Concepts
     type: label
     children:
-      - text: Nodes
+      - text: Entities
         type: link
-        path: language/nodes.html
+        path: language/entities.html
       - text: Labels
         type: link
         path: language/labels.html

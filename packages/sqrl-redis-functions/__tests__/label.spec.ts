@@ -8,7 +8,7 @@ import { runSqrl } from "./helpers/runSqrl";
 test("Labeling works", async () => {
   await runSqrl(`
     LET SqrlMutate := true;
-    LET Ip := node("Ip", "1.2.3.4");
+    LET Ip := entity("Ip", "1.2.3.4");
     log("Ip: %s", Ip);
 
     addLabel(Ip, "mylabel") WHERE false;
@@ -31,7 +31,7 @@ test("WHEN works", async () => {
   await runSqrl(`
   LET A := false;
   LET B := false;
-  LET Ip := node("Ip", "1.2.3.4");
+  LET Ip := entity("Ip", "1.2.3.4");
   CREATE RULE X WHERE A;
   WHEN X THEN addLabel(Ip, "bad");
   EXECUTE;

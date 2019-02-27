@@ -9,14 +9,14 @@ import { Ast, CallAst } from "../ast/Ast";
 import { AstTypes as AT } from "../ast/AstTypes";
 import SqrlAst from "../ast/SqrlAst";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
-import SqrlNode from "../object/SqrlNode";
+import SqrlEntity from "../object/SqrlEntity";
 
 import bluebird = require("bluebird");
 import { SqrlParserState } from "../compile/SqrlParserState";
 import SqrlUniqueId from "../object/SqrlUniqueId";
 import { UniqueIdService } from "../api/services";
 
-async function toNode(
+async function toEntity(
   service: UniqueIdService,
   state: SqrlExecutionState,
   type: string,
@@ -32,20 +32,20 @@ async function toNode(
   }
 
   const uniqueId = await service.fetch(state.ctx, type, value);
-  return new SqrlNode(new SqrlUniqueId(uniqueId), type, value);
+  return new SqrlEntity(new SqrlUniqueId(uniqueId), type, value);
 }
 
-export function registerNodeFunctions(
+export function registerEntityFunctions(
   registry: SqrlFunctionRegistry,
   service: UniqueIdService
 ) {
   registry.save(
-    async function _node(state: SqrlExecutionState, type: string, value) {
+    async function _entity(state: SqrlExecutionState, type: string, value) {
       // Handle common empty / null values
       if (value === null || typeof value === "undefined" || value === "") {
         return null;
       }
-      return toNode(service, state, type, value);
+      return toEntity(service, state, type, value);
     },
     {
       allowNull: true,
@@ -55,7 +55,7 @@ export function registerNodeFunctions(
   );
 
   registry.save(
-    async function _nodeList(
+    async function _entityList(
       state: SqrlExecutionState,
       type: string,
       arr: string[]
@@ -63,10 +63,10 @@ export function registerNodeFunctions(
       if (type === null || arr === null || !Array.isArray(arr)) {
         return null;
       }
-      const nodes = await bluebird.map(arr, (v?) =>
-        toNode(service, state, type, v)
+      const entities = await bluebird.map(arr, (v?) =>
+        toEntity(service, state, type, v)
       );
-      return nodes.filter((v?) => v !== null);
+      return entities.filter((v?) => v !== null);
     },
     {
       allowNull: true,
@@ -75,45 +75,45 @@ export function registerNodeFunctions(
   );
 
   registry.save(
-    function uniqueId(state: SqrlExecutionState, uniqueId: SqrlNode) {
+    function uniqueId(state: SqrlExecutionState, uniqueId: SqrlEntity) {
       return uniqueId.getNumberString();
     },
     {
       allowSqrlObjects: true,
-      args: [AT.state, AT.any.sqrlNode],
-      argstring: "node",
-      docstring: "Returns the unique id of the node as a string"
+      args: [AT.state, AT.any.sqrlEntity],
+      argstring: "entity",
+      docstring: "Returns the unique id of the entity as a string"
     }
   );
 
   registry.save(
-    function nodeId(state: SqrlExecutionState, node: SqrlNode) {
-      return node.nodeId.getIdString();
+    function entityId(state: SqrlExecutionState, entity: SqrlEntity) {
+      return entity.entityId.getIdString();
     },
     {
       allowSqrlObjects: true,
-      args: [AT.state, AT.any.sqrlNode],
-      argstring: "node",
-      docstring: "Returns the node id of the node"
+      args: [AT.state, AT.any.sqrlEntity],
+      argstring: "entity",
+      docstring: "Returns the entity id of the entity"
     }
   );
 
   registry.save(null, {
-    name: "node",
+    name: "entity",
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
-      return SqrlAst.call("_node", ast.args);
+      return SqrlAst.call("_entity", ast.args);
     },
     args: [AT.constant.string, AT.any],
     argstring: "type, key",
-    docstring: "Create a node of the given type"
+    docstring: "Create an entity of the given type"
   });
 
   registry.save(null, {
-    name: "nodeList",
+    name: "entityList",
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
-      return SqrlAst.call("_nodeList", ast.args);
+      return SqrlAst.call("_entityList", ast.args);
     },
     argstring: "type, keys",
-    docstring: "Create a list of nodes of the given type"
+    docstring: "Create a list of entities of the given type"
   });
 }

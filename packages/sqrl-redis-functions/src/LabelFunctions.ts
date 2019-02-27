@@ -12,24 +12,24 @@ import {
   FunctionRegistry,
   Manipulator,
   WhenCause,
-  SqrlNode,
+  SqrlEntity,
   AT
 } from "sqrl";
 
 export interface LabelService {
   addLabel(
     manipulator: Manipulator,
-    node: SqrlNode,
+    entity: SqrlEntity,
     label: string,
     cause: WhenCause | null
   );
   removeLabel(
     manipulator: Manipulator,
-    node: SqrlNode,
+    entity: SqrlEntity,
     label: string,
     cause: WhenCause | null
   );
-  hasLabel(ctx: Context, node: SqrlNode, label: string): Promise<boolean>;
+  hasLabel(ctx: Context, entity: SqrlEntity, label: string): Promise<boolean>;
 }
 
 export function registerLabelFunctions(
@@ -41,12 +41,12 @@ export function registerLabelFunctions(
     async function addLabel(
       state: Execution,
       cause: WhenCause,
-      nodes: SqrlNode | SqrlNode[],
+      entities: SqrlEntity | SqrlEntity[],
       label: string
     ) {
-      ensureArray(nodes).forEach(node => {
-        if (node !== null) {
-          service.addLabel(state.manipulator, node, label, cause);
+      ensureArray(entities).forEach(entity => {
+        if (entity !== null) {
+          service.addLabel(state.manipulator, entity, label, cause);
         }
       });
     },
@@ -54,7 +54,7 @@ export function registerLabelFunctions(
       args: [
         AT.state,
         AT.whenCause,
-        AT.any.sqrlNodeOrNodes,
+        AT.any.sqrlEntityOrEntities,
         AT.constant.string
       ],
       allowNull: true,
@@ -67,12 +67,12 @@ export function registerLabelFunctions(
     async function removeLabel(
       state: Execution,
       cause: WhenCause,
-      nodes: SqrlNode | SqrlNode[],
+      entities: SqrlEntity | SqrlEntity[],
       label: string
     ) {
-      ensureArray(nodes).forEach(node => {
-        if (node !== null) {
-          service.removeLabel(state.manipulator, node, label, cause);
+      ensureArray(entities).forEach(entity => {
+        if (entity !== null) {
+          service.removeLabel(state.manipulator, entity, label, cause);
         }
       });
     },
@@ -80,7 +80,7 @@ export function registerLabelFunctions(
       args: [
         AT.state,
         AT.whenCause,
-        AT.any.sqrlNodeOrNodes,
+        AT.any.sqrlEntityOrEntities,
         AT.constant.string
       ],
       allowNull: true,
@@ -89,11 +89,15 @@ export function registerLabelFunctions(
   );
 
   registry.register(
-    async function hasLabel(state: Execution, node: SqrlNode, label: string) {
-      return service.hasLabel(state.ctx, node, label);
+    async function hasLabel(
+      state: Execution,
+      entity: SqrlEntity,
+      label: string
+    ) {
+      return service.hasLabel(state.ctx, entity, label);
     },
     {
-      args: [AT.state, AT.any.sqrlNode, AT.constant.string],
+      args: [AT.state, AT.any.sqrlEntity, AT.constant.string],
       allowSqrlObjects: true
     }
   );

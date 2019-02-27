@@ -9,7 +9,7 @@ import { sqrlInvariant } from "../api/parse";
 import { Ast, CallAst, ConstantAst } from "./Ast";
 import { isValidFeatureName } from "../feature/FeatureName";
 import mapToObj from "../jslib/mapToObj";
-import SqrlNode from "../object/SqrlNode";
+import SqrlEntity from "../object/SqrlEntity";
 import { ensureArray } from "sqrl-common";
 import {
   StateArgument,
@@ -38,11 +38,11 @@ export interface OptionalTypeChecker extends RuntimeTypeChecker {
   array: RuntimeTypeChecker;
   bool: RuntimeTypeChecker;
   instanceOf: RuntimeTypeChecker;
-  nodeId: RuntimeTypeChecker;
+  entityId: RuntimeTypeChecker;
   number: RuntimeTypeChecker;
   object: RuntimeTypeChecker;
-  sqrlNode: RuntimeTypeChecker;
-  sqrlNodeOrNodes: RuntimeTypeChecker;
+  sqrlEntity: RuntimeTypeChecker;
+  sqrlEntityOrEntities: RuntimeTypeChecker;
 
   sqrlGeoPoint: RuntimeTypeChecker;
   string: RuntimeTypeChecker;
@@ -63,7 +63,7 @@ Runs in two passes, compile time checks and runtime checks.
   args: [ AT.string.optional ]     // Optional compile time arg
   args: [ AT.any.string ]          // Anything at compile time, string at runtime
   args: [ AT.any.optional.string ] // Optional arg, anything at compile time, string at runtime
-  args: [ AT.any.optional.sqrlNode ] // Optional arg, anything at compile time, string at runtime
+  args: [ AT.any.optional.SqrlEntity ] // Optional arg, anything at compile time, string at runtime
 
 */
 
@@ -73,8 +73,8 @@ const runtimeCheckers = {
   instanceOf: ensureRuntimeInstanceOf,
   number: ensureRuntimeTypeOf("number"),
   object: ensureRuntimeTypeOf("object"),
-  sqrlNode: ensureRuntimeInstanceOf(SqrlNode),
-  sqrlNodeOrNodes: ensureRuntimeInstanceOf(SqrlNode, true),
+  sqrlEntity: ensureRuntimeInstanceOf(SqrlEntity),
+  sqrlEntityOrEntities: ensureRuntimeInstanceOf(SqrlEntity, true),
   string: ensureRuntimeTypeOf("string")
 };
 

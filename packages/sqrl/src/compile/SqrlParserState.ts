@@ -34,7 +34,7 @@ import SqrlImporter from "./SqrlImporter";
 import SqrlFeatureSlot from "../slot/SqrlFeatureSlot";
 import { reduceTruthTable } from "./SqrlTruthTable";
 import { murmurhashJsonHexSync } from "../jslib/murmurhashJson";
-import { NodeId } from "../platform/NodeId";
+import { EntityId } from "../platform/EntityId";
 import { Filesystem, EmptyFilesystem } from "../api/filesystem";
 import SqrlRuleSlot from "../slot/SqrlRuleSlot";
 import { RuleSpec } from "../api/spec";
@@ -687,26 +687,30 @@ export class SqrlParserState extends SqrlParseInfo {
     return rv;
   }
 
-  constantNodeAst(sourceAst: Ast, type: string, key: string): SlotAst {
-    const nodeAst = SqrlAst.call("node", SqrlAst.constants(type, key));
+  constantEntityAst(sourceAst: Ast, type: string, key: string): SlotAst {
+    const entityAst = SqrlAst.call("entity", SqrlAst.constants(type, key));
     return this.withoutGlobalWhere(() =>
-      this.newGlobal(sourceAst, nodeAst, `node(${type}/${key})`)
+      this.newGlobal(sourceAst, entityAst, `entity(${type}/${key})`)
     );
   }
 
-  counterNode(
+  counterEntity(
     sourceAst: Ast,
-    nodeType: string,
+    entityType: string,
     props: {
       [key: string]: any;
     }
   ): {
-    nodeId: NodeId;
-    nodeAst: SlotAst;
+    entityId: EntityId;
+    entityAst: SlotAst;
   } {
-    const nodeKey = murmurhashJsonHexSync(props);
-    const nodeId = new NodeId(nodeType, nodeKey);
-    const nodeAst = this.constantNodeAst(sourceAst, nodeId.type, nodeId.key);
-    return { nodeId, nodeAst };
+    const entityKey = murmurhashJsonHexSync(props);
+    const entityId = new EntityId(entityType, entityKey);
+    const entityAst = this.constantEntityAst(
+      sourceAst,
+      entityId.type,
+      entityId.key
+    );
+    return { entityId, entityAst };
   }
 }

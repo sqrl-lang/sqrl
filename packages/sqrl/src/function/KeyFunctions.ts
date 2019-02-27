@@ -11,13 +11,13 @@ import { murmurhashJsonBuffer } from "../jslib/murmurhashJson";
 import { SqrlObject } from "../object/SqrlObject";
 import { nice } from "node-nice";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
-import SqrlNode from "../object/SqrlNode";
+import SqrlEntity from "../object/SqrlEntity";
 import { Context } from "../api/ctx";
 import { sqrlCartesianProduct } from "sqrl-common";
 
 export async function buildKey(
   ctx: Context,
-  counterNode: SqrlNode,
+  counterEntity: SqrlEntity,
   ...featureValues: Array<any>
 ): Promise<SqrlKey | null> {
   const hasEmpty = featureValues.some(v => {
@@ -27,8 +27,8 @@ export async function buildKey(
     return null;
   }
 
-  // Search through all the values for Node/UniqueId
-  let timeMs = counterNode.uniqueId.getTimeMs();
+  // Search through all the values for Entity/UniqueId
+  let timeMs = counterEntity.uniqueId.getTimeMs();
   for (const value of featureValues) {
     if (value instanceof SqrlObject) {
       timeMs = Math.max(timeMs, value.tryGetTimeMs() || 0);
@@ -46,7 +46,7 @@ export async function buildKey(
   }
   return new SqrlKey(
     ctx.requireDatabaseSet(),
-    counterNode,
+    counterEntity,
     basicFeatureValues,
     timeMs,
     featuresHash
@@ -55,20 +55,20 @@ export async function buildKey(
 
 async function getKeyList(
   ctx: Context,
-  counterNode?,
+  counterEntity?,
   ...featureValues: Array<any>
 ): Promise<SqrlKey[]> {
-  if (counterNode === null) {
+  if (counterEntity === null) {
     return [];
   }
   if (featureValues.length === 0) {
-    return [await buildKey(ctx, counterNode)];
+    return [await buildKey(ctx, counterEntity)];
   }
 
   return Promise.all(
     sqrlCartesianProduct(featureValues, {
       maxArrays: 1
-    }).map(values => buildKey(ctx, counterNode, ...values))
+    }).map(values => buildKey(ctx, counterEntity, ...values))
   );
 }
 
@@ -76,10 +76,10 @@ export function registerKeyFunctions(registry: SqrlFunctionRegistry) {
   registry.save(
     async function buildKeySqrl(
       state: SqrlExecutionState,
-      counterNode: SqrlNode,
+      counterEntity: SqrlEntity,
       ...args
     ) {
-      const key = await buildKey(state.ctx, counterNode, ...args);
+      const key = await buildKey(state.ctx, counterEntity, ...args);
       if (state.manipulator) {
         state.manipulator.trackSqrlKey(key);
       }

@@ -1,5 +1,4 @@
-title: REPL
----
+## title: REPL
 
 # REPL
 
@@ -15,8 +14,8 @@ sqrl> LET ActionName := jsonValue(ActionData, "$.name")
 'hi'
 sqrl> LET UserId := jsonValue(ActionData, "$.user_id")
 '1234'
-sqrl > LET User := node('User', UserId)
-node<User/1234> {
+sqrl > LET User := entity('User', UserId)
+entity<User/1234> {
   uniqueId<2019-01-18T03:58:57.834Z@1>
 }
 sqrl> printSource(ActionName);

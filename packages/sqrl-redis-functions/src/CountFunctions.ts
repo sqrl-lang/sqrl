@@ -28,7 +28,7 @@ import {
   AliasedFeature
 } from "./parser/sqrlRedis";
 
-const NODE_TYPE = "Counter";
+const ENTITY_TYPE = "Counter";
 
 export const TIMESPAN_CONFIG = {
   lastHour: {
@@ -183,9 +183,9 @@ function interpretCountArgs(
     bumpByAst = AstBuilder.call("getBumpBy", [args.sumFeature]);
   }
 
-  const { nodeAst, nodeId } = state.addHashedNode(
+  const { entityAst, entityId } = state.addHashedEntity(
     sourceAst,
-    NODE_TYPE,
+    ENTITY_TYPE,
     counterProps
   );
 
@@ -193,10 +193,10 @@ function interpretCountArgs(
     AstBuilder.feature(aliasFeature.feature.value)
   );
   const featureString = featuresAst.map(ast => ast.value).join("~");
-  const keyedCounterName = `${nodeId.getIdString()}~${featureString}`;
+  const keyedCounterName = `${entityId.getIdString()}~${featureString}`;
   const keysAst = state.setGlobal(
     sourceAst,
-    AstBuilder.call("_getKeyList", [nodeAst, ...featuresAst]),
+    AstBuilder.call("_getKeyList", [entityAst, ...featuresAst]),
     `key(${keyedCounterName})`
   );
   const hasAlias = args.features.some(
@@ -209,8 +209,8 @@ function interpretCountArgs(
     hasAlias,
     keyedCounterName,
     keysAst,
-    nodeAst,
-    nodeId,
+    entityAst,
+    entityId,
     whereAst,
     whereFeatures,
     whereTruth

@@ -1,5 +1,5 @@
 LET RequestIp := input();
-LET Ip := node('Ip', RequestIp);
+LET Ip := entity('Ip', RequestIp);
 
 # Note: You could use `WHERE rateLimited(BY ...)` instead of using `rateLimit()` and
 # checking the remaining tokens are empty.

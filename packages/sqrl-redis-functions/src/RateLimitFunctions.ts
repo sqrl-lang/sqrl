@@ -62,7 +62,7 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
       AstBuilder.constant(0)
     )
   );
-  const { nodeId, nodeAst } = state.addHashedNode(ast, "RateLimit", {
+  const { entityId, entityAst } = state.addHashedEntity(ast, "RateLimit", {
     whereFeatures,
     whereTruth,
     features: args.features,
@@ -73,8 +73,8 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
 
   const keysAst = state.setGlobal(
     ast,
-    AstBuilder.call("_getKeyList", [nodeAst, ...args.features]),
-    `key(${nodeId.getIdString()})`
+    AstBuilder.call("_getKeyList", [entityAst, ...args.features]),
+    `key(${entityId.getIdString()})`
   );
 
   // Convert the amount to be taken into a new global, this allows the
@@ -101,7 +101,7 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
         strict: AstBuilder.constant(args.strict)
       })
     ]),
-    nodeId.getIdString()
+    entityId.getIdString()
   );
   return { keysAst, resultsAst };
 }
@@ -262,7 +262,7 @@ export function registerRateLimitFunctions(
       )
     );
 
-    const { nodeId, nodeAst } = state.addHashedNode(ast, "Sessionize", {
+    const { entityId, entityAst } = state.addHashedEntity(ast, "Sessionize", {
       whereFeatures,
       whereTruth,
       features: args.features,
@@ -273,8 +273,8 @@ export function registerRateLimitFunctions(
 
     const keyAst = state.setGlobal(
       ast,
-      AstBuilder.call("_buildKey", [nodeAst, ...args.features]),
-      `key(${nodeId.getIdString()})`
+      AstBuilder.call("_buildKey", [entityAst, ...args.features]),
+      `key(${entityId.getIdString()})`
     );
 
     // Convert the amount to be taken into a new global, this allows the

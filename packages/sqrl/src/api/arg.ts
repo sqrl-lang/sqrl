@@ -19,8 +19,8 @@ interface OptArgumentCheck extends ArgumentCheck {
 }
 
 interface ArgumentCheckWithRuntime extends ArgumentCheck {
-  sqrlNodeOrNodes: ArgumentCheck;
-  sqrlNode: ArgumentCheck;
+  sqrlEntityOrEntities: ArgumentCheck;
+  sqrlEntity: ArgumentCheck;
   string: ArgumentCheck;
   number: ArgumentCheck;
   bool: ArgumentCheck;

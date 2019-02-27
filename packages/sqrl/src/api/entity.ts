@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-export class NodeId {
+export class EntityId {
   constructor(public type: string, public key: string) {}
 
   getIdString(): string {

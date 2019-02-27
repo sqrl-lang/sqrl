@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import SqrlNode from "./SqrlNode";
+import SqrlEntity from "./SqrlEntity";
 import { SqrlObject } from "./SqrlObject";
 
 import { bufferToHexEncodedAscii } from "../jslib/bufferToHexEncodedAscii";
@@ -20,28 +20,31 @@ export class SqrlKey extends SqrlObject {
 
   constructor(
     public databaseSet: DatabaseSet,
-    public counterNode: SqrlNode,
+    public counterEntity: SqrlEntity,
     public featureValues: any[],
     public timeMs: number,
     public featuresHash: Buffer
   ) {
     super();
 
-    invariant(counterNode instanceof SqrlNode, "Expected SqrlNode for counter");
+    invariant(
+      counterEntity instanceof SqrlEntity,
+      "Expected SqrlEntity for counter"
+    );
     invariant(featuresHash.length === 16, "Expected 16 bytes featuresHash");
 
     const timeMsBuffer = timeToBuffer(this.timeMs);
 
     this.buffer = Buffer.concat([
       this.databaseSet.getDatasetIdBuffer(),
-      this.counterNode.uniqueId.getBuffer(),
+      this.counterEntity.uniqueId.getBuffer(),
       timeMsBuffer,
       this.featuresHash
     ]);
   }
 
   getDebugString() {
-    const counterHash = this.counterNode.getBasicValue().substring(0, 8);
+    const counterHash = this.counterEntity.getBasicValue().substring(0, 8);
     let featureString = "";
     if (this.featureValues.length) {
       featureString = stringify(this.featureValues);
@@ -56,7 +59,7 @@ export class SqrlKey extends SqrlObject {
   render(): RenderedSpan {
     return mkSpan("type:key", [
       mkSpan("", "key {\n"),
-      mkSpan("counter", [indentSpan(this.counterNode.render(), 2)]),
+      mkSpan("counter", [indentSpan(this.counterEntity.render(), 2)]),
       mkSpan("key:time", "\n  time: "),
       mkSpan("value:time", new Date(this.timeMs).toISOString() + "\n"),
       mkSpan("key:features", `  features: `),
@@ -92,7 +95,7 @@ export class SqrlKey extends SqrlObject {
     return {
       key: bufferToHexEncodedAscii(this.buffer),
       shardValue: this.getShardValue(),
-      counter: this.counterNode.getData(),
+      counter: this.counterEntity.getData(),
       time: new Date(this.timeMs).toISOString(),
       featureValues: this.featureValues
     };

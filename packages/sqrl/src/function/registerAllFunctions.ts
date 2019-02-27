@@ -9,7 +9,7 @@ import { registerTypeFunctions } from "./TypeFunctions";
 import { registerComparisonFunctions } from "./ComparisonFunctions";
 import { registerMathFunctions } from "./MathFunctions";
 import { registerStdlibFunctions } from "./StdlibFunctions";
-import { registerNodeFunctions } from "./NodeFunctions";
+import { registerEntityFunctions } from "./EntityFunctions";
 import { registerKeyFunctions } from "./KeyFunctions";
 import { registerArrayFunctions } from "./ArrayFunctions";
 import { registerDateFunctions } from "./DateFunctions";
@@ -61,7 +61,7 @@ export function registerAllFunctions(
   }
 
   if (services.uniqueId) {
-    registerNodeFunctions(functionRegistry, services.uniqueId);
+    registerEntityFunctions(functionRegistry, services.uniqueId);
   }
 
   registerSaveFunctions(functionRegistry, services);

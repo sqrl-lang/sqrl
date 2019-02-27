@@ -239,21 +239,25 @@ export function registerCountUniqueFunctions(
     const groupHasAliases = args.groups.some(f => f.feature.value !== f.alias);
     const sortedGroupAliases = sortedGroup.map(feature => feature.alias);
 
-    const { nodeId, nodeAst } = state.addHashedNode(ast, "UniqueCounter", {
-      groups: sortedGroupAliases,
-      uniques: sortedUniques.map(feature => feature.alias),
+    const { entityId, entityAst } = state.addHashedEntity(
+      ast,
+      "UniqueCounter",
+      {
+        groups: sortedGroupAliases,
+        uniques: sortedUniques.map(feature => feature.alias),
 
-      // Only include the where clauses if they're non-empty
-      ...(whereTruth ? { whereFeatures, whereTruth } : {})
-    });
+        // Only include the where clauses if they're non-empty
+        ...(whereTruth ? { whereFeatures, whereTruth } : {})
+      }
+    );
 
     const originalKeysAst = state.setGlobal(
       ast,
       AstBuilder.call("_getKeyList", [
-        nodeAst,
+        entityAst,
         ...groupAliases.map(alias => AstBuilder.feature(alias))
       ]),
-      `key(${nodeId.getIdString()})`
+      `key(${entityId.getIdString()})`
     );
 
     // Always bump the counter according to the original keys (aliases)
@@ -277,10 +281,10 @@ export function registerCountUniqueFunctions(
       keysAst = state.setGlobal(
         ast,
         AstBuilder.call("_getKeyList", [
-          nodeAst,
+          entityAst,
           ...groupFeatures.map(feature => AstBuilder.feature(feature))
         ]),
-        `key(${nodeId.getIdString()}:${groupFeatures.join(",")})`
+        `key(${entityId.getIdString()}:${groupFeatures.join(",")})`
       );
 
       // If we're using aliases we only count the uniques in this request if

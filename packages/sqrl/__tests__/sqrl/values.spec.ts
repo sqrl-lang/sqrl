@@ -54,7 +54,7 @@ sqrlTest(
   ASSERT hasAttr(DataBlob, "key") = true;
   ASSERT attr(DataBlob, Key) = 0;
   ASSERT hasAttr(DataBlob, Key) = true;
-  ASSERT attr(DataBlob, node("Ip", "key")) = 0;
+  ASSERT attr(DataBlob, entity("Ip", "key")) = 0;
   ASSERT jsonValue(DataBlob, "$.key") = 0;
   ASSERT jsonValue(DataBlob, "$.key_2") = 2;
   ASSERT jsonValue(DataBlob, "$.nested.key") = 1;
