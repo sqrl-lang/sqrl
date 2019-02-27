@@ -23,6 +23,7 @@
     "sqrl": "file:packages/sqrl",
     "sqrl-cli": "file:packages/sqrl-cli",
     "sqrl-common": "file:packages/sqrl-common",
+    "sqrl-example-functions": "file:examples/sqrl-example-functions",
     "sqrl-redis-functions": "file:packages/sqrl-redis-functions",
     "sqrl-test-utils": "file:packages/sqrl-test-utils",
     "sqrl-text-functions": "file:packages/sqrl-text-functions",

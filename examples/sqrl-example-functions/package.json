@@ -1,0 +1,25 @@
+{
+  "name": "sqrl-example-functions",
+  "version": "0.0.1",
+  "main": "./lib/index.js",
+  "author": {
+    "name": "Josh Yudaken",
+    "email": "j@yud.co.za"
+  },
+  "license": "GLP-3.0",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "peerDependencies": {
+    "sqrl": ">= 0.0.1 < 1"
+  },
+  "devDependencies": {
+    "@types/node": "^11.9.5",
+    "tslint": "^5.13.0",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "sqrl": "file:../../packages/sqrl"
+  }
+}

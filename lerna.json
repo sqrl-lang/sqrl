@@ -1,6 +1,7 @@
 {
   "packages": [
     "packages/*",
+    "examples/sqrl-example-functions",
     "website",
     "website/themes/sqrl-hexo-theme-doc"
   ],

@@ -36,7 +36,10 @@ export function buildServices(redisAddress: string): RedisServices {
   });
 }
 
-export function register(registry: FunctionRegistry, services: RedisServices) {
+export function register(
+  registry: FunctionRegistry,
+  services: RedisServices = {}
+) {
   if (services.count) {
     registerCountFunctions(registry, services.count);
   }
