@@ -476,7 +476,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     return {
       args,
       type: "call",
-      func: "dataObject",
+      func: "createMap",
       location: loc()
     };
   };

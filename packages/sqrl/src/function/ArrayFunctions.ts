@@ -41,9 +41,10 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
       });
     },
     {
-      argCount: 1,
+      args: [AT.any],
       allowSqrlObjects: true,
       allowNull: true,
+      argstring: "list",
       docstring: "Removes duplicate entries from a list"
     }
   );
@@ -65,6 +66,7 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     {
       args: [AT.any],
       allowSqrlObjects: true,
+      argstring: "list",
       docstring: "Returns the provided list in sorted order"
     }
   );
@@ -80,6 +82,7 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     {
       allowSqrlObjects: true,
       allowNull: true,
+      argstring: "list, list...",
       docstring: "Concatenates many lists into a single long list"
     }
   );
@@ -107,6 +110,7 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     {
       name: "flatten",
       allowNull: true,
+      argstring: "list",
       docstring: "Reducess multiple levels of lists into a single flat list"
     }
   );
@@ -121,7 +125,8 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     {
       allowNull: true,
       allowSqrlObjects: true,
-      argCount: 1,
+      args: [AT.any],
+      argstring: "list",
       docstring: "Removes any falsy values from the given list"
     }
   );
@@ -136,7 +141,8 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     {
       allowNull: true,
       allowSqrlObjects: true,
-      argCount: 1,
+      args: [AT.any],
+      argstring: "list",
       docstring: "Returns the first item in the provided list"
     }
   );
@@ -164,8 +170,9 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowNull: true,
-      argCount: 1,
+      args: [AT.any],
       allowSqrlObjects: true,
+      argstring: "list",
       docstring: "Returns the last item in the provided list"
     }
   );
@@ -177,7 +184,8 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowNull: true,
-      argCount: 1,
+      args: [AT.any],
+      argstring: "list",
       docstring: "Returns the sum of all items in the list"
     }
   );
@@ -189,7 +197,8 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowNull: true,
-      argCount: 1,
+      args: [AT.any],
+      argstring: "list",
       docstring: "Returns the minimum of all items in the list"
     }
   );
@@ -201,7 +210,8 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowNull: true,
-      argCount: 1,
+      args: [AT.any],
+      argstring: "list",
       docstring: "Returns the maximum of all items in the list"
     }
   );
@@ -215,8 +225,9 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowNull: true,
-      argCount: 2,
+      args: [AT.any, AT.any],
       pure: true,
+      argstring: "list | string, value",
       docstring:
         "Tests if a given list or string contains the provided search value"
     }
@@ -232,6 +243,7 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
     {
       allowNull: true,
       args: [AT.state, AT.any.array, AT.any.number],
+      argstring: "list, index",
       docstring: "Returns the item at the specified index in a list"
     }
   );
@@ -244,7 +256,8 @@ export function registerArrayFunctions(registry: SqrlFunctionRegistry) {
       return seq.length;
     },
     {
-      argCount: 1,
+      args: [AT.any],
+      argstring: "list",
       docstring: "Returns the length of a provided list"
     }
   );

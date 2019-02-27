@@ -5,6 +5,8 @@
  */
 import { SqrlObject } from "../object/SqrlObject";
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { AstTypes as AT } from "../ast/AstTypes";
+
 const FLOAT_REGEX = /^-?[0-9]*(\.[0-9]+)?$/;
 
 function float(value: any): number | null {
@@ -37,30 +39,39 @@ function int(value: any): number | null {
 }
 export function registerTypeFunctions(registry: SqrlFunctionRegistry) {
   registry.save(int, {
-    argCount: 1,
+    args: [AT.any],
     pure: true,
-    allowSqrlObjects: true
+    allowSqrlObjects: true,
+    argstring: "value",
+    docstring: "Returns the integer value of the given input value"
   });
 
   registry.save(SqrlObject.isTruthy, {
     name: "nonNullBool",
     allowSqrlObjects: true,
     allowNull: true,
-    argCount: 1,
-    pure: true
+    args: [AT.any],
+    pure: true,
+    argstring: "value",
+    docstring:
+      "Returns the boolean value of the given input value (false if it is null)"
   });
 
   registry.save(SqrlObject.isTruthy, {
     name: "bool",
-    argCount: 1,
+    args: [AT.any],
     allowSqrlObjects: true,
-    pure: true
+    pure: true,
+    argstring: "value",
+    docstring: "Returns the boolean value of the given input value"
   });
 
   registry.save(float, {
-    argCount: 1,
+    args: [AT.any],
     pure: true,
-    allowSqrlObjects: true
+    allowSqrlObjects: true,
+    argstring: "value",
+    docstring: "Returns the floating point value of the given input value"
   });
 
   registry.save(
@@ -70,7 +81,7 @@ export function registerTypeFunctions(registry: SqrlFunctionRegistry) {
     {
       allowSqrlObjects: true,
       pure: true,
-      argstring: "value, ...",
+      argstring: "value, value...",
       docstring: "Returns a list of the provided values"
     }
   );
@@ -86,7 +97,7 @@ export function registerTypeFunctions(registry: SqrlFunctionRegistry) {
       }
     },
     {
-      argCount: 1,
+      args: [AT.any],
       pure: true,
       argstring: "value",
       docstring: "Creates a string representation of the given value"
@@ -98,37 +109,10 @@ export function registerTypeFunctions(registry: SqrlFunctionRegistry) {
       return value;
     },
     {
-      argCount: 1,
+      args: [AT.any],
       pure: true,
       argstring: "value",
       docstring: "Returns the basic representation of the given value"
-    }
-  );
-
-  registry.save(
-    function intMap(arr) {
-      if (!Array.isArray(arr)) {
-        return null;
-      }
-      return arr.map(int);
-    },
-    {
-      argCount: 1,
-      pure: true
-    }
-  );
-
-  registry.save(
-    function floatMap(arr) {
-      if (!Array.isArray(arr)) {
-        return null;
-      }
-      return arr.map(float);
-    },
-    {
-      allowSqrlObjects: true,
-      argCount: 1,
-      pure: true
     }
   );
 }

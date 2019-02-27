@@ -34,7 +34,9 @@ export function registerLogFunctions(
       allowNull: true,
       statement: true,
       statementFeature: "SqrlLogStatements",
-      stateArg: true
+      stateArg: true,
+      argstring: "format string, value...",
+      docstring: "Logs a message using sprintf style formatting"
     }
   );
 
@@ -69,6 +71,8 @@ export function registerLogFunctions(
     },
     args: [AT.feature],
     allowNull: true,
-    statement: true
+    statement: true,
+    argstring: "feature",
+    docstring: "Logs the given feature and its value"
   });
 }

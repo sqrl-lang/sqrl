@@ -51,20 +51,6 @@ export function registerAssertFunctions(
     }
   );
 
-  registry.save(
-    function _getCurrentOutput(state, allowEmpty) {
-      return state.manipulator.getCurrentHumanOutput(!!allowEmpty);
-    },
-    {
-      args: [AT.state, AT.any]
-    }
-  );
-
-  registry.save(null, {
-    name: "sampleTestResults",
-    docstring: "Save a snapshot of results for comparison during testing"
-  });
-
   registry.save(null, {
     name: "assert",
     statement: true,
@@ -80,19 +66,6 @@ export function registerAssertFunctions(
       const [testAst] = ast.args;
 
       if (testAst.type === "binary_expr") {
-        if (
-          testAst.operator === "=" &&
-          testAst.right.type === "call" &&
-          testAst.right.func === "sampleTestResults"
-        ) {
-          const [name] = testAst.right.args;
-          return SqrlAst.call("_assertSample", [
-            testAst.left,
-            name || SqrlAst.constant(false),
-            sourceArrowAst
-          ]);
-        }
-
         if (comparisonSymbols.has(testAst.operator)) {
           return SqrlAst.call("_assertCmp", [
             testAst.left,
@@ -104,6 +77,7 @@ export function registerAssertFunctions(
       }
       return SqrlAst.call("_assert", [testAst, sourceArrowAst]);
     },
+    argstring: "condition",
     docstring: "Assert that an expected condition is true"
   });
 }

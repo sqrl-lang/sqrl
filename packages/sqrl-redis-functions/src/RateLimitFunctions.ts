@@ -88,7 +88,7 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
     )
   );
 
-  const redisResults = state.setGlobal(
+  const resultsAst = state.setGlobal(
     ast,
     AstBuilder.call("_fetchRateLimit", [
       AstBuilder.props({
@@ -100,11 +100,7 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
         at: AstBuilder.call("timeMs", [AstBuilder.feature("SqrlClock")]),
         strict: AstBuilder.constant(args.strict)
       })
-    ])
-  );
-  const resultsAst = state.setGlobal(
-    ast,
-    AstBuilder.call("intMap", [redisResults]),
+    ]),
     nodeId.getIdString()
   );
   return { keysAst, resultsAst };

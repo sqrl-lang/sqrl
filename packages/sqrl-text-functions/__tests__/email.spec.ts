@@ -1,4 +1,4 @@
-import { runSqrlTest } from "../../src/simple/runSqrlTest";
+import { textSqrlTest } from "./helpers/textSqrlTest";
 
 /**
  * Copyright 2018 Twitter, Inc.
@@ -6,11 +6,12 @@ import { runSqrlTest } from "../../src/simple/runSqrlTest";
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-test("charGrams", async () => {
-  await runSqrlTest(`
+textSqrlTest(
+  "email",
+  `
 LET RawActorEmail := "pete.HUNT1+978@gmail.com";
 LET ActorEmail := normalizeEmail(RawActorEmail);
 
 ASSERT ActorEmail = "petehunt1@gmail.com";
-    `);
-});
+    `
+);

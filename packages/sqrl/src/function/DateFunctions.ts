@@ -47,7 +47,7 @@ function timeMsForValue(value: any) {
 export function registerDateFunctions(registry: SqrlFunctionRegistry) {
   registry.save(null, {
     name: "dateDiff",
-    args: [AT.any, AT.any, AT.any.optional],
+    args: [AT.constant.string, AT.any, AT.any.optional],
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
       const timeUnitAst = ast.args[0];
 
@@ -76,7 +76,10 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
         startDateAst,
         endDateAst || SqrlAst.feature("SqrlClock")
       ]);
-    }
+    },
+    argstring: "unit, start, end?",
+    docstring:
+      "Returns the difference between the two dates in the given unit (millisecond, second, minute, hour, day, week)"
   });
 
   registry.save(
@@ -128,7 +131,10 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
         );
       }
       return SqrlAst.call("_formatDate", [ast.args[0], formatAst]);
-    }
+    },
+    argstring: "date, format",
+    docstring:
+      "Format a given date according to a given format (see https://momentjs.com/docs/#/displaying/format/)"
   });
 
   registry.save(
@@ -168,21 +174,35 @@ export function registerDateFunctions(registry: SqrlFunctionRegistry) {
       );
 
       return SqrlAst.call("_dateAdd", ast.args);
-    }
+    },
+    argstring: "date, duration",
+    docstring: "Add a given duration (ISO8601 format) to the given date"
   });
 
   registry.save(
     function date(value) {
-      // Value can be iso8601 or timeMs
       if (value instanceof SqrlObject) {
         value = value.tryGetTimeMs() || value.getBasicValue();
       }
-      const ms = new Date(value).getTime() || null;
-      return ms && new SqrlDateTime(ms);
+      return new SqrlDateTime(timeMsForValue(value));
     },
     {
       allowSqrlObjects: true,
-      args: [AT.any]
+      args: [AT.any],
+      argstring: "value",
+      docstring: "Convert the given object or ISO8601 string to a date"
+    }
+  );
+
+  registry.save(
+    function dateFromMs(ms: number) {
+      return ms && new SqrlDateTime(ms);
+    },
+    {
+      args: [AT.any.number],
+      argstring: "value",
+      docstring:
+        "Converts a count of milliseconds since the unix epoch to a date"
     }
   );
 

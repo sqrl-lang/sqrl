@@ -46,7 +46,7 @@ export class AstBuilder {
     Object.entries(obj).forEach(([key, ast]) => {
       args.push(AstBuilder.constant(key), ast);
     });
-    return AstBuilder.call("dataObject", args);
+    return AstBuilder.call("createMap", args);
   }
 
   static branch(condition: Ast, trueBranch: Ast, falseBranch: Ast): IfAst {

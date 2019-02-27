@@ -25,9 +25,9 @@ Object {
 }",
   "G": "function() {
   return bluebird.resolve(
-    functions._dataObject(
+    functions._createMap(
       \\"a\\",
-      functions._dataObject(
+      functions._createMap(
         \\"c\\",
         functions.subtract(functions.divide(this, 6, 2), 1)
       )
@@ -91,9 +91,9 @@ Object {
   return bluebird.resolve(
     functions._assertCmp(
       this,
-      functions._dataObject(\\"a\\", [1, 2]),
+      functions._createMap(\\"a\\", [1, 2]),
       \\"=\\",
-      functions._dataObject(\\"a\\", [1, 2]),
+      functions._createMap(\\"a\\", [1, 2]),
       'line 45\\\\\\\\n  ASSERT {\\"a\\": [1, 2]} = { \\"a\\": [1, 2] };\\\\\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\\\\\n'
     )
   );
@@ -102,7 +102,7 @@ Object {
   return bluebird.resolve(
     functions._assertCmp(
       this,
-      functions._dataObject(\\"a\\", 9, \\"b\\", functions.divide(this, 6, 2)),
+      functions._createMap(\\"a\\", 9, \\"b\\", functions.divide(this, 6, 2)),
       \\"=\\",
       { a: 9, b: 3 },
       'line 46\\\\\\\\n  ASSERT {\\"a\\": 5 + 4, \\"b\\": Six / 2} = { \\"a\\": 9, \\"b\\": 3 };\\\\\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\\\\\n'
@@ -145,14 +145,14 @@ Object {
   "Zero": "function() {
   return bluebird.resolve(0);
 }",
-  "ast:0b4b0127e16fadc99fab4c263110754b": "function() {
+  "ast:1417de40896f44775ffe300dc51c74c5": "function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
-      functions._dataObject(\\"a\\", [1, 2]),
+      functions._createMap(\\"a\\", 9, \\"b\\", functions.divide(this, 6, 2)),
       \\"=\\",
-      functions._dataObject(\\"a\\", [1, 2]),
-      'line 45\\\\n  ASSERT {\\"a\\": [1, 2]} = { \\"a\\": [1, 2] };\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\n'
+      { a: 9, b: 3 },
+      'line 46\\\\n  ASSERT {\\"a\\": 5 + 4, \\"b\\": Six / 2} = { \\"a\\": 9, \\"b\\": 3 };\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\n'
     )
   );
 }",
@@ -177,14 +177,14 @@ Object {
     )
   );
 }",
-  "ast:997a4129ca48f22c0db2969cd1cbbf04": "function() {
+  "ast:decae6d5c0d938836df4f140215ba419": "function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
-      functions._dataObject(\\"a\\", 9, \\"b\\", functions.divide(this, 6, 2)),
+      functions._createMap(\\"a\\", [1, 2]),
       \\"=\\",
-      { a: 9, b: 3 },
-      'line 46\\\\n  ASSERT {\\"a\\": 5 + 4, \\"b\\": Six / 2} = { \\"a\\": 9, \\"b\\": 3 };\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\n'
+      functions._createMap(\\"a\\", [1, 2]),
+      'line 45\\\\n  ASSERT {\\"a\\": [1, 2]} = { \\"a\\": [1, 2] };\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\n'
     )
   );
 }",

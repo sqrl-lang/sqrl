@@ -251,7 +251,7 @@ NonEmptyDataObjectExpr = "{" _? firstPair:DataObjectPair restExprs:(_? "," _? Da
   return {
     args,
     type: 'call',
-    func: 'dataObject',
+    func: 'createMap',
     location: loc()
   };
 }

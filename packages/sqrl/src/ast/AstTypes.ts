@@ -6,7 +6,7 @@
 import SqrlAst from "./SqrlAst";
 
 import { sqrlInvariant } from "../api/parse";
-import { Ast, CallAst } from "./Ast";
+import { Ast, CallAst, ConstantAst } from "./Ast";
 import { isValidFeatureName } from "../feature/FeatureName";
 import mapToObj from "../jslib/mapToObj";
 import SqrlNode from "../object/SqrlNode";
@@ -69,7 +69,7 @@ Runs in two passes, compile time checks and runtime checks.
 
 const runtimeCheckers = {
   array: ensureRuntime(Array.isArray, `expected array`),
-  bool: ensureRuntimeTypeOf("boolean"),
+  boolean: ensureRuntimeTypeOf("boolean"),
   instanceOf: ensureRuntimeInstanceOf,
   number: ensureRuntimeTypeOf("number"),
   object: ensureRuntimeTypeOf("object"),
@@ -81,6 +81,8 @@ const runtimeCheckers = {
 const compileCheckers = {
   any: typeChecker(() => true),
   constant: {
+    array: ensureConstant("array", ast => Array.isArray(ast.value)),
+    boolean: constantType("boolean"),
     number: constantNumber(),
     string: constantType("string"),
     value: constantValue,
@@ -144,7 +146,7 @@ function ensureAstType(type?) {
   return ensure(`be of type ${type}`, (ast?) => ast && ast.type === type);
 }
 
-function ensureConstant(message, checker) {
+function ensureConstant(message, checker: (ast: ConstantAst) => boolean) {
   return ensure(
     `be a constant ${message}`,
     (ast?) => ast && ast.type === "constant" && checker(ast)

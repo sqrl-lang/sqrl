@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
-import { Ast, CallAst, ConstantAst } from "../ast/Ast";
+import { Ast, CallAst } from "../ast/Ast";
 
 import { AstTypes as AT } from "../ast/AstTypes";
 import SqrlAst from "../ast/SqrlAst";
@@ -13,7 +13,6 @@ import SqrlNode from "../object/SqrlNode";
 
 import bluebird = require("bluebird");
 import { SqrlParserState } from "../compile/SqrlParserState";
-import { sqrlInvariant } from "../api/parse";
 import SqrlUniqueId from "../object/SqrlUniqueId";
 import { UniqueIdService } from "../api/services";
 
@@ -40,30 +39,6 @@ export function registerNodeFunctions(
   registry: SqrlFunctionRegistry,
   service: UniqueIdService
 ) {
-  registry.save(null, {
-    name: "object",
-    transformAst(state: SqrlParserState, ast): Ast {
-      sqrlInvariant(
-        ast,
-        ast.args[0].type === "feature" ||
-          (ast.args[0].type === "constant" &&
-            typeof (ast.args[0] as ConstantAst).value === "string"),
-        "object expects a feature / string collection name as the first argument"
-      );
-      sqrlInvariant(
-        ast,
-        ast.args.length === 2,
-        "Invalid number of arguments passed in to object"
-      );
-      const objectAst = SqrlAst.call("concat", [
-        ast.args[0],
-        SqrlAst.constant("/"),
-        ast.args[1]
-      ]);
-      return SqrlAst.call("node", [SqrlAst.constant("Object"), objectAst]);
-    }
-  });
-
   registry.save(
     async function _node(state: SqrlExecutionState, type: string, value) {
       // Handle common empty / null values

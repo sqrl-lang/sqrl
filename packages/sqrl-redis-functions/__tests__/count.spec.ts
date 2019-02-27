@@ -10,8 +10,8 @@ test("multi aliases work", async () => {
   const { lastManipulator } = await runSqrl(
     `
     LET SqrlIsClassify := true;
-    LET SessionActor := object("user", "josh");
-    LET Target := object("user", "julian");
+    LET SessionActor := node("User", "josh");
+    LET Target := node("User", "julian");
     LET ActionName := "report";
 
     LET NumTimesReported := count(BY SessionActor AS Target WHERE ActionName = "report" LAST WEEK);
@@ -28,8 +28,8 @@ test("multi aliases work", async () => {
     EXECUTE;
 
     # Flip Actor and julian
-    LET SessionActor := object("user", "julian");
-    LET Target := object("user", "josh");
+    LET SessionActor := node("User", "julian");
+    LET Target := node("User", "josh");
 
     # Now that Julian is reporting Josh they should both have one report
 
@@ -47,8 +47,8 @@ test("multi aliases work", async () => {
   );
 
   expect(Array.from(lastManipulator.sqrlKeys).sort()).toEqual([
-    'counter=054c84dc;timeMs=2019-01-17T20:51:27.017Z;features=["user/josh"]',
-    'counter=054c84dc;timeMs=2019-01-17T20:51:27.017Z;features=["user/julian"]'
+    'counter=054c84dc;timeMs=2019-01-17T20:51:27.017Z;features=["josh"]',
+    'counter=054c84dc;timeMs=2019-01-17T20:51:27.017Z;features=["julian"]'
   ]);
 });
 

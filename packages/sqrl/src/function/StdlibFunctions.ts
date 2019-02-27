@@ -5,6 +5,7 @@
  */
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { Ast, CallAst } from "../ast/Ast";
+import { AstTypes as AT } from "../ast/AstTypes";
 
 import invariant from "../jslib/invariant";
 import { SqrlParserState } from "../compile/SqrlParserState";
@@ -51,7 +52,9 @@ export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
       throw new Error(
         "This is a language feature, should not be called in runtime"
       );
-    }
+    },
+    argstring: "",
+    docstring: "Sets the given feature as an input value"
   });
 
   registry.save(function _slotWait() {
@@ -125,8 +128,7 @@ export function registerStdlibFunctions(registry: SqrlFunctionRegistry) {
     {
       allowNull: true,
       allowSqrlObjects: true,
-      argCount: 4,
-      stateArg: true
+      args: [AT.state, AT.any, AT.any, AT.any]
     }
   );
 }

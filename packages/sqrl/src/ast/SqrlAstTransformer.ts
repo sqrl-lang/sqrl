@@ -45,8 +45,6 @@ const ignoreTypes = [
 ];
 
 const entriesToObj = (o, [k, v]) => Object.assign(o, { [k]: v });
-const pluralize = (text, count) =>
-  `${count} ${text}` + (count === 1 ? "" : "s");
 
 export default class SqrlAstTransformer {
   transformCase;
@@ -85,22 +83,6 @@ export default class SqrlAstTransformer {
   assertArgs(ast: CallAst) {
     const { functionRegistry } = this.state;
     const props = functionRegistry.getProps(ast.func);
-
-    // @TODO remove argCount
-    // if args is specified with no argCount, ensure that we've provided a type for every arg
-    if (props.argCount) {
-      const hasStateArg = ast.args[0] && ast.args[0].type === "state";
-      const argCount =
-        props.argCount + (props.stateArg && !hasStateArg ? -1 : 0);
-      sqrlInvariant(
-        ast,
-        argCount === ast.args.length,
-        `Argument count to call of ${ast.func} did not match. ` +
-          `Expected ${pluralize("argument", argCount)} but got ${
-            ast.args.length
-          }.`
-      );
-    }
 
     if (props.args) {
       AT.compileTypesInvariant(ast, props.args);

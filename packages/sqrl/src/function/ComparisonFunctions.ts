@@ -5,11 +5,13 @@
  */
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { cmpE, cmpNE, cmpG, cmpGE, cmpL, cmpLE } from "sqrl-common";
+import { AstTypes as AT } from "../ast/AstTypes";
 
 export function registerComparisonFunctions(registry: SqrlFunctionRegistry) {
   const compareOpts = {
-    argCount: 2,
-    pure: true
+    args: [AT.any, AT.any],
+    pure: true,
+    argstring: "value, value"
   };
   registry.save(cmpE, {
     ...compareOpts,

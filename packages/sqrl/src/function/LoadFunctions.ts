@@ -34,7 +34,9 @@ export function registerLoadFunctions(registry: SqrlFunctionRegistry) {
       const parsed = yaml.safeLoad(loadFile(state, ast, pathAst.value));
       return SqrlAst.constant(parsed);
     },
-    args: [AT.constant.string]
+    args: [AT.constant.string],
+    argstring: "path",
+    docstring: "Loads data from a given JSON file"
   });
 
   registry.save(null, {
@@ -44,7 +46,9 @@ export function registerLoadFunctions(registry: SqrlFunctionRegistry) {
       const parsed = yaml.safeLoad(loadFile(state, ast, pathAst.value));
       return SqrlAst.constant(parsed);
     },
-    args: [AT.constant.string]
+    args: [AT.constant.string],
+    argstring: "path",
+    docstring: "Loads data from a given YAML file"
   });
 
   // Used by patternMatches
@@ -54,10 +58,12 @@ export function registerLoadFunctions(registry: SqrlFunctionRegistry) {
       const pathAst = ast.args[0] as ConstantAst;
       const parsed = loadFile(state, pathAst, pathAst.value)
         .split("\n")
-        .map(pattern => pattern.trim())
-        .filter(pattern => pattern.length > 0);
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
       return SqrlAst.constant(parsed);
     },
-    args: [AT.constant.string]
+    args: [AT.constant.string],
+    argstring: "path",
+    docstring: "Loads data as a list of lines from a given text file"
   });
 }

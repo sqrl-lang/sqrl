@@ -6,14 +6,14 @@
     "version": "3.8.0"
   },
   "dependencies": {
-    "hexo": "^3.3.8",
+    "hexo": "^3.8.0",
     "hexo-cli": "^1.0.3",
     "hexo-deployer-git": "^1.0.0",
-    "hexo-renderer-ejs": "^0.2.0",
+    "hexo-renderer-ejs": "^0.3.1",
     "hexo-renderer-less": "^1.0.0",
-    "hexo-renderer-marked": "^0.2.10",
+    "hexo-renderer-marked": "^0.3.2",
     "hexo-renderer-sass": "^0.3.2",
-    "hexo-server": "^0.2.1",
+    "hexo-server": "^0.3.3",
     "sqrl-hexo-theme-doc": "file:themes/sqrl-hexo-theme-doc"
   },
   "scripts": {

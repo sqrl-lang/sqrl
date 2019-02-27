@@ -7,10 +7,6 @@
 
 import { SqrlFunctionRegistry } from "./FunctionRegistry";
 import { AstTypes as AT } from "../ast/AstTypes";
-import { SqrlParserState } from "../compile/SqrlParserState";
-import { CallAst, Ast } from "../ast/Ast";
-import SqrlAst from "../ast/SqrlAst";
-import { sqrlInvariant } from "../api/parse";
 import { SqrlObject } from "../object/SqrlObject";
 
 export function registerStringFunctions(registry: SqrlFunctionRegistry) {
@@ -210,95 +206,6 @@ export function registerStringFunctions(registry: SqrlFunctionRegistry) {
       argstring: "string, start, [end]",
       docstring:
         "Returns the substring from the given start index of the string"
-    }
-  );
-
-  registry.save(null, {
-    transformAst(state: SqrlParserState, ast: CallAst): Ast {
-      const [stringAst, optionsAst] = ast.args;
-      const args = [
-        stringAst,
-        SqrlAst.call("regexReplace", [
-          stringAst,
-          SqrlAst.constant("/[^a-zA-Z]/ig"),
-          SqrlAst.constant("")
-        ])
-      ];
-
-      if (optionsAst) {
-        args.push(optionsAst);
-      }
-
-      return SqrlAst.call("_isGibberish", args);
-    },
-    args: [AT.any, AT.any.optional],
-    name: "isGibberish"
-  });
-
-  registry.save(
-    function _charGrams(string, gramSize) {
-      const grams = [];
-      for (let i = 0; i <= string.length - gramSize; i++) {
-        grams.push(string.substr(i, gramSize));
-      }
-      return grams;
-    },
-    {
-      args: [AT.any.string, AT.constant.number]
-    }
-  );
-  registry.save(null, {
-    name: "charGrams",
-    args: [AT.any, AT.constant.number],
-    transformAst(state: SqrlParserState, ast): Ast {
-      const sizeAst = ast.args[1];
-      sqrlInvariant(
-        ast,
-        sizeAst.type === "constant" && sizeAst.value > 0,
-        "charGrams size must be > 0"
-      );
-      return SqrlAst.call("_charGrams", ast.args);
-    }
-  });
-
-  // TODO: could precompile these regexes at parse time
-  registry.save(
-    function regexMatch(state, string, regex) {
-      return string.match(new RegExp(regex, "g"));
-    },
-    {
-      args: [AT.state, AT.any.string, AT.any.string]
-    }
-  );
-
-  registry.save(
-    function regexTest(state, string, regex) {
-      return new RegExp(regex, "g").test(string);
-    },
-    {
-      args: [AT.state, AT.any.string, AT.any.string]
-    }
-  );
-
-  registry.save(
-    function regexReplace(state, string, regex, replaceWith) {
-      return string.replace(new RegExp(regex, "g"), replaceWith);
-    },
-    {
-      args: [AT.state, AT.any.string, AT.any.string, AT.any]
-    }
-  );
-
-  const RE_EMAIL = new RegExp("[^\\d\\w]+", "ig");
-
-  // TODO: This could be improved *a lot*.
-  registry.save(
-    function normalizeEmail(state, email: string) {
-      const [handle, domain] = email.toLowerCase().split("@", 2);
-      return handle.split("+")[0].replace(RE_EMAIL, "") + "@" + domain;
-    },
-    {
-      args: [AT.state, AT.any.string]
     }
   );
 }

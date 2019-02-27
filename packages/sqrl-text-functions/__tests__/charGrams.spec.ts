@@ -1,4 +1,4 @@
-import { runSqrlTest } from "../../src/simple/runSqrlTest";
+import { textSqrlTest } from "./helpers/textSqrlTest";
 
 /**
  * Copyright 2018 Twitter, Inc.
@@ -6,8 +6,9 @@ import { runSqrlTest } from "../../src/simple/runSqrlTest";
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-test("charGrams", async () => {
-  await runSqrlTest(`
+textSqrlTest(
+  "charGrams",
+  `
 LET ActorEmail := "abc123def";
 LET SimpleString := "abcdefghi";
 LET CharTriGrams := charGrams(SimpleString, 3);
@@ -46,5 +47,5 @@ ASSERT CharGrams = [
     "h",
     "i"
   ];
-    `);
-});
+    `
+);

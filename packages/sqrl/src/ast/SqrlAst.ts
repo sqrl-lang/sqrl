@@ -154,10 +154,10 @@ const SqrlAst = {
     return (
       (ast.type === "constant" && typeof ast.value === "object") ||
       (ast.type === "call" &&
-        ast.func === "dataObject" &&
+        ast.func === "createMap" &&
         ast.args.length % 2 === 0) ||
       (ast.type === "call" &&
-        ast.func === "_dataObject" &&
+        ast.func === "_createMap" &&
         ast.args.length % 2 === 0)
     );
   },

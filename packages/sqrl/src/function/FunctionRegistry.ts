@@ -26,7 +26,6 @@ const AsyncFunction = Object.getPrototypeOf(async function() {
 export interface SaveFunctionProperties {
   allowNull?: boolean;
   allowSqrlObjects?: boolean;
-  argCount?: number;
   args?: ArgumentCheck[];
   async?: boolean;
   asyncSafe?: boolean;
@@ -295,6 +294,14 @@ export class SqrlFunctionRegistry {
         name
       );
     }
+
+    /* @todo: At some point we can/should require documentation on every function
+    if (props.name && !props.name.startsWith("_")) {
+      if (typeof props.argstring !== "string" || !props.docstring) {
+        console.error("Missing documentation for function: " + props.name);
+      }
+    }
+    */
 
     let stateArg = props.stateArg;
     let whenCauseArg = false;

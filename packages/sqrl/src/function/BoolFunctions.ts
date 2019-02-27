@@ -22,6 +22,7 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
     safe: true,
     allowSqrlObjects: true,
     allowNull: true,
+    argstring: "value, value...",
     docstring:
       "Return true if all of the input values are truthy, false otherwise (even if there are null values)"
   });
@@ -30,6 +31,7 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
     name: "andOrNull",
     safe: true,
     allowSqrlObjects: true,
+    argstring: "value, value...",
     docstring:
       "Return true if all of the input values are truthy, false otherwise"
   });
@@ -45,10 +47,11 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
       }
     },
     {
-      argCount: 1,
+      args: [AT.any],
       safe: true,
       allowNull: true,
       pure: true,
+      argstring: "value",
       docstring: "Return false if the value is truthy, true if it is falsy"
     }
   );
@@ -104,8 +107,8 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
       allowNull: true,
       safe: true,
       asyncSafe: true,
-      docstring:
-        "Returns the first truthy argument, otherwise the final argument."
+      argstring: "value, value...",
+      docstring: "Returns the first truthy value, otherwise the final value."
     }
   );
 
@@ -121,7 +124,8 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
     {
       allowSqrlObjects: true,
       allowNull: true,
-      docstring: "Returns the first argument that is not null"
+      argstring: "value, value...",
+      docstring: "Returns the first value that is not null"
     }
   );
 
@@ -138,8 +142,8 @@ export function registerBoolFunctions(registry: SqrlFunctionRegistry) {
       allowSqrlObjects: true,
       safe: true,
       allowNull: true,
-      docstring:
-        "Returns true if any of the arguments are truthy, false otherwise"
+      argstring: "value, value...",
+      docstring: "Returns true if any of the values are truthy, false otherwise"
     }
   );
 

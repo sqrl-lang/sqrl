@@ -131,7 +131,7 @@ export default class SqrlSourcePrinter {
 
     const formatted = prettier
       .format("(" + replacedSource + ")()", {
-        parser: "babylon"
+        parser: "babel"
       })
       .trim();
     return formatted.slice("(".length, formatted.length - ")();".length);

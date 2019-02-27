@@ -39,7 +39,7 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
     {
       allowNull: true,
       allowSqrlObjects: true,
-      argCount: 2,
+      args: [AT.any, AT.any],
       argstring: "object, key",
       docstring: "Returns the given attribute off the data"
     }
@@ -58,7 +58,7 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
     },
     {
       allowNull: true,
-      argCount: 2,
+      args: [AT.any, AT.any],
       argstring: "object, key",
       docstring: "Returns true if the given attribute is set on the data"
     }
@@ -73,7 +73,9 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
       }
     },
     {
-      argCount: 1
+      args: [AT.any],
+      argstring: "object",
+      docstring: "Returns a list of all the keys in the given object"
     }
   );
 
@@ -82,13 +84,17 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
       return JSON.parse(raw);
     },
     {
-      args: [AT.any.string]
+      args: [AT.any.string],
+      argstring: "string",
+      docstring: "Parses the provided JSON encoded string"
     }
   );
 
   registry.save(null, {
     name: "jsonValue",
     args: [AT.any, AT.constant.string],
+    argstring: "object, path string",
+    docstring: "Returns the value at the given path in the JSON object",
     transformAst(state: SqrlParserState, ast): Ast {
       const pathAst = ast.args[1];
       if (pathAst.type !== "constant") {
@@ -142,7 +148,7 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
 
   registry.save(null, {
     name: "jsonPath",
-    argCount: 2,
+    args: [AT.any, AT.any],
     transformAst(state: SqrlParserState, ast): Ast {
       const pathAst = ast.args[1];
       invariant(
@@ -150,11 +156,13 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
         "Expected constant string as argument to jsonPath"
       );
       return SqrlAst.call("_jsonPath", ast.args);
-    }
+    },
+    argstring: "object, path string",
+    docstring: "Returns the values matching the given JSONPath query"
   });
 
   registry.save(
-    function _dataObject(...items) {
+    function _createMap(...items) {
       const result = {};
       for (let idx = 0; idx < items.length; idx += 2) {
         result[SqrlObject.ensureBasic(items[idx])] = items[idx + 1];
@@ -169,24 +177,28 @@ export function registerDataFunctions(registry: SqrlFunctionRegistry) {
   );
 
   registry.save(null, {
-    name: "dataObject",
+    name: "createMap",
     transformAst(state, ast): Ast {
       sqrlInvariant(
         ast,
         ast.args.length % 2 === 0,
         "Expected even number of arguments"
       );
-      return SqrlAst.call("_dataObject", ast.args);
+      return SqrlAst.call("_createMap", ast.args);
     },
-    pure: true
+    pure: true,
+    argstring: "key, value, (key, value)...",
+    docstring: "Create a map given the key, value pairs"
   });
 
   registry.save(
-    function mergeDataObjects(...objects) {
+    function mergeMaps(...objects) {
       return Object.assign({}, ...objects);
     },
     {
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
+      argstring: "map, map...",
+      docstring: "Merges the given maps together"
     }
   );
 }

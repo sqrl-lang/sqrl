@@ -9,10 +9,13 @@ import { AstTypes as AT } from "../ast/AstTypes";
 import crypto = require("crypto");
 
 function sha256HexSync(data: Buffer | string): string {
-  return crypto
-    .createHash("sha256")
-    .update(data, "utf8")
-    .digest("hex");
+  const hasher = crypto.createHash("sha256");
+  if (data instanceof Buffer) {
+    hasher.update(data);
+  } else {
+    hasher.update(data, "utf8");
+  }
+  return hasher.digest("hex");
 }
 
 function arrayMath(callback, values, defaultValue = null) {
@@ -29,7 +32,7 @@ function arrayMath(callback, values, defaultValue = null) {
 
 export function registerMathFunctions(registry: SqrlFunctionRegistry) {
   const safeMathOpts = {
-    argCount: 2,
+    args: [AT.any, AT.any],
     pure: true,
     safe: true
   };
@@ -173,11 +176,7 @@ export function registerMathFunctions(registry: SqrlFunctionRegistry) {
       }
       return left / right;
     },
-    Object.assign({}, safeMathOpts, {
-      stateArg: true,
-      argCount: 3,
-      pure: false
-    })
+    { ...safeMathOpts, args: [AT.state, AT.any, AT.any], pure: false }
   );
 
   registry.save(sha256HexSync, {
