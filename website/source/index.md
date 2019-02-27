@@ -1,52 +1,111 @@
-title: Introduction
+title: Home
 ---
 
-# SQRL
+# SQRL: A Safe, Stateful Language for Event Streams
 
-**A Safe, Stateful Rules Language for Event Streams**
+SQRL lets nonprogrammers safely deploy stateful rules and features to production in seconds.
 
-### :boom: This is a **beta release**. :boom:
+### Instant
+New features and rules can be deployed to production in seconds.
 
-The code here *was* used by Smyte pre-acquisition but has not been tested in a production since it was extracted from the code base. We plan to work with the community on making it production ready, but we want to set expectations correctly. We hope you find it useful. :squirrel:
+### Inclusive
+Non-technical users can review and safely deploy changes to production without talking to an engineer.
 
-### Why SQRL
+### Powerful
+Rules can declaratively aggregate state, trigger side effects, and call functions in other languages.
 
-At Smyte we needed a solution that would allow our customers to write their own rules to fight spam on their websites. We wanted to provide a powerful tool but with a simple language that reads like SQL. SQRL (Smyte Query & Rules Language) is a language and runtime that has been used to stop a variety of attacks on large social websites and marketplaces.
+### Auditable
+It's easy to understand why a rule fired or a side effect occured, and rules can be safely replayed.
 
-## Getting Started
-
-**SQRL** is designed to be used as a library, but the easiest way to see what it can do is to try out the command line interface.
-
+# Getting started
 ```
-$ npm install --global sqrl-cli
-$ cat > simple.sqrl
-LET ActionData := input();
-LET ActionName := jsonValue(ActionData, '$.name');
-
-$ sqrl run simple.sqrl -s 'ActionData={"name":"login"}' ActionName
-✓ 2019-01-14 15:09 action was allowed.
-ActionName="login"
+npm install -g sqrl && sqrl
 ```
 
-Once you've got that running, you can dive into our example section:
-* Set up external state storage in [Redis](examples/redis.html)
-* See a real-life use case on [Wikipedia](examples/wikipedia.html)
+# Examples
+### Stopping account compromise
+```
+-- Check for lots of failed login attempts from a single IP address
+LET NumLoginAttemptsForIpLastDay := count(BY Ip LAST DAY);
+LET NumFailedLoginsForIpLastDay := count(BY Ip WHERE IsFailedLogin LAST DAY);
+CREATE RULE IsCredentialStuffingLoginAttempt WHERE
+  NumLoginAttemptsForIpLastDay > 20 AND
+  NumLoginAttemptsForIpLastDay / NumFailedLoginsForIpLastDay > 0.9
+  WITH REASON "IP ${Ip} had ${NumLoginAttemptsForIpLastDay} login attempts in the last day and more than 90% of those failed."
+```
 
-### Extending SQRL with functions and counters
+### Mitigating abuse and bullying
+```
+-- If users swear too much we give them a warning
+LET UsedBadWord := patternMatches("BadWords.txt", UserGeneratedText);
+LET NumStrikes := count(BY User WHERE UsedBadWord LAST WEEK);
+CREATE RULE IsToxicComment
+  WHERE NumStrikes > 3
+  WITH REASON "User sent ${NumStrikes} messages with bad words in the last week."
+```
 
-The [`sqrl`](https://github.com/twitter/sqrl/tree/master/packages/sqrl) package includes a base set of functions that should be common to any application. None of them require any external network access or databases, and should fulfill your basic.
+### Preventing credit card fraud
+```
+-- If a single user account is using lots of credit cards it's an indicator of fraud
+LET NumCreditCards := countUnique(CreditCard BY Actor LAST 5 DAYS);
+CREATE RULE SuspiciousNumCreditCards
+  WHERE NumCreditCards > 4
+  WITH REASON "User ${Actor} used ${NumCreditCards} in the last 5 days";
 
-We've included [`sqrl-text-functions`](https://github.com/twitter/sqrl/tree/master/packages/sqrl-text-functions) which has more advanced text analysis functions such as `patternMatch` (RE2 regular expression text based pattern matching), and `simhash()` which returns similar values for similar text.
+-- If a credit card was used in multiple risky countries then it's suspicious
+LET NumRiskyCountries := countUnique(Country BY CreditCard WHERE RiskyCountry LAST 5 DAYS);
+CREATE RULE MultiRiskyCountryCreditCard WHERE NumRiskyCountries > 1
+  WITH REASON "Credit card was used in ${NumRiskyCountries} risky countries in last 5 days.";
+```
 
-The real power of SQRL comes with its streaming counters. While the *Redis database* is not the best choice for large production systems, it is one of the most wildly available and easy to set up choices. The [`sqrl-redis-functions`](https://github.com/twitter/sqrl/tree/master/packages/sqrl-redis-functions) builds a couple of common counters on top of this database:
+### Identifying duplicate accounts
+```
+-- If a user has signed up with the same normalized email address (i.e. lowercased, removing + suffixes, etc), cookie, or phone number, or if a subnet is creating lots of accounts, flag it.
+LET NormalizedActorEmail := normalizeEmail(ActorEmail);
+LET NumSignupsByNormalizedActorEmail := count(BY NormalizedActorEmail TOTAL);
+LET NumSignupsByBrowserCookie := count(BY BrowserCookie TOTAL);
+LET NumSignupsByActorPhone := count(BY ActorPhone TOTAL);
+CREATE RULE IsDuplicateSignup WHERE
+  NumSignupsByNormalizedActorEmail > 1 OR NumSignupsByBrowserCookie > 1 OR NumSignupsByActorPhone > 1 OR rateLimited(BY IpNetwork MAX 100 EVERY DAY)
+  WITH REASON "Signup was a duplicate."
+```
 
-* count() - Streaming counters (*How many requests from this IP in the last day*)
-* countUnique() - Streaming set cardinatily (*How many unique users on this IP in the last day*)
-* rateLimit() - Token-bucket based rate limiter (*Have we seen more than X requests per hour*)
-* sessionize() - Sessionization (*When did the current session from this IP start*)
+### Stopping spam
+```
+-- Limit quickly accelerating, similar looking messages. It's a good idea to do this with URLs too.
+LET Simhash := simhash(UserGeneratedText);
+LET NumSimhashWeek := count(BY Simhash LAST WEEK);
+LET NumSimhashDay := count(BY Simhash LAST DAY);
 
-These packages are all designed as examples, we built SQRL to be extendable with functions you need, as well as any new databases as you require. We're hoping the community can come together and use/extend these tools to protect online user.
+CREATE RULE IsSpammyMessage
+  WHERE NumSimhashDay > 50 AND NumSimhashDay / NumSimhashWeek > 0.9
+  WITH REASON "A simhash was used ${NumSimhashDay} times in the last day, but only ${NumSimhashWeek} times in the last week.";
+```
 
-## API Reference
+### Interfacing with ML models
+```
+-- When someone reports an NSFW image, automatically take it down if our NSFW model agrees and the reporter does not have a history of false positives.
+LET NsfwScore := mlScores("nsfw", ReportedImageUrl);
+LET IsLikelyNsfwImage := NsfwScore > 0.92;
+LET NumReporterReports := count(BY Actor LAST MONTH);
+LET NumReporterFalsePositives := count(BY Actor WHERE NOT IsLikelyNsfwImage LAST MONTH);
+LET IsReporterTrustworthy := NumReporterReports < 3 OR NumReporterFalsePositives / NumReporterReports < 0.3;
+CREATE RULE AutomaticTakeDown
+  WHERE IsLikelyNsfwImage AND IsReporterTrustworthy
+  WITH REASON "Trustworthy reporter reported an image with NSFW score ${NsfwScore}."
+```
 
-For detailed information view the [API Reference](https://twitter.github.io/sqrl/reference/globals.html).
+### Coupon codes for high-value users
+```
+-- If the user spends at least $200 every month for at least 3 months, give them a discount.
+LET PurchaseSession := sessionize(BY User EVERY 1 MONTH WHERE PurchaseAmountUsd >= 200);
+LET PurchaseSessionAgeInMonths := dateDiff(
+  "MONTH", 
+  PurchaseSession, 
+  Timestamp
+);
+
+CREATE RULE GiveLoyaltyDiscount
+  WHERE PurchaseSessionAgeInMonths >= 3
+  WITH REASON "User ${Actor} has made purchases for $200 or more for ${PurchaseSessionAgeInMonths} consecutive months."
+```
