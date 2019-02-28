@@ -22,7 +22,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     safe: true,
     allowSqrlObjects: true,
     allowNull: true,
-    argstring: "value, value...",
+    argstring: "value[, ...]",
     docstring:
       "Return true if all of the input values are truthy, false otherwise (even if there are null values)"
   });
@@ -31,7 +31,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     name: "andOrNull",
     safe: true,
     allowSqrlObjects: true,
-    argstring: "value, value...",
+    argstring: "value[, ...]",
     docstring:
       "Return true if all of the input values are truthy, false otherwise"
   });
@@ -107,7 +107,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
       allowNull: true,
       safe: true,
       asyncSafe: true,
-      argstring: "value, value...",
+      argstring: "value[, ...]",
       docstring: "Returns the first truthy value, otherwise the final value."
     }
   );
@@ -124,7 +124,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     {
       allowSqrlObjects: true,
       allowNull: true,
-      argstring: "value, value...",
+      argstring: "value[, ...]",
       docstring: "Returns the first value that is not null"
     }
   );
@@ -142,7 +142,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
       allowSqrlObjects: true,
       safe: true,
       allowNull: true,
-      argstring: "value, value...",
+      argstring: "value[, ...]",
       docstring: "Returns true if any of the values are truthy, false otherwise"
     }
   );

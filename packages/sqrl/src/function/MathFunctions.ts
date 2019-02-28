@@ -73,7 +73,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     },
     {
       allowNull: true,
-      argstring: "number, ...",
+      argstring: "number[, ...]",
       docstring: "Returns the maximum value of the arguments provided"
     }
   );
@@ -90,7 +90,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     },
     {
       allowNull: true,
-      argstring: "number, ...",
+      argstring: "number[, ...]",
       docstring: "Returns the minimum value of the arguments provided"
     }
   );

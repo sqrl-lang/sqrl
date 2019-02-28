@@ -20,7 +20,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
       return strings.join("");
     },
     {
-      argstring: "value, ...",
+      argstring: "value[, ...]",
       docstring:
         "Returns a string from the concatenated value of all the arguments"
     }

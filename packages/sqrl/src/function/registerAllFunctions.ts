@@ -81,7 +81,7 @@ export function registerAllFunctions(
     services
   );
   registerKeyFunctions(functionRegistry.createStdlibRegistry("key"));
-  registerArrayFunctions(functionRegistry.createStdlibRegistry("array"));
+  registerArrayFunctions(functionRegistry.createStdlibRegistry("list"));
   registerDataFunctions(functionRegistry.createStdlibRegistry("data"));
   registerDateFunctions(functionRegistry.createStdlibRegistry("date"));
   registerTimeFunctions(functionRegistry.createStdlibRegistry("time"));

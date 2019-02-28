@@ -64,6 +64,8 @@ import { CloseableGroup } from "../jslib/Closeable";
 // tslint:disable-next-line:no-duplicate-imports
 import * as SQRL from "sqrl";
 import { invariant } from "sqrl-common";
+import { renderFunctionsHelp } from "../renderFunctionsHelp";
+import { CliError } from "./CliError";
 
 const readFileAsync = promisify(readFile);
 
@@ -77,6 +79,7 @@ Usage:
   sqrl [options] serve [--port=<port>] <filename>
   sqrl [options] compile <filename> [(-s <key=value>)...]
   sqrl [options] test <filename>
+  sqrl [options] help functions
 
 Options:
   --color=<when>           Force color in ouput. When can be \`never\`, \`always\`, or \`auto\`.
@@ -105,6 +108,7 @@ export interface CliArgs {
   print?: boolean;
   repl?: boolean;
   test?: boolean;
+  help?: boolean;
   "<filename>"?: string;
   "<feature>": string[];
   "<key=value>": string[];
@@ -114,19 +118,6 @@ export interface CliArgs {
   "--output": string;
   "--concurrency": string;
   "--skip-default-requires"?: boolean;
-}
-
-export class CliError extends Error {
-  readonly suggestion: string | null;
-  constructor(
-    message: string,
-    options: {
-      suggestion?: string;
-    } = {}
-  ) {
-    super(message);
-    this.suggestion = options.suggestion || null;
-  }
 }
 
 function cliInvariant(condition: boolean, message: string) {
@@ -313,16 +304,23 @@ export async function cliMain(
 
   const redisAddress = args["--redis"] || process.env.SQRL_REDIS;
 
-  if (args.test) {
+  const { functionRegistry, services } = await buildFunctionRegistry(args, {
+    redisAddress
+  });
+  if (options.registerFunctions) {
+    options.registerFunctions(functionRegistry);
+  }
+
+  if (args.help) {
+    if (output instanceof CliPrettyOutput) {
+      console.log(renderFunctionsHelp(functionRegistry));
+    } else {
+      output.printFunctions(functionRegistry.listFunctions());
+    }
+  } else if (args.test) {
     const { filesystem, source } = await sourceOptionsFromPath(
       args["<filename>"]
     );
-    const { functionRegistry, services } = await buildFunctionRegistry(args, {
-      redisAddress
-    });
-    if (options.registerFunctions) {
-      options.registerFunctions(functionRegistry);
-    }
 
     const test = new SqrlTest(functionRegistry._wrapped, {
       filesystem,

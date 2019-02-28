@@ -86,7 +86,7 @@ export function registerStdlibFunctions(registry: StdlibRegistry) {
         })
       );
     },
-    argstring: "feature, ...",
+    argstring: "feature[, ...]",
     docstring:
       "Function that returns once all of the input features have been calculated"
   });

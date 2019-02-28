@@ -14,7 +14,7 @@ import { SqrlCompileError } from "sqrl/lib/api/parse";
 import { CliOutputOptions, CliActionOutput } from "./CliOutput";
 import { FeatureMap, SimpleManipulator } from "sqrl";
 import { spanToShell } from "../spanToShell";
-import { CliError } from "./CliMain";
+import { CliError } from "./CliError";
 
 const CHECKMARK = "\u2713";
 const CROSS = "\u2717";

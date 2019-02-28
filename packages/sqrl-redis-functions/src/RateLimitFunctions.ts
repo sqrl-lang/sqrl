@@ -167,7 +167,7 @@ export function registerRateLimitFunctions(
     },
     {
       argstring:
-        "BY Feature, ... [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
+        "BY Feature[, ...] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
       docstring:
         "Returns the number of tokens left in the token bucket ratelimiter before decrementing"
     }
@@ -201,7 +201,7 @@ export function registerRateLimitFunctions(
     },
     {
       argstring:
-        "BY Feature, ... [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
+        "BY Feature[, ...] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
       docstring:
         "Returns the values that were rate limited by the token bucket rate limiter"
     }
@@ -240,7 +240,7 @@ export function registerRateLimitFunctions(
     },
     {
       argstring:
-        "BY Feature, ... [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
+        "BY Feature[, ...] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
       docstring:
         "Returns true if the token bucket rate limiter has no tokens left, false otherwise"
     }
@@ -321,7 +321,7 @@ export function registerRateLimitFunctions(
     },
     {
       argstring:
-        "BY Feature, ... [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
+        "BY Feature[, ...] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
       docstring: "Creates a new session using a token bucket rate limiter"
     }
   );

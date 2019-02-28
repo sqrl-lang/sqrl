@@ -10,6 +10,7 @@ import { Writable } from "stream";
 import {
   serializeExpr,
   FeatureMap,
+  FunctionInfo,
   Execution,
   ExecutableCompiler,
   ExecutableSpec,
@@ -18,7 +19,7 @@ import {
 } from "sqrl";
 import { invariant, SqrlObject, mapObject } from "sqrl-common";
 import * as csvStringify from "csv-stringify";
-import { CliError } from "./CliMain";
+import { CliError } from "./CliError";
 
 // @todo: This could be made a command line option
 const MAX_TABLE_ROWS = 50;
@@ -49,6 +50,9 @@ export abstract class CliOutput {
   }
   sourceRecompileError(err: Error) {
     console.error("Source recompile failed: " + err.toString());
+  }
+  printFunctions(info: FunctionInfo[]) {
+    throw new CliError("Output mode not supported");
   }
 }
 
@@ -106,6 +110,9 @@ export class CliJsonOutput extends CliActionOutput {
       }
     }
     console.log(JSON.stringify(loggedFeatures));
+  }
+  printFunctions(info: FunctionInfo[]) {
+    console.log(JSON.stringify(info));
   }
 }
 

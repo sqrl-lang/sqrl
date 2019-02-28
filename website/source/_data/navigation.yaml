@@ -61,9 +61,63 @@ main:
   - text: Standard Library
     type: label
     children:
-      - text: Array Functions
+      - text: Assert Functions
         type: link
-        path: stdlib/array.html
+        path: stdlib/assert.html
+      - text: Block Functions
+        type: link
+        path: stdlib/block.html
+      - text: Bool Functions
+        type: link
+        path: stdlib/bool.html
+      - text: Compare Functions
+        type: link
+        path: stdlib/compare.html
+      - text: Data Functions
+        type: link
+        path: stdlib/data.html
+      - text: Date Functions
+        type: link
+        path: stdlib/date.html
+      - text: Entity Functions
+        type: link
+        path: stdlib/entity.html
+      - text: Language Functions
+        type: link
+        path: stdlib/language.html
+      - text: List Functions
+        type: link
+        path: stdlib/list.html
+      - text: Load Functions
+        type: link
+        path: stdlib/load.html
+      - text: Log Functions
+        type: link
+        path: stdlib/log.html
+      - text: Math Functions
+        type: link
+        path: stdlib/math.html
+      - text: Source Functions
+        type: link
+        path: stdlib/source.html
+      - text: String Functions
+        type: link
+        path: stdlib/string.html
+      - text: Time Functions
+        type: link
+        path: stdlib/time.html
+      - text: Type Functions
+        type: link
+        path: stdlib/type.html
+  - text: Function Packages
+    type: label
+    children:
+      - text: sqrl-redis-functions
+        type: link
+        path: packages/sqrl-redis-functions.html
+      - text: sqrl-text-functions
+        type: link
+        path: packages/sqrl-text-functions.html
   - text: Defining Functions
     type: label
     children:

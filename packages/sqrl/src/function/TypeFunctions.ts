@@ -81,7 +81,7 @@ export function registerTypeFunctions(registry: StdlibRegistry) {
     {
       allowSqrlObjects: true,
       pure: true,
-      argstring: "value, value...",
+      argstring: "value[, ...]",
       docstring: "Returns a list of the provided values"
     }
   );

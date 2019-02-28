@@ -352,7 +352,7 @@ export function registerCountUniqueFunctions(
     },
     {
       argstring:
-        "Feature, ... [GROUP BY Feature, ...] [WHERE Condition] [LAST Duration] [BEFORE ACTION]",
+        "Feature[, ...] [GROUP BY Feature[, ...]] [WHERE Condition] [LAST Duration] [BEFORE ACTION]",
       docstring: "Performs a sliding window unique set count"
     }
   );

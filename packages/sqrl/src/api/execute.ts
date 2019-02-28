@@ -18,6 +18,9 @@ import { FunctionServices } from "../function/registerAllFunctions";
 import { SqrlObject } from "sqrl-common";
 import { SqrlKey } from "./object";
 import { isValidFeatureName } from "../feature/FeatureName";
+
+export const STANDARD_LIBRARY = "sqrl";
+
 export interface ExecutionErrorProperties {
   functionName?: string;
   fatal?: boolean;
@@ -49,6 +52,13 @@ export interface ExecutableOptions {
 
 export interface FeatureMap {
   [feature: string]: any;
+}
+
+export interface FunctionInfo {
+  name: string;
+  argstring: string | null;
+  docstring: string | null;
+  package: string | null;
 }
 
 /**
@@ -101,6 +111,20 @@ export class FunctionRegistry {
       "Function registry is already linked to package: " + this.pkg
     );
     return new FunctionRegistry(this._wrapped, name);
+  }
+
+  listFunctions(): FunctionInfo[] {
+    return Object.keys(this._wrapped.functionProperties)
+      .filter(func => !func.startsWith("_"))
+      .map(func => {
+        const props = this._wrapped.functionProperties[func];
+        return {
+          name: func,
+          argstring: props.argstring || null,
+          docstring: props.docstring || null,
+          package: props.package || null
+        };
+      });
   }
 
   register(

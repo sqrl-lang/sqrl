@@ -17,7 +17,7 @@ import { nice } from "node-nice";
 import hrtimeToNs from "../jslib/hrtimeToNs";
 import { getGlobalLogger } from "../api/log";
 import { WhenCauseArgument, StateArgument, ArgumentCheck } from "../api/arg";
-import { ExecutionErrorProperties } from "../api/execute";
+import { ExecutionErrorProperties, STANDARD_LIBRARY } from "../api/execute";
 
 const AsyncFunction = Object.getPrototypeOf(async function() {
   /* intentional */
@@ -42,9 +42,6 @@ export interface SaveFunctionProperties {
   jsonCache?: boolean;
 
   lazyArguments?: boolean;
-
-  /* was this function defined as part of the standard library, if so package is the group of function */
-  stdlib?: boolean;
 
   /* name of the package that provided this function */
   package?: string;
@@ -161,8 +158,7 @@ export class StdlibRegistry {
     props: SaveFunctionProperties = {}
   ): void {
     return this.wrapped.save(fn, {
-      package: this.packageName,
-      stdlib: true,
+      package: STANDARD_LIBRARY + "." + this.packageName,
       ...props
     });
   }

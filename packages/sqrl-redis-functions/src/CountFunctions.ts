@@ -409,7 +409,7 @@ export function registerCountFunctions(
     },
     {
       argstring:
-        "Feature, [...] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK)"
+        "Feature[, ...] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK)"
     }
   );
 
