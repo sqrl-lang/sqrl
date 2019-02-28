@@ -392,8 +392,11 @@ export async function cliMain(
     const compilingLock = new Semaphore({ max: 1 });
     await compilingLock.take();
 
+    let streamFeature: string = null;
     if (args.run) {
-      if (args["--stream"]) {
+      streamFeature = args["--stream"];
+
+      if (streamFeature) {
         watchedSource.on("change", async () => {
           await compilingLock.take();
           try {
@@ -413,7 +416,7 @@ export async function cliMain(
       if (!args.compile && !args.repl) {
         // Outside of compile/repl mode, make sure we have all required inputs
         for (const feature of executable.getRequiredFeatures()) {
-          if (!inputs.hasOwnProperty(feature)) {
+          if (!inputs.hasOwnProperty(feature) && streamFeature !== feature) {
             throw new CliError("Required input was not provided: " + feature, {
               suggestion: `Try add: -s ${feature}=<value>`
             });
@@ -447,7 +450,7 @@ export async function cliMain(
       run = new CliRun(executable, output);
       compilingLock.release();
 
-      if (args["--stream"]) {
+      if (streamFeature) {
         output.startStream();
 
         let concurrency: number = null;
@@ -458,7 +461,7 @@ export async function cliMain(
           ctx,
           inputs,
           concurrency,
-          streamFeature: args["--stream"],
+          streamFeature,
           features: args["<feature>"]
         });
       } else {

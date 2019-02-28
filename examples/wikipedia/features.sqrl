@@ -11,6 +11,6 @@ LET OldRev := jsonValue(EventData, "$.revision.old");
 LET NewRev := jsonValue(EventData, "$.revision.new");
 LET DiffUrl := concat(
     "https://", Domain, "/w/index.php?",
-    "title=", urlEncode(Title), "&type=revision&",
+    "title=", escapeURI(Title), "&type=revision&",
     "diff=", NewRev, "&oldid=", OldRev
 );

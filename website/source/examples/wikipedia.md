@@ -8,7 +8,7 @@ Once you get a little further, we have a demonstration that looks for a set of b
 ```
 git clone git@github.com:twitter/sqrl
 cd sqrl/examples/wikipedia
-npx wikipedia-diff-stream | sqrl run main.sqrl --stream=EventData --only-blocked
+npx wikipedia-diff-stream en.wikipedia.org | sqrl run main.sqrl --stream=EventData --only-blocked
 
 ...
 ✗ 2018-11-15 11:25 action was blocked.
