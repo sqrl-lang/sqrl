@@ -4,9 +4,21 @@ logo:
   path: index.html
 
 main:
-  - text: Documentation
+  - text: Introduction
     type: link
     path: index.html
+  - text: Motivation
+    type: link
+    path: motivation.html
+  - text: Tutorial
+    type: link
+    path: tutorial.html
+  - text: Why is it unique?
+    type: link
+    path: unique.html
+  - text: FAQ
+    type: link
+    path: faq.html
   - text: Examples
     type: label
     children:
@@ -78,6 +90,12 @@ main:
         path: deployment/async.html
   - text: External Resources
     type: label
+  - text: API Reference
+    type: link
+    path: reference/globals.html
+  - text: Discord Chat
+    type: link
+    path: https://discord.gg/mMJwWT6
   - text: View on GitHub
     type: link
     path: https://github.com/twitter/sqrl

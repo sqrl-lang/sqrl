@@ -1,4 +1,5 @@
-## title: Labels
+title: Labels
+---
 
 # Labels
 

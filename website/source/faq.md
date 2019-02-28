@@ -3,11 +3,11 @@ title: FAQ
 
 # FAQ
 
-## Why build a new language? Why not just use JS, Haxl, SQL, etc?
+### Why build a new language? Why not just use JS, Haxl, SQL, etc?
 
-See our [motivations and design principles] doc.
+See our [motivations and design principles](motivation.html) doc.
 
-## Why does it run on Node.js? Why not compile to native code?
+### Why does it run on Node.js? Why not compile to native code?
 
 There are three reasons why we chose Node.js.
 * SQRL does a lot of I/O and fairly little compute. Node.js shines at these applications.
@@ -16,7 +16,7 @@ There are three reasons why we chose Node.js.
 
 We've been kicking around doing a golang runtime for a while. It's a good idea!
 
-## Who's behind this?
+### Who's behind this?
 
 SQRL was designed and implemented by:
 * Josh Yudaken
@@ -33,10 +33,10 @@ It would not have come together without lots of dogfooding and suggestions from:
 
 We also want to thank Twitter Engineering for helping us get this project released.
 
-## Who's using this?
+### Who's using this?
 
 Twitter, and before that Smyte (and ~40 of their customers).
 
-## What could be better about it?
+### What could be better about it?
 
 * The type system

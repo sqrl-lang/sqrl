@@ -1,3 +1,6 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib/"
+  "typescript.tsdk": "node_modules/typescript/lib/",
+  "[markdown]": {
+    "editor.rulers": [80, 120]
+  }
 }

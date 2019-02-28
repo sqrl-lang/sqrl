@@ -42,8 +42,8 @@
   },
   "scripts": {
     "clean": "lerna run clean",
-    "deploy-website": "lerna run docs; lerna run deploy-website",
-    "serve-website": "lerna run docs; lerna run serve-website",
+    "deploy-website": "lerna run docs; rm -rf website/.deploy_git && git clone --branch gh-pages git@github.com:twitter/sqrl website/.deploy_git; lerna run deploy-website",
+    "serve-website": "lerna run docs; (cd website && npm run serve-website)",
     "test": "jest",
     "test:integration": "jest --config=jest.integration.config.js",
     "coverage": "jest --coverage",

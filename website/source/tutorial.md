@@ -1,7 +1,7 @@
 title: Tutorial
 ----
 
-# SQRL tutorial
+# Tutorial
 
 Welcome to the SQRL tutorial! Before we begin, let's go over a few concepts.
 
@@ -20,7 +20,7 @@ Save that JSON blob into a file called `tweet.json`. We'll need it later.
 Now let's wire up some basic **features** in SQRL. **Features** are similar to variables in other languages. You can bind them using the `LET` keyword, and can reference them in any expression. Open up your favorite editor (hint: it's emacs) and create a file called `main.sqrl` with the following code in it:
 
 ```
-LET ActionData := loadJson("tweet.json");
+LET ActionData := input();
 LET ActionName := jsonValue(ActionData, "$.name");
 LET Username := jsonValue(ActionData, "$.username");
 LET Text := jsonValue(ActionData, "$.text");
@@ -28,12 +28,10 @@ LET Text := jsonValue(ActionData, "$.text");
 
 `jsonValue()` is a builtin function that parses a JSON string and returns the value at the given [JSONPath](http://jsonpath.com/). Note that SQRL is smart enough to only parse the JSON once.
 
-If you were to run this in production, you'd replace the call to `loadJson("tweet.json")` with `input()` to read the next action from the service. But for the purposes of this tutorial, let's stick with a static JSON file.
-
 Let's fire up the [repl](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) and play with it.
 ```
 $ npm install -g sqrl
-$ sqrl repl main.sqrl
+$ sqrl repl main.sqrl -s ActionData=@tweet.json
 sqrl> Username
 'floydophone'
 sqrl> Text
@@ -63,7 +61,7 @@ function() {
 }
 ```
 
-We can also spin up a SQRL service to serve this code over the network. Replace `loadJson("tweet.json")` with `input()` and run the following commands:
+We can also spin up a SQRL service to serve this code over the network:
 
 ```
 $ sqrl serve main.sqrl &
@@ -74,8 +72,6 @@ $ curl -H "Accept: application/json" 'http://localhost:2288/run?features=Usernam
   "ActionName": "tweet"
 }
 ```
-
-Switch `input()` back to `loadJson("tweet.json")` for the rest of this tutorial.
 
 We call this process of unpacking a JSON object into feature names **wiring up the action**. You usually do this work once per action type. Once an action is wired up, all of your existing features and rules will automatically start to work on the new action.
 
@@ -89,9 +85,9 @@ true
 ```
 `ActionData` is a builtin feature that represents the action data passed in via an API. Other builtin features include `SqrlClock`, which represents the time when the event began processing.
 
-## Stateful features (aka: how to count things)
+## Counters
 
-Now let's say we want to count how often someone is tweeting about cryptocurrency. Let's create a new feature `NumCryptoTweetsLastDay`:
+Now let's say we want to count how often someone is tweeting about cryptocurrency. We'll need to use a **stateful feature** like a counter. Let's create a new feature `NumCryptoTweetsLastDay`:
 
 ```
 sqrl> LET NumTweetsAboutCrypto := count(BY Username WHERE HasCryptoKeywords LAST DAY);
