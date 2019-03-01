@@ -85,7 +85,9 @@
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.featuremap.html" class="tsd-kind-icon">Feature<wbr>Map</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.functioninfo.html" class="tsd-kind-icon">Function<wbr>Info</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.functionoptions.html" class="tsd-kind-icon">Function<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.functionservices.html" class="tsd-kind-icon">Function<wbr>Services</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.implementedfunctionoptions.html" class="tsd-kind-icon">Implemented<wbr>Function<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.logservice.html" class="tsd-kind-icon">Log<wbr>Service</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_execute_.minimalfunctionoptions.html" class="tsd-kind-icon">Minimal<wbr>Function<wbr>Options</a></li>
 							</ul>
 						</section>
@@ -118,7 +120,7 @@
 					<div class="tsd-signature tsd-kind-icon">Manipulator<wbr>Callback<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L29">execute.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L38">execute.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -152,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">STANDARD_<wbr>LIBRARY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"sqrl"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;sqrl&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L22">execute.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L22">execute.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -163,13 +165,13 @@
 					<a name="buildfunctionregistry" class="tsd-anchor"></a>
 					<h3>build<wbr>Function<wbr>Registry</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">build<wbr>Function<wbr>Registry<span class="tsd-signature-symbol">(</span>services<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">FunctionServices</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></li>
+						<li class="tsd-signature tsd-kind-icon">build<wbr>Function<wbr>Registry<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L67">execute.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L77">execute.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -180,7 +182,15 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> services: <span class="tsd-signature-type">FunctionServices</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> props: <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> config<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_config_.config.html" class="tsd-signature-type">Config</a></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> services<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_execute_.functionservices.html" class="tsd-signature-type">FunctionServices</a></h5>
+										</li>
+									</ul>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h4>
@@ -203,6 +213,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_compile_.html">"compile"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="_config_.html">"config"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_ctx_.html">"ctx"</a>
@@ -233,9 +246,6 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_parse_.html">"parse"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_services_.html">"services"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="_spec_.html">"spec"</a>
@@ -278,7 +288,13 @@
 						<a href="../interfaces/_execute_.functionoptions.html" class="tsd-kind-icon">Function<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_execute_.functionservices.html" class="tsd-kind-icon">Function<wbr>Services</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_execute_.implementedfunctionoptions.html" class="tsd-kind-icon">Implemented<wbr>Function<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_execute_.logservice.html" class="tsd-kind-icon">Log<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_execute_.minimalfunctionoptions.html" class="tsd-kind-icon">Minimal<wbr>Function<wbr>Options</a>

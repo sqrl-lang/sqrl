@@ -88,9 +88,19 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_execute_.functionregistry.html#config" class="tsd-kind-icon">config</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_execute_.functionregistry.html#mergedconfig" class="tsd-kind-icon">merged<wbr>Config</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_execute_.functionregistry.html#packagename" class="tsd-kind-icon">package<wbr>Name</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#createpackageregistry" class="tsd-kind-icon">create<wbr>Package<wbr>Registry</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#createpackageinstance" class="tsd-kind-icon">create<wbr>Package<wbr>Instance</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#getconfig" class="tsd-kind-icon">get<wbr>Config</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#importfrompackage" class="tsd-kind-icon">import<wbr>From<wbr>Package</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#listfunctions" class="tsd-kind-icon">list<wbr>Functions</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#register" class="tsd-kind-icon">register</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_execute_.functionregistry.html#registercustom" class="tsd-kind-icon">register<wbr>Custom</a></li>
@@ -103,18 +113,51 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="config" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> config</h3>
+					<div class="tsd-signature tsd-kind-icon">config<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_config_.config.html" class="tsd-signature-type">Config</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L118">execute.ts:118</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="mergedconfig" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> merged<wbr>Config</h3>
+					<div class="tsd-signature tsd-kind-icon">merged<wbr>Config<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;null</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L112">execute.ts:112</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="packagename" class="tsd-anchor"></a>
+					<h3>package<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">package<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L123">execute.ts:123</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="createpackageregistry" class="tsd-anchor"></a>
-					<h3>create<wbr>Package<wbr>Registry</h3>
+					<a name="createpackageinstance" class="tsd-anchor"></a>
+					<h3>create<wbr>Package<wbr>Instance</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Package<wbr>Registry<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Package<wbr>Instance<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L108">execute.ts:108</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L126">execute.ts:126</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -128,6 +171,49 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getconfig" class="tsd-anchor"></a>
+					<h3>get<wbr>Config</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Config<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_config_.config.html" class="tsd-signature-type">Config</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L142">execute.ts:142</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_config_.config.html" class="tsd-signature-type">Config</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="importfrompackage" class="tsd-anchor"></a>
+					<h3>import<wbr>From<wbr>Package</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">import<wbr>From<wbr>Package<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, importedPackage<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L134">execute.ts:134</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>importedPackage: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="listfunctions" class="tsd-anchor"></a>
 					<h3>list<wbr>Functions</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -137,7 +223,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L116">execute.ts:116</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L157">execute.ts:157</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_execute_.functioninfo.html" class="tsd-signature-type">FunctionInfo</a><span class="tsd-signature-symbol">[]</span></h4>
@@ -154,7 +240,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L130">execute.ts:130</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L171">execute.ts:171</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -201,7 +287,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L180">execute.ts:180</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L221">execute.ts:221</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -248,7 +334,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L161">execute.ts:161</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L202">execute.ts:202</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -298,7 +384,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L146">execute.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L187">execute.ts:187</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -342,7 +428,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/execute.ts#L199">execute.ts:199</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L240">execute.ts:240</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -397,6 +483,9 @@
 						<a href="../modules/_compile_.html">"compile"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_config_.html">"config"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ctx_.html">"ctx"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -427,9 +516,6 @@
 						<a href="../modules/_parse_.html">"parse"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_services_.html">"services"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/_spec_.html">"spec"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -450,8 +536,23 @@
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_execute_.functionregistry.html" class="tsd-kind-icon">Function<wbr>Registry</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_execute_.functionregistry.html#config" class="tsd-kind-icon">config</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_execute_.functionregistry.html#mergedconfig" class="tsd-kind-icon">merged<wbr>Config</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_execute_.functionregistry.html#packagename" class="tsd-kind-icon">package<wbr>Name</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_execute_.functionregistry.html#createpackageregistry" class="tsd-kind-icon">create<wbr>Package<wbr>Registry</a>
+								<a href="_execute_.functionregistry.html#createpackageinstance" class="tsd-kind-icon">create<wbr>Package<wbr>Instance</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_execute_.functionregistry.html#getconfig" class="tsd-kind-icon">get<wbr>Config</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_execute_.functionregistry.html#importfrompackage" class="tsd-kind-icon">import<wbr>From<wbr>Package</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_execute_.functionregistry.html#listfunctions" class="tsd-kind-icon">list<wbr>Functions</a>
@@ -497,7 +598,13 @@
 						<a href="../interfaces/_execute_.functionoptions.html" class="tsd-kind-icon">Function<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_execute_.functionservices.html" class="tsd-kind-icon">Function<wbr>Services</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_execute_.implementedfunctionoptions.html" class="tsd-kind-icon">Implemented<wbr>Function<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="../interfaces/_execute_.logservice.html" class="tsd-kind-icon">Log<wbr>Service</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/_execute_.minimalfunctionoptions.html" class="tsd-kind-icon">Minimal<wbr>Function<wbr>Options</a>

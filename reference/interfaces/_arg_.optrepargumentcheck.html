@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>UniqueIdService | sqrl</title>
+	<title>OptRepArgumentCheck | sqrl</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_services_.html">&quot;services&quot;</a>
+					<a href="../modules/_arg_.html">&quot;arg&quot;</a>
 				</li>
 				<li>
-					<a href="_services_.uniqueidservice.html">UniqueIdService</a>
+					<a href="_arg_.optrepargumentcheck.html">OptRepArgumentCheck</a>
 				</li>
 			</ul>
-			<h1>Interface UniqueIdService</h1>
+			<h1>Interface OptRepArgumentCheck</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +71,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">UniqueIdService</span>
+						<span class="tsd-signature-type">ArgumentCheck</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">OptRepArgumentCheck</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -79,67 +84,120 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_arg_.optrepargumentcheck.html#isoptional" class="tsd-kind-icon">is<wbr>Optional</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_arg_.optrepargumentcheck.html#isrepeated" class="tsd-kind-icon">is<wbr>Repeated</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_arg_.optrepargumentcheck.html#optional" class="tsd-kind-icon">optional</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_arg_.optrepargumentcheck.html#repeated" class="tsd-kind-icon">repeated</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-inherited tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_services_.uniqueidservice.html#create" class="tsd-kind-icon">create</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_services_.uniqueidservice.html#fetch" class="tsd-kind-icon">fetch</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_arg_.optrepargumentcheck.html#compiletimecheck" class="tsd-kind-icon">compile<wbr>Time<wbr>Check</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_arg_.optrepargumentcheck.html#runtimechecker" class="tsd-kind-icon">runtime<wbr>Checker</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="isoptional" class="tsd-anchor"></a>
+					<h3>is<wbr>Optional</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Optional<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from ArgumentCheck.isOptional</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/ast/ArgumentCheck.ts#L9">/Users/jyudaken/code/sqrl/packages/sqrl/src/ast/ArgumentCheck.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="isrepeated" class="tsd-anchor"></a>
+					<h3>is<wbr>Repeated</h3>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Repeated<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from ArgumentCheck.isRepeated</p>
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/ast/ArgumentCheck.ts#L10">/Users/jyudaken/code/sqrl/packages/sqrl/src/ast/ArgumentCheck.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="optional" class="tsd-anchor"></a>
+					<h3>optional</h3>
+					<div class="tsd-signature tsd-kind-icon">optional<span class="tsd-signature-symbol">:</span> <a href="_arg_.repargumentcheck.html" class="tsd-signature-type">RepArgumentCheck</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/arg.ts#L18">arg.ts:18</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+					<a name="repeated" class="tsd-anchor"></a>
+					<h3>repeated</h3>
+					<div class="tsd-signature tsd-kind-icon">repeated<span class="tsd-signature-symbol">:</span> <a href="_arg_.optargumentcheck.html" class="tsd-signature-type">OptArgumentCheck</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/arg.ts#L19">arg.ts:19</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-not-exported">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="create" class="tsd-anchor"></a>
-					<h3>create</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_ctx_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_services_.uniqueid.html" class="tsd-signature-type">UniqueId</a><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="compiletimecheck" class="tsd-anchor"></a>
+					<h3>compile<wbr>Time<wbr>Check</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">compile<wbr>Time<wbr>Check<span class="tsd-signature-symbol">(</span>argAst<span class="tsd-signature-symbol">: </span><a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a>, functionAst<span class="tsd-signature-symbol">: </span><a href="_ast_.callast.html" class="tsd-signature-type">CallAst</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from ArgumentCheck.compileTimeCheck</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/services.ts#L20">services.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/ast/ArgumentCheck.ts#L11">/Users/jyudaken/code/sqrl/packages/sqrl/src/ast/ArgumentCheck.ts:11</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ctx: <a href="_ctx_.context.html" class="tsd-signature-type">Context</a></h5>
+									<h5>argAst: <a href="../modules/_ast_.html#ast" class="tsd-signature-type">Ast</a></h5>
+								</li>
+								<li>
+									<h5>functionAst: <a href="_ast_.callast.html" class="tsd-signature-type">CallAst</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_services_.uniqueid.html" class="tsd-signature-type">UniqueId</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="fetch" class="tsd-anchor"></a>
-					<h3>fetch</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">fetch<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_ctx_.context.html" class="tsd-signature-type">Context</a>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_services_.uniqueid.html" class="tsd-signature-type">UniqueId</a><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="runtimechecker" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> runtime<wbr>Checker</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">runtime<wbr>Checker<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from ArgumentCheck.runtimeChecker</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/services.ts#L21">services.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/ast/ArgumentCheck.ts#L12">/Users/jyudaken/code/sqrl/packages/sqrl/src/ast/ArgumentCheck.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ctx: <a href="_ctx_.context.html" class="tsd-signature-type">Context</a></h5>
-								</li>
-								<li>
-									<h5>type: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
+									<h5>value: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_services_.uniqueid.html" class="tsd-signature-type">UniqueId</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -151,7 +209,7 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_arg_.html">"arg"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -159,6 +217,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_compile_.html">"compile"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_config_.html">"config"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ctx_.html">"ctx"</a>
@@ -190,9 +251,6 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_parse_.html">"parse"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="../modules/_services_.html">"services"</a>
-					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_spec_.html">"spec"</a>
 					</li>
@@ -206,24 +264,54 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_services_.uniqueid.html" class="tsd-kind-icon">Unique<wbr>Id</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_arg_.argumentcheckwithruntime.html" class="tsd-kind-icon">Argument<wbr>Check<wbr>With<wbr>Runtime</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_arg_.optargumentcheck.html" class="tsd-kind-icon">Opt<wbr>Argument<wbr>Check</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_arg_.optargumentcheckwithruntime.html" class="tsd-kind-icon">Opt<wbr>Argument<wbr>Check<wbr>With<wbr>Runtime</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="_services_.uniqueidservice.html" class="tsd-kind-icon">Unique<wbr>IdService</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_arg_.optrepargumentcheck.html" class="tsd-kind-icon">Opt<wbr>Rep<wbr>Argument<wbr>Check</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_services_.uniqueidservice.html#create" class="tsd-kind-icon">create</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="_arg_.optrepargumentcheck.html#isoptional" class="tsd-kind-icon">is<wbr>Optional</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="_services_.uniqueidservice.html#fetch" class="tsd-kind-icon">fetch</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="_arg_.optrepargumentcheck.html#isrepeated" class="tsd-kind-icon">is<wbr>Repeated</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_arg_.optrepargumentcheck.html#optional" class="tsd-kind-icon">optional</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+								<a href="_arg_.optrepargumentcheck.html#repeated" class="tsd-kind-icon">repeated</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="_arg_.optrepargumentcheck.html#compiletimecheck" class="tsd-kind-icon">compile<wbr>Time<wbr>Check</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="_arg_.optrepargumentcheck.html#runtimechecker" class="tsd-kind-icon">runtime<wbr>Checker</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_arg_.optrepargumentcheckwithruntime.html" class="tsd-kind-icon">Opt<wbr>Rep<wbr>Argument<wbr>Check<wbr>With<wbr>Runtime</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_arg_.repargumentcheck.html" class="tsd-kind-icon">Rep<wbr>Argument<wbr>Check</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_arg_.repargumentcheckwithruntime.html" class="tsd-kind-icon">Rep<wbr>Argument<wbr>Check<wbr>With<wbr>Runtime</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+						<a href="../modules/_arg_.html#at" class="tsd-kind-icon">AT</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

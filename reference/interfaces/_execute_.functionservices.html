@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>UniqueId | sqrl</title>
+	<title>FunctionServices | sqrl</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,33 +54,24 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_services_.html">&quot;services&quot;</a>
+					<a href="../modules/_execute_.html">&quot;execute&quot;</a>
 				</li>
 				<li>
-					<a href="_services_.uniqueid.html">UniqueId</a>
+					<a href="_execute_.functionservices.html">FunctionServices</a>
 				</li>
 			</ul>
-			<h1>Class UniqueId</h1>
+			<h1>Interface FunctionServices</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Copyright 2018 Twitter, Inc.
-							Licensed under the Apache License, Version 2.0
-						<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">UniqueId</span>
+						<span class="target">FunctionServices</span>
 					</li>
 				</ul>
 			</section>
@@ -89,104 +80,36 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Methods</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_.uniqueid.html#getbuffer" class="tsd-kind-icon">get<wbr>Buffer</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_.uniqueid.html#gethexstring" class="tsd-kind-icon">get<wbr>Hex<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_.uniqueid.html#getnumberstring" class="tsd-kind-icon">get<wbr>Number<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_.uniqueid.html#getremainder" class="tsd-kind-icon">get<wbr>Remainder</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_services_.uniqueid.html#gettimems" class="tsd-kind-icon">get<wbr>Time<wbr>Ms</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_execute_.functionservices.html#assert" class="tsd-kind-icon">assert</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_execute_.functionservices.html#log" class="tsd-kind-icon">log</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getbuffer" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> get<wbr>Buffer</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Buffer<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/services.ts#L11">services.ts:11</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Buffer</span></h4>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="assert" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> assert</h3>
+					<div class="tsd-signature tsd-kind-icon">assert<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">AssertService</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L34">execute.ts:34</a></li>
+						</ul>
+					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="gethexstring" class="tsd-anchor"></a>
-					<h3>get<wbr>Hex<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Hex<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/services.ts#L14">services.ts:14</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getnumberstring" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> get<wbr>Number<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Number<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/services.ts#L12">services.ts:12</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getremainder" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> get<wbr>Remainder</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Remainder<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/services.ts#L10">services.ts:10</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="gettimems" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> get<wbr>Time<wbr>Ms</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Time<wbr>Ms<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d0a0024/packages/sqrl/src/api/services.ts#L9">services.ts:9</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="log" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> log</h3>
+					<div class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">:</span> <a href="_execute_.logservice.html" class="tsd-signature-type">LogService</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/be9dd08/packages/sqrl/src/api/execute.ts#L35">execute.ts:35</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -206,6 +129,9 @@
 						<a href="../modules/_compile_.html">"compile"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_config_.html">"config"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_ctx_.html">"ctx"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -214,7 +140,7 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_executable_.html">"executable"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_execute_.html">"execute"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -235,9 +161,6 @@
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_parse_.html">"parse"</a>
 					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="../modules/_services_.html">"services"</a>
-					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_spec_.html">"spec"</a>
 					</li>
@@ -251,32 +174,65 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_execute_.executable.html" class="tsd-kind-icon">Executable</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_execute_.functionregistry.html" class="tsd-kind-icon">Function<wbr>Registry</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="../classes/_execute_.manipulator.html" class="tsd-kind-icon">Manipulator</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.executableoptions.html" class="tsd-kind-icon">Executable<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.execution.html" class="tsd-kind-icon">Execution</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.executionerrorproperties.html" class="tsd-kind-icon">Execution<wbr>Error<wbr>Properties</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.featuremap.html" class="tsd-kind-icon">Feature<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.functioninfo.html" class="tsd-kind-icon">Function<wbr>Info</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.functionoptions.html" class="tsd-kind-icon">Function<wbr>Options</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_services_.uniqueid.html" class="tsd-kind-icon">Unique<wbr>Id</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.functionservices.html" class="tsd-kind-icon">Function<wbr>Services</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_services_.uniqueid.html#getbuffer" class="tsd-kind-icon">get<wbr>Buffer</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_execute_.functionservices.html#assert" class="tsd-kind-icon">assert</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_services_.uniqueid.html#gethexstring" class="tsd-kind-icon">get<wbr>Hex<wbr>String</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_services_.uniqueid.html#getnumberstring" class="tsd-kind-icon">get<wbr>Number<wbr>String</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_services_.uniqueid.html#getremainder" class="tsd-kind-icon">get<wbr>Remainder</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_services_.uniqueid.html#gettimems" class="tsd-kind-icon">get<wbr>Time<wbr>Ms</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_execute_.functionservices.html#log" class="tsd-kind-icon">log</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_services_.uniqueidservice.html" class="tsd-kind-icon">Unique<wbr>IdService</a>
+						<a href="_execute_.implementedfunctionoptions.html" class="tsd-kind-icon">Implemented<wbr>Function<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.logservice.html" class="tsd-kind-icon">Log<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_execute_.minimalfunctionoptions.html" class="tsd-kind-icon">Minimal<wbr>Function<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/_execute_.html#manipulatorcallback" class="tsd-kind-icon">Manipulator<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+						<a href="../modules/_execute_.html#standard_library" class="tsd-kind-icon">STANDARD_<wbr>LIBRARY</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/_execute_.html#buildfunctionregistry" class="tsd-kind-icon">build<wbr>Function<wbr>Registry</a>
 					</li>
 				</ul>
 			</nav>
