@@ -145,8 +145,15 @@ function nonNullBoolExpr(state: AstExprState, expr: Expr): Expr {
   return {
     type: "call",
     load: expr.load,
-    func: "nonNullBool",
-    exprs: [expr]
+    func: "ifNull",
+    exprs: [
+      {
+        type: "call",
+        func: "bool",
+        exprs: [expr]
+      },
+      constantExpr(false)
+    ]
   };
 }
 

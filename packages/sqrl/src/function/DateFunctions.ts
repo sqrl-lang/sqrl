@@ -181,9 +181,6 @@ export function registerDateFunctions(registry: StdlibRegistry) {
 
   registry.save(
     function date(value) {
-      if (value instanceof SqrlObject) {
-        value = value.tryGetTimeMs() || value.getBasicValue();
-      }
       return new SqrlDateTime(timeMsForValue(value));
     },
     {

@@ -33,12 +33,6 @@ Returns the integer value of the given input value
 
 Returns a list of the provided values
 
-## nonNullBool
-
-**nonNullBool**(value)
-
-Returns the boolean value of the given input value (false if it is null)
-
 ## str
 
 **str**(value)

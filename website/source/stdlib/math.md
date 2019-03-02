@@ -17,15 +17,15 @@ Returns the base 10 logarithm of the given number
 
 ## max
 
-**max**(number[, ...])
+**max**(number list)
 
-Returns the maximum value of the arguments provided
+Returns the maximum value in the list provided
 
 ## min
 
-**min**(number[, ...])
+**min**(number list)
 
-Returns the minimum value of the arguments provided
+Returns the minimum value in the list provided
 
 ## round
 
@@ -33,9 +33,9 @@ Returns the minimum value of the arguments provided
 
 Returns the rounded value of the given number
 
-## sha256
+## sum
 
-**sha256**(value)
+**sum**(number list)
 
-Returns the sha256 hash of the given value as hex
+Returns the sum of the values in the list provided
 

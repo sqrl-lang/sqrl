@@ -3,6 +3,8 @@ title: sqrl-redis-functions
 
 # sqrl-redis-functions
 
+Functions that store state in redis. This consists of counting, labeling and entity to unique id mapping.
+
 ## addLabel
 
 **addLabel**(entity | entity list, label)
@@ -77,5 +79,5 @@ Creates a new session using a token bucket rate limiter
 
 **trending**(Feature[, ...] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK))
 
-None
+Returns values whose counts have gone up by an order of magnitude
 

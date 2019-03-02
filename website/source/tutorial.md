@@ -46,9 +46,9 @@ sqrl> SomethingElse
 Error: Could not find the requested name:: SomethingElse
 ```
 
-Cool! You'll see that the features were extracted successfully, and that there's a magic `SqrlClock` feature that represents the current time. Note also that features are case sensitive.
+Cool! You'll see that the features were extracted successfully, and that there's a built-in (but overridable) `SqrlClock` feature that represents the event time. Note also that features are case sensitive.
 
-The current SQRL implementation runs on Node.js and is a compiler, not an interpreter. As we've run this at scale for a long time at a startup that needed to conserve cash, we've put in some effort to make this JS as efficient as we could. You can see the compiled code for a feature by calling `printSource()`:
+The current SQRL implementation runs on Node.js and is a compiler, not an interpreter. As we've run this at scale for a long time at a startup that needed to conserve cash, we've put in some effort to make this JS as efficient as we could. You can see a readable version of the compiled code for a feature by calling `printSource()`:
 
 ```
 sqrl> printSource(Username);
@@ -83,7 +83,6 @@ false
 sqrl> Text CONTAINS "world"
 true
 ```
-`ActionData` is a builtin feature that represents the action data passed in via an API. Other builtin features include `SqrlClock`, which represents the time when the event began processing.
 
 ## Counters
 
@@ -197,6 +196,10 @@ For example, if you had an `addUserToReviewQueue()` function defined, you could 
 WHEN TooMuchCrypto THEN addUserToReviewQueue("cryptospam");
 ```
 
+The fuction `addUserToReviewQueue()` is not included with the default SQRL distribution, but if you have a review queue set up with an API, you can easily define a new [when clause function](functions/when.html).
+
 ## Next steps
 
-This is a quick whirlwind tour of SQRL. Unfortunately, this is a brand new open-source release so we don't have everything documented quite yet, but see the JS API reference, the SQRL Library Reference, or the `examples/` directory to learn more.
+* View functions in the [standard library](stdlib/assert.html)
+* See the example using [redis to store state](examples/redis.html)
+* Try out a real life use case on [Wikipedia edits](examples/wikipedia.html)

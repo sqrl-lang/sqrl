@@ -3,23 +3,9 @@ title: String Functions
 
 # String Functions
 
-## charAt
-
-**charAt**(value, index)
-
-Returns the character at the given index into the string
-
-## charLength
-
-**charLength**(value)
-
-Returns the character length of the given string
-
-## concat
-
-**concat**(value[, ...])
-
-Returns a string from the concatenated value of all the arguments
+These are the functions that perform operations on strings in the standard library.
+Some functions such as `list` and `concat` operate on both strings and lists (strings are
+treated as lists of unicode characters) and are documented on the [list](list.html) page.
 
 ## endsWith
 

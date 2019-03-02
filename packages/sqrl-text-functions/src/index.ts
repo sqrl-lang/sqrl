@@ -14,9 +14,29 @@ import {
 import { registerPatternFunctions } from "./PatternFunctions";
 import { InProcessPatternService } from "./InProcessPatternService";
 import { SimHash } from "simhash-js";
+import { createHash } from "crypto";
 
 export function register(registry: FunctionRegistry) {
   const jsSimhash = new SimHash();
+
+  registry.registerSync(
+    function sha256(data: Buffer | string): string {
+      const hasher = createHash("sha256");
+      if (data instanceof Buffer) {
+        hasher.update(data);
+      } else {
+        hasher.update(data, "utf8");
+      }
+      return hasher.digest("hex");
+    },
+    {
+      args: [AT.any],
+      pure: true,
+      argstring: "value",
+      docstring: "Returns the sha256 hash of the given value as hex"
+    }
+  );
+
   registry.registerSync(
     function simhash(text: string) {
       const hashHex: string = jsSimhash.hash(text).toString(16);

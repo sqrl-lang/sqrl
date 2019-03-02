@@ -27,7 +27,6 @@ import {
   TrendingArguments,
   AliasedFeature
 } from "./parser/sqrlRedis";
-import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
 
 const ENTITY_TYPE = "Counter";
 
@@ -410,7 +409,9 @@ export function registerCountFunctions(
     },
     {
       argstring:
-        "Feature[, ...] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK)"
+        "Feature[, ...] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK)",
+      docstring:
+        "Returns values whose counts have gone up by an order of magnitude"
     }
   );
 
@@ -487,7 +488,12 @@ export function registerCountFunctions(
     );
     const resultAst = AstBuilder.call("_add", [
       hasAlias ? AstBuilder.constant(0) : addAst,
-      AstBuilder.call("_maxCount", [databaseCountTransform(state, ast, args)])
+      AstBuilder.call("max", [
+        AstBuilder.call("concat", [
+          AstBuilder.constant([0]),
+          databaseCountTransform(state, ast, args)
+        ])
+      ])
     ]);
     return state.setGlobal(
       ast,
@@ -495,15 +501,6 @@ export function registerCountFunctions(
       `count(${args.timespan}:${keyedCounterName})`
     );
   }
-
-  registry.registerSync(
-    function _maxCount(state: SqrlExecutionState, counts: number[]) {
-      return Math.max(0, ...counts);
-    },
-    {
-      args: [AT.state, AT.any.array]
-    }
-  );
 
   registry.registerCustom(
     function count(state: CompileState, ast: CustomCallAst): Ast {

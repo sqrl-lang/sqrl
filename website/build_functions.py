@@ -7,6 +7,7 @@ Usage: `./sqrl help functions --output=json | ./website/build_functions.py`
 import itertools
 import json
 import os
+import re
 import sys
 
 website = os.path.dirname(__file__)
@@ -15,9 +16,29 @@ data = json.load(sys.stdin)
 data.sort(key=lambda f: (not f["package"].startswith("sqrl."), f["package"]))
 
 
+def read_intro(path):
+    """
+    Reads the introduction out of the documentation page so that we can
+    maintain it when we rewrite the file
+    """
+    try:
+        contents = open(path, "r").read()
+    except FileNotFoundError:
+        return ""
+
+    match = re.search(r"\n# [^\n]*\n(.*?)\n## ", contents, re.MULTILINE | re.DOTALL)
+    if match and match.group(1).strip():
+        return match.group(1).strip() + "\n\n"
+    else:
+        return ""
+
+
 def write_docs(folder, name, title, functions):
-    with open(os.path.join(website, "source/%s/%s.md" % (folder, name)), "w") as f:
-        f.write("title: %s\n---\n\n# %s\n\n" % (title, title))
+    path = os.path.join(website, "source/%s/%s.md" % (folder, name))
+    intro = read_intro(path)
+
+    with open(path, "w") as f:
+        f.write("title: %s\n---\n\n# %s\n\n%s" % (title, title, intro))
         for props in sorted(functions, key=lambda p: p["name"]):
             f.write(
                 "## %(name)s\n\n**%(name)s**(%(argstring)s)\n\n%(docstring)s\n\n"

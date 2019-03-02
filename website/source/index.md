@@ -28,6 +28,13 @@ $ sqrl run simple.sqrl -s 'Username="josh"' Message
 Message="Hello, josh!"
 ```
 
+Once you have the command line running, you could:
+* Read about our [motivations](motivation.html) for writing SQRL
+* Learn about the [features that make SQRL unique](unique.html)
+* Try write some basic SQRL in the [Tutorial](tutorial.html)
+* Set up external state storage in [Redis](examples/redis.html)
+* See a real-life use case on [Wikipedia](examples/wikipedia.html)
+
 ## SQRL snippets
 
 ### Stopping account compromise
@@ -130,8 +137,8 @@ CREATE RULE GiveLoyaltyDiscount
               "than ${PurchaseSessionAgeInMonths} consecutive months."
 ```
 
-## Examples
+## Next steps
 
-If you want to try out SQRL, you can dive into our example section:
+* Try out SQRL in the [Tutorial](tutorial.html)
 * Set up external state storage in [Redis](examples/redis.html)
 * See a real-life use case on [Wikipedia](examples/wikipedia.html)

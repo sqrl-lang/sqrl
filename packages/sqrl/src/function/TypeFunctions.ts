@@ -47,17 +47,6 @@ export function registerTypeFunctions(registry: StdlibRegistry) {
   });
 
   registry.save(SqrlObject.isTruthy, {
-    name: "nonNullBool",
-    allowSqrlObjects: true,
-    allowNull: true,
-    args: [AT.any],
-    pure: true,
-    argstring: "value",
-    docstring:
-      "Returns the boolean value of the given input value (false if it is null)"
-  });
-
-  registry.save(SqrlObject.isTruthy, {
     name: "bool",
     args: [AT.any],
     allowSqrlObjects: true,

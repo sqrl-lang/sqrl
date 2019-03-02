@@ -19,14 +19,14 @@ test("runtime checks", async () => {
 });
 
 test("tests inside sqrl", async () => {
-  await expect(runSqrlTest("LET V := max();")).rejects.toThrow(
+  await expect(runSqrlTest("LET V := concat();")).rejects.toThrow(
     /Expected at least 2 arguments but got 0/
   );
-  await expect(runSqrlTest("LET V := max(1);")).rejects.toThrow(
+  await expect(runSqrlTest("LET V := concat(1);")).rejects.toThrow(
     /Expected at least 2 arguments but got 1/
   );
-  await expect(runSqrlTest("LET V := max(1,2);")).resolves.toBeTruthy();
-  await expect(runSqrlTest("LET V := max(1,2,3);")).resolves.toBeTruthy();
+  await expect(runSqrlTest("LET V := concat(1,2);")).resolves.toBeTruthy();
+  await expect(runSqrlTest("LET V := concat(1,2,3);")).resolves.toBeTruthy();
 
   await expect(runSqrlTest("LET V := log10();")).rejects.toThrow(
     /Expected 1 argument but got 0./

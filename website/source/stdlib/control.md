@@ -9,6 +9,12 @@ title: Control Functions
 
 Returns either the true_result or false_result based on the condition
 
+## ifNull
+
+**ifNull**(value, valueIfNull)
+
+Returns the value, or valueIfNull if it is null
+
 ## input
 
 **input**(None)

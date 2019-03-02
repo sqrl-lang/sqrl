@@ -37,22 +37,6 @@ export function registerStringFunctions(registry: StdlibRegistry) {
   );
 
   registry.save(
-    function concat(...strings) {
-      for (const string of strings) {
-        if (typeof string !== "string" && typeof string !== "number") {
-          return null;
-        }
-      }
-      return strings.join("");
-    },
-    {
-      argstring: "value[, ...]",
-      docstring:
-        "Returns a string from the concatenated value of all the arguments"
-    }
-  );
-
-  registry.save(
     function stringify(value) {
       return JSON.stringify(value);
     },
@@ -120,31 +104,6 @@ export function registerStringFunctions(registry: StdlibRegistry) {
       args: [AT.any, AT.any],
       argstring: "value, by",
       docstring: "Splits a string into a list of strings"
-    }
-  );
-
-  registry.save(
-    function charLength(string) {
-      return typeof string === "string" ? string.length : null;
-    },
-    {
-      args: [AT.any],
-      argstring: "value",
-      docstring: "Returns the character length of the given string"
-    }
-  );
-
-  registry.save(
-    function charAt(string, index: number) {
-      if (typeof string !== "string" || typeof index !== "number") {
-        return null;
-      }
-      return string.charAt(index) || null;
-    },
-    {
-      args: [AT.any, AT.any],
-      argstring: "value, index",
-      docstring: "Returns the character at the given index into the string"
     }
   );
 

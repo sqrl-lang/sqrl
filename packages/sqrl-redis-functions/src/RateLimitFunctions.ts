@@ -163,7 +163,7 @@ export function registerRateLimitFunctions(
   registry.registerCustom(
     function rateLimit(state: CompileState, ast: CustomCallAst): Ast {
       const resultsAst = setupRateLimitAst(state, ast).resultsAst;
-      return AstBuilder.call("listMin", [resultsAst]);
+      return AstBuilder.call("min", [resultsAst]);
     },
     {
       argstring:
@@ -217,7 +217,7 @@ export function registerRateLimitFunctions(
       const resultsAst = setupRateLimitAst(state, ast).resultsAst;
       const rateLimitValue = state.setGlobal(
         ast,
-        AstBuilder.call("listMin", [resultsAst])
+        AstBuilder.call("min", [resultsAst])
       );
 
       const tokenAmountAst = state.setGlobal(

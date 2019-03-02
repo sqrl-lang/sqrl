@@ -3,6 +3,8 @@ title: sqrl-text-functions
 
 # sqrl-text-functions
 
+Functions for doing analysis on text.
+
 ## charGrams
 
 **charGrams**(text, size)
@@ -38,6 +40,12 @@ Replaces each match of the given regular expression in the string
 **regexTest**(regex, string)
 
 Returns true if the given regular expression matches the string
+
+## sha256
+
+**sha256**(value)
+
+Returns the sha256 hash of the given value as hex
 
 ## simhash
 

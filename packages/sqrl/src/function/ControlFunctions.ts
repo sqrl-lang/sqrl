@@ -34,6 +34,24 @@ export function registerControlFunctions(registry: StdlibRegistry) {
       "Returns either the true_result or false_result based on the condition"
   });
 
+  registry.save(
+    function ifNull(test, valueIfNull) {
+      if (test === null) {
+        return valueIfNull;
+      } else {
+        return test;
+      }
+    },
+    {
+      allowSqrlObjects: true,
+      allowNull: true,
+      args: [AT.any, AT.any],
+      pure: true,
+      argstring: "value, valueIfNull",
+      docstring: "Returns the value, or valueIfNull if it is null"
+    }
+  );
+
   registry.save(null, {
     name: INPUT_FUNCTION,
     transformAst(state, ast: CallAst) {

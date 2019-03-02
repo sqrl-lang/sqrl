@@ -3,6 +3,8 @@ title: sqrl-load-functions
 
 # sqrl-load-functions
 
+These functions assist with loading data from disk at compile time.
+
 ## loadJson
 
 **loadJson**(path)

@@ -11,9 +11,13 @@ The first time we see an entity, they are assigned a unique id based on the curr
 $ ./sqrl repl
 sqrl> LET User := entity('User', '1234')
 entity<User/1234> {
-  uniqueId<2019-01-18T03:58:57.834Z@1>
+  uniqueId<2019-03-01T06:28:44.925Z@1>
 }
 '1234'
+sqrl> User='1234'
+true
+sqrl> str(date(User))
+'2019-03-01T06:28:44.925Z'
 ```
 
-The value of the `entity()` is the same as the string key, so in the example above `User="1234"` **however** they also have additional properties such as creation time. Running `iso8601(User)` above would give you the timestamp it was created: '2019-01-18T03:58:57.834Z'
+The value of the `entity()` is the same as the string key, so in the example above `User="1234"` **however** they also have additional properties such as creation time. Running `date(User)` above would give you the timestamp it was created: '2019-03-01T06:28:44.925Z'

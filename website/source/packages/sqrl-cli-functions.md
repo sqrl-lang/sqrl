@@ -3,6 +3,8 @@ title: sqrl-cli-functions
 
 # sqrl-cli-functions
 
+These functions are intended for use with the sqrl cli. At a later stage they may be ported to a separate package.
+
 ## allSource
 
 **allSource**(None)
