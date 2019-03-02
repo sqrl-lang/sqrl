@@ -1,8 +1,3 @@
-<!--
-Copyright 2019 Twitter, Inc.
-Licensed under the Apache License, Version 2.0
-http://www.apache.org/licenses/LICENSE-2.0
- --!>
 <!DOCTYPE html>
 <html lang="en">
   <head><meta name="generator" content="Hexo 3.8.0">
@@ -38,10 +33,12 @@ http://www.apache.org/licenses/LICENSE-2.0
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
         <h1 id="What-makes-SQRL-unique"><a href="#What-makes-SQRL-unique" class="headerlink" title="What makes SQRL unique?"></a>What makes SQRL unique?</h1><p>SQRL has a number of features that we think are cool and/or unique.</p>
-<h2 id="Parallelizable-data-fetching"><a href="#Parallelizable-data-fetching" class="headerlink" title="Parallelizable data fetching"></a>Parallelizable data fetching</h2><p>Data fetching is implicit and can be parallelized. The runtime can decide whether to fetch eagerly or lazily to balance speed vs cost as needed without changing the source of the rule.</p>
+<h2 id="Parallel-data-fetching"><a href="#Parallel-data-fetching" class="headerlink" title="Parallel data fetching"></a>Parallel data fetching</h2><p>Data fetching is implicit and can be parallelized. The runtime can decide whether to fetch eagerly or lazily to balance speed vs cost as needed without changing the source of the rule.</p>
 <p>This is similar to a number of projects, including <a href="https://github.com/facebook/Haxl" target="_blank" rel="noopener">Haxl</a>, but isn&#x2019;t part of any mainstream languages to our knowledge.</p>
-<h2 id="No-halting-problem"><a href="#No-halting-problem" class="headerlink" title="No halting problem"></a>No halting problem</h2><p>SQRL does not have recursion or unbounded loops, meaning that we can know that the program will halt.</p>
-<h2 id="No-call-stack"><a href="#No-call-stack" class="headerlink" title="No call stack"></a>No call stack</h2><p>SQRL does not have user-defined functions. Introducing user-defined functions can often lead to difficult to understand code for nonprogrammers.</p>
+<h2 id="Fail-open-error-handling"><a href="#Fail-open-error-handling" class="headerlink" title="Fail-open error handling"></a>Fail-open error handling</h2><p>SQRL uses <a href="https://en.wikipedia.org/wiki/Three-valued_logic" target="_blank" rel="noopener">three-valued logic</a> to handle errors (they are treated as unknown values). For example, if a downstream service goes down, SQRL will do the right thing &#x2014; it will fail open <em>unless</em> the service would not have affected the result.</p>
+<h2 id="Declarative-state"><a href="#Declarative-state" class="headerlink" title="Declarative state"></a>Declarative state</h2><p>SQRL functions like <code>count()</code> track their own state declaratively, rather than requiring the rule author to write rules to explicitly mutate state. A problem we found with other systems was that you&#x2019;d have a set of rules that mutate state imperatively, and a set of rules that read from the state, often written by different people. Keeping these rules in sync is painful, and if they fall out of sync your state will be very inconsistent.</p>
+<p>We think this is unique to SQRL (but it&#x2019;s a pretty good idea so someone else must have done it somewhere).</p>
+<h2 id="Not-Turing-complete"><a href="#Not-Turing-complete" class="headerlink" title="Not Turing-complete"></a>Not Turing-complete</h2><p>SQRL does not have user-defined functions, recursion or unbounded loops. This produces simpler code for non-programmers and allows deep static analysis. Logic that needs the power of a full programming language can be implemented as new library functions.</p>
 <h2 id="Entities-as-first-class-citizens"><a href="#Entities-as-first-class-citizens" class="headerlink" title="Entities as first-class citizens"></a>Entities as first-class citizens</h2><p>SQRL has a notion of an &#x201C;entity&#x201D;, which is a <code>type</code> (i.e. &#x201C;EmailAddress&#x201D;) and a string <code>key</code> (i.e. &#x201C;<a href="mailto:foo@bar.com" target="_blank" rel="noopener">foo@bar.com</a>&#x201C;). It gets a stable 64 bit ID called a <code>UniqueId</code> where the most significant bits of the ID are the timestamp that the ID was created. Subsequent references to the same (<code>type</code>, <code>key</code>) pair will get the same <code>UniqueId</code>.</p>
 <p>This has many advantages:</p>
 <ul>
@@ -51,8 +48,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 <li>If the <code>UniqueId</code> is used as a database key, most databases will store entities in chronological order (i.e. B-trees and LSM-trees, the most popular type of DB indexes, store rows in key-sorted order). When doing spam, fraud, or security investigations, you usually want to query the oldest or newest entities of a given type, which won&#x2019;t require a separate (slow) sort step since they&#x2019;re already sorted.</li>
 </ul>
 <p>This has proven to be incredibly useful and we think it&#x2019;s unique to SQRL.</p>
-<h2 id="Declarative-state"><a href="#Declarative-state" class="headerlink" title="Declarative state"></a>Declarative state</h2><p>SQRL functions like <code>count()</code> track their own state declaratively, rather than requiring the rule author to write rules to explicitly mutate state. A problem we found with other systems was that you&#x2019;d have a set of rules that mutate state imperatively, and a set of rules that read from the state, often written by different people. Keeping these rules in sync is painful, and if they fall out of sync your state will be very inconsistent.</p>
-<p>We think this is unique to SQRL (but it&#x2019;s a pretty good idea so someone else must have done it somewhere).</p>
 <h2 id="Can-run-synchronously"><a href="#Can-run-synchronously" class="headerlink" title="Can run synchronously"></a>Can run synchronously</h2><p>Many languages for event processing (i.e. <a href="https://www.confluent.io/product/ksql/" target="_blank" rel="noopener">KSQL</a>) expect to be run as part of an asynchronous stream processing pipeline. SQRL needs to be able to run synchronously in under 100 ms.</p>
 <h2 id="Feature-imports-and-overrides"><a href="#Feature-imports-and-overrides" class="headerlink" title="Feature imports and overrides"></a>Feature imports and overrides</h2><p>SQRL libraries can be shared between event types and customers, and specific features can be overridden (similar to how you can extend a class in an OOP language).</p>
 <p>This let Smyte create a common set of libraries for identifying spam in text content, and then apply them to a new customer with just a few lines of code to &#x201C;wire up&#x201D; the new customer&#x2019;s event schemas.</p>
