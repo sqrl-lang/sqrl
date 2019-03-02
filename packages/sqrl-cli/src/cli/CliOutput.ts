@@ -14,12 +14,12 @@ import {
   Execution,
   ExecutableCompiler,
   ExecutableSpec,
-  createSimpleContext,
-  SimpleManipulator
+  createSimpleContext
 } from "sqrl";
 import { invariant, SqrlObject, mapObject } from "sqrl-common";
 import * as csvStringify from "csv-stringify";
 import { CliError } from "./CliError";
+import { CliManipulator } from "sqrl-cli-functions";
 
 // @todo: This could be made a command line option
 const MAX_TABLE_ROWS = 50;
@@ -86,7 +86,7 @@ export class CliSlotJsOutput extends CliCompileOutput {
 export abstract class CliActionOutput extends CliOutput {
   abstract startStream();
   abstract action(
-    manipulator: SimpleManipulator,
+    manipulator: CliManipulator,
     execution: Execution,
     loggedFeatures: FeatureMap
   );
@@ -100,7 +100,7 @@ export class CliJsonOutput extends CliActionOutput {
     /* do nothing */
   }
   action(
-    manipulator: SimpleManipulator,
+    manipulator: CliManipulator,
     execution: Execution,
     loggedFeatures: FeatureMap
   ) {
@@ -134,7 +134,7 @@ export class CliCsvOutput extends CliActionOutput {
     this.stringifier.write(this.features);
   }
   action(
-    manipulator: SimpleManipulator,
+    manipulator: CliManipulator,
     execution: Execution,
     loggedFeatures: FeatureMap
   ) {
@@ -183,7 +183,7 @@ export class CliTableOutput extends CliActionOutput {
     this.streaming = true;
   }
   action(
-    manipulator: SimpleManipulator,
+    manipulator: CliManipulator,
     execution: Execution,
     loggedFeatures: FeatureMap
   ) {

@@ -63,6 +63,12 @@ Returns the date as a valid ISO8601 date string
 
 Returns the lowercase version of the given string
 
+## repr
+
+**repr**(value)
+
+Represent the given value (including nulls) as a string
+
 ## split
 
 **split**(value, by)

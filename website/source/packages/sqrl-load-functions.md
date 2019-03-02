@@ -1,7 +1,7 @@
-title: Load Functions
+title: sqrl-load-functions
 ---
 
-# Load Functions
+# sqrl-load-functions
 
 ## loadJson
 

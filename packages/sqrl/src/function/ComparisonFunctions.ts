@@ -15,30 +15,36 @@ export function registerComparisonFunctions(registry: StdlibRegistry) {
   };
   registry.save(cmpE, {
     ...compareOpts,
+    name: "_cmpE",
     docstring:
       "Returns true if the first argument is equal to the second argument"
   });
   registry.save(cmpNE, {
     ...compareOpts,
+    name: "_cmpNE",
     docstring:
       "Returns true if the first argument is not equal to the second argument"
   });
   registry.save(cmpG, {
     ...compareOpts,
+    name: "_cmpG",
     docstring:
       "Returns true if the first argument is greater than second argument"
   });
   registry.save(cmpGE, {
     ...compareOpts,
+    name: "_cmpGE",
     docstring:
       "Returns true if the first argument is greater than or equal to second argument"
   });
   registry.save(cmpL, {
     ...compareOpts,
+    name: "_cmpL",
     docstring: "Returns true if the first argument is less than second argument"
   });
   registry.save(cmpLE, {
     ...compareOpts,
+    name: "_cmpLE",
     docstring:
       "Returns true if the first argument is less than or equal to second argument"
   });

@@ -16,19 +16,19 @@ import { SqrlObject } from "../object/SqrlObject";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
 
 const binaryOperatorToFunction = {
-  "=": "cmpE",
-  "!=": "cmpNE",
-  ">": "cmpG",
-  ">=": "cmpGE",
-  "<": "cmpL",
-  "<=": "cmpLE",
-  "-": "subtract",
-  "+": "add",
-  "*": "multiply",
-  "%": "modulo",
-  or: "or",
-  and: "and",
-  contains: "contains"
+  "=": "_cmpE",
+  "!=": "_cmpNE",
+  ">": "_cmpG",
+  ">=": "_cmpGE",
+  "<": "_cmpL",
+  "<=": "_cmpLE",
+  "-": "_subtract",
+  "+": "_add",
+  "*": "_multiply",
+  "%": "_modulo",
+  or: "_or",
+  and: "_and",
+  contains: "_contains"
 };
 
 class AstExprState {
@@ -380,7 +380,7 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
           });
         });
       } else if (ast.type === "not") {
-        return callExpr(state, "not", [ast.expr]);
+        return callExpr(state, "_not", [ast.expr]);
       } else if (ast.type === "constant") {
         return constantExpr(ast.value);
       } else if (ast.type === "binary_expr" || ast.type === "boolean_expr") {
@@ -403,14 +403,14 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
         }
 
         if (ast.operator === "in") {
-          func = "contains";
+          func = "_contains";
           args.reverse();
         } else if (ast.operator === "/") {
           args.unshift({ type: "state" });
-          func = "divide";
+          func = "_divide";
         } else if (ast.operator === "%") {
           args.unshift({ type: "state" });
-          func = "modulo";
+          func = "_modulo";
         } else if (ast.operator === "or") {
           return orExpr(state, args);
         } else if (ast.operator === "and") {
@@ -420,9 +420,9 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
             args.length === 2 && SqrlAst.isConstantNull(args[1]),
             "Expected `null` value for right-hand side of IS"
           );
-          let expr = callExpr(state, "isNull", [args[0]]);
+          let expr = callExpr(state, "_isNull", [args[0]]);
           if (ast.operator === "is not") {
-            expr = makeCall("not", [expr]);
+            expr = makeCall("_not", [expr]);
           }
           return expr;
         } else {

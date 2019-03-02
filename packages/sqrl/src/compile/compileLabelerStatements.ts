@@ -43,9 +43,7 @@ export function labelerPushStatement(
     "Execute statement is only valid in sqrl tests"
   );
 
-  if (ast.type === "noop") {
-    return;
-  } else if (ast.type === "constant" && ast.value === null) {
+  if (ast.type === "constant" && ast.value === null) {
     return;
   } else if (ast.type === "include") {
     const includeFiles = parserState.importer.getIncludeFiles(ast);

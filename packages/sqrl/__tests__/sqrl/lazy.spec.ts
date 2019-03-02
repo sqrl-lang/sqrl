@@ -17,15 +17,15 @@ test("works", async () => {
   async function rebuildFunctionRegistry(functionCost?: FunctionCostData) {
     functionRegistry = await buildTestFunctionRegistry({ functionCost });
 
-    registerTestFunctions(functionRegistry._wrapped);
-    functionRegistry._wrapped.save(function simpleFalse() {
+    registerTestFunctions(functionRegistry._functionRegistry);
+    functionRegistry._functionRegistry.save(function simpleFalse() {
       return false;
     });
-    functionRegistry._wrapped.save(function logIfRun(msg: string) {
+    functionRegistry._functionRegistry.save(function logIfRun(msg: string) {
       messages.push(msg);
       return msg;
     });
-    functionRegistry._wrapped.save(
+    functionRegistry._functionRegistry.save(
       function outputSave(value: any) {
         output = value;
       },

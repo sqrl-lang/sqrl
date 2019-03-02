@@ -19,25 +19,17 @@ function and(...args) {
 
 export function registerBoolFunctions(registry: StdlibRegistry) {
   registry.save(and, {
+    name: "_and",
     safe: true,
     allowSqrlObjects: true,
     allowNull: true,
-    argstring: "value[, ...]",
-    docstring:
-      "Return true if all of the input values are truthy, false otherwise (even if there are null values)"
-  });
-
-  registry.save(and, {
-    name: "andOrNull",
-    safe: true,
-    allowSqrlObjects: true,
     argstring: "value[, ...]",
     docstring:
       "Return true if all of the input values are truthy, false otherwise"
   });
 
   registry.save(
-    function not(value) {
+    function _not(value) {
       if (Array.isArray(value)) {
         return value.length === 0 ? true : false;
       } else if (value === null) {
@@ -79,7 +71,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
   );
 
   registry.save(
-    function isNull(value) {
+    function _isNull(value) {
       return value === null;
     },
     {
@@ -130,7 +122,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
   );
 
   registry.save(
-    function or(...args) {
+    function _or(...args) {
       for (const arg of args) {
         if (SqrlObject.isTruthy(arg)) {
           return true;

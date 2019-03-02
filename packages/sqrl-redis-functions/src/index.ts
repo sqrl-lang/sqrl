@@ -13,43 +13,25 @@ import {
   RateLimitService
 } from "./RateLimitFunctions";
 import { LabelService, registerLabelFunctions } from "./LabelFunctions";
-import { buildServicesFromAddresses } from "./ServiceHelpers";
-import { UniqueIdService, FunctionRegistry } from "sqrl";
+import { RedisServices } from "./ServiceHelpers";
+import { FunctionRegistry } from "sqrl";
+import { registerEntityFunctions } from "./EntityFunctions";
+import { UniqueIdService } from "./services/RedisUniqueId";
 
 export interface RedisServices {
-  count?: CountService;
-  countUnique?: CountUniqueService;
-  label?: LabelService;
-  rateLimit?: RateLimitService;
-  uniqueId?: UniqueIdService;
+  count: CountService;
+  countUnique: CountUniqueService;
+  label: LabelService;
+  rateLimit: RateLimitService;
+  uniqueId: UniqueIdService;
 }
 
-export function buildServicesWithMockRedis(): RedisServices {
-  return buildServicesFromAddresses({
-    inMemory: true
-  });
-}
+export function register(registry: FunctionRegistry) {
+  const services = new RedisServices(registry.getConfig());
 
-export function buildServices(redisAddress: string): RedisServices {
-  return buildServicesFromAddresses({
-    redisAddress
-  });
-}
-
-export function register(
-  registry: FunctionRegistry,
-  services: RedisServices = {}
-) {
-  if (services.count) {
-    registerCountFunctions(registry, services.count);
-  }
-  if (services.countUnique) {
-    registerCountUniqueFunctions(registry, services.countUnique);
-  }
-  if (services.label) {
-    registerLabelFunctions(registry, services.label);
-  }
-  if (services.rateLimit) {
-    registerRateLimitFunctions(registry, services.rateLimit);
-  }
+  registerCountFunctions(registry, services.count);
+  registerCountUniqueFunctions(registry, services.countUnique);
+  registerEntityFunctions(registry, services.uniqueId);
+  registerLabelFunctions(registry, services.label);
+  registerRateLimitFunctions(registry, services.rateLimit);
 }

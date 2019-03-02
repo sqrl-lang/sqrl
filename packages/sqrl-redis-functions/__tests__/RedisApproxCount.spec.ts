@@ -14,7 +14,7 @@ redisTest("works", async (redis: RedisInterface) => {
 
   const prefix = "test" + Date.now();
 
-  const uniqueId = new RedisUniqueIdService(redis, prefix);
+  const uniqueId = new RedisUniqueIdService(redis, () => Date.now(), prefix);
   const service = new RedisSingleWindowApproxCountService(
     redis,
     prefix,

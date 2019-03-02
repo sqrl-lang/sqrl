@@ -14,57 +14,60 @@ import { MockRedisService } from "./mocks/MockRedisService";
 import { RedisCountService } from "./services/RedisCountService";
 import { RedisApproxCountUniqueService } from "./services/RedisApproxCountUnique";
 import { RedisLabelService } from "./services/RedisLabelService";
-import { RedisUniqueIdService } from "./services/RedisUniqueId";
+import {
+  RedisUniqueIdService,
+  UniqueIdService,
+  GetTimeMs
+} from "./services/RedisUniqueId";
 import { RedisRateLimit } from "./services/RedisRateLimit";
-import { UniqueIdService } from "sqrl";
+import { Config } from "sqrl";
 
 interface Closeable {
   close(): void;
 }
 
-class RedisServices {
-  count?: CountService;
-  countUnique?: CountUniqueService;
-  label?: LabelService;
-  uniqueId?: UniqueIdService;
-  rateLimit?: RateLimitService;
+export class RedisServices {
+  count: CountService;
+  countUnique: CountUniqueService;
+  label: LabelService;
+  uniqueId: UniqueIdService;
+  rateLimit: RateLimitService;
 
   private shutdown: Closeable[] = [];
-  constructor(props: { redisAddress?: string; inMemory?: boolean }) {
-    const { redisAddress, inMemory } = props;
-
-    let redisService: RedisInterface = null;
-    if (redisAddress) {
-      const redis = new RedisService(redisAddress);
-      redisService = redis;
-      this.shutdown.push(redis);
-    } else if (inMemory) {
-      redisService = new MockRedisService();
+  constructor(config: Config) {
+    let getTimeMs: GetTimeMs = () => Date.now();
+    if (config["testing.fixed-date"]) {
+      const fixedTimeMs = Date.parse(config["testing.fixed-date"]);
+      getTimeMs = () => fixedTimeMs;
     }
 
-    if (redisService) {
-      this.count = new RedisCountService(redisService, "count~");
-      this.countUnique = new RedisApproxCountUniqueService(
-        redisService,
-        "countUnique~"
+    let redisService: RedisInterface = null;
+    if (config["redis.address"]) {
+      const redis = new RedisService(config["redis.address"]);
+      redisService = redis;
+      this.shutdown.push(redis);
+    } else if (config["state.allow-in-memory"]) {
+      redisService = new MockRedisService();
+    } else {
+      throw new Error(
+        "No `redis.address` was configured and`state.allow-in-memory` is false."
       );
-      this.label = new RedisLabelService(redisService, "label~");
-      this.uniqueId = new RedisUniqueIdService(redisService, "id~");
+    }
 
-      if (!this.rateLimit) {
-        this.rateLimit = new RedisRateLimit(redisService, "ratelimit~");
-      }
+    this.count = new RedisCountService(redisService, "count~");
+    this.countUnique = new RedisApproxCountUniqueService(
+      redisService,
+      "countUnique~"
+    );
+    this.label = new RedisLabelService(redisService, "label~");
+    this.uniqueId = new RedisUniqueIdService(redisService, getTimeMs, "id~");
+
+    if (!this.rateLimit) {
+      this.rateLimit = new RedisRateLimit(redisService, "ratelimit~");
     }
   }
 
   close() {
     this.shutdown.forEach(svc => svc.close());
   }
-}
-
-export function buildServicesFromAddresses(props: {
-  redisAddress?: string;
-  inMemory?: boolean;
-}) {
-  return new RedisServices(props);
 }

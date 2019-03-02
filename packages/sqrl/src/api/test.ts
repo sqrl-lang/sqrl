@@ -5,14 +5,9 @@
  */
 import { SqrlTest } from "../testing/SqrlTest";
 
-export {
-  buildTestServices,
-  buildTestFunctionRegistry
-} from "../testing/runSqrlTest";
+export { buildTestFunctionRegistry } from "../testing/runSqrlTest";
 
 export { runSqrlTest } from "../simple/runSqrlTest";
-export { SimpleBlockService } from "../simple/SimpleBlockService";
-export { SimpleLogService } from "../simple/SimpleLogService";
 export { SimpleManipulator } from "../simple/SimpleManipulator";
 export { TestLogger } from "../simple/TestLogger";
 

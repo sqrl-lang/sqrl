@@ -18,18 +18,6 @@ function sha256HexSync(data: Buffer | string): string {
   return hasher.digest("hex");
 }
 
-function arrayMath(callback, values, defaultValue = null) {
-  values = values.filter((value?) => value !== null);
-  if (values.some((value?) => typeof value !== "number")) {
-    return null;
-  }
-  if (!values.length) {
-    return defaultValue;
-  }
-  const result = callback(...values);
-  return isNaN(result) ? null : result;
-}
-
 export function registerMathFunctions(registry: StdlibRegistry) {
   const safeMathOpts = {
     args: [AT.any, AT.any],
@@ -61,35 +49,46 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
 
-  const arrayMax = arrayMath.bind(null, Math.max.bind(Math));
-  registry.save(arrayMax, {
-    name: "arrayMax",
-    argstring: "numbers",
-    docstring: "Returns the maximum value of the numbers provided"
-  });
+  /**
+   * Filters the given list, removes any nulls and returns an empty list if
+   * there are any non-numbers
+   */
+  function filterNumberList(values: any[]): number[] {
+    values = values.filter(v => v !== null);
+    if (values.some(v => typeof v !== "number" || isNaN(v))) {
+      return [];
+    } else {
+      return values;
+    }
+  }
+
   registry.save(
     function max(...values) {
-      return arrayMax(values);
+      values = filterNumberList(values);
+      if (values.length === 0) {
+        return null;
+      }
+      return Math.max(...values);
     },
     {
       allowNull: true,
+      args: [AT.any, AT.any.repeated],
       argstring: "number[, ...]",
       docstring: "Returns the maximum value of the arguments provided"
     }
   );
 
-  const arrayMin = arrayMath.bind(null, Math.min.bind(Math));
-  registry.save(arrayMin, {
-    name: "arrayMin",
-    argstring: "numbers",
-    docstring: "Returns the minimum value of the numbers provided"
-  });
   registry.save(
     function min(...values) {
-      return arrayMin(values);
+      values = filterNumberList(values);
+      if (values.length === 0) {
+        return null;
+      }
+      return Math.min(...values);
     },
     {
       allowNull: true,
+      args: [AT.any, AT.any.repeated],
       argstring: "number[, ...]",
       docstring: "Returns the minimum value of the arguments provided"
     }
@@ -111,7 +110,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
   );
 
   registry.save(
-    function add(left, right) {
+    function _add(left, right) {
       if (typeof left !== "number" || typeof right !== "number") {
         return null;
       }
@@ -124,7 +123,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
   registry.save(
-    function subtract(left, right) {
+    function _subtract(left, right) {
       if (typeof left !== "number" || typeof right !== "number") {
         return null;
       }
@@ -137,7 +136,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
   registry.save(
-    function multiply(left, right) {
+    function _multiply(left, right) {
       if (typeof left !== "number" || typeof right !== "number") {
         return null;
       }
@@ -152,7 +151,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
 
   // modulo is special due to division by zero error
   registry.save(
-    function modulo(state, left, right) {
+    function _modulo(state, left, right) {
       if (right === 0) {
         state.logError(new Error("Modulo by zero"));
         return null;
@@ -170,7 +169,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
 
   // Divide is special due to division by zero error
   registry.save(
-    function divide(state, left, right) {
+    function _divide(state, left, right) {
       if (typeof left !== "number" || typeof right !== "number") {
         return null;
       } else if (right === 0) {

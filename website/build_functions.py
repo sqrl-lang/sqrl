@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-'''
+"""
 Generates initial documentation pages from SQRL function definitions
 
 Usage: `./sqrl help functions --output=json | ./website/build_functions.py`
-'''
+"""
 import itertools
 import json
 import os
@@ -15,8 +15,7 @@ data = json.load(sys.stdin)
 data.sort(key=lambda f: (not f["package"].startswith("sqrl."), f["package"]))
 
 
-def write_docs(folder, name, functions):
-    title = "%s Functions" % (name[:1].upper() + name[1:])
+def write_docs(folder, name, title, functions):
     with open(os.path.join(website, "source/%s/%s.md" % (folder, name)), "w") as f:
         f.write("title: %s\n---\n\n# %s\n\n" % (title, title))
         for props in sorted(functions, key=lambda p: p["name"]):
@@ -32,6 +31,8 @@ def write_docs(folder, name, functions):
 
 for package, functions in itertools.groupby(data, lambda f: f["package"]):
     if package.startswith("sqrl."):
-        write_docs("stdlib", package[len("sqrl.") :], functions)
+        name = package[len("sqrl.") :]
+        title = "%s Functions" % (name[:1].upper() + name[1:])
+        write_docs("stdlib", name, title, functions)
     else:
-        write_docs("packages", package, functions)
+        write_docs("packages", package, package, functions)

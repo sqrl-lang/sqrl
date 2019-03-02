@@ -42,7 +42,8 @@
     "jest": "^24.1.0",
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.2",
-    "typescript": "^3.2.4"
+    "typescript": "^3.2.4",
+    "sqrl-load-functions": "file:../sqrl-load-functions"
   },
   "engines": {
     "node": ">=6.0.0"

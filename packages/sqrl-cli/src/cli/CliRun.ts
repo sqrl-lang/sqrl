@@ -10,7 +10,8 @@ import * as split2 from "split2";
 import { CliActionOutput } from "./CliOutput";
 import { Context } from "sqrl/lib/api/ctx";
 import { promiseFinally, SqrlObject } from "sqrl-common";
-import { FeatureMap, Executable, Execution, SimpleManipulator } from "sqrl";
+import { FeatureMap, Executable, Execution } from "sqrl";
+import { CliManipulator } from "sqrl-cli-functions";
 
 export class CliRun {
   constructor(
@@ -31,7 +32,7 @@ export class CliRun {
   }
 
   async action(trc: Context, inputs: FeatureMap, features: string[]) {
-    const manipulator = new SimpleManipulator();
+    const manipulator = new CliManipulator();
     const execution: Execution = await this.executable.execute(trc, {
       featureTimeoutMs: 10000,
       inputs,

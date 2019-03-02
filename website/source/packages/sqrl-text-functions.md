@@ -1,7 +1,7 @@
-title: Sqrl-text-functions Functions
+title: sqrl-text-functions
 ---
 
-# Sqrl-text-functions Functions
+# sqrl-text-functions
 
 ## charGrams
 

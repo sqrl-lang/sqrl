@@ -29,6 +29,7 @@ interface ArgumentCheckWithRuntime extends ArgumentCheck {
 
 interface OptArgumentCheckWithRuntime extends ArgumentCheckWithRuntime {
   optional: ArgumentCheckWithRuntime;
+  repeated: ArgumentCheckWithRuntime;
 }
 
 export const AT: {

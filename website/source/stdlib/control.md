@@ -1,13 +1,7 @@
-title: Language Functions
+title: Control Functions
 ---
 
-# Language Functions
-
-## functionList
-
-**functionList**(None)
-
-Returns the list of available functions
+# Control Functions
 
 ## if
 
@@ -20,12 +14,6 @@ Returns either the true_result or false_result based on the condition
 **input**(None)
 
 Sets the given feature as an input value
-
-## noop
-
-**noop**(None)
-
-A statement that does nothing (no operation)
 
 ## wait
 

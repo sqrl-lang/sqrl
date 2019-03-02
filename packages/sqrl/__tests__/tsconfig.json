@@ -5,5 +5,9 @@
     "rootDir": "..",
     "outDir": "build"
   },
-  "include": ["../src/**/*", "**/*"]
+  "include": [
+    "../src/**/*",
+    "**/*",
+    "../../sqrl-load-functions/__tests__/load.spec.ts"
+  ]
 }

@@ -7,18 +7,45 @@ import { StdlibRegistry } from "../function/FunctionRegistry";
 import { AstTypes as AT } from "../ast/AstTypes";
 import { Ast, CallAst } from "../ast/Ast";
 
-import { AssertService, comparisonSymbols } from "sqrl-common";
+import {
+  AssertService,
+  comparisonSymbols,
+  sqrlCompare,
+  SqrlObject
+} from "sqrl-common";
 import SqrlAst from "../ast/SqrlAst";
 
 import { sqrlInvariant } from "../api/parse";
 import { sqrlSourceArrow } from "../compile/sqrlSourceArrow";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
+import { Manipulator } from "../api/execute";
+
+export class SimpleAssertService implements AssertService {
+  compare(
+    manipulator: Manipulator,
+    left: any,
+    operator: string,
+    right: any,
+    arrow: string
+  ) {
+    if (!sqrlCompare(left, operator, right)) {
+      throw new Error(`Assertion failed: ${left} ${operator} ${right}`);
+    }
+  }
+  ok(manipulator: Manipulator, value: any, arrow: string) {
+    if (!SqrlObject.isTruthy(value)) {
+      throw new Error("Assertion failed:" + value);
+    }
+  }
+}
 
 export function registerAssertFunctions(
   registry: StdlibRegistry,
-  service: AssertService
+  service?: AssertService
 ) {
+  service = service || new SimpleAssertService();
+
   registry.save(
     function _assert(state: SqrlExecutionState, value, arrow) {
       service.ok(state.manipulator, value, arrow);

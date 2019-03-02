@@ -29,7 +29,7 @@ Object {
       \\"a\\",
       functions._createMap(
         \\"c\\",
-        functions.subtract(functions.divide(this, 6, 2), 1)
+        functions._subtract(functions._divide(this, 6, 2), 1)
       )
     )
   );
@@ -65,7 +65,7 @@ Object {
   "SqrlAssertionStatements": "function() {
   const p0 = bluebird.resolve(true);
   return this.load(
-    \`23:function() {
+    \`20:function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -76,7 +76,7 @@ Object {
     )
   );
 }\`,
-    \`24:function() {
+    \`21:function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -87,7 +87,7 @@ Object {
     )
   );
 }\`,
-    \`25:function() {
+    \`22:function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -98,18 +98,18 @@ Object {
     )
   );
 }\`,
-    \`26:function() {
+    \`23:function() {
   return bluebird.resolve(
     functions._assertCmp(
       this,
-      functions._createMap(\\"a\\", 9, \\"b\\", functions.divide(this, 6, 2)),
+      functions._createMap(\\"a\\", 9, \\"b\\", functions._divide(this, 6, 2)),
       \\"=\\",
       { a: 9, b: 3 },
       'line 46\\\\\\\\n  ASSERT {\\"a\\": 5 + 4, \\"b\\": Six / 2} = { \\"a\\": 9, \\"b\\": 3 };\\\\\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\\\\\n'
     )
   );
 }\`,
-    \`27:function() {
+    \`24:function() {
   const p0 = bluebird.resolve(\\"=\\");
   const p1 = bluebird.resolve({ a: 6 });
   const p2 = bluebird.resolve(
@@ -130,16 +130,7 @@ Object {
   "SqrlIsClassify": "function() {
   return bluebird.resolve(true);
 }",
-  "SqrlLogStatements": "function() {
-  return bluebird.resolve(true);
-}",
   "SqrlMutate": "function() {
-  return bluebird.resolve(true);
-}",
-  "SqrlNoopStatements": "function() {
-  return bluebird.resolve(true);
-}",
-  "SqrlSaveStatements": "function() {
   return bluebird.resolve(true);
 }",
   "Zero": "function() {
@@ -149,7 +140,7 @@ Object {
   return bluebird.resolve(
     functions._assertCmp(
       this,
-      functions._createMap(\\"a\\", 9, \\"b\\", functions.divide(this, 6, 2)),
+      functions._createMap(\\"a\\", 9, \\"b\\", functions._divide(this, 6, 2)),
       \\"=\\",
       { a: 9, b: 3 },
       'line 46\\\\n  ASSERT {\\"a\\": 5 + 4, \\"b\\": Six / 2} = { \\"a\\": 9, \\"b\\": 3 };\\\\n  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\\\n'

@@ -187,7 +187,7 @@ test("unique aliases work", async () => {
   let manipulator: SimpleManipulator;
 
   const functionRegistry = await buildRedisTestFunctionRegistry({
-    startMs: Date.parse("2016-09-26T20:56:14.538Z")
+    fixedDate: "2016-09-26T20:56:14.538Z"
   });
   const run = async (
     countStatement?: string,

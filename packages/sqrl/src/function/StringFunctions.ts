@@ -11,6 +11,32 @@ import { SqrlObject } from "../object/SqrlObject";
 
 export function registerStringFunctions(registry: StdlibRegistry) {
   registry.save(
+    function repr(value) {
+      if (value === null) {
+        return "null";
+      } else if (Array.isArray(value)) {
+        return "[" + value.map(repr).join(",") + "]";
+      } else if (typeof value === "object") {
+        return "[object]";
+      } else if (typeof value === "undefined") {
+        // @todo: We should ensure this doesn't happen, but log the string to reduce confusion
+        return "[undefined]";
+      } else if (typeof value === "boolean" || typeof value === "number") {
+        return value.toString();
+      } else {
+        return JSON.stringify(value.toString());
+      }
+    },
+    {
+      args: [AT.any],
+      pure: true,
+      allowNull: true,
+      argstring: "value",
+      docstring: "Represent the given value (including nulls) as a string"
+    }
+  );
+
+  registry.save(
     function concat(...strings) {
       for (const string of strings) {
         if (typeof string !== "string" && typeof string !== "number") {

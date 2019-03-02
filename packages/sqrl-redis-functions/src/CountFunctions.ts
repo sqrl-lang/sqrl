@@ -27,6 +27,7 @@ import {
   TrendingArguments,
   AliasedFeature
 } from "./parser/sqrlRedis";
+import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
 
 const ENTITY_TYPE = "Counter";
 
@@ -449,7 +450,7 @@ export function registerCountFunctions(
       // weekOverWeek = lastWeek - previousLastWeek
       //              = lastWeek - (lastTwoWeeks - lastWeek)
       //
-      const resultAst = AstBuilder.call("subtract", [
+      const resultAst = AstBuilder.call("_subtract", [
         classifyCountTransform(state, ast, {
           ...args,
           timespan: previousConfig.subtractLeft
@@ -468,7 +469,7 @@ export function registerCountFunctions(
         );
         return AstBuilder.branch(
           // if result < 0
-          AstBuilder.call("cmpL", [subtractionAst, AstBuilder.constant(0)]),
+          AstBuilder.call("_cmpL", [subtractionAst, AstBuilder.constant(0)]),
           // then null
           AstBuilder.constant(null),
           // else result
@@ -484,12 +485,9 @@ export function registerCountFunctions(
       AstBuilder.constant(1),
       AstBuilder.constant(0)
     );
-    const resultAst = AstBuilder.call("add", [
+    const resultAst = AstBuilder.call("_add", [
       hasAlias ? AstBuilder.constant(0) : addAst,
-      AstBuilder.call("arrayMax", [
-        databaseCountTransform(state, ast, args),
-        AstBuilder.constant(0)
-      ])
+      AstBuilder.call("_maxCount", [databaseCountTransform(state, ast, args)])
     ]);
     return state.setGlobal(
       ast,
@@ -497,6 +495,15 @@ export function registerCountFunctions(
       `count(${args.timespan}:${keyedCounterName})`
     );
   }
+
+  registry.registerSync(
+    function _maxCount(state: SqrlExecutionState, counts: number[]) {
+      return Math.max(0, ...counts);
+    },
+    {
+      args: [AT.state, AT.any.array]
+    }
+  );
 
   registry.registerCustom(
     function count(state: CompileState, ast: CustomCallAst): Ast {

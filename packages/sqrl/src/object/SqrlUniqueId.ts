@@ -4,8 +4,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlObject } from "./SqrlObject";
-import { UniqueId } from "../api/services";
 import { mkSpan } from "./span";
+import { UniqueId } from "../api/entity";
 
 export default class SqrlUniqueId extends SqrlObject {
   constructor(private uniqueId: UniqueId) {

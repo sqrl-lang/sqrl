@@ -1,0 +1,54 @@
+{
+  "name": "sqrl-load-functions",
+  "version": "0.5.0",
+  "description": "> TODO: description",
+  "homepage": "https://twitter.github.io/sqrl",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl-load-functions",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "author": {
+    "name": "Josh Yudaken",
+    "email": "josh@smyte.com"
+  },
+  "keywords": [
+    "sqrl"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib && rimraf coverage",
+    "format": "prettier --write \"{src,__tests__}/**/*.ts\"",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "build": "tsc --pretty",
+    "test": "jest",
+    "test:integration": "jest --config=jest.integration.config.js",
+    "coverage": "jest --coverage",
+    "watch": "npm run build -- --watch",
+    "watch:test": "npm run test -- --watch",
+    "watch:test:integration": "npm run test:integration -- --watch"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.9",
+    "@types/node": "^11.9.5",
+    "jest": "^24.1.0",
+    "ts-jest": "^24.0.0",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "dependencies": {
+    "js-yaml": "^3.12.1",
+    "sqrl": "file:../sqrl"
+  }
+}

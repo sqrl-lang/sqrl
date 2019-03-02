@@ -38,9 +38,8 @@
     "double-ended-queue": "^2.1.0-0",
     "eventemitter3": "^3.1.0",
     "fast-stable-stringify": "^1.0.0",
-    "ioredis": "^4.3.0",
-    "js-yaml": "^3.12.1",
     "jsonpath": "^1.0.0",
+    "jsonschema": "^1.2.4",
     "moment": "^2.23.0",
     "moment-timezone": "^0.5.23",
     "murmurhash-native": "^3.3.0",
@@ -50,7 +49,6 @@
   },
   "devDependencies": {
     "@types/bignum": "^0.0.29",
-    "@types/ioredis": "^4.0.4",
     "@types/jest": "^24.0.9",
     "@types/jest-diff": "^20.0.0",
     "@types/jsonpath": "^0.2.0",

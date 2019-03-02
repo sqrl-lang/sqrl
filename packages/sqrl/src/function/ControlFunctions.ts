@@ -15,19 +15,7 @@ import { SqrlObject } from "../object/SqrlObject";
 
 export const INPUT_FUNCTION = "input";
 
-export function registerStdlibFunctions(registry: StdlibRegistry) {
-  registry.save(
-    function functionList() {
-      return Object.keys(registry.wrapped.functionProperties).filter(
-        func => !func.startsWith("_")
-      );
-    },
-    {
-      argstring: "",
-      docstring: "Returns the list of available functions"
-    }
-  );
-
+export function registerControlFunctions(registry: StdlibRegistry) {
   registry.save(null, {
     name: "if",
     allowNull: true,
@@ -60,18 +48,6 @@ export function registerStdlibFunctions(registry: StdlibRegistry) {
   registry.save(function _slotWait() {
     throw new Error("This function is a language builtin");
   });
-
-  registry.save(
-    function noop() {
-      /* do nothing */
-    },
-    {
-      statement: true,
-      statementFeature: "SqrlNoopStatements",
-      argstring: "",
-      docstring: "A statement that does nothing (no operation)"
-    }
-  );
 
   registry.save(null, {
     name: "wait",

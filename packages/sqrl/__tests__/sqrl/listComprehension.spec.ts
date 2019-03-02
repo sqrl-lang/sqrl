@@ -39,7 +39,7 @@ test("works with in", async () => {
   # and that entities work within sequences
   LET A := [
     X FOR X IN SequenceA
-    WHERE entity("Machine", X) IN SequenceB AND NOT X In IgnoreStrings
+    WHERE delayMs(50, X) IN SequenceB AND NOT X In IgnoreStrings
   ];
 
   ASSERT A = ["2"];

@@ -74,9 +74,6 @@ export interface BinaryExprAst extends BaseAst {
   operator: string;
   right: Ast;
 }
-export interface NoopAst extends BaseAst {
-  type: "noop";
-}
 export interface LetAst extends BaseAst {
   type: "let";
 
@@ -234,7 +231,6 @@ export type Ast =
   | BinaryExprAst
   | ExprAst
   | IncludeAst
-  | NoopAst
   | RuleAst
   | ListAst
   | RulesAst

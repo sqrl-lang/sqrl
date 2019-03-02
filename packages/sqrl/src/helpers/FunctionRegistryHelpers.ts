@@ -4,13 +4,11 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
-import {
-  registerAllFunctions,
-  FunctionServices
-} from "../function/registerAllFunctions";
+import { registerAllFunctions } from "../function/registerAllFunctions";
+import { FunctionServices } from "../api/execute";
 
-export function buildFunctionRegistryForServices(services?: FunctionServices) {
+export function buildFunctionRegistryForServices(services: FunctionServices) {
   const registry = new SqrlFunctionRegistry();
-  registerAllFunctions(registry, services);
+  registerAllFunctions(registry);
   return registry;
 }

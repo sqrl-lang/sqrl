@@ -6,6 +6,7 @@
 type autogen_any = any;
 import { AstTypes as AT } from "../../src/ast/AstTypes";
 import SqrlAst from "../../src/ast/SqrlAst";
+import { runSqrlTest } from "../../src";
 
 const func: autogen_any = "myCoolFunction";
 
@@ -75,5 +76,22 @@ test("runtime checks", async () => {
   AT.any.number.runtimeChecker(67);
   expect(AT.any.number.runtimeChecker("hey hey")).toEqual(
     "Expected type number but was string"
+  );
+});
+
+test("tests inside sqrl", async () => {
+  await expect(runSqrlTest("LET V := max();")).rejects.toThrow(
+    /Expected at least 1 argument but got 0/
+  );
+  await expect(runSqrlTest("LET V := max(1);")).resolves.toBeTruthy();
+  await expect(runSqrlTest("LET V := max(1,2);")).resolves.toBeTruthy();
+  await expect(runSqrlTest("LET V := max(1,2,3);")).resolves.toBeTruthy();
+
+  await expect(runSqrlTest("LET V := log10();")).rejects.toThrow(
+    /Expected 1 argument but got 0./
+  );
+  await expect(runSqrlTest("LET V := log10(1);")).resolves.toBeTruthy();
+  await expect(runSqrlTest("LET V := log10(1,2);")).rejects.toThrow(
+    /Expected 1 argument but got 2./
   );
 });

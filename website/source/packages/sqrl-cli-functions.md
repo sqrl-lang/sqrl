@@ -1,0 +1,65 @@
+title: sqrl-cli-functions
+---
+
+# sqrl-cli-functions
+
+## allSource
+
+**allSource**(None)
+
+Returns all of the source code for this execution
+
+## blockAction
+
+**blockAction**(None)
+
+Mark the current action as blocked
+
+## featureSource
+
+**featureSource**(feature)
+
+Returns the source code for the given feature
+
+## log
+
+**log**(format string, value...)
+
+Logs a message using sprintf style formatting
+
+## logFeature
+
+**logFeature**(feature)
+
+Logs the given feature and its value
+
+## printAllSource
+
+**printAllSource**(None)
+
+Prints the SQRL execution source
+
+## printSource
+
+**printSource**(feature)
+
+Prints the SQRL source of the given feature
+
+## source
+
+**source**(feature)
+
+Returns the source code of the given feature
+
+## wasBlocked
+
+**wasBlocked**(None)
+
+Check if the current action was marked as blocked
+
+## whitelistAction
+
+**whitelistAction**(None)
+
+Mark the current action as whitelisted
+

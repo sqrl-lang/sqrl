@@ -58,7 +58,7 @@ export async function compileFromStatements(
 }> {
   const parserState = new SqrlParserState({
     statements,
-    functionRegistry: functionRegistry._wrapped,
+    functionRegistry: functionRegistry._functionRegistry,
     setInputs: options.setInputs || {},
     filesystem: options.filesystem
   });
@@ -102,14 +102,14 @@ export async function compileFromString(
   if (options.librarySource) {
     libraryStatements = [
       ...statementsFromString(options.librarySource, {
-        customFunctions: functionRegistry._wrapped.customFunctions
+        customFunctions: functionRegistry._functionRegistry.customFunctions
       })
     ];
   }
   const statements: StatementAst[] = [
     ...libraryStatements,
     ...statementsFromString(source, {
-      customFunctions: functionRegistry._wrapped.customFunctions
+      customFunctions: functionRegistry._functionRegistry.customFunctions
     })
   ];
   return compileFromStatements(functionRegistry, statements, options);
@@ -144,7 +144,7 @@ export async function compileFromFilesystem(
   const sqrlBuffer = filesystem.tryRead(mainFile);
   invariant(sqrlBuffer, "Expected to find main.sqrl in test fs");
   const statements = statementsFromString(sqrlBuffer.toString("utf-8"), {
-    customFunctions: functionRegistry._wrapped.customFunctions
+    customFunctions: functionRegistry._functionRegistry.customFunctions
   });
   return compileFromStatements(functionRegistry, statements, {
     filesystem,
@@ -173,6 +173,6 @@ export function executableFromSpec(
   functionRegistry: FunctionRegistry,
   spec: ExecutableSpec
 ): Executable {
-  const context = new JsExecutionContext(functionRegistry._wrapped);
+  const context = new JsExecutionContext(functionRegistry._functionRegistry);
   return new Executable(new SqrlExecutable(context, spec));
 }

@@ -7,23 +7,21 @@ import {
   runSqrlTest as runLibSqrl,
   buildTestFunctionRegistry,
   FunctionRegistry,
-  Logger,
-  buildTestServices
+  Logger
 } from "sqrl";
 import { register } from "../../src";
-import { buildServices } from "./services";
 
 export async function buildRedisTestFunctionRegistry(
   options: {
-    startMs?: number;
+    fixedDate?: string;
   } = {}
 ) {
   const functionRegistry = await buildTestFunctionRegistry({
-    services: await buildTestServices({
-      startMs: options.startMs
-    })
+    config: {
+      "testing.fixed-date": options.fixedDate
+    }
   });
-  register(functionRegistry, buildServices());
+  register(functionRegistry);
   return functionRegistry;
 }
 
@@ -32,14 +30,14 @@ export async function runSqrl(
   options: {
     functionRegistry?: FunctionRegistry;
     logger?: Logger;
-    startMs?: number;
+    fixedDate?: string;
   } = {}
 ) {
   return runLibSqrl(sqrl, {
     functionRegistry:
       options.functionRegistry ||
       (await buildRedisTestFunctionRegistry({
-        startMs: options.startMs
+        fixedDate: options.fixedDate
       })),
     logger: options.logger
   });

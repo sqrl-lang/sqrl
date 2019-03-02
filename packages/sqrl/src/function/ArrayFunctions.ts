@@ -217,7 +217,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
   );
 
   registry.save(
-    function contains(seq, value) {
+    function _contains(seq, value) {
       if (!_isStringOrArray(seq) || seq === null || value === null) {
         return null;
       }

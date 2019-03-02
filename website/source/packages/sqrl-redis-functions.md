@@ -1,7 +1,7 @@
-title: Sqrl-redis-functions Functions
+title: sqrl-redis-functions
 ---
 
-# Sqrl-redis-functions Functions
+# sqrl-redis-functions
 
 ## addLabel
 
@@ -24,6 +24,18 @@ Timespans: LAST DAY, LAST EIGHT DAYS, LAST HOUR, LAST MONTH, LAST TWO DAYS, LAST
 **countUnique**(Feature[, ...] [GROUP BY Feature[, ...]] [WHERE Condition] [LAST Duration] [BEFORE ACTION])
 
 Performs a sliding window unique set count
+
+## entity
+
+**entity**(type, key)
+
+Create an entity of the given type
+
+## entityList
+
+**entityList**(type, keys)
+
+Create a list of entities of the given type
 
 ## hasLabel
 

@@ -1,4 +1,5 @@
-import { runSqrlTest } from "../../src/simple/runSqrlTest";
+import { runSqrlTest } from "sqrl";
+import { register as registerCliFunctions } from "../src";
 
 /**
  * Copyright 2018 Twitter, Inc.
@@ -34,7 +35,8 @@ function sourceTemplate(strings: TemplateStringsArray, ...args: any[]): string {
 }
 
 test("saves features", async () => {
-  await runSqrlTest(sourceTemplate`
+  await runSqrlTest(
+    sourceTemplate`
     LET Result := 5;
     ASSERT source(Result) = ${`
       function() {
@@ -49,7 +51,7 @@ test("saves features", async () => {
     # @NOTE: divide() is not pure for now as it deals with divide by zero
     ASSERT source(Result) = ${`
       function() {
-        return bluebird.resolve(functions.divide(this, 20, 1));
+        return bluebird.resolve(functions._divide(this, 20, 1));
       }
     `};
 
@@ -80,5 +82,11 @@ test("saves features", async () => {
         return this.load(\"Fast\", \"Slow\");
       }
     `};
-  `);
+  `,
+    {
+      async register(instance) {
+        await registerCliFunctions(instance);
+      }
+    }
+  );
 });

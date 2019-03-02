@@ -43,7 +43,7 @@ import { LogProperties, getGlobalLogger } from "../api/log";
 import { buildSqrlError } from "./buildSqrlError";
 import { sqrlInvariant } from "../api/parse";
 import { FeatureMap } from "../api/execute";
-import { INPUT_FUNCTION } from "../function/StdlibFunctions";
+import { INPUT_FUNCTION } from "../function/ControlFunctions";
 
 export interface SqrlParserSourceOptions {
   statements: StatementAst[];

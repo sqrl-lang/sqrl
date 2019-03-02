@@ -4,13 +4,9 @@
 
 This package includes functions for working with text. It may be useful as a starting point for creating your own simple SQRL function packs.
 
-## simhash(text)
+## Function documentation
 
-This uses the off the shelf `simhash-js` package to compute a [simhash](https://matpalm.com/resemblance/simhash/) of the given string.
-
-## patternMatches(filename, text)
-
-This loads in a file with newline separated regular expressions and matches them against the provided text.
+See [sqrl-text-functions documentation](https://twitter.github.io/sqrl/packages/sqrl-text-functions.html) on the website
 
 # SQRL documentation
 

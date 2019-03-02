@@ -12,9 +12,10 @@ import { SqrlObject } from "sqrl/lib/object/SqrlObject";
 import * as util from "util";
 import { SqrlCompileError } from "sqrl/lib/api/parse";
 import { CliOutputOptions, CliActionOutput } from "./CliOutput";
-import { FeatureMap, SimpleManipulator } from "sqrl";
+import { FeatureMap } from "sqrl";
 import { spanToShell } from "../spanToShell";
 import { CliError } from "./CliError";
+import { CliManipulator } from "sqrl-cli-functions";
 
 const CHECKMARK = "\u2713";
 const CROSS = "\u2717";
@@ -143,7 +144,7 @@ export class CliPrettyOutput extends CliActionOutput {
   }
 
   action(
-    manipulator: SimpleManipulator,
+    manipulator: CliManipulator,
     execution: SqrlExecutionState,
     loggedFeatures: FeatureMap
   ) {

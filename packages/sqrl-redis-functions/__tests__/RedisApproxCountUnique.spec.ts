@@ -12,7 +12,7 @@ redisTest("works", async redis => {
   const ctx = createSimpleContext();
   const prefix = "test" + Date.now();
 
-  const uniqueId = new RedisUniqueIdService(redis, prefix);
+  const uniqueId = new RedisUniqueIdService(redis, () => Date.now(), prefix);
   const service = new RedisSingleWindowApproxCountUniqueService(
     redis,
     prefix,

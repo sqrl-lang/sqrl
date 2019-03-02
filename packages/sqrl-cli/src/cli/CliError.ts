@@ -10,3 +10,9 @@ export class CliError extends Error {
     this.suggestion = options.suggestion || null;
   }
 }
+
+export function cliInvariant(condition: boolean, message: string) {
+  if (!condition) {
+    throw new CliError(message);
+  }
+}

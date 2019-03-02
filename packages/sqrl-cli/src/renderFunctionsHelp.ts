@@ -13,7 +13,7 @@ export function renderFunctionsHelp(functionRegistry: FunctionRegistry) {
     [name: string]: FunctionDescriptions;
   } = {};
   for (const [name, props] of Object.entries(
-    functionRegistry._wrapped.functionProperties
+    functionRegistry._functionRegistry.functionProperties
   ).sort()) {
     if (!name.startsWith("_")) {
       let args = "";

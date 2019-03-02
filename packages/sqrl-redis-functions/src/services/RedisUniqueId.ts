@@ -3,11 +3,10 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-// tslint:disable:no-submodule-imports (@TODO)
 
 import { redisKey, RedisInterface } from "./RedisService";
 import bignum = require("bignum");
-import { Context, UniqueId, UniqueIdService } from "sqrl";
+import { Context, UniqueId } from "sqrl";
 import { invariant } from "sqrl-common";
 
 export const TIMESTAMP_BITS = 40;
@@ -16,6 +15,11 @@ export const TIMESTAMP_EPOCH = 1262304000000; // 2010-01-01
 
 export const REMAINDER_BITS = 23;
 export const REMAINDER_SIZE = Math.pow(2, REMAINDER_BITS);
+
+export interface UniqueIdService {
+  create(ctx: Context): Promise<UniqueId>;
+  fetch(ctx: Context, type: string, value: string): Promise<UniqueId>;
+}
 
 export class SimpleId extends UniqueId {
   constructor(private timeMs: number, private remainder: number) {
@@ -49,8 +53,14 @@ export class SimpleId extends UniqueId {
   }
 }
 
+export type GetTimeMs = () => number;
+
 export class RedisUniqueIdService implements UniqueIdService {
-  constructor(private redis: RedisInterface, private prefix: string) {
+  constructor(
+    private redis: RedisInterface,
+    private getTimeMs: GetTimeMs,
+    private prefix: string
+  ) {
     /* do nothing yet */
   }
 
@@ -60,7 +70,7 @@ export class RedisUniqueIdService implements UniqueIdService {
   }
 
   async create(ctx: Context) {
-    const timeMs = Date.now();
+    const timeMs = this.getTimeMs();
     const timeKey = redisKey(
       ctx.requireDatabaseSet(),
       this.prefix,

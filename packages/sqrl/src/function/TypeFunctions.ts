@@ -92,8 +92,11 @@ export function registerTypeFunctions(registry: StdlibRegistry) {
         return "[array]";
       } else if (typeof value === "object") {
         return "[object]";
+      } else if (typeof value === "undefined") {
+        // @todo: We should ensure this doesn't happen, but log the string to reduce confusion
+        return "[undefined]";
       } else {
-        return (value != null ? value : "").toString();
+        return value.toString();
       }
     },
     {

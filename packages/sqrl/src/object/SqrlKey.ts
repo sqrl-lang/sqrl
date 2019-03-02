@@ -6,12 +6,11 @@
 import SqrlEntity from "./SqrlEntity";
 import { SqrlObject } from "./SqrlObject";
 
-import { bufferToHexEncodedAscii } from "../jslib/bufferToHexEncodedAscii";
 import invariant from "../jslib/invariant";
 import stringify = require("fast-stable-stringify");
 import { timeToBuffer } from "../jslib/timeToBuffer";
 import { DatabaseSet } from "../api/ctx";
-import { RenderedSpan } from "sqrl-common";
+import { bufferToHexEncodedAscii, RenderedSpan } from "sqrl-common";
 import { mkSpan, indentSpan } from "./span";
 
 export class SqrlKey extends SqrlObject {

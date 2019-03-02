@@ -8,14 +8,8 @@ import * as microQuery from "micro-query";
 // tslint:disable-next-line:no-submodule-imports (it is the documented suggestion)
 import * as dispatch from "micro-route/dispatch";
 import { IncomingMessage, ServerResponse } from "http";
-import {
-  Context,
-  FeatureMap,
-  SimpleManipulator,
-  Executable,
-  Execution,
-  FiredRule
-} from "sqrl";
+import { Context, FeatureMap, Executable, Execution, FiredRule } from "sqrl";
+import { CliManipulator } from "sqrl-cli-functions";
 
 function userInvariant(cond, message) {
   if (!cond) {
@@ -57,7 +51,7 @@ async function run(
 
   const inputs = await micro.json(req, { limit: "128mb" });
 
-  const manipulator = new SimpleManipulator();
+  const manipulator = new CliManipulator();
   const execution: Execution = await executable.execute(ctx, {
     manipulator,
     inputs,

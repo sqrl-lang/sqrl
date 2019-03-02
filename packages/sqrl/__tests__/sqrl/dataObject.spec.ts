@@ -19,8 +19,8 @@ test("works", async () => {
   LET B := {"a": 5};
   LET C := {"a": 5 + 1};
   LET D := {"a": 5 + One};
-  LET E := {"a": {"c": add(5, Six)}};
-  LET F := {"a": {"c": add(5, 6)}};
+  LET E := {"a": {"c": (5 + Six)}};
+  LET F := {"a": {"c": (5 + 6)}};
   LET G := {"a": {"c": (6 / 2) - 1}};
 
   # This is fake data

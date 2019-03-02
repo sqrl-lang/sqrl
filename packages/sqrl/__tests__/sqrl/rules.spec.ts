@@ -33,7 +33,7 @@ test("when context works", async () => {
 
   let saveCount = 0;
   let savedContext = null;
-  functionRegistry._wrapped.save(
+  functionRegistry._functionRegistry.save(
     function saveContext(state, whenCause, word) {
       saveCount += 1;
       savedContext = {

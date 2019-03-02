@@ -28,9 +28,6 @@ jsonFields.switch = [];
 recurseFields.switchCase = ["ast", "expr", "where", "truthTableWhere"];
 jsonFields.switchCase = [];
 
-recurseFields.noop = [];
-jsonFields.noop = [];
-
 recurseFields.listComprehension = ["output", "input", "iterator", "where"];
 jsonFields.listComprehension = [];
 

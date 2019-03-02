@@ -4,8 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import bignum = require("bignum");
-import mapObject from "./mapObject";
-import { bufferToHexEncodedAscii } from "./bufferToHexEncodedAscii";
+import { bufferToHexEncodedAscii, mapObject } from "sqrl-common";
 
 function friendlyBuffer(buf) {
   try {
@@ -35,7 +34,7 @@ function deepFriendlyMap(obj) {
  * This process is not necessarily reversible and is meant for convenience
  * only.
  */
-export function kafkaBufferHumanJson(topic: string, msg: Buffer): any {
+export function bufferHumanJson(msg: Buffer): any {
   try {
     return JSON.parse(msg.toString("utf-8"));
   } catch (err) {

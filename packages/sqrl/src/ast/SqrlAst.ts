@@ -15,7 +15,6 @@ import {
   ListAst,
   AstLocation,
   LetAst,
-  NoopAst,
   mapAst,
   SlotAst,
   jsonAst,
@@ -32,10 +31,6 @@ function invariantAst(ast: Ast): void {
     "Expected an AST node"
   );
 }
-
-const noop: NoopAst = {
-  type: "noop"
-};
 
 const SqrlAst = {
   SqrlSlot,
@@ -236,9 +231,7 @@ const SqrlAst = {
       table += filenames[i] + "  " + lines[i].trim();
     }
     return table;
-  },
-
-  noop
+  }
 };
 
 export default SqrlAst;

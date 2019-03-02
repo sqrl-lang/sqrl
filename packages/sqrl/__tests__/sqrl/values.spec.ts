@@ -54,7 +54,6 @@ sqrlTest(
   ASSERT hasAttr(DataBlob, "key") = true;
   ASSERT attr(DataBlob, Key) = 0;
   ASSERT hasAttr(DataBlob, Key) = true;
-  ASSERT attr(DataBlob, entity("Ip", "key")) = 0;
   ASSERT jsonValue(DataBlob, "$.key") = 0;
   ASSERT jsonValue(DataBlob, "$.key_2") = 2;
   ASSERT jsonValue(DataBlob, "$.nested.key") = 1;
@@ -116,11 +115,11 @@ sqrlTest(
   ASSERT min(StringSix) = null;
   ASSERT min(5, StringSix) = null;
   ASSERT min(5, 5, 10) = 5;
-  ASSERT contains(StringSix, 6) = true;
-  ASSERT contains(EmptyList, 3) = false;
-  ASSERT contains(IntList, 3) = true;
-  ASSERT contains(NullFeature, 3) = null;
-  ASSERT contains(Six, 3) = null;
+  ASSERT (StringSix CONTAINS 6) = true;
+  ASSERT (EmptyList CONTAINS 3) = false;
+  ASSERT (IntList CONTAINS 3) = true;
+  ASSERT (NullFeature CONTAINS 3) = null;
+  ASSERT (Six CONTAINS 3) = null;
   ASSERT split(StringSix, ".") = ["6", "5"];
   ASSERT split(StringSix, "Z") = ["6.5"];
   ASSERT join(StringSix, 6) = null;
@@ -174,7 +173,7 @@ sqrlTest(
   ASSERT 2 * -0.5 = -1;
   ASSERT -10*-0.1 = 1;
   ASSERT (not not EmptyList) = false;
-  ASSERT cmpL(null, 1) is null;
+  ASSERT (null < 1) is null;
   ASSERT (null=NullFeature) is null;
   ASSERT (6=null) is null;
   ASSERT (5>4) = true;
@@ -193,7 +192,7 @@ sqrlTest(
   
   ASSERT max(5, 7) = 7;
   ASSERT max(7, 5) = 7;
-  ASSERT max() is null;
+  ASSERT max('7') is null;
   ASSERT min(7, null, 3) = 3;
   ASSERT min(7, null, null) = 7;
   ASSERT min(null, null, null) is null;

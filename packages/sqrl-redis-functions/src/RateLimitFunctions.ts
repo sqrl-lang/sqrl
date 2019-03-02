@@ -231,11 +231,11 @@ export function registerRateLimitFunctions(
 
       return AstBuilder.branch(
         // if tokenAmount > 0
-        AstBuilder.call("cmpG", [tokenAmountAst, AstBuilder.constant(0)]),
+        AstBuilder.call("_cmpG", [tokenAmountAst, AstBuilder.constant(0)]),
         // then return rateLimit < tokenAmount
-        AstBuilder.call("cmpL", [rateLimitValue, tokenAmountAst]),
+        AstBuilder.call("_cmpL", [rateLimitValue, tokenAmountAst]),
         // else return rateLimit <= 0
-        AstBuilder.call("cmpLE", [rateLimitValue, AstBuilder.constant(0)])
+        AstBuilder.call("_cmpLE", [rateLimitValue, AstBuilder.constant(0)])
       );
     },
     {

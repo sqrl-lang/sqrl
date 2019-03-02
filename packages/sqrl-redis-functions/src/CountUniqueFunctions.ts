@@ -293,7 +293,7 @@ export function registerCountUniqueFunctions(
 
         // If we're using aliases we only count the uniques in this request if
         // they exactly match the aliases that we used
-        const aliasesEqualAst = AstBuilder.call("cmpE", [
+        const aliasesEqualAst = AstBuilder.call("_cmpE", [
           AstBuilder.list(groupAliases.map(alias => AstBuilder.feature(alias))),
           AstBuilder.list(
             groupFeatures.map(feature => AstBuilder.feature(feature))

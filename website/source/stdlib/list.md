@@ -9,12 +9,6 @@ title: List Functions
 
 Concatenates many lists into a single long list
 
-## contains
-
-**contains**(list | string, value)
-
-Tests if a given list or string contains the provided search value
-
 ## dedupe
 
 **dedupe**(list)

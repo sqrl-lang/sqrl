@@ -43,7 +43,7 @@ test("multi aliases work", async () => {
     ASSERT NumReportsForTarget = 1;
     ASSERT NumTimesReported = 3;
   `,
-    { startMs: 1547758287017 }
+    { fixedDate: "2019-01-17T20:51:27.017Z" }
   );
 
   expect(Array.from(lastManipulator.sqrlKeys).sort()).toEqual([
@@ -93,7 +93,7 @@ LET TrendingTriGramsDayOverDay := trending(
 );
 ASSERT TrendingTriGramsDayOverDay = [];
 `,
-      { startMs: 1547758287017 }
+      { fixedDate: "2019-01-17T20:51:27.017Z" }
     );
 
     expect(Array.from(lastManipulator.sqrlKeys)).toEqual([

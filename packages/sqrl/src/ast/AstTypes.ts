@@ -28,13 +28,17 @@ export type CompileCheckCallback = (
 
 export interface RuntimeTypeChecker {
   isOptional: boolean;
+  isRepeated: boolean;
   compileTimeCheck: CompileCheckCallback;
   runtimeChecker?: (value: any) => string | null;
 }
 
 export type AstArgs = RuntimeTypeChecker[];
 
-export interface OptionalTypeChecker extends RuntimeTypeChecker {
+/**
+ * Type checker that already has a count (either optional, or repeated)
+ */
+export interface CountedTypeChecker extends RuntimeTypeChecker {
   array: RuntimeTypeChecker;
   bool: RuntimeTypeChecker;
   instanceOf: RuntimeTypeChecker;
@@ -48,8 +52,9 @@ export interface OptionalTypeChecker extends RuntimeTypeChecker {
   string: RuntimeTypeChecker;
 }
 
-export interface TypeChecker extends OptionalTypeChecker {
-  optional: OptionalTypeChecker;
+export interface TypeChecker extends CountedTypeChecker {
+  optional: CountedTypeChecker;
+  repeated: CountedTypeChecker;
 }
 
 const pluralize = (text, count: number) =>
@@ -202,15 +207,20 @@ function ensureObjectWithConstantKeys(ast?) {
 function compileTypesInvariant(fnAst: CallAst, types: ArgumentCheck[]) {
   const { args } = fnAst;
 
-  const optArgs = types.filter(t => t.isOptional).length;
-  const maxArgs = types.length;
-  const minArgs = maxArgs - optArgs;
   const providedArgs = args.length;
+  const repeatedLast = types.length && types[types.length - 1].isRepeated;
+  const optArgs = types.filter(t => t.isOptional || t.isRepeated).length;
+  const maxArgs = repeatedLast ? providedArgs : types.length;
+  const minArgs = types.length - optArgs;
 
-  const lengthMessage =
-    minArgs === maxArgs
-      ? `${pluralize("argument", minArgs)}`
-      : `${minArgs} to ${pluralize("argument", maxArgs)}`;
+  let lengthMessage: string;
+  if (repeatedLast) {
+    lengthMessage = `at least ${pluralize("argument", minArgs)}`;
+  } else if (minArgs === maxArgs) {
+    lengthMessage = `${pluralize("argument", minArgs)}`;
+  } else {
+    lengthMessage = `${minArgs} to ${pluralize("argument", maxArgs)}`;
+  }
 
   sqrlInvariant(
     fnAst,
@@ -220,7 +230,9 @@ function compileTypesInvariant(fnAst: CallAst, types: ArgumentCheck[]) {
   );
 
   for (let i = 0; i < types.length; i++) {
-    const checker: ArgumentCheck = types[i];
+    // The last field may have a repeated checker on it
+    const checker: ArgumentCheck = types[Math.min(i, types.length - 1)];
+
     checker.compileTimeCheck(args[i], fnAst);
   }
 }
@@ -228,7 +240,9 @@ function compileTypesInvariant(fnAst: CallAst, types: ArgumentCheck[]) {
 function validateRuntime(fnArgs: any[], types: ArgumentCheck[]) {
   let errors = [];
   for (let i = 0; i < fnArgs.length; i++) {
-    const checker = types[i];
+    // The last field may have a repeated checker on it
+    const checker = types[Math.min(i, types.length - 1)];
+
     const error = checker.runtimeChecker && checker.runtimeChecker(fnArgs[i]);
     if (error) {
       errors = [
@@ -247,33 +261,28 @@ function validateRuntime(fnArgs: any[], types: ArgumentCheck[]) {
 
 function createRuntimeCheckers(
   compileTimeCheck: CompileCheckCallback,
-  isOptional: boolean
+  isOptional: boolean,
+  isRepeated: boolean
 ) {
-  return mapToObj(Object.keys(runtimeCheckers), (k?) => ({
-    compileTimeCheck,
-    runtimeChecker: runtimeCheckers[k],
-    isOptional
-  }));
+  return Object.assign(
+    {
+      compileTimeCheck,
+      isOptional,
+      isRepeated
+    },
+    mapToObj(Object.keys(runtimeCheckers), (k?) => ({
+      compileTimeCheck,
+      runtimeChecker: runtimeCheckers[k],
+      isOptional,
+      isRepeated
+    }))
+  );
 }
 
 function typeChecker(compileTimeCheck: CompileCheckCallback): TypeChecker {
-  const o = Object.assign(
-    {
-      compileTimeCheck,
-      isOptional: false
-    },
-    createRuntimeCheckers(compileTimeCheck, false)
-  );
-
-  o.optional = Object.assign(
-    {},
-    o,
-    {
-      isOptional: true
-    },
-    createRuntimeCheckers(compileTimeCheck, true)
-  );
-
+  const o = createRuntimeCheckers(compileTimeCheck, false, false);
+  o.optional = createRuntimeCheckers(compileTimeCheck, true, false);
+  o.repeated = createRuntimeCheckers(compileTimeCheck, false, true);
   return o;
 }
 

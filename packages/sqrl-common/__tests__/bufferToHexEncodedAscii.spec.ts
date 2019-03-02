@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { bufferToHexEncodedAscii } from "../../src/jslib/bufferToHexEncodedAscii";
+import { bufferToHexEncodedAscii } from "../src/bufferToHexEncodedAscii";
 
 test("works", () => {
   const hello = Buffer.from("hello");

@@ -3,8 +3,11 @@
 SQRL is a Safe, Stateful Rules Language for Event Streams
 
 **Instant** – New features and rules can be deployed to production in seconds.
+
 **Inclusive** – Non-technical users can review and safely deploy changes to production without talking to an engineer.
+
 **Powerful** – Rules can declaratively aggregate state, trigger side effects, and call functions in other languages.
+
 **Auditable** – It’s easy to understand why a rule fired or a side effect occured, and rules can be safely replayed.
 
 ## Documentation

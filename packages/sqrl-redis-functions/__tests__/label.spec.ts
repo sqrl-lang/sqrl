@@ -9,7 +9,6 @@ test("Labeling works", async () => {
   await runSqrl(`
     LET SqrlMutate := true;
     LET Ip := entity("Ip", "1.2.3.4");
-    log("Ip: %s", Ip);
 
     addLabel(Ip, "mylabel") WHERE false;
     EXECUTE;

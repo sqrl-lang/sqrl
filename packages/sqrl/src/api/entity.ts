@@ -10,3 +10,14 @@ export class EntityId {
     return `${this.type}/${this.key}`;
   }
 }
+
+export abstract class UniqueId {
+  abstract getTimeMs(): number;
+  abstract getRemainder(): number;
+  abstract getBuffer(): Buffer;
+  abstract getNumberString(): string;
+
+  getHexString() {
+    return this.getBuffer().toString("hex");
+  }
+}

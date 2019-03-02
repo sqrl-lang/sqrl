@@ -54,7 +54,7 @@ export class SqrlRepl extends EventEmitter {
       returnFeature = input.trim();
     } else {
       const ast = parseRepl(input, {
-        customFunctions: this.functionRegistry._wrapped.customFunctions
+        customFunctions: this.functionRegistry._functionRegistry.customFunctions
       });
       const statements = ast.statements;
       if (!statements.length) {
@@ -67,8 +67,8 @@ export class SqrlRepl extends EventEmitter {
       // If it's a call, make sure it's to a statement otherwise treat as an expression
       if (last.type === "call") {
         if (
-          this.functionRegistry._wrapped.has(last.func) &&
-          !this.functionRegistry._wrapped.isStatement(last.func)
+          this.functionRegistry._functionRegistry.has(last.func) &&
+          !this.functionRegistry._functionRegistry.isStatement(last.func)
         ) {
           last = {
             type: "expr",

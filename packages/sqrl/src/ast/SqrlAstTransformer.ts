@@ -36,7 +36,6 @@ const ignoreTypes = [
   "importRules",
   "iterator",
   "load",
-  "noop",
   "slot",
   "state",
   "value",

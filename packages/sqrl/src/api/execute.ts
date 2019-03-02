@@ -14,16 +14,25 @@ import { CompileState } from "./parse";
 import { buildFunctionRegistryForServices } from "../helpers/FunctionRegistryHelpers";
 import { ArgumentCheck } from "./arg";
 import { SourcePrinter } from "./executable";
-import { FunctionServices } from "../function/registerAllFunctions";
-import { SqrlObject } from "sqrl-common";
+import { SqrlObject, AssertService } from "sqrl-common";
 import { SqrlKey } from "./object";
 import { isValidFeatureName } from "../feature/FeatureName";
+import { Config } from "./config";
 
 export const STANDARD_LIBRARY = "sqrl";
 
 export interface ExecutionErrorProperties {
   functionName?: string;
   fatal?: boolean;
+}
+
+export interface LogService {
+  log(manipulator: Manipulator, message: string);
+}
+
+export interface FunctionServices {
+  assert?: AssertService;
+  log?: LogService;
 }
 
 export type ManipulatorCallback = (ctx: Context) => Promise<void>;
@@ -64,8 +73,17 @@ export interface FunctionInfo {
 /**
  * Build a function registry with the default functions included.
  */
-export function buildFunctionRegistry(services: FunctionServices = {}) {
-  return new FunctionRegistry(buildFunctionRegistryForServices(services));
+// @todo: Rename to `createInstance`
+export function buildFunctionRegistry(
+  props: {
+    config?: Config;
+    services?: FunctionServices;
+  } = {}
+) {
+  return new FunctionRegistry(
+    props.config || {},
+    buildFunctionRegistryForServices(props.services || {})
+  );
 }
 
 /**
@@ -91,33 +109,56 @@ export interface ImplementedFunctionOptions extends FunctionOptions {
  * to the SQRL compiler and runtime.
  */
 export class FunctionRegistry {
+  private mergedConfig = null;
+
   /**
    * @hidden
    */
   constructor(
+    private config: Config,
     /**
      * @hidden
      */
-    public _wrapped: _FunctionRegistry,
-    /**
-     * @hidden
-     */
-    private pkg: string = null
+    public _functionRegistry: _FunctionRegistry,
+    readonly packageName: string = null
   ) {}
 
-  createPackageRegistry(name: string) {
+  createPackageInstance(name: string) {
     invariant(
-      this.pkg === null,
-      "Function registry is already linked to package: " + this.pkg
+      this.packageName === null,
+      "Function registry is already linked to package: " + this.packageName
     );
-    return new FunctionRegistry(this._wrapped, name);
+    return new FunctionRegistry(this.config, this._functionRegistry, name);
+  }
+
+  async importFromPackage(name: string, importedPackage: any) {
+    invariant(
+      typeof importedPackage.register === "function",
+      "Required package did not include a `register` function: " + name
+    );
+    await importedPackage.register(this.createPackageInstance(name));
+  }
+
+  getConfig(): Config {
+    if (!this.mergedConfig) {
+      if (this.packageName && this.config["[" + this.packageName + "]"]) {
+        this.mergedConfig = Object.assign(
+          {},
+          this.config,
+          this.config["[" + this.packageName + "]"]
+        );
+      } else {
+        this.mergedConfig = this.config;
+      }
+    }
+    return this.mergedConfig;
   }
 
   listFunctions(): FunctionInfo[] {
-    return Object.keys(this._wrapped.functionProperties)
+    return Object.keys(this._functionRegistry.functionProperties)
       .filter(func => !func.startsWith("_"))
       .map(func => {
-        const props = this._wrapped.functionProperties[func];
+        const props = this._functionRegistry.functionProperties[func];
         return {
           name: func,
           argstring: props.argstring || null,
@@ -131,13 +172,13 @@ export class FunctionRegistry {
     func: (state: Execution, ...args: any) => Promise<any>,
     options: ImplementedFunctionOptions = {}
   ) {
-    this._wrapped.save(func, {
+    this._functionRegistry.save(func, {
       async: true,
       allowNull: options.allowNull || false,
       allowSqrlObjects: options.allowSqrlObjects || false,
       pure: options.pure || false,
       args: options.args,
-      package: this.pkg,
+      package: this.packageName,
       argstring: options.argstring,
       docstring: options.docstring
     });
@@ -147,12 +188,12 @@ export class FunctionRegistry {
     func: (...args: any) => any,
     options: ImplementedFunctionOptions = {}
   ) {
-    this._wrapped.save(func, {
+    this._functionRegistry.save(func, {
       allowNull: options.allowNull || false,
       allowSqrlObjects: options.allowSqrlObjects || false,
       pure: options.pure || false,
       args: options.args,
-      package: this.pkg,
+      package: this.packageName,
       argstring: options.argstring,
       docstring: options.docstring
     });
@@ -163,7 +204,7 @@ export class FunctionRegistry {
     func: (state: Execution, ...args: any) => Promise<any>,
     options: ImplementedFunctionOptions = {}
   ) {
-    this._wrapped.save(func, {
+    this._functionRegistry.save(func, {
       statementFeature,
       async: true,
       allowNull: options.allowNull || false,
@@ -171,7 +212,7 @@ export class FunctionRegistry {
       pure: options.pure || false,
       statement: true,
       args: options.args,
-      package: this.pkg,
+      package: this.packageName,
       argstring: options.argstring,
       docstring: options.docstring
     });
@@ -185,12 +226,12 @@ export class FunctionRegistry {
       transform.name,
       "registerCustom() must be called with a named function"
     );
-    return this._wrapped.save(null, {
+    return this._functionRegistry.save(null, {
       name: transform.name,
       customTransform: (state, ast) => {
         return transform(new CompileState(state), ast);
       },
-      package: this.pkg,
+      package: this.packageName,
       argstring: options.argstring,
       docstring: options.docstring
     });
@@ -204,12 +245,12 @@ export class FunctionRegistry {
       transform.name,
       "registerTransform() must be called with a named function"
     );
-    return this._wrapped.save(null, {
+    return this._functionRegistry.save(null, {
       name: transform.name,
       transformAst: (state, ast) => {
         return transform(new CompileState(state), ast);
       },
-      package: this.pkg,
+      package: this.packageName,
       args: options.args,
       argstring: options.argstring,
       docstring: options.docstring

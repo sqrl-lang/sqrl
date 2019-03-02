@@ -1,7 +1,7 @@
-title: Date Functions
+title: Date-time Functions
 ---
 
-# Date Functions
+# Date-time Functions
 
 ## date
 
@@ -27,11 +27,29 @@ Returns the difference between the two dates in the given unit (millisecond, sec
 
 Converts a count of milliseconds since the unix epoch to a date
 
+## delayMs
+
+**delayMs**(ms, value)
+
+Returns the given value after delaying for the specified number of milliseconds
+
 ## formatDate
 
 **formatDate**(date, format)
 
 Format a given date according to a given format (see https://momentjs.com/docs/#/displaying/format/)
+
+## now
+
+**now**(None)
+
+Returns the current time as an ISO 8601 string
+
+## nowMs
+
+**nowMs**(None)
+
+Returns the current time as a count of milliseconds since the unix epoch
 
 ## timeMs
 
