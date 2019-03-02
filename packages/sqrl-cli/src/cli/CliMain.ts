@@ -5,7 +5,7 @@
  */
 // tslint:disable:no-console
 // tslint:disable:no-submodule-imports (@TODO)
-import { createSqrlServer } from "../SqrlServer";
+import { createSqrlServer, ServerWaitCallback } from "../SqrlServer";
 import { SqrlTest } from "sqrl/lib/testing/SqrlTest";
 import { SqrlRepl } from "../repl/SqrlRepl";
 import * as path from "path";
@@ -88,12 +88,14 @@ Options:
   --only-blocked           Only show blocked actions
   --redis=<address>        Address of redis server
   --output=<output>        Output format [default: pretty]
+  --port=<port>            Port for server [default: 2288]
   --skip-default-requires  Do not include bundled SQRL function packages
 `;
 
 export const defaultCliArgs: CliArgs = {
   "--output": "pretty",
   "--concurrency": "50",
+  "--port": "2288",
   "<feature>": [],
   "<key=value>": []
 };
@@ -116,6 +118,7 @@ export interface CliArgs {
   "--compiled"?: boolean;
   "--output": string;
   "--concurrency": string;
+  "--port": string;
   "--skip-default-requires"?: boolean;
 }
 
@@ -276,15 +279,18 @@ async function buildInstance(
 
 type FunctionRegistrator = (registry: FunctionRegistry) => void;
 
+export interface CliMainOptions {
+  registerFunctions?: FunctionRegistrator;
+  output?: CliOutput;
+  stdin?: Readable;
+  stdout?: Writable;
+  serverWaitCallback?: ServerWaitCallback;
+}
+
 export async function cliMain(
   args: CliArgs,
   closeables: CloseableGroup,
-  options: {
-    registerFunctions?: FunctionRegistrator;
-    output?: CliOutput;
-    stdin?: Readable;
-    stdout?: Writable;
-  } = {}
+  options: CliMainOptions = {}
 ) {
   const defaultTrc = createDefaultContext();
   const inputs = await getInputs(args);
@@ -402,7 +408,7 @@ export async function cliMain(
     if (args["<filename>"]) {
       ({ executable, spec, compiler } = await loadSource());
 
-      if (!args.compile && !args.repl) {
+      if (!args.compile && !args.repl && !args.serve) {
         // Outside of compile/repl mode, make sure we have all required inputs
         for (const feature of executable.getRequiredFeatures()) {
           if (!inputs.hasOwnProperty(feature) && streamFeature !== feature) {
@@ -489,12 +495,29 @@ export async function cliMain(
         repl.on("exit", resolve);
       });
     } else if (args.serve) {
-      const port = parseInt(args["--port"] || "2288", 10);
+      // Read the port from the argument, or `0` for automatically pick
+      let port = args["--port"] ? parseInt(args["--port"], 10) : 0;
+
       invariant(!isNaN(port), "port must be a number");
-      console.log("Serving", args["<filename>"], "on port", port);
       const server = createSqrlServer(ctx, executable);
       server.listen(port);
-      await waitForSigint();
+
+      await new Promise((resolve, reject) => {
+        server.on("listening", resolve);
+        server.on("error", err => reject(err));
+      });
+
+      // If port was 0 it might have changed by this point
+      const address = server.address();
+      if (typeof address === "string") {
+        throw new Error("Expected `AddressInfo` from server.address()");
+      }
+      port = address.port;
+
+      console.log("Serving", args["<filename>"], "on port", port);
+      const serverWaitCallback = options.serverWaitCallback || waitForSigint;
+      await serverWaitCallback({ server });
+
       server.close();
     } else {
       throw new Error("Unknown cli command");

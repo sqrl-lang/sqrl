@@ -7,7 +7,7 @@ import * as micro from "micro";
 import * as microQuery from "micro-query";
 // tslint:disable-next-line:no-submodule-imports (it is the documented suggestion)
 import * as dispatch from "micro-route/dispatch";
-import { IncomingMessage, ServerResponse } from "http";
+import { IncomingMessage, ServerResponse, Server } from "http";
 import { Context, FeatureMap, Executable, Execution, FiredRule } from "sqrl";
 import { CliManipulator } from "sqrl-cli-functions";
 
@@ -111,7 +111,7 @@ async function deleteRoute(
   throw micro.createError(500, "Not implemented\n");
 }
 
-export function createSqrlServer(ctx: Context, executable: Executable) {
+export function createSqrlServer(ctx: Context, executable: Executable): Server {
   const router = dispatch()
     .dispatch("/run", ["POST"], (req, res) => run(ctx, executable, req, res))
     .dispatch("/delete", ["POST"], (req, res) => deleteRoute(ctx, req, res))
@@ -121,3 +121,5 @@ export function createSqrlServer(ctx: Context, executable: Executable) {
 
   return micro(router);
 }
+
+export type ServerWaitCallback = (props: { server: Server }) => Promise<void>;
