@@ -319,23 +319,41 @@ export class SqrlFunctionRegistry {
       );
     }
 
-    /* @todo: At some point we can/should require documentation on every function
     if (props.name && !props.name.startsWith("_")) {
       if (typeof props.argstring !== "string" || !props.docstring) {
-        console.error("Missing documentation for function: " + props.name);
+        // tslint:disable-next-line:no-console
+        console.error(
+          "Warning: " + props.name + " is missing argstring and/or docstring"
+        );
       }
     }
-    */
 
     let stateArg = props.stateArg;
     let whenCauseArg = false;
-    if (props.args && Array.isArray(props.args)) {
+    if (props.args) {
       // If args are set, stateArg should be set as one of them
       invariant(
         !stateArg,
         "The .stateArg argument is not valid together with .args"
       );
+      let seenOptional = false;
       props.args.forEach((arg, idx) => {
+        if (arg.isOptional) {
+          seenOptional = true;
+        } else {
+          invariant(
+            !seenOptional,
+            "A non-optional argument cannot follow an optional one"
+          );
+        }
+
+        if (arg.isRepeated) {
+          invariant(
+            idx === props.args.length - 1,
+            "Repeated arguments are only valid as the final argument"
+          );
+        }
+
         if (arg instanceof StateArgument) {
           invariant(idx === 0, "State argument must be the first argument");
           stateArg = true;

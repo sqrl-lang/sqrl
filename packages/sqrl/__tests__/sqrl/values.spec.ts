@@ -107,12 +107,12 @@ sqrlTest(
   ASSERT length(Six) = null;
   ASSERT log10(100) = 2;
   ASSERT log10(StringSix) = null;
-  ASSERT max(5) = 5;
-  ASSERT max(StringSix) = null;
+  ASSERT max(5, 5) = 5;
+  ASSERT max(StringSix, StringSix) = null;
   ASSERT max(5, StringSix) = null;
   ASSERT max(5, 5, 10) = 10;
-  ASSERT min(5) = 5;
-  ASSERT min(StringSix) = null;
+  ASSERT min(5, 5) = 5;
+  ASSERT min(StringSix, StringSix) = null;
   ASSERT min(5, StringSix) = null;
   ASSERT min(5, 5, 10) = 5;
   ASSERT (StringSix CONTAINS 6) = true;
@@ -192,7 +192,7 @@ sqrlTest(
   
   ASSERT max(5, 7) = 7;
   ASSERT max(7, 5) = 7;
-  ASSERT max('7') is null;
+  ASSERT max('7', 8) is null;
   ASSERT min(7, null, 3) = 3;
   ASSERT min(7, null, null) = 7;
   ASSERT min(null, null, null) is null;

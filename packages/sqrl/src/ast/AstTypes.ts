@@ -53,8 +53,8 @@ export interface CountedTypeChecker extends RuntimeTypeChecker {
 }
 
 export interface TypeChecker extends CountedTypeChecker {
-  optional: CountedTypeChecker;
-  repeated: CountedTypeChecker;
+  optional: TypeChecker;
+  repeated: TypeChecker;
 }
 
 const pluralize = (text, count: number) =>
@@ -209,7 +209,7 @@ function compileTypesInvariant(fnAst: CallAst, types: ArgumentCheck[]) {
 
   const providedArgs = args.length;
   const repeatedLast = types.length && types[types.length - 1].isRepeated;
-  const optArgs = types.filter(t => t.isOptional || t.isRepeated).length;
+  const optArgs = types.filter(t => t.isOptional).length;
   const maxArgs = repeatedLast ? providedArgs : types.length;
   const minArgs = types.length - optArgs;
 
@@ -283,6 +283,8 @@ function typeChecker(compileTimeCheck: CompileCheckCallback): TypeChecker {
   const o = createRuntimeCheckers(compileTimeCheck, false, false);
   o.optional = createRuntimeCheckers(compileTimeCheck, true, false);
   o.repeated = createRuntimeCheckers(compileTimeCheck, false, true);
+  o.optional.repeated = createRuntimeCheckers(compileTimeCheck, true, true);
+  o.repeated.optional = o.optional.repeated;
   return o;
 }
 
