@@ -8,7 +8,7 @@ import { runRepl } from "../helpers/runRepl";
 test("works", async () => {
   expect(
     await runRepl(
-      {},
+      [],
       `
     LET User := entity('User', '1234')
     User='1234'

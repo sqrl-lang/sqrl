@@ -1,15 +1,14 @@
 import { runCli } from "../helpers/runCli";
-import { defaultCliArgs, CliArgs } from "../../src/cli/CliMain";
 
-export function runCompile(args: Partial<CliArgs> = {}) {
+export function runCompile(args: string[] = []) {
   return runCli(
-    {
-      ...defaultCliArgs,
-      compile: true,
-      "--output": "expr",
-      "<filename>": __dirname + "/../../../../examples/hello.sqrl",
+    [
+      "compile",
+      "--output",
+      "expr",
+      __dirname + "/../../../../examples/hello.sqrl",
       ...args
-    },
+    ],
     ""
   );
 }

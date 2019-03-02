@@ -14,12 +14,10 @@ import {
   AssertService,
   SqrlObject,
   sqrlCompare,
-  FeatureMap,
   executableFromSpec,
   FunctionRegistry,
   Executable,
   compileFromFilesystem,
-  isValidFeatureName,
   ExecutableCompiler,
   ExecutableSpec,
   getDefaultConfig,
@@ -51,8 +49,6 @@ import {
 import { getGlobalLogger } from "sqrl/lib/api/log";
 import { SimpleDatabaseSet } from "sqrl/lib/platform/DatabaseSet";
 import { SimpleContext } from "sqrl/lib/platform/Trace";
-import { readFile } from "fs";
-import { promisify } from "util";
 import { Readable, Writable } from "stream";
 import { CloseableGroup } from "../jslib/Closeable";
 
@@ -63,83 +59,10 @@ import { renderFunctionsHelp } from "../renderFunctionsHelp";
 import { CliError } from "./CliError";
 import { CliManipulator } from "sqrl-cli-functions";
 import Semaphore from "sqrl/lib/jslib/Semaphore";
-
-const readFileAsync = promisify(readFile);
+import { CliArgs } from "./CliArgs";
+import { readJsonFile } from "./readJsonFile";
 
 const STATEFUL_FUNCTIONS = ["_fetchRateLimit", "_fetchSession", "_entity"];
-
-export const CliDoc = `
-Usage:
-  sqrl [options] print <filename> [(-s <key=value>)...]
-  sqrl [options] run <filename> [--stream=<feature>] [(-s <key=value>)...] [<feature>...]
-  sqrl [options] repl [<filename> [(-s <key=value>)...]]
-  sqrl [options] serve [--port=<port>] <filename>
-  sqrl [options] compile <filename> [(-s <key=value>)...]
-  sqrl [options] test <filename>
-  sqrl [options] help functions
-
-Options:
-  --config=<path>          Load the provided given JSON file as configuration
-  --color=<when>           Force color in ouput. When can be \`never\`, \`always\`, or \`auto\`.
-  --stream=<feature>       Stream inputs to the given feature from stdin as newline seperated json
-  --require=<package>      Require packages that contain SQRL functions
-  --concurrency=<N>        Limit actions processed in parallel [default: 50]
-  --compiled               Read compiled SQRL rather than source
-  --only-blocked           Only show blocked actions
-  --redis=<address>        Address of redis server
-  --output=<output>        Output format [default: pretty]
-  --port=<port>            Port for server [default: 2288]
-  --skip-default-requires  Do not include bundled SQRL function packages
-`;
-
-export const defaultCliArgs: CliArgs = {
-  "--output": "pretty",
-  "--concurrency": "50",
-  "--port": "2288",
-  "<feature>": [],
-  "<key=value>": []
-};
-
-export interface CliArgs {
-  compile?: boolean;
-  execute?: boolean;
-  run?: boolean;
-  serve?: boolean;
-  print?: boolean;
-  repl?: boolean;
-  test?: boolean;
-  help?: boolean;
-  "<filename>"?: string;
-  "<feature>": string[];
-  "<key=value>": string[];
-  "--config"?: string;
-  "--redis"?: string;
-  "--require"?: string; // @todo: would be great if this could be specified multiple times
-  "--compiled"?: boolean;
-  "--output": string;
-  "--concurrency": string;
-  "--port": string;
-  "--skip-default-requires"?: boolean;
-}
-
-async function readJsonFile(path: string) {
-  let data: Buffer;
-  try {
-    data = await readFileAsync(path);
-  } catch (err) {
-    if (err.code === "ENOENT") {
-      throw new CliError("Could not find file: " + path);
-    } else {
-      throw err;
-    }
-  }
-
-  try {
-    return JSON.parse(data.toString("utf-8"));
-  } catch (err) {
-    throw new CliError("File did not contain JSON-encoded data: " + path);
-  }
-}
 
 export function getCliOutput(
   args: CliArgs,
@@ -147,61 +70,28 @@ export function getCliOutput(
 ): CliOutput {
   const outputOptions: CliOutputOptions = {
     stdout,
-    features: args["<feature>"],
-    onlyBlocked: args["--only-blocked"]
+    features: args.features,
+    onlyBlocked: args.onlyBlocked
   };
-  if (args["--output"] === "pretty") {
-    if (args.compile) {
+  if (args.output === "pretty") {
+    if (args.command === "compile") {
       return new CliSlotJsOutput(stdout);
     } else {
       return new CliPrettyOutput(outputOptions);
     }
-  } else if (args["--output"] === "csv") {
+  } else if (args.output === "csv") {
     return new CliCsvOutput(outputOptions);
-  } else if (args["--output"] === "table") {
+  } else if (args.output === "table") {
     return new CliTableOutput(outputOptions);
-  } else if (args["--output"] === "json") {
+  } else if (args.output === "json") {
     return new CliJsonOutput(outputOptions);
-  } else if (args["--output"] === "expr") {
+  } else if (args.output === "expr") {
     return new CliExprOutput(stdout);
-  } else if (args["--output"] === "slot-js") {
+  } else if (args.output === "slot-js") {
     return new CliSlotJsOutput(stdout);
   } else {
-    throw new CliError("Unknown output type: " + args["--output"]);
+    throw new CliError("Unknown output type: " + args.output);
   }
-}
-
-async function getInputs(args: CliArgs) {
-  const inputs: FeatureMap = {};
-  for (const pair of args["<key=value>"]) {
-    const [key] = pair.split("=", 1);
-    const valueString = pair.substring(key.length + 1);
-
-    if (!isValidFeatureName(key)) {
-      throw new CliError(
-        "Invalid feature name for input: " + JSON.stringify(key)
-      );
-    }
-
-    if (valueString.startsWith("@")) {
-      const path = valueString.substring(1);
-      inputs[key] = await readJsonFile(path);
-      continue;
-    }
-
-    try {
-      const value = JSON.parse(valueString);
-      inputs[key] = value;
-    } catch (err) {
-      console.error(
-        `Warning: Invalid JSON value for ${key}, assuming string: ${JSON.stringify(
-          valueString
-        )}`
-      );
-      inputs[key] = valueString;
-    }
-  }
-  return inputs;
 }
 
 export class CliAssertService implements AssertService {
@@ -244,12 +134,12 @@ async function buildInstance(
   const config: Config = {
     ...getDefaultConfig(),
     "state.allow-in-memory": true,
-    ...(args["--config"] ? await readJsonFile(args["--config"]) : {})
+    ...(args.config ? await readJsonFile(args.config) : {})
   };
 
   // Allow the --redis argument to override the config
-  if (args["--redis"]) {
-    config["redis.address"] = args["--redis"];
+  if (args.redis) {
+    config["redis.address"] = args.redis;
   }
 
   const services: FunctionServices = {
@@ -259,7 +149,7 @@ async function buildInstance(
   const functionRegistry = SQRL.buildFunctionRegistry({ config, services });
 
   const requires = [
-    ...(args["--skip-default-requires"]
+    ...(args.skipDefaultRequires
       ? []
       : [
           "sqrl-redis-functions",
@@ -267,7 +157,7 @@ async function buildInstance(
           "sqrl-load-functions",
           "sqrl-cli-functions"
         ]),
-    ...(args["--require"] || "").split(",").filter(v => v)
+    ...args.requires
   ];
 
   for (const name of requires) {
@@ -293,7 +183,6 @@ export async function cliMain(
   options: CliMainOptions = {}
 ) {
   const defaultTrc = createDefaultContext();
-  const inputs = await getInputs(args);
   let output: CliOutput;
   if (options.output) {
     output = options.output;
@@ -307,16 +196,14 @@ export async function cliMain(
     options.registerFunctions(functionRegistry);
   }
 
-  if (args.help) {
+  if (args.command === "help") {
     if (output instanceof CliPrettyOutput) {
       console.log(renderFunctionsHelp(functionRegistry));
     } else {
       output.printFunctions(functionRegistry.listFunctions());
     }
-  } else if (args.test) {
-    const { filesystem, source } = await sourceOptionsFromPath(
-      args["<filename>"]
-    );
+  } else if (args.command === "test") {
+    const { filesystem, source } = await sourceOptionsFromPath(args.filename);
 
     const test = new SqrlTest(functionRegistry._functionRegistry, {
       filesystem,
@@ -333,13 +220,13 @@ export async function cliMain(
 
     await test.run(ctx, source);
   } else if (
-    args.compile ||
-    args.run ||
-    args.serve ||
-    args.print ||
-    args.repl
+    args.command === "compile" ||
+    args.command === "run" ||
+    args.command === "serve" ||
+    args.command === "repl"
   ) {
     const ctx = defaultTrc;
+    const { compiled, filename, inputs } = args;
 
     const { functionRegistry } = await buildInstance(args);
     if (options.registerFunctions) {
@@ -353,11 +240,11 @@ export async function cliMain(
 
     let watchedSource: WatchedFilesystem = null;
     let filesystem: Filesystem;
-    if (args["--stream"]) {
-      watchedSource = new WatchedFilesystem(path.dirname(args["<filename>"]));
+    if (args.command === "run" && args.streamFeature) {
+      watchedSource = new WatchedFilesystem(path.dirname(args.filename));
       filesystem = watchedSource;
-    } else if (args["<filename>"]) {
-      filesystem = new LocalFilesystem(path.dirname(args["<filename>"]));
+    } else if (args.filename) {
+      filesystem = new LocalFilesystem(path.dirname(args.filename));
     }
 
     /***
@@ -365,8 +252,8 @@ export async function cliMain(
      * function as we want to log the moment the change occurs.
      */
     async function loadSource() {
-      if (args["--compiled"]) {
-        spec = await readJsonFile(args["<filename>"]);
+      if (compiled) {
+        spec = await readJsonFile(filename);
         return {
           executable: executableFromSpec(functionRegistry, spec),
           spec: null,
@@ -375,7 +262,7 @@ export async function cliMain(
       } else {
         return compileFromFilesystem(functionRegistry, filesystem, {
           context: ctx,
-          mainFile: path.basename(args["<filename>"]),
+          mainFile: path.basename(filename),
           setInputs: inputs
         });
       }
@@ -388,8 +275,8 @@ export async function cliMain(
     await compilingLock.take();
 
     let streamFeature: string = null;
-    if (args.run) {
-      streamFeature = args["--stream"];
+    if (args.command === "run") {
+      streamFeature = args.streamFeature;
 
       if (streamFeature) {
         watchedSource.on("change", async () => {
@@ -405,11 +292,11 @@ export async function cliMain(
       }
     }
 
-    if (args["<filename>"]) {
+    if (args.filename) {
       ({ executable, spec, compiler } = await loadSource());
 
-      if (!args.compile && !args.repl && !args.serve) {
-        // Outside of compile/repl mode, make sure we have all required inputs
+      if (args.command === "run") {
+        // In run mode, make sure we have all required inputs
         for (const feature of executable.getRequiredFeatures()) {
           if (!inputs.hasOwnProperty(feature) && streamFeature !== feature) {
             throw new CliError("Required input was not provided: " + feature, {
@@ -420,7 +307,7 @@ export async function cliMain(
       }
 
       const allFeatures = executable.getFeatures();
-      for (const feature of [...args["<feature>"], ...Object.keys(inputs)]) {
+      for (const feature of [...args.features, ...Object.keys(inputs)]) {
         if (!allFeatures.includes(feature)) {
           throw new CliError("Feature not defined: " + feature);
         }
@@ -438,7 +325,7 @@ export async function cliMain(
       }
     }
 
-    if (args.run) {
+    if (args.command === "run") {
       if (!(output instanceof CliActionOutput)) {
         throw new CliError("Output format not compatible with `run`");
       }
@@ -449,35 +336,33 @@ export async function cliMain(
         output.startStream();
 
         let concurrency: number = null;
-        if (args["--concurrency"]) {
-          concurrency = parseInt(args["--concurrency"], 10);
+        if (args.concurrency) {
+          concurrency = args.concurrency;
         }
         await run.stream({
           ctx,
           inputs,
           concurrency,
           streamFeature,
-          features: args["<feature>"]
+          features: args.features
         });
       } else {
-        await run.action(ctx, inputs, args["<feature>"]);
+        await run.action(ctx, inputs, args.features);
       }
 
       run.close();
-    } else if (args.print) {
-      executable.getSourcePrinter().printAllSource();
-    } else if (args.compile) {
+    } else if (args.command === "compile") {
       if (!(output instanceof CliCompileOutput)) {
         throw new CliError("Output format not compatible with `compile`");
       }
       invariant(compiler, "Compile options must include a filename");
       await output.compiled(spec, compiler);
-    } else if (args.repl) {
+    } else if (args.command === "repl") {
       let filesystem: Filesystem = new LocalFilesystem(process.cwd());
       const statements: StatementAst[] = [];
       if (executable) {
-        ({ filesystem } = await sourceOptionsFromPath(args["<filename>"]));
-        statements.push(SqrlAst.include(path.basename(args["<filename>"])));
+        ({ filesystem } = await sourceOptionsFromPath(args.filename));
+        statements.push(SqrlAst.include(path.basename(args.filename)));
       }
       const test = new SqrlTest(functionRegistry._functionRegistry, {
         filesystem,
@@ -494,13 +379,10 @@ export async function cliMain(
       await new Promise(resolve => {
         repl.on("exit", resolve);
       });
-    } else if (args.serve) {
+    } else if (args.command === "serve") {
       // Read the port from the argument, or `0` for automatically pick
-      let port = args["--port"] ? parseInt(args["--port"], 10) : 0;
-
-      invariant(!isNaN(port), "port must be a number");
       const server = createSqrlServer(ctx, executable);
-      server.listen(port);
+      server.listen(args.port);
 
       await new Promise((resolve, reject) => {
         server.on("listening", resolve);
@@ -512,9 +394,8 @@ export async function cliMain(
       if (typeof address === "string") {
         throw new Error("Expected `AddressInfo` from server.address()");
       }
-      port = address.port;
 
-      console.log("Serving", args["<filename>"], "on port", port);
+      console.log("Serving", args.filename, "on port", address.port);
       const serverWaitCallback = options.serverWaitCallback || waitForSigint;
       await serverWaitCallback({ server });
 

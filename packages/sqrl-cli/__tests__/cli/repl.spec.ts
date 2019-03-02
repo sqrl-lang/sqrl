@@ -4,14 +4,10 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { runCli } from "../helpers/runCli";
-import { defaultCliArgs } from "../../src/cli/CliMain";
 
 test("repl works", async () => {
   const stdout = await runCli(
-    {
-      ...defaultCliArgs,
-      repl: true
-    },
+    ["repl"],
     `
     LET X := 5;
     LET Y := X + 3;

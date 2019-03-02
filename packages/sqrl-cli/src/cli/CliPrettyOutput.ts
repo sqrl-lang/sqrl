@@ -75,13 +75,13 @@ export class CliPrettyOutput extends CliActionOutput {
   private open(state: State = State.unknown) {
     if (this.state !== State.none) {
       // Leave a blank line between each action
-      process.stdout.write("\n");
+      this.stdout.write("\n");
     }
     this.state = state;
   }
 
   private line(format: string, ...param: any[]) {
-    process.stdout.write(util.format(format, ...param) + "\n");
+    this.stdout.write(util.format(format, ...param) + "\n");
   }
 
   private errorText(err: Error) {

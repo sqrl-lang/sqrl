@@ -5,8 +5,9 @@
  */
 import { Writable, Readable } from "stream";
 import { invariant } from "sqrl-common";
-import { cliMain, CliArgs, CliMainOptions } from "../../src/cli/CliMain";
+import { cliMain, CliMainOptions } from "../../src/cli/CliMain";
 import { CloseableGroup } from "../../src/jslib/Closeable";
+import { parseArgs } from "../../src/cli/CliArgs";
 
 class StringBuffer extends Writable {
   public string: string = "";
@@ -18,7 +19,7 @@ class StringBuffer extends Writable {
 }
 
 export async function runCli(
-  args: CliArgs,
+  argv: string[],
   stdinString?: string,
   options: CliMainOptions = {}
 ) {
@@ -26,9 +27,9 @@ export async function runCli(
   const stdin = new Readable();
   stdin.push(stdinString);
   stdin.push(null);
-
   const stdout = new StringBuffer();
 
+  const args = parseArgs(argv);
   try {
     await cliMain(args, closeables, {
       ...options,

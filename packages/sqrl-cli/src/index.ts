@@ -5,22 +5,24 @@
  */
 // tslint:disable:no-console
 
-import { docopt } from "docopt";
-import { cliMain, CliDoc, getCliOutput } from "./cli/CliMain";
+import { cliMain, getCliOutput } from "./cli/CliMain";
 import { promiseFinally } from "sqrl-common";
 import { CloseableGroup } from "./jslib/Closeable";
 import { FunctionRegistry } from "sqrl";
 import { CliOutput } from "./cli/CliOutput";
 import { CliError } from "./cli/CliError";
+import { parseArgs, CliArgs } from "./cli/CliArgs";
+
+export { CliArgs };
+export { parseArgs };
+export { cliMain };
 
 export function run(registerFunctions?: (registry: FunctionRegistry) => void) {
-  const args = docopt(CliDoc, {
-    version: 0.1
-  });
-
   const closeables = new CloseableGroup();
   let exitCode = 1;
   let output: CliOutput;
+
+  const args = parseArgs();
 
   // Ensure errors inside getCliOutput() get handled neatly.
   try {

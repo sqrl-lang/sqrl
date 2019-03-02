@@ -9,9 +9,7 @@ import { runCompile } from "../helpers/runCompile";
 test("config works", async () => {
   // Using the sample config the compile should throw an error
   await expect(
-    runCompile({
-      "--config": __dirname + "/no-in-memory-config.json"
-    })
+    runCompile(["--config=" + __dirname + "/no-in-memory-config.json"])
   ).rejects.toThrowError(
     "No `redis.address` was configured and`state.allow-in-memory` is false."
   );
