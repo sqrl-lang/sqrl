@@ -89,7 +89,7 @@ sqrlTest(
   ASSERT (null IS NULL) = true;
   ASSERT (1 IS NULL) = false;
   ASSERT ((NOT null) IS NULL) = true;
-  ASSERT (NullFeature OR false) = false;
+  ASSERT (NullFeature OR false) is null;
   ASSERT (NullFeature OR Six) = true;
   ASSERT (NullFeature IS NULL) = true;
   ASSERT (NullFeature IS NOT NULL) = false;

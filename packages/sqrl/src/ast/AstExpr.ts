@@ -141,19 +141,12 @@ function slotExpr(state: AstExprState, name: string): Expr {
   };
 }
 
-function nonNullBoolExpr(state: AstExprState, expr: Expr): Expr {
+function boolExpr(state: AstExprState, expr: Expr): Expr {
   return {
-    type: "call",
     load: expr.load,
-    func: "ifNull",
-    exprs: [
-      {
-        type: "call",
-        func: "bool",
-        exprs: [expr]
-      },
-      constantExpr(false)
-    ]
+    type: "call",
+    func: "bool",
+    exprs: [expr]
   };
 }
 
@@ -193,6 +186,7 @@ function exprOrderedMinimalLoad(exprs: Expr[]): Slot[] {
 
 function andExpr(state: AstExprState, args: Ast[]): Expr {
   let hadFalse = false;
+  let hadNull = false;
   const exprs = args
     .map(arg => _astToExpr(arg, state))
     .filter(expr => {
@@ -200,6 +194,8 @@ function andExpr(state: AstExprState, args: Ast[]): Expr {
         if (SqrlObject.isTruthy(expr.value)) {
           // Filter out truthy values
           return false;
+        } else if (expr.value === null) {
+          hadNull = true;
         } else {
           hadFalse = true;
         }
@@ -209,10 +205,12 @@ function andExpr(state: AstExprState, args: Ast[]): Expr {
 
   if (hadFalse) {
     return constantExpr(false);
+  } else if (hadNull) {
+    return constantExpr(null);
   } else if (exprs.length === 0) {
     return constantExpr(true);
   } else if (exprs.length === 1) {
-    return nonNullBoolExpr(state, exprs[0]);
+    return boolExpr(state, exprs[0]);
   }
 
   const sortedExprs = state.sortExprsByCostAsc(exprs);
@@ -226,14 +224,17 @@ function andExpr(state: AstExprState, args: Ast[]): Expr {
 
 function orExpr(state: AstExprState, args: Ast[]): Expr {
   let hadTrue = false;
+  let hadNull = false;
   const exprs = args
     .map(arg => _astToExpr(arg, state))
     .filter(expr => {
       if (expr.type === "constant") {
         if (SqrlObject.isTruthy(expr.value)) {
           hadTrue = true;
+        } else if (expr.value === null) {
+          hadNull = true;
+          return false;
         } else {
-          // Filter out falsy values
           return false;
         }
       }
@@ -243,9 +244,12 @@ function orExpr(state: AstExprState, args: Ast[]): Expr {
   if (hadTrue) {
     return constantExpr(true);
   } else if (exprs.length === 0) {
-    return constantExpr(false);
+    return constantExpr(hadNull ? null : false);
+  } else if (hadNull) {
+    // If we saw a null but still have other values, add it back
+    exprs.push(constantExpr(null));
   } else if (exprs.length === 1) {
-    return nonNullBoolExpr(state, exprs[0]);
+    return boolExpr(state, exprs[0]);
   }
 
   const sortedExprs = state.sortExprsByCostAsc(exprs);

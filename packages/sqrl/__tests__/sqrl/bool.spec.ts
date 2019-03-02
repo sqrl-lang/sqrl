@@ -1,28 +1,33 @@
 import { sqrlTest } from "../helpers/sqrlTest";
 
-sqrlTest(
-  "handles null correctly",
-  `
-LET T := true;
-LET F := false;
-LET N := null;
+// Check both with/without delay to check compiler optimizations
+for (const delayed of [false, true]) {
+  sqrlTest(
+    "handles null correctly" + (delayed ? " async" : ""),
+    `
+LET T := ${delayed ? "delayMs(100, true)" : "true"};
+LET F := ${delayed ? "delayMs(100, false)" : "false"};
+LET N := ${delayed ? "delayMs(100, null)" : "null"};
 
-
-ASSERT repr(T) = "true";
-ASSERT repr(F) = "false";
 ASSERT repr(N) = "null";
-ASSERT repr(T AND T) = "true";
-ASSERT repr(T AND F) = "false";
-ASSERT repr(T AND F AND N) = "false";
-ASSERT repr(T OR T) = "true";
-ASSERT repr(T OR F) = "true";
-ASSERT repr(F OR T) = "true";
-ASSERT repr(F OR F OR F) = "false";
-ASSERT repr(NOT T) = "false";
-ASSERT repr(NOT F) = "true";
-
 ASSERT repr(NOT N) = "null";
-ASSERT repr(T AND N) = "false";
-ASSERT repr(F OR N) = "false";
+ASSERT repr(N OR N) = "null";
+ASSERT repr(F OR N) = "null";
+ASSERT repr(N OR F) = "null";
+ASSERT repr(N AND N) = "null";
+ASSERT repr(N AND T) = "null";
+ASSERT repr(T AND N) = "null";
+ASSERT repr(NOT (N OR N)) = "null";
+ASSERT repr(NOT (N OR F)) = "null";
+ASSERT repr(NOT (N AND N)) = "null";
+ASSERT repr(NOT (N AND T)) = "null";
+ASSERT repr(N OR T) = "true";
+ASSERT repr(T OR N) = "true";
+ASSERT repr(F AND N) = "false";
+ASSERT repr(N AND F) = "false";
+ASSERT repr(NOT (N OR T)) = "false";
+ASSERT repr(NOT (N AND F)) = "true";
+
 `
-);
+  );
+}

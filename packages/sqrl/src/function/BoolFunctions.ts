@@ -8,34 +8,35 @@ import { AstTypes as AT } from "../ast/AstTypes";
 import { StdlibRegistry } from "./FunctionRegistry";
 import { SqrlObject } from "../object/SqrlObject";
 
-function and(...args) {
-  for (const arg of args) {
-    if (!SqrlObject.isTruthy(arg)) {
-      return false;
-    }
-  }
-  return true;
-}
-
 export function registerBoolFunctions(registry: StdlibRegistry) {
-  registry.save(and, {
-    name: "_and",
-    safe: true,
-    allowSqrlObjects: true,
-    allowNull: true,
-    argstring: "value[, ...]",
-    docstring:
-      "Return true if all of the input values are truthy, false otherwise"
-  });
+  registry.save(
+    function _and(...args) {
+      let seenNull = false;
+      for (const arg of args) {
+        if (arg === null) {
+          seenNull = true;
+        } else if (!SqrlObject.isTruthy(arg)) {
+          return false;
+        }
+      }
+      return seenNull ? null : true;
+    },
+    {
+      safe: true,
+      allowSqrlObjects: true,
+      allowNull: true,
+      argstring: "value[, ...]",
+      docstring:
+        "Return true if all of the input values are truthy, false otherwise"
+    }
+  );
 
   registry.save(
     function _not(value) {
-      if (Array.isArray(value)) {
-        return value.length === 0 ? true : false;
-      } else if (value === null) {
+      if (value === null) {
         return null;
       } else {
-        return !value;
+        return !SqrlObject.isTruthy(value);
       }
     },
     {
@@ -51,13 +52,16 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
   registry.save(
     async function _andSequential(state, callbacks) {
       let arg;
+      let seenNull = false;
       for (const callback of callbacks) {
         arg = await callback();
-        if (!SqrlObject.isTruthy(arg)) {
+        if (arg === null) {
+          seenNull = true;
+        } else if (!SqrlObject.isTruthy(arg)) {
           return false;
         }
       }
-      return true;
+      return seenNull ? null : true;
     },
     {
       allowSqrlObjects: true,
@@ -123,12 +127,15 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
 
   registry.save(
     function _or(...args) {
+      let hadNull = false;
       for (const arg of args) {
         if (SqrlObject.isTruthy(arg)) {
           return true;
+        } else if (arg === null) {
+          hadNull = true;
         }
       }
-      return false;
+      return hadNull ? null : false;
     },
     {
       allowSqrlObjects: true,
@@ -141,13 +148,16 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
 
   registry.save(
     async function _orSequential(state, callbacks) {
+      let hadNull = false;
       for (const callback of callbacks) {
         const arg = await callback();
         if (SqrlObject.isTruthy(arg)) {
           return true;
+        } else if (arg === null) {
+          hadNull = true;
         }
       }
-      return false;
+      return hadNull ? null : false;
     },
     {
       promiseArgs: true,
@@ -164,15 +174,19 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     function _orParallel(state, ...promises) {
       return new Promise(resolve => {
         let remaining = promises.length;
+        let hadNull = false;
         for (const promise of promises) {
           promise.then(result => {
             if (resolve && SqrlObject.isTruthy(result)) {
               resolve(true);
               resolve = null;
             } else {
+              if (result === null) {
+                hadNull = true;
+              }
               remaining -= 1;
               if (remaining === 0) {
-                resolve(false);
+                resolve(hadNull ? null : false);
               }
             }
           });
