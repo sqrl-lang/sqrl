@@ -45,3 +45,7 @@ Many languages for event processing (i.e. [KSQL](https://www.confluent.io/produc
 SQRL libraries can be shared between event types and customers, and specific features can be overridden (similar to how you can extend a class in an OOP language).
 
 This let Smyte create a common set of libraries for identifying spam in text content, and then apply them to a new customer with just a few lines of code to "wire up" the new customer's event schemas.
+
+## Fail-open error handling
+
+SQRL uses [three-valued logic](https://en.wikipedia.org/wiki/Three-valued_logic) to handle errors. For example, if a downstream service goes down, SQRL will do the right thing.
