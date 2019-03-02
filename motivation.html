@@ -1,15 +1,10 @@
-<!--
-Copyright 2019 Twitter, Inc.
-Licensed under the Apache License, Version 2.0
-http://www.apache.org/licenses/LICENSE-2.0
- --!>
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+  <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
 
     <title>SQRL | Motivation </title>
-    <meta name="description" content="">
+    <meta name="description" content>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     
@@ -37,10 +32,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     <div class="dc-card">
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
-        <html><head><meta name="generator" content="Hexo 3.8.0"></head><body><h1 id="SQRL-Motivation-and-Design-Principles"><a href="#SQRL-Motivation-and-Design-Principles" class="headerlink" title="SQRL Motivation and Design Principles"></a>SQRL Motivation and Design Principles</h1><p>Smyte was a company that prevented spam, abuse, and fraud on some of the world&#x2019;s largest websites and mobile apps. We were eventually purchased by Twitter and the service was shut down. By the end, SQRL &#x2013; the Smyte Query and Rules Language &#x2013; was protecting over 150m monthly active users. Tens of thousands of rules were running on thousands of events per second and were maintained by almost 50 customers over the course of 3 years. It lives on today inside of Twitter at an even larger scale.</p>
+        <h1 id="SQRL-Motivation-and-Design-Principles"><a href="#SQRL-Motivation-and-Design-Principles" class="headerlink" title="SQRL Motivation and Design Principles"></a>SQRL Motivation and Design Principles</h1><p>Smyte was a company that prevented spam, abuse, and fraud on some of the world&#x2019;s largest websites and mobile apps. We were eventually purchased by Twitter and the service was shut down. By the end, SQRL &#x2013; the Smyte Query and Rules Language &#x2013; was protecting over 150m monthly active users. Tens of thousands of rules were running on thousands of events per second and were maintained by almost 50 customers over the course of 3 years. It lives on today inside of Twitter at an even larger scale.</p>
 <p>Like most startups, we began with the simplest and cheapest solution: we let our customers write their rules in JavaScript. This worked for a while, but led to a number of issues:</p>
 <ul>
-<li><strong>Maintainability.</strong> Rules rapidly change and are often maintained by nonprogrammers, so the codebase quickly became a mess.</li>
+<li><strong>Maintainability.</strong> Rules rapidly change and are often maintained by non-programmers, so the codebase quickly became a mess.</li>
 <li><strong>Auditability.</strong> It was difficult to understand why a rule fired after the fact, since the JS code grew to be very complex.</li>
 <li><strong>Performance and cost.</strong> The rules often had to query multiple databases and downstream services, and we couldn&#x2019;t control the latency vs cost trade-off without editing our customer&#x2019;s code (which we often didn&#x2019;t understand).</li>
 <li><strong>Safety.</strong> It was easy for rule authors to make a mistake and exhaust CPU or storage resources.</li>
@@ -76,7 +71,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 <li>Features defined in SQRL should be usable for machine learning and other applications.</li>
 <li>It should be easy for engineers to integrate new downstream services.</li>
 </ul>
-</body></html>
+
         <div id="react-support-footer-root"></div>
       </div>
     </div>
