@@ -27,6 +27,17 @@ export function registerMathFunctions(registry: StdlibRegistry) {
   );
 
   registry.save(
+    function random() {
+      return Math.random();
+    },
+    {
+      args: [],
+      argstring: "",
+      docstring: "Returns a random value from zero, less than one"
+    }
+  );
+
+  registry.save(
     function round(value) {
       const result = Math.round(value);
       return isNaN(result) ? null : result;

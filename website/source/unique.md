@@ -4,19 +4,25 @@ title: What makes SQRL unique?
 
 SQRL has a number of features that we think are cool and/or unique.
 
-## Parallelizable data fetching
+## Parallel data fetching
 
 Data fetching is implicit and can be parallelized. The runtime can decide whether to fetch eagerly or lazily to balance speed vs cost as needed without changing the source of the rule.
 
 This is similar to a number of projects, including [Haxl](https://github.com/facebook/Haxl), but isn't part of any mainstream languages to our knowledge.
 
-## No halting problem
+## Fail-open error handling
 
-SQRL does not have recursion or unbounded loops, meaning that we can know that the program will halt.
+SQRL uses [three-valued logic](https://en.wikipedia.org/wiki/Three-valued_logic) to handle errors (they are treated as unknown values). For example, if a downstream service goes down, SQRL will do the right thing — it will fail open _unless_ the service would not have affected the result.
 
-## No call stack
+## Declarative state
 
-SQRL does not have user-defined functions. Introducing user-defined functions can often lead to difficult to understand code for nonprogrammers.
+SQRL functions like `count()` track their own state declaratively, rather than requiring the rule author to write rules to explicitly mutate state. A problem we found with other systems was that you'd have a set of rules that mutate state imperatively, and a set of rules that read from the state, often written by different people. Keeping these rules in sync is painful, and if they fall out of sync your state will be very inconsistent.
+
+We think this is unique to SQRL (but it's a pretty good idea so someone else must have done it somewhere).
+
+## Not Turing-complete
+
+SQRL does not have user-defined functions, recursion or unbounded loops. This produces simpler code for non-programmers and allows deep static analysis. Logic that needs the power of a full programming language can be implemented as new library functions.
 
 ## Entities as first-class citizens
 
@@ -30,22 +36,12 @@ This has many advantages:
 
 This has proven to be incredibly useful and we think it's unique to SQRL.
 
-## Declarative state
-
-SQRL functions like `count()` track their own state declaratively, rather than requiring the rule author to write rules to explicitly mutate state. A problem we found with other systems was that you'd have a set of rules that mutate state imperatively, and a set of rules that read from the state, often written by different people. Keeping these rules in sync is painful, and if they fall out of sync your state will be very inconsistent.
-
-We think this is unique to SQRL (but it's a pretty good idea so someone else must have done it somewhere).
-
 ## Can run synchronously
 
-Many languages for event processing (i.e. [KSQL](https://www.confluent.io/product/ksql/)) expect to be run as part of an asynchronous stream processing pipeline. SQRL needs to be able to run synchronously in under 100 ms.
+Many languages for event processing (i.e. [KSQL](https://www.confluent.io/product/ksql/)) expect to be run as part of an asynchronous stream processing pipeline. SQRL is designed to be run _either_ in a pipeline _or_ synchronously with events (with time limits as tight as 100ms). Production deployments often do both — an initial fast path synchronously (so that it can block a signup, notification, etc.) and a second slower path that can do in-depth analysis and clean up before much damage has been done.
 
-## Feature imports and overrides
+## Shared SQRL libraries
 
 SQRL libraries can be shared between event types and customers, and specific features can be overridden (similar to how you can extend a class in an OOP language).
 
 This let Smyte create a common set of libraries for identifying spam in text content, and then apply them to a new customer with just a few lines of code to "wire up" the new customer's event schemas.
-
-## Fail-open error handling
-
-SQRL uses [three-valued logic](https://en.wikipedia.org/wiki/Three-valued_logic) to handle errors. For example, if a downstream service goes down, SQRL will do the right thing.

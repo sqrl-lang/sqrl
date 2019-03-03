@@ -10,6 +10,7 @@ Another powerful tool at your disposal is the ability to flexibly count across m
 Here's an example of a simple counter that counts the number of action by a given User in the last week.
 
 ```
+LET User := input();
 LET NumMessages := count(BY User LAST WEEK);
 ```
 
@@ -20,9 +21,11 @@ You can create a counter by one or more features. In the above example for each 
 For certain use cases you'll want to count pairwise features. Perhaps you'll want to know the number of messages the given user sent on this **Ip** as compared to the number they have sent total. That is easy to do just by comma separating the features.
 
 ```
+LET Ip := input();
+LET User := input();
 LET NumMessages := count(BY User LAST HOUR);
 LET NumIpMessages := count(BY User, Ip LAST HOUR);
-LET PercentMessagesByIp = 100 * (NumIpMessages / NumMessages);
+LET PercentMessagesByIp := 100 * (NumIpMessages / NumMessages);
 ```
 
 
@@ -49,6 +52,7 @@ It is very easy to create more interesting counters by passing in a WHERE statem
 Let's imagine you were interested in tracking users who had a high percentage of messages with profanity. We could easily accomplish this by tracking two counts.
 
 ```
+LET TextWithStrongProfanity := random() < 0.5; # You can use pattern matches for this
 LET NumMessagesWithProfanity := count(BY User WHERE TextWithStrongProfanity LAST WEEK);
 LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK); 
 ```
@@ -77,8 +81,8 @@ LET NumMessagesWithProfanity := count(BY User WHERE TextWithStrongProfanity LAST
 LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK);
 
 # Keep track of total and percentage so we can use in reason string.
-LET TotalMessages := NumWithProfanity + NumWithoutProfanity;
-LET PercentProfaneMessages := NumWithProfanity / TotalMessages;
+LET TotalMessages := NumMessagesWithProfanity + NumMessagesWithoutProfanity;
+LET PercentProfaneMessages := NumMessagesWithProfanity / TotalMessages;
 CREATE RULE HighPercentageProfanity
   WHERE PercentProfaneMessages > 0.5 AND TotalMessages > 2;
   
@@ -97,7 +101,7 @@ LET PercentProfaneReceived := NumReceivedWithProfanity / TotalReceived;
 CREATE RULE HighPercentageProfanityReceived
   WHERE PercentProfaneReceived > 0.5 AND TotalReceived > 2;
   
-WHEN HighPercentageProfanityReceived
+WHEN HighPercentageProfanityReceived THEN
   blockAction(),
   addLabel(Target, "harassment_recipient");
 ```

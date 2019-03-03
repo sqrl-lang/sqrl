@@ -6,7 +6,7 @@ title: Motivation
 Smyte was a company that prevented spam, abuse, and fraud on some of the world's largest websites and mobile apps. We were eventually purchased by Twitter and the service was shut down. By the end, SQRL -- the Smyte Query and Rules Language -- was protecting over 150m monthly active users. Tens of thousands of rules were running on thousands of events per second and were maintained by almost 50 customers over the course of 3 years. It lives on today inside of Twitter at an even larger scale.
 
 Like most startups, we began with the simplest and cheapest solution: we let our customers write their rules in JavaScript. This worked for a while, but led to a number of issues:
-* **Maintainability.** Rules rapidly change and are often maintained by nonprogrammers, so the codebase quickly became a mess.
+* **Maintainability.** Rules rapidly change and are often maintained by non-programmers, so the codebase quickly became a mess.
 * **Auditability.** It was difficult to understand why a rule fired after the fact, since the JS code grew to be very complex.
 * **Performance and cost.** The rules often had to query multiple databases and downstream services, and we couldn't control the latency vs cost trade-off without editing our customer's code (which we often didn't understand).
 * **Safety.** It was easy for rule authors to make a mistake and exhaust CPU or storage resources.

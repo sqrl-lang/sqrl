@@ -20,16 +20,16 @@ LET UserHourSession := sessionize(BY User EVERY 1 HOUR);
 ```
  
 From now on, whenever the user performs an action (logs in, sends a message, makes a payment, etc) we will check to see if a session exists. If no session exists, we will create a session that lasts for one hour.
-
-### Creating a one hour session
+	
+![Creating a one hour session](../images/session/one_session.jpeg)
 
 If the specified time elapses with no activity, the current session is destroyed. Any subsequent event will create a new session.
 
-Creating a new session after too much time has elapsed
+![Creating a new session after too much time has elapsed](../images/session/two_sessions.jpeg)
 
 If the session does exist, then we will extend the current session’s window by an additional hour.
 
-Extending a session
+![Extending a session](../images/session/extended_session.jpeg)
 
 It is important to note that each session gets its own unique ID. This identifier can be used in simple counters, unique counters, or rate-limits to identify suspect behavior and can even be used to determine the age of the session since we embed timestamps in all Smyte IDs.
 
@@ -66,6 +66,8 @@ LET MessageHourSessionAgeInHours := dateDiff(
 
 Remember that as soon as an hour has elapsed with no activity the session is destroyed and a new one will be created. This means that if a user has a message session that is 24 hours old they have been actively sending messages for the past 24 hours straight! This type of behavior often indicates that the user is in fact a bot.
 
+![Bot session](../images/session/bot_session.jpeg)
+
 With this insight, you can easily create a rule to flag and review this suspicious behavior.
 
 ### Session age rule
@@ -76,6 +78,7 @@ CREATE RULE DayLongMessageSession WHERE MessageHourSessionAgeInHours >= 24
              "past ${MessageHourSessionAgeInHours} hours straight";
  ```
  
+<!-- @todo: These features have not been implemented in open-source SQRL (yet!)
 
 ## Variance checks
 
@@ -104,6 +107,7 @@ LET EmailLengthIpSessionVariance := variance(ActorEmailHandleLength GROUP BY IpS
 
 With two lines of code we can now look at the variance in email lengths across signups for a given IP address!
 If we wanted to create a rule to flag this we might want to add a minimum number of signups before considering this risky behavior. All this would require is counting how many total signups we have seen for this signup session.
+-->
 
 ## Counting
 
@@ -114,6 +118,8 @@ LET NumSignupsByIpSignupSessionHour := count(
 ```
 
 Here, we are counting how many signups we have seen for this session over the past week. This gives us plenty of buffer in case the IP has continuous signup activity (remember that as soon as an hour with no signups elapses we will get a new session ID).
+
+<!-- @todo: These features have not been implemented in open-source SQRL (yet!)
 To tie it all together we can create a rule like this:
 
 ## Variance rule
@@ -176,3 +182,4 @@ CREATE RULE 99PercentilePaymentVelocity
   WHERE IsPaymentVelocity99Percentile
   WITH REASON “User is in the 99th percentile for payment velocity: ${PaymentVelocity}”;
 ```
+-->

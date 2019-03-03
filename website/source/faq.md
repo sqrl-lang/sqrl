@@ -11,7 +11,7 @@ See our [motivations and design principles](motivation.html) doc.
 
 There are three reasons why we chose Node.js.
 * SQRL does a lot of I/O and fairly little compute. Node.js shines at these applications.
-* Node.js has a rich ecosystem of libraries
+* Node.js has a rich ecosystem of libraries.
 * We were already using Node.js for our JS-based rule system and we just built on top of what we already had.
 
 We've been kicking around doing a golang runtime for a while. It's a good idea!

@@ -8,21 +8,39 @@ title: Running as a Server
 One way of running SQRL in production is by running it as a stateless server:
 
 ```
-$ cat > ratelimit.sqrl
+$ cat << EOF > ratelimit.sqrl
 LET Ip := input();
 LET Remaining := rateLimit(BY Ip MAX 2 EVERY 30 SECONDS);
+CREATE RULE BlockedByRateLimit WHERE Remaining = 0
+  WITH REASON "Saw more than two requests in the last thirty seconds.";
+WHEN BlockedByRateLimit THEN blockAction();
+EOF
 
-CREATE RULE BlockedByRateLimit WHERE Remaining = 0;
-WHEN BlockedByRateLimit BLOCK ACTION;
-
-$ ./sqrl serve --port=2288 examples/ratelimit.sqrl
+$ ./sqrl serve --port=2288 ratelimit.sqrl
 Serving examples/ratelimit.sqrl on port 2288
 ```
 
-Once your server is up and running, it will serve traffic over HTTP. You can test it out with the `curl` command line tool, sending it a sample request from the IP address **1.2.3.4**:
+Once your server is up and running, it will serve traffic over HTTP. You can test it out with the `curl` command line tool, sending it a couple sample request from the IP address **1.2.3.4**:
 
 ```
-$ curl -d '{"RequestIp": "1.2.3.4"}' \
+$ curl -d '{"Ip": "1.2.3.4"}' \
+    -H "Content-Type: application/json" \
+    'localhost:2288/run?features=BlockedByRateLimit,Remaining&pretty'
+{
+  "allow": true,
+  "verdict": {
+    "blockRules": [],
+    "whitelistRules": []
+  },
+  "rules": {},
+  "features": {
+    "BlockedByRateLimit": false,
+    "Remaining": 2
+  }
+}
+
+# If you send enough requests in a short enough time
+$ curl -d '{"Ip": "1.2.3.4"}' \
     -H "Content-Type: application/json" \
     'localhost:2288/run?features=BlockedByRateLimit,Remaining&pretty'
 {
@@ -30,7 +48,13 @@ $ curl -d '{"RequestIp": "1.2.3.4"}' \
   "verdict": {
     "blockRules": [
       "BlockedByRateLimit"
-    ]
+    ],
+    "whitelistRules": []
+  },
+  "rules": {
+    "BlockedByRateLimit": {
+      "reason": "Saw more than two requests in the last thirty seconds."
+    }
   },
   "features": {
     "BlockedByRateLimit": true,

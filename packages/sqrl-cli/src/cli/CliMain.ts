@@ -175,6 +175,7 @@ export interface CliMainOptions {
   stdin?: Readable;
   stdout?: Writable;
   serverWaitCallback?: ServerWaitCallback;
+  filesystem?: Filesystem;
 }
 
 export async function cliMain(
@@ -240,7 +241,10 @@ export async function cliMain(
 
     let watchedSource: WatchedFilesystem = null;
     let filesystem: Filesystem;
-    if (args.command === "run" && args.streamFeature) {
+
+    if (options.filesystem) {
+      filesystem = options.filesystem;
+    } else if (args.command === "run" && args.streamFeature) {
       watchedSource = new WatchedFilesystem(path.dirname(args.filename));
       filesystem = watchedSource;
     } else if (args.filename) {
@@ -389,17 +393,19 @@ export async function cliMain(
         server.on("error", err => reject(err));
       });
 
-      // If port was 0 it might have changed by this point
-      const address = server.address();
-      if (typeof address === "string") {
-        throw new Error("Expected `AddressInfo` from server.address()");
+      try {
+        // If port was 0 it might have changed by this point
+        const address = server.address();
+        if (typeof address === "string") {
+          throw new Error("Expected `AddressInfo` from server.address()");
+        }
+        console.log("Serving", args.filename, "on port", address.port);
+
+        const serverWaitCallback = options.serverWaitCallback || waitForSigint;
+        await serverWaitCallback({ server });
+      } finally {
+        server.close();
       }
-
-      console.log("Serving", args.filename, "on port", address.port);
-      const serverWaitCallback = options.serverWaitCallback || waitForSigint;
-      await serverWaitCallback({ server });
-
-      server.close();
     } else {
       throw new Error("Unknown cli command");
     }

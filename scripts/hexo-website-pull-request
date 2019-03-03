@@ -1,0 +1,8 @@
+#!/bin/bash
+set -xeo pipefail
+
+cd "$(dirname $0)/../website"
+rm -rf .deploy_git
+git clone --branch gh-pages git@github.com:twitter/sqrl .deploy_git
+hexo deploy --generate
+hub pull-request -f -b gh-pages -h gh-pages-staging -m 'Deploy site'

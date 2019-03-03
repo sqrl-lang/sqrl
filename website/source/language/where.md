@@ -57,7 +57,7 @@ This is most clearly demonstrated by taking the following combination of files:
 ```
 LET NumPurchaseByActor := count(BY SessionActor);
 LET ManyPurchaseByActor := NumPurchaseByActor > 5;
-CREATE RULE ManyPurchase WHERE ManyPurcaseByActor;
+CREATE RULE ManyPurchase WHERE ManyPurchaseByActor;
 ```
 
 **main.sqrl**
@@ -72,5 +72,5 @@ To achieve the same thing in a single file, the equivalent SQRL code would be:
 LET IsPurchase := Event = "purchase";
 LET NumPurchaseByActor := if(IsPurchase, count(BY SessionActor WHERE IsPurchase));
 LET ManyPurchaseByActor := if(IsPurchase, NumPurchaseByActor > 5);
-CREATE RULE ManyPurchases WHERE ManyPurcaseByActor AND IsPurchase;
+CREATE RULE ManyPurchases WHERE ManyPurchaseByActor AND IsPurchase;
 ```
