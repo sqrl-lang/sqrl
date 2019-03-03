@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """
+Copyright 2019 Twitter, Inc.
+Licensed under the Apache License, Version 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+"""
+"""
 Generates initial documentation pages from SQRL function definitions
 
 Usage: `./sqrl help functions --output=json | ./website/build_functions.py`

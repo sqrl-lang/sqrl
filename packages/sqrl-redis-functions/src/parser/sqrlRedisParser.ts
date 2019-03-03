@@ -1,3 +1,8 @@
+/**
+ * Copyright 2019 Twitter, Inc.
+ * Licensed under the Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
 // tslint:disable:ban-comma-operator
 // tslint:disable:no-empty
 // tslint:disable:no-unused-expression
