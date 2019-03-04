@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlSlot } from "./SqrlSlot";
-import { SqrlDocDefinition } from "../doc/SqrlDoc";
+import { FeatureDefinition } from "../api/spec";
 
 export interface SerializedSlotBase {
   class: string;
@@ -29,7 +29,7 @@ export interface SerializedFixedSlot extends SerializedSlotBase {
 
 export interface SerializedFeatureSlot extends SerializedSlotBase {
   class: "SqrlFeatureSlot";
-  definitions: SqrlDocDefinition[];
+  definitions: FeatureDefinition[];
   final: boolean;
   ast: any;
   where: any;
@@ -38,7 +38,7 @@ export interface SerializedFeatureSlot extends SerializedSlotBase {
 
 export interface SerializedRuleSlot extends SerializedSlotBase {
   class: "SqrlRuleSlot";
-  definition: SqrlDocDefinition;
+  definition: FeatureDefinition;
   ast: any;
   where: any;
   ruleSpec: any;

@@ -58,6 +58,9 @@ main:
       - text: Where Clauses
         type: link
         path: language/where.html
+      - text: Cost Optimisation
+        type: link
+        path: language/cost.html
   - text: Standard Library
     type: label
     children:

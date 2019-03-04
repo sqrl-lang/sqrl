@@ -23,7 +23,7 @@ export async function runCompile(sqrl: string) {
   compileParserStateAst(parserState);
   const compiledOutput = new SqrlCompiledOutput(parserState);
   const trace = createDefaultContext();
-  const spec = await compiledOutput.buildLabelerSpec(trace);
+  const spec = compiledOutput.executableSpec;
   const context = new JsExecutionContext(functionRegistry);
   const executable = new SqrlExecutable(context, spec);
 

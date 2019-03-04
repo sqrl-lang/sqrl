@@ -12,7 +12,7 @@ import { SqrlInputSlot } from "../slot/SqrlSlot";
 import invariant from "../jslib/invariant";
 import { isValidFeatureName } from "../feature/FeatureName";
 import { compileParserStateAst } from "./SqrlCompile";
-import { ExecutableSpec } from "../api/spec";
+import { ExecutableSpec, RuleSpecMap, FeatureDocMap } from "../api/spec";
 import { Context } from "../api/ctx";
 import { buildSqrlError } from "../api/parse";
 
@@ -23,17 +23,16 @@ class ExprLoopError extends Error {
 }
 
 export class SqrlCompiledOutput extends SqrlParseInfo {
-  slotNames: string[];
-  slotExprs: Expr[];
-  slotCosts: number[];
-  slotRecursiveCosts: number[];
+  readonly usedFiles: string[];
+  readonly ruleSpecs: RuleSpecMap;
 
-  built: boolean = false;
-  usedFiles: Set<string>;
-  slotExprMap: { [slotName: string]: Expr } = {};
-
+  private slotExprMap: { [slotName: string]: Expr } = {};
   private cost: { [name: string]: number } = {};
   private recursiveCost: { [name: string]: number } = {};
+
+  /**
+   * List of slots that are used in the calculation of the given slot
+   */
   private load: { [name: string]: Set<string> } = {};
 
   constructor(
@@ -41,10 +40,14 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     public slotFilter: SlotFilter | null = null
   ) {
     super(parserState.slots, parserState.options);
-    this.usedFiles = parserState.usedFiles;
+    this.usedFiles = Array.from(parserState.usedFiles).sort();
+    this.ruleSpecs = parserState.getRuleSpecs();
   }
 
-  private ensureSlotCost(name: string) {
+  /**
+   * Recurse through the given slot calculating cost and load data
+   */
+  private recurseSlot(name: string) {
     // If we've got a cost make sure it's not `null` ("in calculation")
     if (this.cost.hasOwnProperty(name)) {
       invariant(this.cost[name] !== null, "Loop while calculating slotCost");
@@ -64,7 +67,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
           return;
         }
 
-        this.getSlotCost(slot.name);
+        this.recurseSlot(slot.name);
 
         // We need to load the given slot, and all it's children
         load.add(slot.name);
@@ -86,11 +89,6 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     this.load[name] = load;
   }
 
-  getSlotCost(name: string) {
-    this.ensureSlotCost(name);
-    return { cost: this.cost[name], recursiveCost: this.recursiveCost[name] };
-  }
-
   exprForSlot(slotName: string): Expr {
     if (this.slotExprMap.hasOwnProperty(slotName)) {
       if (this.slotExprMap[slotName] === null) {
@@ -110,6 +108,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     this.slotExprMap[slotName] = null;
 
     const ast: Ast = slot.finalizedAst();
+
     const expr = processExprAst(ast, this, this.functionRegistry);
 
     this.slotExprMap[slotName] = expr;
@@ -117,7 +116,9 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     return expr;
   }
 
-  private fetchSlotNames(ctx: Context) {
+  private _slotNames: string[];
+  private _usedSlotNames: (string | null)[];
+  private calculateSlotNames() {
     const used: Set<Slot> = new Set();
     const current: Set<Slot> = new Set();
 
@@ -202,48 +203,76 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
       Object.values(this.slots).forEach(slot => recurseUsedSlot(slot));
     }
 
-    const usedSlotNames: (string | null)[] = slotNames.map(name =>
+    this._slotNames = slotNames;
+    this._usedSlotNames = slotNames.map(name =>
       this.slots.hasOwnProperty(name) ? name : null
     );
-
-    return { slotNames, usedSlotNames };
   }
 
-  private performBuild(ctx: Context) {
-    const { slotNames, usedSlotNames } = this.fetchSlotNames(ctx);
-
-    const slotExprs = usedSlotNames.map((name, idx) => {
-      if (!name) {
-        return null;
-      }
-      this.slots[name].setIndex(idx);
-      return this.exprForSlot(name);
-    });
-
-    this.built = true;
-    this.slotNames = slotNames;
-    this.slotExprs = slotExprs;
-
-    this.calculateCostData(ctx, usedSlotNames);
+  get slotNames(): string[] {
+    if (!this._slotNames) {
+      this.calculateSlotNames();
+    }
+    return this._slotNames;
   }
 
-  private calculateCostData(ctx: Context, usedSlotNames: string[]) {
-    usedSlotNames.forEach(name => {
+  get usedSlotNames(): string[] {
+    if (!this._slotNames) {
+      this.calculateSlotNames();
+    }
+    return this._usedSlotNames;
+  }
+
+  private _slotExprs: Expr[];
+  get slotExprs() {
+    if (!this._slotExprs) {
+      this._slotExprs = this.usedSlotNames.map((name, idx) => {
+        if (!name) {
+          return null;
+        }
+        this.slots[name].setIndex(idx);
+        return this.exprForSlot(name);
+      });
+    }
+    return this._slotExprs;
+  }
+
+  private _recursed = false;
+  private recurseAllSlots() {
+    if (this._recursed) {
+      return;
+    }
+    this.usedSlotNames.forEach(name => {
       if (name) {
-        this.ensureSlotCost(name);
+        this.recurseSlot(name);
       }
     });
-    this.slotCosts = usedSlotNames.map(name => name && this.cost[name]);
-    this.slotRecursiveCosts = usedSlotNames.map(
-      name => name && this.recursiveCost[name]
-    );
+    this._recursed = true;
   }
 
-  getUsedFunctions(ctx: Context) {
-    const { slotExprs } = this.fetchBuildOutput(ctx);
+  public get slotCosts(): number[] {
+    this.recurseAllSlots();
+    return this.usedSlotNames.map(name => name && this.cost[name]);
+  }
+  public get slotRecursiveCosts(): number[] {
+    this.recurseAllSlots();
+    return this.usedSlotNames.map(name => name && this.recursiveCost[name]);
+  }
+  public get slotLoad(): number[][] {
+    return this.usedSlotNames.map(name => {
+      return Array.from(this.load[name])
+        .map(loadName => {
+          const index = this.usedSlotNames.indexOf(loadName);
+          invariant(index >= 0, "Could not find slot index: " + loadName);
+          return index;
+        })
+        .sort();
+    });
+  }
 
+  get usedFunctions(): string[] {
     const functions: Set<string> = new Set();
-    for (const expr of slotExprs) {
+    for (const expr of this.slotExprs) {
       walkExpr(expr, node => {
         if (node.type === "call") {
           functions.add(node.func);
@@ -253,25 +282,31 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     return Array.from(functions).sort();
   }
 
-  fetchBuildOutput(ctx: Context) {
-    if (!this.built) {
-      this.performBuild(ctx);
-    }
+  get featureDocs(): FeatureDocMap {
+    this.recurseAllSlots();
 
-    return {
-      slotNames: this.slotNames,
-      slotExprs: this.slotExprs,
-      slotCosts: this.slotCosts,
-      slotRecursiveCosts: this.slotRecursiveCosts
-    };
+    const rv: FeatureDocMap = {};
+    this.foreachFeatureSlot(slot => {
+      rv[slot.name] = slot.buildDoc({
+        cost: this.cost[slot.name],
+        recursiveCost: this.recursiveCost[slot.name]
+      });
+    });
+    this.foreachRuleSlot(slot => {
+      rv[slot.name] = slot.buildDoc({
+        cost: this.cost[slot.name],
+        recursiveCost: this.recursiveCost[slot.name]
+      });
+    });
+    return rv;
   }
 
-  private buildSlotJs(slotNames: string[], slotExprs: Expr[]) {
-    return slotExprs.map((fetchExpr, idx) => {
+  get slotJs() {
+    return this.slotExprs.map((fetchExpr, idx) => {
       invariant(
         fetchExpr,
         "Expected source for null fetchExpr:: %s",
-        slotNames[idx]
+        this.slotNames[idx]
       );
 
       if (fetchExpr.type === "input") {
@@ -282,28 +317,36 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     });
   }
 
-  async buildLabelerSpec(
-    ctx: Context,
-    options: {} = {}
-  ): Promise<ExecutableSpec> {
-    const {
-      slotNames,
-      slotExprs,
-      slotCosts,
-      slotRecursiveCosts
-    } = this.fetchBuildOutput(ctx);
-
-    const usedFiles = Array.from(this.usedFiles);
-    const ruleSpec = this.getRuleSpecs();
-    const slotJs = this.buildSlotJs(slotNames, slotExprs);
-
+  get executableSpec(): ExecutableSpec {
     return {
-      slotNames,
-      slotCosts,
-      slotRecursiveCosts,
-      ruleSpec,
-      usedFiles,
-      slotJs
+      slotNames: this.slotNames,
+      slotCosts: this.slotCosts,
+      slotRecursiveCosts: this.slotRecursiveCosts,
+      rules: this.ruleSpecs,
+      usedFiles: this.usedFiles,
+      slotJs: this.slotJs
+    };
+  }
+
+  getSlotIndex(slotName: string): number {
+    const idx = this.slotNames.indexOf(slotName);
+    invariant(idx >= 0, "Could not find slot: " + slotName);
+    return idx;
+  }
+
+  /**
+   * Fetch the cost for a single slot without recursing all the others
+   */
+  getSlotCost(
+    slotName: string
+  ): {
+    cost: number;
+    recursiveCost: number;
+  } {
+    this.recurseSlot(slotName);
+    return {
+      cost: this.cost[slotName],
+      recursiveCost: this.recursiveCost[slotName]
     };
   }
 

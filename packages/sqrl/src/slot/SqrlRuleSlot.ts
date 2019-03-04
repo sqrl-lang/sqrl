@@ -8,10 +8,9 @@ import { Ast, RuleAst, SwitchAst, jsonAst } from "../ast/Ast";
 import SqrlAst from "../ast/SqrlAst";
 import invariant from "../jslib/invariant";
 import { registerSlotClass, SerializedRuleSlot } from "./SerializedSlot";
-import { SqrlDocDefinition, CostProps, SqrlFeatureDoc } from "../doc/SqrlDoc";
-import { RuleSpec } from "../api/spec";
+import { RuleSpec, FeatureDoc, FeatureDefinition } from "../api/spec";
 import { mapRegExpMatches } from "../jslib/mapRegExpMatches";
-import { buildDocDefinition } from "./SqrlFeatureSlot";
+import { buildDocDefinition, CostProps } from "./SqrlFeatureSlot";
 
 export const REASON_FEATURE_REGEX = /\$\{([A-Za-z0-9_.]+)\}/g;
 
@@ -26,7 +25,7 @@ export default class SqrlRuleSlot extends SqrlSlot {
   private ast: Ast = null;
   private where: Ast = null;
 
-  public definition: SqrlDocDefinition = null;
+  public definition: FeatureDefinition = null;
 
   constructor(name: string) {
     super(name);
@@ -76,7 +75,7 @@ export default class SqrlRuleSlot extends SqrlSlot {
     this.where = where;
   }
 
-  buildDoc(costProps: CostProps): SqrlFeatureDoc {
+  buildDoc(costProps: CostProps): FeatureDoc {
     return { name: this.name, definitions: [this.definition], ...costProps };
   }
 

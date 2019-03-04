@@ -6,7 +6,7 @@
 import { Executable, FunctionRegistry, FeatureMap } from "./execute";
 import { SqrlExecutable } from "../execute/SqrlExecutable";
 import { JsExecutionContext } from "../execute/JsExecutionContext";
-import { ExecutableSpec } from "./spec";
+import { ExecutableSpec, FeatureDocMap, RuleSpecMap } from "./spec";
 import { Context } from "./ctx";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
 import { StatementAst } from "./ast";
@@ -26,7 +26,7 @@ interface CompileFromStatementsOptions {
  * A SQRL Executable Compiler is the partial representation of a compiled
  * execution
  */
-export class ExecutableCompiler {
+export class CompiledExecutable {
   constructor(
     /**
      * @internal
@@ -34,12 +34,26 @@ export class ExecutableCompiler {
     public _wrapped: SqrlCompiledOutput
   ) {}
 
-  buildExprs(ctx: Context) {
-    return this._wrapped.fetchBuildOutput(ctx);
+  getSlotLoad(): number[][] {
+    return this._wrapped.slotLoad;
   }
-
+  getSlotNames(): string[] {
+    return this._wrapped.slotNames;
+  }
+  getSlotExprs() {
+    return this._wrapped.slotExprs;
+  }
   getUsedFunctions(ctx: Context): string[] {
-    return this._wrapped.getUsedFunctions(ctx);
+    return this._wrapped.usedFunctions;
+  }
+  getExecutableSpec(): ExecutableSpec {
+    return this._wrapped.executableSpec;
+  }
+  getFeatureDocs(): FeatureDocMap {
+    return this._wrapped.featureDocs;
+  }
+  getRuleSpecs(): RuleSpecMap {
+    return this._wrapped.ruleSpecs;
   }
 }
 
@@ -52,7 +66,7 @@ export async function compileFromStatements(
   statements: StatementAst[],
   options: CompileFromStatementsOptions
 ): Promise<{
-  compiler: ExecutableCompiler;
+  compiled: CompiledExecutable;
   executable: Executable;
   spec: ExecutableSpec;
 }> {
@@ -64,9 +78,9 @@ export async function compileFromStatements(
   });
   compileParserStateAst(parserState);
   const compiledOutput = new SqrlCompiledOutput(parserState);
-  const spec = await compiledOutput.buildLabelerSpec(options.context);
+  const spec = compiledOutput.executableSpec;
   return {
-    compiler: new ExecutableCompiler(compiledOutput),
+    compiled: new CompiledExecutable(compiledOutput),
     executable: executableFromSpec(functionRegistry, spec),
     spec
   };

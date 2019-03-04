@@ -12,14 +12,14 @@ import {
   FeatureMap,
   FunctionInfo,
   Execution,
-  ExecutableCompiler,
-  ExecutableSpec,
+  CompiledExecutable,
   createSimpleContext
 } from "sqrl";
 import { invariant, SqrlObject, mapObject } from "sqrl-common";
 import * as csvStringify from "csv-stringify";
 import { CliError } from "./CliError";
 import { CliManipulator } from "sqrl-cli-functions";
+import { generateDotFile } from "./generateDot";
 
 // @todo: This could be made a command line option
 const MAX_TABLE_ROWS = 50;
@@ -57,29 +57,40 @@ export abstract class CliOutput {
 }
 
 export abstract class CliCompileOutput extends CliOutput {
-  abstract compiled(
-    spec: ExecutableSpec,
-    compiledOutput: ExecutableCompiler
-  ): Promise<void>;
+  abstract compiled(compiledOutput: CompiledExecutable): Promise<void>;
 }
 
 export class CliExprOutput extends CliCompileOutput {
-  async compiled(spec: ExecutableSpec, compiledOutput: ExecutableCompiler) {
-    const { slotNames, slotExprs } = await compiledOutput.buildExprs(
-      createSimpleContext()
-    );
+  async compiled(compiledOutput: CompiledExecutable) {
     this.stdout.write(
       jsonStableStringify({
-        slotExprs: slotExprs.map(expr => serializeExpr(expr)),
-        slotNames
+        slotExprs: compiledOutput
+          .getSlotExprs()
+          .map(expr => serializeExpr(expr)),
+        slotNames: compiledOutput.getSlotNames()
       }) + "\n"
     );
   }
 }
 
 export class CliSlotJsOutput extends CliCompileOutput {
-  async compiled(spec: ExecutableSpec, compiledOutput: ExecutableCompiler) {
-    console.log(jsonStableStringify(spec));
+  async compiled(compiledOutput: CompiledExecutable) {
+    console.log(
+      jsonStableStringify({
+        ...compiledOutput.getExecutableSpec(),
+        features: compiledOutput.getFeatureDocs()
+      })
+    );
+  }
+}
+
+export class CliDotOutput extends CliCompileOutput {
+  async compiled(compiledOutput: CompiledExecutable) {
+    console.log(
+      generateDotFile(createSimpleContext(), compiledOutput, [
+        "SqrlExecutionComplete"
+      ])
+    );
   }
 }
 

@@ -46,7 +46,7 @@ export class SqrlExecutable {
   constructor(executionContext: JsExecutionContext, props: ExecutableSpec) {
     const { slotNames, slotJs } = props;
 
-    this.ruleSpecs = props.ruleSpec;
+    this.ruleSpecs = props.rules;
     this.slotNames = slotNames;
     this.slotCount = slotJs.length;
     this.slotCosts = props.slotCosts;

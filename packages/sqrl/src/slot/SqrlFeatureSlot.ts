@@ -15,22 +15,21 @@ import {
 } from "../ast/Ast";
 import astIntersects from "../ast/astIntersects";
 import SqrlAst from "../ast/SqrlAst";
-import { sqrlInvariant } from "../api/parse";
+import { buildSqrlError, sqrlInvariant } from "../api/parse";
 import { stringifyWhereAst } from "../compile/SqrlTruthTable";
 import invariant from "../jslib/invariant";
 import { SerializedFeatureSlot, registerSlotClass } from "./SerializedSlot";
-import { buildSqrlError } from "../api/parse";
-import {
-  SqrlDocDefinition,
-  SqrlDocLocation,
-  CostProps,
-  SqrlFeatureDoc
-} from "../doc/SqrlDoc";
+import { FeatureDoc, FeatureDefinition } from "../api/spec";
+
+export interface CostProps {
+  cost: number;
+  recursiveCost: number;
+}
 
 export function buildDocDefinition(
   ast: RuleAst | LetAst,
   globalWhere: Ast
-): SqrlDocDefinition {
+): FeatureDefinition {
   const features = extractAstFeatures(SqrlAst.list(ast, globalWhere));
   const { location } = ast;
   return {
@@ -53,16 +52,16 @@ export default class SqrlFeatureSlot extends SqrlSlot {
   private ast: Ast = null;
   private where: Ast = null;
 
-  public definitions: SqrlDocDefinition[] = [];
+  public definitions: FeatureDefinition[] = [];
 
   private finalized = false;
   private final = false;
   private replaceable = true;
 
   /* Mark whether or not the default case of this feature is replaceable.
-   * 
+   *
    * common.sqrl - LET A := 5;
-   * 
+   *
    * custom.sqrl - LET A := 6 WHERE B;  [defaultCase=5, defaultCaseReplaceable=true]
    *             - LET A := 7 DEFAULT;  [defaultCase=7, defaultCaseReplaceable=false]
    */
@@ -120,10 +119,10 @@ export default class SqrlFeatureSlot extends SqrlSlot {
     this.where = where;
   }
 
-  getFirstLocation(): SqrlDocLocation {
+  getFirstLocation(): FeatureDefinition {
     return this.definitions[0];
   }
-  buildDoc(costProps: CostProps): SqrlFeatureDoc {
+  buildDoc(costProps: CostProps): FeatureDoc {
     return { name: this.name, definitions: this.definitions, ...costProps };
   }
 

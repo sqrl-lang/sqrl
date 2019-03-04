@@ -37,7 +37,7 @@ import { murmurhashJsonHexSync } from "../jslib/murmurhashJson";
 import { EntityId } from "../platform/EntityId";
 import { Filesystem, EmptyFilesystem } from "../api/filesystem";
 import SqrlRuleSlot from "../slot/SqrlRuleSlot";
-import { RuleSpec } from "../api/spec";
+import { RuleSpec, RuleSpecMap } from "../api/spec";
 import { AbstractLogger } from "../util/Logger";
 import { LogProperties, getGlobalLogger } from "../api/log";
 import { buildSqrlError } from "./buildSqrlError";
@@ -156,7 +156,7 @@ export abstract class SqrlParseInfo extends AbstractLogger {
     return Object.keys(this.slots).filter(isValidFeatureName);
   }
 
-  getRuleSpecs() {
+  getRuleSpecs(): RuleSpecMap {
     return mapObject(this.getRuleSlots(), value => {
       return value.ruleSpec;
     });

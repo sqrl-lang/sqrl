@@ -18,7 +18,7 @@ import {
   FunctionRegistry,
   Executable,
   compileFromFilesystem,
-  ExecutableCompiler,
+  CompiledExecutable,
   ExecutableSpec,
   getDefaultConfig,
   Config,
@@ -44,7 +44,8 @@ import {
   CliCompileOutput,
   CliExprOutput,
   CliSlotJsOutput,
-  CliTableOutput
+  CliTableOutput,
+  CliDotOutput
 } from "./CliOutput";
 import { getGlobalLogger } from "sqrl/lib/api/log";
 import { SimpleDatabaseSet } from "sqrl/lib/platform/DatabaseSet";
@@ -87,6 +88,8 @@ export function getCliOutput(
     return new CliJsonOutput(outputOptions);
   } else if (args.output === "expr") {
     return new CliExprOutput(stdout);
+  } else if (args.output === "dot") {
+    return new CliDotOutput(stdout);
   } else if (args.output === "slot-js") {
     return new CliSlotJsOutput(stdout);
   } else {
@@ -237,7 +240,7 @@ export async function cliMain(
     // <filename> is sqrl source code
     let executable: Executable | null = null;
     let spec: ExecutableSpec = null;
-    let compiler: ExecutableCompiler = null;
+    let compiledSource: CompiledExecutable = null;
 
     let watchedSource: WatchedFilesystem = null;
     let filesystem: Filesystem;
@@ -261,7 +264,7 @@ export async function cliMain(
         return {
           executable: executableFromSpec(functionRegistry, spec),
           spec: null,
-          compiler: null
+          compiled: null
         };
       } else {
         return compileFromFilesystem(functionRegistry, filesystem, {
@@ -297,7 +300,7 @@ export async function cliMain(
     }
 
     if (args.filename) {
-      ({ executable, spec, compiler } = await loadSource());
+      ({ executable, spec, compiled: compiledSource } = await loadSource());
 
       if (args.command === "run") {
         // In run mode, make sure we have all required inputs
@@ -317,8 +320,12 @@ export async function cliMain(
         }
       }
 
-      if (compiler && !functionRegistry.getConfig()["redis.address"]) {
-        for (const func of compiler.getUsedFunctions(ctx)) {
+      if (
+        args.command !== "compile" &&
+        compiledSource &&
+        !functionRegistry.getConfig()["redis.address"]
+      ) {
+        for (const func of compiledSource.getUsedFunctions(ctx)) {
           if (STATEFUL_FUNCTIONS.includes(func)) {
             console.error(
               "Warning: Using stateful functions but `--redis` flag was not provided. State will be in-memory only."
@@ -359,8 +366,8 @@ export async function cliMain(
       if (!(output instanceof CliCompileOutput)) {
         throw new CliError("Output format not compatible with `compile`");
       }
-      invariant(compiler, "Compile options must include a filename");
-      await output.compiled(spec, compiler);
+      invariant(compiledSource, "Compile options must include a filename");
+      await output.compiled(compiledSource);
     } else if (args.command === "repl") {
       let filesystem: Filesystem = new LocalFilesystem(process.cwd());
       const statements: StatementAst[] = [];

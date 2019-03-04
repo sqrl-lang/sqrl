@@ -24,6 +24,10 @@ We think this is unique to SQRL (but it's a pretty good idea so someone else mus
 
 SQRL does not have user-defined functions, recursion or unbounded loops. This produces simpler code for non-programmers and allows deep static analysis. Logic that needs the power of a full programming language can be implemented as new library functions.
 
+## Cost optimisation
+
+SQRL will optimise your code to be cheaper to run in production. Expressions such as `a() OR b()` can be re-ordered by the cost of each function in production (if you have that data.) For more detail see the [page on cost optimisation](language/cost.html).
+
 ## Entities as first-class citizens
 
 SQRL has a notion of an "entity", which is a `type` (i.e. "EmailAddress") and a string `key` (i.e. "foo@bar.com"). It gets a stable 64 bit ID called a `UniqueId` where the most significant bits of the ID are the timestamp that the ID was created. Subsequent references to the same (`type`, `key`) pair will get the same `UniqueId`.

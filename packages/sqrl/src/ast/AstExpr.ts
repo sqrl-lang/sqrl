@@ -42,6 +42,8 @@ class AstExprState {
   costForExpr(expr: Expr): number {
     if (expr.type === "value") {
       return this.compiledSqrl.getSlotCost(expr.slot.name).recursiveCost;
+    } else if (expr.type === "call") {
+      return this.functionRegistry.getCost(expr.func);
     }
     return 1;
   }

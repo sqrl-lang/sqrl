@@ -173,19 +173,15 @@ export class SqrlTest {
       filesystem: this.filesystem
     });
 
-    const compiledOutput = await SqrlCompiledOutput.build(ctx, parserState, {
+    const compiled = await SqrlCompiledOutput.build(ctx, parserState, {
       skipCostCalculations: !this.calculateCost
     });
 
-    const processed = await compiledOutput.buildLabelerSpec(ctx, {
-      skipSourceVersion: true
-    });
-
-    const slotCallback = this.executionContext.compileSlots(processed.slotJs);
+    const slotCallback = this.executionContext.compileSlots(compiled.slotJs);
 
     const sourcePrinter = new SqrlSourcePrinter({
-      slotNames: processed.slotNames,
-      slotJs: processed.slotJs
+      slotNames: compiled.slotNames,
+      slotJs: compiled.slotJs
     });
 
     // sourcePrinter.printAllSource();
@@ -198,12 +194,12 @@ export class SqrlTest {
     const state = new SqrlExecutionState(
       ctx,
       slotCallback,
-      processed.slotNames,
+      compiled.slotNames,
       manipulator,
       {
         sourcePrinter,
         featureTimeout: this.featureTimeout,
-        ruleSpecs: processed.ruleSpec
+        ruleSpecs: compiled.ruleSpecs
       },
       this.inputs
     );

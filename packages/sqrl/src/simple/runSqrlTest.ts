@@ -12,12 +12,15 @@ import { FunctionRegistry, Execution } from "../api/execute";
 import * as path from "path";
 import { Logger } from "../api/log";
 import { Config } from "../api/config";
+import { FunctionCostData } from "../function/FunctionRegistry";
+import { invariant } from "sqrl-common";
 
 export async function runSqrlTest(
   sqrl: string,
   options: {
     config?: Config;
     functionRegistry?: FunctionRegistry;
+    functionCost?: FunctionCostData;
     logger?: Logger;
     filesystem?: Filesystem;
     librarySqrl?: string;
@@ -32,9 +35,18 @@ export async function runSqrlTest(
   let functionRegistry: FunctionRegistry;
 
   if (options.functionRegistry) {
+    invariant(
+      !options.config,
+      "config option not valid when functionRegistry is provided"
+    );
+    invariant(
+      !options.functionCost,
+      "functionCost option not valid when functionRegistry is provided"
+    );
     functionRegistry = options.functionRegistry;
   } else {
     functionRegistry = await buildTestFunctionRegistry({
+      functionCost: options.functionCost,
       config: options.config
     });
   }
