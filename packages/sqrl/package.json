@@ -5,8 +5,8 @@
   "license": "Apache-2.0",
   "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl",
   "author": {
-    "name": "Josh Yudaken",
-    "email": "josh@smyte.com"
+    "name": "Twitter, Inc.",
+    "url": "https://twitter.com/twitteross"
   },
   "keywords": [
     "sqrl"

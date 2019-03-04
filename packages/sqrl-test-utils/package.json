@@ -12,8 +12,8 @@
     "registry": "https://registry.npmjs.org"
   },
   "author": {
-    "name": "Josh Yudaken",
-    "email": "josh@smyte.com"
+    "name": "Twitter, Inc.",
+    "url": "https://twitter.com/twitteross"
   },
   "keywords": [
     "sqrl"
