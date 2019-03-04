@@ -67,6 +67,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Specification to load a compiled SQRL file into the JavaScript runtime.
+						The optional fields are not required for the runtime, but are used elsewhere.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -82,7 +90,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_spec_.executablespec.html#rulespec" class="tsd-kind-icon">rule<wbr>Spec</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_spec_.executablespec.html#features" class="tsd-kind-icon">features</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_spec_.executablespec.html#rules" class="tsd-kind-icon">rules</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_spec_.executablespec.html#slotcosts" class="tsd-kind-icon">slot<wbr>Costs</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_spec_.executablespec.html#slotjs" class="tsd-kind-icon">slot<wbr>Js</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_spec_.executablespec.html#slotnames" class="tsd-kind-icon">slot<wbr>Names</a></li>
@@ -96,12 +105,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="rulespec" class="tsd-anchor"></a>
-					<h3>rule<wbr>Spec</h3>
-					<div class="tsd-signature tsd-kind-icon">rule<wbr>Spec<span class="tsd-signature-symbol">:</span> <a href="_spec_.rulespecmap.html" class="tsd-signature-type">RuleSpecMap</a></div>
+					<a name="features" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> features</h3>
+					<div class="tsd-signature tsd-kind-icon">features<span class="tsd-signature-symbol">:</span> <a href="_spec_.featuredocmap.html" class="tsd-signature-type">FeatureDocMap</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/spec.ts#L16">spec.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/spec.ts#L48">spec.ts:48</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rules" class="tsd-anchor"></a>
+					<h3>rules</h3>
+					<div class="tsd-signature tsd-kind-icon">rules<span class="tsd-signature-symbol">:</span> <a href="_spec_.rulespecmap.html" class="tsd-signature-type">RuleSpecMap</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/spec.ts#L47">spec.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -111,7 +130,7 @@
 					<div class="tsd-signature tsd-kind-icon">slot<wbr>Costs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/spec.ts#L21">spec.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/spec.ts#L53">spec.ts:53</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -121,7 +140,7 @@
 					<div class="tsd-signature tsd-kind-icon">slot<wbr>Js<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/spec.ts#L20">spec.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/spec.ts#L52">spec.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -131,7 +150,7 @@
 					<div class="tsd-signature tsd-kind-icon">slot<wbr>Names<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/spec.ts#L19">spec.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/spec.ts#L51">spec.ts:51</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -141,7 +160,7 @@
 					<div class="tsd-signature tsd-kind-icon">slot<wbr>Recursive<wbr>Costs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/spec.ts#L22">spec.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/spec.ts#L54">spec.ts:54</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -151,7 +170,7 @@
 					<div class="tsd-signature tsd-kind-icon">used<wbr>Files<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/spec.ts#L17">spec.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/spec.ts#L49">spec.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -224,7 +243,10 @@
 						<a href="_spec_.executablespec.html" class="tsd-kind-icon">Executable<wbr>Spec</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_spec_.executablespec.html#rulespec" class="tsd-kind-icon">rule<wbr>Spec</a>
+								<a href="_spec_.executablespec.html#features" class="tsd-kind-icon">features</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_spec_.executablespec.html#rules" class="tsd-kind-icon">rules</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_spec_.executablespec.html#slotcosts" class="tsd-kind-icon">slot<wbr>Costs</a>
@@ -245,6 +267,18 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_spec_.featuredefinition.html" class="tsd-kind-icon">Feature<wbr>Definition</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_spec_.featuredefinitionlocation.html" class="tsd-kind-icon">Feature<wbr>Definition<wbr>Location</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_spec_.featuredoc.html" class="tsd-kind-icon">Feature<wbr>Doc</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="_spec_.featuredocmap.html" class="tsd-kind-icon">Feature<wbr>Doc<wbr>Map</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="_spec_.rulespec.html" class="tsd-kind-icon">Rule<wbr>Spec</a>
 					</li>

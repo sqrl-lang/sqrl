@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ExecutableCompiler | sqrl</title>
+	<title>CompiledExecutable | sqrl</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../modules/_compile_.html">&quot;compile&quot;</a>
 				</li>
 				<li>
-					<a href="_compile_.executablecompiler.html">ExecutableCompiler</a>
+					<a href="_compile_.compiledexecutable.html">CompiledExecutable</a>
 				</li>
 			</ul>
-			<h1>Class ExecutableCompiler</h1>
+			<h1>Class CompiledExecutable</h1>
 		</div>
 	</div>
 </header>
@@ -79,7 +79,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ExecutableCompiler</span>
+						<span class="target">CompiledExecutable</span>
 					</li>
 				</ul>
 			</section>
@@ -90,20 +90,25 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_compile_.executablecompiler.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_compile_.executablecompiler.html#_wrapped" class="tsd-kind-icon">_wrapped</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#_wrapped" class="tsd-kind-icon">_wrapped</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.executablecompiler.html#buildexprs" class="tsd-kind-icon">build<wbr>Exprs</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.executablecompiler.html#getusedfunctions" class="tsd-kind-icon">get<wbr>Used<wbr>Functions</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#getexecutablespec" class="tsd-kind-icon">get<wbr>Executable<wbr>Spec</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#getfeaturedocs" class="tsd-kind-icon">get<wbr>Feature<wbr>Docs</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#getrulespecs" class="tsd-kind-icon">get<wbr>Rule<wbr>Specs</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#getslotexprs" class="tsd-kind-icon">get<wbr>Slot<wbr>Exprs</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#getslotload" class="tsd-kind-icon">get<wbr>Slot<wbr>Load</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#getslotnames" class="tsd-kind-icon">get<wbr>Slot<wbr>Names</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_compile_.compiledexecutable.html#getusedfunctions" class="tsd-kind-icon">get<wbr>Used<wbr>Functions</a></li>
 							</ul>
 						</section>
 					</div>
@@ -115,13 +120,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Executable<wbr>Compiler<span class="tsd-signature-symbol">(</span>_wrapped<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SqrlCompiledOutput</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_compile_.executablecompiler.html" class="tsd-signature-type">ExecutableCompiler</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Compiled<wbr>Executable<span class="tsd-signature-symbol">(</span>_wrapped<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SqrlCompiledOutput</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_compile_.compiledexecutable.html" class="tsd-signature-type">CompiledExecutable</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L29">compile.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L29">compile.ts:29</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -130,7 +135,7 @@
 									<h5>_wrapped: <span class="tsd-signature-type">SqrlCompiledOutput</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_compile_.executablecompiler.html" class="tsd-signature-type">ExecutableCompiler</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_compile_.compiledexecutable.html" class="tsd-signature-type">CompiledExecutable</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -143,7 +148,7 @@
 					<div class="tsd-signature tsd-kind-icon">_wrapped<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">SqrlCompiledOutput</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L34">compile.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L34">compile.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -157,39 +162,104 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="buildexprs" class="tsd-anchor"></a>
-					<h3>build<wbr>Exprs</h3>
+					<a name="getexecutablespec" class="tsd-anchor"></a>
+					<h3>get<wbr>Executable<wbr>Spec</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">build<wbr>Exprs<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="../interfaces/_ctx_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Executable<wbr>Spec<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_spec_.executablespec.html" class="tsd-signature-type">ExecutableSpec</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L37">compile.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L49">compile.ts:49</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>ctx: <a href="../interfaces/_ctx_.context.html" class="tsd-signature-type">Context</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
-							<ul class="tsd-parameters">
-								<li class="tsd-parameter">
-									<h5>slot<wbr>Costs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>slot<wbr>Exprs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><a href="../interfaces/_expr_.inputexpr.html" class="tsd-signature-type">InputExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.loadexpr.html" class="tsd-signature-type">LoadExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.constantexpr.html" class="tsd-signature-type">ConstantExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.valueexpr.html" class="tsd-signature-type">ValueExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.iteratorexpr.html" class="tsd-signature-type">IteratorExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.stateexpr.html" class="tsd-signature-type">StateExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.ifexpr.html" class="tsd-signature-type">IfExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.callexpr.html" class="tsd-signature-type">CallExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.listexpr.html" class="tsd-signature-type">ListExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.listcomprehensionexpr.html" class="tsd-signature-type">ListComprehensionExpr</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>slot<wbr>Names<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-								<li class="tsd-parameter">
-									<h5>slot<wbr>Recursive<wbr>Costs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_spec_.executablespec.html" class="tsd-signature-type">ExecutableSpec</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getfeaturedocs" class="tsd-anchor"></a>
+					<h3>get<wbr>Feature<wbr>Docs</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Feature<wbr>Docs<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_spec_.featuredocmap.html" class="tsd-signature-type">FeatureDocMap</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L52">compile.ts:52</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_spec_.featuredocmap.html" class="tsd-signature-type">FeatureDocMap</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getrulespecs" class="tsd-anchor"></a>
+					<h3>get<wbr>Rule<wbr>Specs</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Rule<wbr>Specs<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_spec_.rulespecmap.html" class="tsd-signature-type">RuleSpecMap</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L55">compile.ts:55</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_spec_.rulespecmap.html" class="tsd-signature-type">RuleSpecMap</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getslotexprs" class="tsd-anchor"></a>
+					<h3>get<wbr>Slot<wbr>Exprs</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Slot<wbr>Exprs<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><a href="../interfaces/_expr_.inputexpr.html" class="tsd-signature-type">InputExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.loadexpr.html" class="tsd-signature-type">LoadExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.constantexpr.html" class="tsd-signature-type">ConstantExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.valueexpr.html" class="tsd-signature-type">ValueExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.iteratorexpr.html" class="tsd-signature-type">IteratorExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.stateexpr.html" class="tsd-signature-type">StateExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.ifexpr.html" class="tsd-signature-type">IfExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.callexpr.html" class="tsd-signature-type">CallExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.listexpr.html" class="tsd-signature-type">ListExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.listcomprehensionexpr.html" class="tsd-signature-type">ListComprehensionExpr</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L43">compile.ts:43</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span><a href="../interfaces/_expr_.inputexpr.html" class="tsd-signature-type">InputExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.loadexpr.html" class="tsd-signature-type">LoadExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.constantexpr.html" class="tsd-signature-type">ConstantExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.valueexpr.html" class="tsd-signature-type">ValueExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.iteratorexpr.html" class="tsd-signature-type">IteratorExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.stateexpr.html" class="tsd-signature-type">StateExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.ifexpr.html" class="tsd-signature-type">IfExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.callexpr.html" class="tsd-signature-type">CallExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.listexpr.html" class="tsd-signature-type">ListExpr</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_expr_.listcomprehensionexpr.html" class="tsd-signature-type">ListComprehensionExpr</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getslotload" class="tsd-anchor"></a>
+					<h3>get<wbr>Slot<wbr>Load</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Slot<wbr>Load<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L37">compile.ts:37</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getslotnames" class="tsd-anchor"></a>
+					<h3>get<wbr>Slot<wbr>Names</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Slot<wbr>Names<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L40">compile.ts:40</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -203,7 +273,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L41">compile.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L46">compile.ts:46</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -282,19 +352,34 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_compile_.executablecompiler.html" class="tsd-kind-icon">Executable<wbr>Compiler</a>
+						<a href="_compile_.compiledexecutable.html" class="tsd-kind-icon">Compiled<wbr>Executable</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_compile_.executablecompiler.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="_compile_.compiledexecutable.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_compile_.executablecompiler.html#_wrapped" class="tsd-kind-icon">_wrapped</a>
+								<a href="_compile_.compiledexecutable.html#_wrapped" class="tsd-kind-icon">_wrapped</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_compile_.executablecompiler.html#buildexprs" class="tsd-kind-icon">build<wbr>Exprs</a>
+								<a href="_compile_.compiledexecutable.html#getexecutablespec" class="tsd-kind-icon">get<wbr>Executable<wbr>Spec</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_compile_.executablecompiler.html#getusedfunctions" class="tsd-kind-icon">get<wbr>Used<wbr>Functions</a>
+								<a href="_compile_.compiledexecutable.html#getfeaturedocs" class="tsd-kind-icon">get<wbr>Feature<wbr>Docs</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_compile_.compiledexecutable.html#getrulespecs" class="tsd-kind-icon">get<wbr>Rule<wbr>Specs</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_compile_.compiledexecutable.html#getslotexprs" class="tsd-kind-icon">get<wbr>Slot<wbr>Exprs</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_compile_.compiledexecutable.html#getslotload" class="tsd-kind-icon">get<wbr>Slot<wbr>Load</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_compile_.compiledexecutable.html#getslotnames" class="tsd-kind-icon">get<wbr>Slot<wbr>Names</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_compile_.compiledexecutable.html#getusedfunctions" class="tsd-kind-icon">get<wbr>Used<wbr>Functions</a>
 							</li>
 						</ul>
 					</li>

@@ -71,7 +71,7 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_compile_.executablecompiler.html" class="tsd-kind-icon">Executable<wbr>Compiler</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_compile_.compiledexecutable.html" class="tsd-kind-icon">Compiled<wbr>Executable</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
@@ -103,13 +103,13 @@
 					<a name="compilefromfilesystem" class="tsd-anchor"></a>
 					<h3>compile<wbr>From<wbr>Filesystem</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">compile<wbr>From<wbr>Filesystem<span class="tsd-signature-symbol">(</span>functionRegistry<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a>, filesystem<span class="tsd-signature-symbol">: </span><a href="../classes/_filesystem_.filesystem.html" class="tsd-signature-type">Filesystem</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_compile_.compilefromfilesystemoptions.html" class="tsd-signature-type">CompileFromFilesystemOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compile<wbr>From<wbr>Filesystem<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a>, filesystem<span class="tsd-signature-symbol">: </span><a href="../classes/_filesystem_.filesystem.html" class="tsd-signature-type">Filesystem</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_compile_.compilefromfilesystemoptions.html" class="tsd-signature-type">CompileFromFilesystemOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L138">compile.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L149">compile.ts:149</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -120,7 +120,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>functionRegistry: <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h5>
+									<h5>instance: <a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a></h5>
 								</li>
 								<li>
 									<h5>filesystem: <a href="../classes/_filesystem_.filesystem.html" class="tsd-signature-type">Filesystem</a></h5>
@@ -137,25 +137,25 @@
 					<a name="compilefromstatements" class="tsd-anchor"></a>
 					<h3>compile<wbr>From<wbr>Statements</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">compile<wbr>From<wbr>Statements<span class="tsd-signature-symbol">(</span>functionRegistry<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a>, statements<span class="tsd-signature-symbol">: </span><a href="_ast_.html#statementast" class="tsd-signature-type">StatementAst</a><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_compile_.compilefromstatementsoptions.html" class="tsd-signature-type">CompileFromStatementsOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compile<wbr>From<wbr>Statements<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a>, statements<span class="tsd-signature-symbol">: </span><a href="_ast_.html#statementast" class="tsd-signature-type">StatementAst</a><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_compile_.compilefromstatementsoptions.html" class="tsd-signature-type">CompileFromStatementsOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L50">compile.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L64">compile.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This method creates an SQRL Executable given a function registry and a list
+									<p>This method creates an SQRL Executable given an instance and a list
 									of statements.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>functionRegistry: <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h5>
+									<h5>instance: <a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a></h5>
 								</li>
 								<li>
 									<h5>statements: <a href="_ast_.html#statementast" class="tsd-signature-type">StatementAst</a><span class="tsd-signature-symbol">[]</span></h5>
@@ -172,25 +172,24 @@
 					<a name="compilefromstring" class="tsd-anchor"></a>
 					<h3>compile<wbr>From<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">compile<wbr>From<wbr>String<span class="tsd-signature-symbol">(</span>functionRegistry<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a>, source<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_compile_.compilefromstringoptions.html" class="tsd-signature-type">CompileFromStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compile<wbr>From<wbr>String<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a>, source<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_compile_.compilefromstringoptions.html" class="tsd-signature-type">CompileFromStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L96">compile.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L109">compile.ts:109</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This method creates an SQRL Executable given source code and a function
-									registry.</p>
+									<p>This method creates an SQRL Executable given source code and an instance</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>functionRegistry: <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h5>
+									<h5>instance: <a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a></h5>
 								</li>
 								<li>
 									<h5>source: <span class="tsd-signature-type">string</span></h5>
@@ -207,25 +206,24 @@
 					<a name="executablefromfilesystem" class="tsd-anchor"></a>
 					<h3>executable<wbr>From<wbr>Filesystem</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>Filesystem<span class="tsd-signature-symbol">(</span>functionRegistry<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a>, filesystem<span class="tsd-signature-symbol">: </span><a href="../classes/_filesystem_.filesystem.html" class="tsd-signature-type">Filesystem</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_compile_.compilefromfilesystemoptions.html" class="tsd-signature-type">CompileFromFilesystemOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>Filesystem<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a>, filesystem<span class="tsd-signature-symbol">: </span><a href="../classes/_filesystem_.filesystem.html" class="tsd-signature-type">Filesystem</a>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_compile_.compilefromfilesystemoptions.html" class="tsd-signature-type">CompileFromFilesystemOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L159">compile.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L169">compile.ts:169</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This method creates an SQRL Executable given source code and a function
-									registry.</p>
+									<p>This method creates an SQRL Executable given source code and an instance</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>functionRegistry: <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h5>
+									<h5>instance: <a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a></h5>
 								</li>
 								<li>
 									<h5>filesystem: <a href="../classes/_filesystem_.filesystem.html" class="tsd-signature-type">Filesystem</a></h5>
@@ -242,13 +240,13 @@
 					<a name="executablefromspec" class="tsd-anchor"></a>
 					<h3>executable<wbr>From<wbr>Spec</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>Spec<span class="tsd-signature-symbol">(</span>functionRegistry<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a>, spec<span class="tsd-signature-symbol">: </span><a href="../interfaces/_spec_.executablespec.html" class="tsd-signature-type">ExecutableSpec</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a></li>
+						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>Spec<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a>, spec<span class="tsd-signature-symbol">: </span><a href="../interfaces/_spec_.executablespec.html" class="tsd-signature-type">ExecutableSpec</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L172">compile.ts:172</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L182">compile.ts:182</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -260,7 +258,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>functionRegistry: <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h5>
+									<h5>instance: <a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a></h5>
 								</li>
 								<li>
 									<h5>spec: <a href="../interfaces/_spec_.executablespec.html" class="tsd-signature-type">ExecutableSpec</a></h5>
@@ -274,25 +272,25 @@
 					<a name="executablefromstatements" class="tsd-anchor"></a>
 					<h3>executable<wbr>From<wbr>Statements</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>Statements<span class="tsd-signature-symbol">(</span>functionRegistry<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a>, statements<span class="tsd-signature-symbol">: </span><a href="_ast_.html#statementast" class="tsd-signature-type">StatementAst</a><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_compile_.compilefromstatementsoptions.html" class="tsd-signature-type">CompileFromStatementsOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>Statements<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a>, statements<span class="tsd-signature-symbol">: </span><a href="_ast_.html#statementast" class="tsd-signature-type">StatementAst</a><span class="tsd-signature-symbol">[]</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_compile_.compilefromstatementsoptions.html" class="tsd-signature-type">CompileFromStatementsOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L79">compile.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L93">compile.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This method creates an SQRL Executable given a function registry and a list
+									<p>This method creates an SQRL Executable given an instance and a list
 									of statements.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>functionRegistry: <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h5>
+									<h5>instance: <a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a></h5>
 								</li>
 								<li>
 									<h5>statements: <a href="_ast_.html#statementast" class="tsd-signature-type">StatementAst</a><span class="tsd-signature-symbol">[]</span></h5>
@@ -309,25 +307,24 @@
 					<a name="executablefromstring" class="tsd-anchor"></a>
 					<h3>executable<wbr>From<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>String<span class="tsd-signature-symbol">(</span>functionRegistry<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a>, source<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_compile_.compilefromstringoptions.html" class="tsd-signature-type">CompileFromStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">executable<wbr>From<wbr>String<span class="tsd-signature-symbol">(</span>instance<span class="tsd-signature-symbol">: </span><a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a>, source<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_compile_.compilefromstringoptions.html" class="tsd-signature-type">CompileFromStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/_execute_.executable.html" class="tsd-signature-type">Executable</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/0b21efe/packages/sqrl/src/api/compile.ts#L122">compile.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L134">compile.ts:134</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This method creates an SQRL Executable given source code and a function
-									registry.</p>
+									<p>This method creates an SQRL Executable given source code and an instance</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>functionRegistry: <a href="../classes/_execute_.functionregistry.html" class="tsd-signature-type">FunctionRegistry</a></h5>
+									<h5>instance: <a href="../classes/_execute_.instance.html" class="tsd-signature-type">Instance</a></h5>
 								</li>
 								<li>
 									<h5>source: <span class="tsd-signature-type">string</span></h5>
@@ -404,7 +401,7 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_compile_.executablecompiler.html" class="tsd-kind-icon">Executable<wbr>Compiler</a>
+						<a href="../classes/_compile_.compiledexecutable.html" class="tsd-kind-icon">Compiled<wbr>Executable</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../interfaces/_compile_.compilefromfilesystemoptions.html" class="tsd-kind-icon">Compile<wbr>From<wbr>Filesystem<wbr>Options</a>
