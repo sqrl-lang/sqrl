@@ -27,17 +27,6 @@ export function registerMathFunctions(instance: StdlibRegistry) {
   );
 
   instance.save(
-    function random() {
-      return Math.random();
-    },
-    {
-      args: [],
-      argstring: "",
-      docstring: "Returns a random value from zero, less than one"
-    }
-  );
-
-  instance.save(
     function round(value) {
       const result = Math.round(value);
       return isNaN(result) ? null : result;

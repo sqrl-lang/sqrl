@@ -52,7 +52,9 @@ It is very easy to create more interesting counters by passing in a WHERE statem
 Let's imagine you were interested in tracking users who had a high percentage of messages with profanity. We could easily accomplish this by tracking two counts.
 
 ```
-LET TextWithStrongProfanity := random() < 0.5; # You can use pattern matches for this
+# You could use `patternMatch` for a more powerful profanity filter
+LET TextWithStrongProfanity := regexMatch('\\b(shit)\\b', Text);
+
 LET NumMessagesWithProfanity := count(BY User WHERE TextWithStrongProfanity LAST WEEK);
 LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK); 
 ```

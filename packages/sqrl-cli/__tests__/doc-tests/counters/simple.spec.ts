@@ -14,13 +14,14 @@ LET SqrlClock := '2019-03-01T01:02:03.456Z';
 
 LET Ip := input();
 LET User := input();
+LET Text := input();
 LET NumMessagesBasic := count(BY User LAST WEEK);
 
 LET NumMessages := count(BY User LAST HOUR);
 LET NumIpMessages := count(BY User, Ip LAST HOUR);
 LET PercentMessagesByIp := 100 * (NumIpMessages / NumMessages);
 
-LET TextWithStrongProfanity := random() < 0.5; # You can use pattern matches for this
+LET TextWithStrongProfanity := regexMatch('\\b(shit)\\b', Text);
 LET NumMessagesWithProfanity := count(BY User WHERE TextWithStrongProfanity LAST WEEK);
 LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK); 
 
@@ -61,6 +62,8 @@ WHEN HighPercentageProfanityReceived THEN
       "User=josh",
       "-s",
       "Target=greg",
+      "-s",
+      "Text=poop",
       "HighPercentageProfanityReceived"
     ],
     "",
