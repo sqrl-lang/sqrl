@@ -4,12 +4,12 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import {
-  SqrlFunctionRegistry,
+  SqrlInstance,
   FunctionCostData
-} from "../function/FunctionRegistry";
+} from "../function/Instance";
 import { registerAllFunctions } from "../function/registerAllFunctions";
 import { AssertService } from "sqrl-common";
-import { FunctionRegistry, FunctionServices } from "../api/execute";
+import { Instance, FunctionServices } from "../api/execute";
 import { getDefaultConfig, Config } from "../api/config";
 
 export class CapturingAssertService implements AssertService {
@@ -44,14 +44,14 @@ export class CapturingAssertService implements AssertService {
   }
 }
 
-export async function buildTestFunctionRegistry(
+export async function buildTestInstance(
   options: {
     config?: Config;
     functionCost?: FunctionCostData;
     services?: FunctionServices;
   } = {}
 ) {
-  const functionRegistry = new SqrlFunctionRegistry({
+  const instance = new SqrlInstance({
     functionCost: options.functionCost
   });
 
@@ -64,16 +64,16 @@ export async function buildTestFunctionRegistry(
     assert = new CapturingAssertService();
   }
 
-  registerAllFunctions(functionRegistry, {
+  registerAllFunctions(instance, {
     assert,
     ...(options.services || {})
   });
-  return new FunctionRegistry(
+  return new Instance(
     {
       ...getDefaultConfig(),
       "state.allow-in-memory": true,
       ...(options.config || {})
     },
-    functionRegistry
+    instance
   );
 }

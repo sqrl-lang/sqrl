@@ -6,13 +6,13 @@
 import { runExecutable, fetchExecutableFeature } from "../helpers/runCompile";
 import {
   executableFromFilesystem,
-  buildTestFunctionRegistry,
+  buildTestInstance,
   VirtualFilesystem
 } from "../../src";
 
 test("supports include statements", async () => {
   const executable = await executableFromFilesystem(
-    await buildTestFunctionRegistry(),
+    await buildTestInstance(),
     new VirtualFilesystem({
       "sample.sqrl": `
     LET A := "Hello ";
@@ -55,7 +55,7 @@ LET NullMessage := concat(A, B, C);
 
 test("supports dynamic include", async () => {
   const executable = await executableFromFilesystem(
-    await buildTestFunctionRegistry(),
+    await buildTestInstance(),
     new VirtualFilesystem({
       "features/foo_action.sqrl": `
 LET Thing := "from foo action";
@@ -96,7 +96,7 @@ INCLUDE "features/\${Action}.sqrl";
   ).resolves.toEqual("from bar action");
   await expect(
     executableFromFilesystem(
-      await buildTestFunctionRegistry(),
+      await buildTestInstance(),
       new VirtualFilesystem({
         "features/foo_action.sqrl": `
 LET Thing := "from foo action";

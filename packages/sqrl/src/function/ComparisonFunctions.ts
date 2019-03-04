@@ -3,46 +3,46 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { cmpE, cmpNE, cmpG, cmpGE, cmpL, cmpLE } from "sqrl-common";
 import { AstTypes as AT } from "../ast/AstTypes";
 
-export function registerComparisonFunctions(registry: StdlibRegistry) {
+export function registerComparisonFunctions(instance: StdlibRegistry) {
   const compareOpts = {
     args: [AT.any, AT.any],
     pure: true,
     argstring: "value, value"
   };
-  registry.save(cmpE, {
+  instance.save(cmpE, {
     ...compareOpts,
     name: "_cmpE",
     docstring:
       "Returns true if the first argument is equal to the second argument"
   });
-  registry.save(cmpNE, {
+  instance.save(cmpNE, {
     ...compareOpts,
     name: "_cmpNE",
     docstring:
       "Returns true if the first argument is not equal to the second argument"
   });
-  registry.save(cmpG, {
+  instance.save(cmpG, {
     ...compareOpts,
     name: "_cmpG",
     docstring:
       "Returns true if the first argument is greater than second argument"
   });
-  registry.save(cmpGE, {
+  instance.save(cmpGE, {
     ...compareOpts,
     name: "_cmpGE",
     docstring:
       "Returns true if the first argument is greater than or equal to second argument"
   });
-  registry.save(cmpL, {
+  instance.save(cmpL, {
     ...compareOpts,
     name: "_cmpL",
     docstring: "Returns true if the first argument is less than second argument"
   });
-  registry.save(cmpLE, {
+  instance.save(cmpLE, {
     ...compareOpts,
     name: "_cmpLE",
     docstring:

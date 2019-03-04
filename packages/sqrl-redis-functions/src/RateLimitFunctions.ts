@@ -10,7 +10,7 @@ import {
   AstBuilder,
   CallAst,
   Context,
-  FunctionRegistry,
+  Instance,
   CompileState,
   SqrlKey,
   AT,
@@ -107,10 +107,10 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
 }
 
 export function registerRateLimitFunctions(
-  registry: FunctionRegistry,
+  instance: Instance,
   service: RateLimitService
 ) {
-  registry.register(
+  instance.register(
     async function _fetchRateLimit(state: Execution, props) {
       if (props.keys === null) {
         return null;
@@ -123,7 +123,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.register(
+  instance.register(
     async function _fetchSession(state, props) {
       if (props.keys === null) {
         return null;
@@ -136,7 +136,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function _parseInt(val) {
       return typeof val !== "number" ? null : Math.floor(val);
     },
@@ -145,7 +145,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerTransform(
+  instance.registerTransform(
     function _getTokenAmount(state: CompileState, ast: CallAst): Ast {
       const tokenAmountAst = ast.args[0];
       sqrlInvariant(
@@ -160,7 +160,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerCustom(
+  instance.registerCustom(
     function rateLimit(state: CompileState, ast: CustomCallAst): Ast {
       const resultsAst = setupRateLimitAst(state, ast).resultsAst;
       return AstBuilder.call("min", [resultsAst]);
@@ -173,7 +173,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function _rateLimitedValues(state, keys, results) {
       if (keys.length !== results.length) {
         throw new Error("Mismatched # of keys and results");
@@ -194,7 +194,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerCustom(
+  instance.registerCustom(
     function rateLimitedValues(state: CompileState, ast: CustomCallAst): Ast {
       const { resultsAst, keysAst } = setupRateLimitAst(state, ast);
       return AstBuilder.call("_rateLimitedValues", [keysAst, resultsAst]);
@@ -207,7 +207,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerCustom(
+  instance.registerCustom(
     function rateLimited(state: CompileState, ast: CustomCallAst): Ast {
       const args: RateLimitArguments = parse(ast.source, {
         startRule: "RateLimitArguments"
@@ -246,7 +246,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function _sessionize(key, startMs) {
       startMs = SqrlObject.ensureBasic(startMs);
       return new SqrlSession(key, startMs);
@@ -256,7 +256,7 @@ export function registerRateLimitFunctions(
     }
   );
 
-  registry.registerCustom(
+  instance.registerCustom(
     function sessionize(state: CompileState, ast: CustomCallAst): Ast {
       const args: RateLimitArguments = parse(ast.source, {
         startRule: "RateLimitArguments"

@@ -149,7 +149,7 @@ function syncSafetyNet(name: string, fn, config: SafetyNetConfig) {
 
 export class StdlibRegistry {
   constructor(
-    public wrapped: SqrlFunctionRegistry,
+    public wrapped: SqrlInstance,
     public packageName: string
   ) {}
 
@@ -164,7 +164,7 @@ export class StdlibRegistry {
   }
 }
 
-export class SqrlFunctionRegistry {
+export class SqrlInstance {
   // Use integers for calculation
   static intCostMultiplier = 100000;
 

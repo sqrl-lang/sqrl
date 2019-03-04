@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
+import { SqrlInstance } from "../function/Instance";
 import SqrlAst from "./SqrlAst";
 
 import invariant from "../jslib/invariant";
@@ -35,7 +35,7 @@ class AstExprState {
   currentIterator: string | null = null;
 
   constructor(
-    public functionRegistry: SqrlFunctionRegistry,
+    public instance: SqrlInstance,
     private compiledSqrl: SqrlCompiledOutput
   ) {}
 
@@ -43,7 +43,7 @@ class AstExprState {
     if (expr.type === "value") {
       return this.compiledSqrl.getSlotCost(expr.slot.name).recursiveCost;
     } else if (expr.type === "call") {
-      return this.functionRegistry.getCost(expr.func);
+      return this.instance.getCost(expr.func);
     }
     return 1;
   }
@@ -275,8 +275,8 @@ function makeCall(func: string, exprs: Expr[], load?: Slot[]): CallExpr {
 }
 
 function callExpr(state: AstExprState, func: string, args: Ast[]): Expr {
-  const { functionRegistry } = state;
-  const props = functionRegistry.getProps(func);
+  const { instance } = state;
+  const props = instance.getProps(func);
 
   if (props.pure) {
     const argExprs = args.map(arg => _astToExpr(arg, state));
@@ -289,7 +289,7 @@ function callExpr(state: AstExprState, func: string, args: Ast[]): Expr {
         }
         return expr;
       });
-      const rv = state.functionRegistry.pureFunction[func](
+      const rv = state.instance.pureFunction[func](
         ...constantExprs.map(expr => expr.value)
       );
       return constantExpr(rv);
@@ -488,8 +488,8 @@ function _exprExtractLoad(expr?, loaded: Set<SqrlSlot> = new Set()): Expr {
 export function processExprAst(
   ast: Ast,
   compiledSqrl: SqrlCompiledOutput,
-  functionRegistry: SqrlFunctionRegistry
+  instance: SqrlInstance
 ): Expr {
-  const astExprState = new AstExprState(functionRegistry, compiledSqrl);
+  const astExprState = new AstExprState(instance, compiledSqrl);
   return _exprExtractLoad(_astToExpr(ast, astExprState));
 }

@@ -5,7 +5,7 @@
  */
 import { SqrlTest } from "../testing/SqrlTest";
 
-export { buildTestFunctionRegistry } from "../testing/runSqrlTest";
+export { buildTestInstance } from "../testing/runSqrlTest";
 
 export { runSqrlTest } from "../simple/runSqrlTest";
 export { SimpleManipulator } from "../simple/SimpleManipulator";

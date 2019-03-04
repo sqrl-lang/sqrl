@@ -5,13 +5,13 @@
  */
 
 import { SqrlExecutable } from "../execute/SqrlExecutable";
-import { SqrlFunctionRegistry as _FunctionRegistry } from "../function/FunctionRegistry";
+import { SqrlInstance as _Instance } from "../function/Instance";
 import { Context } from "./ctx";
 import { Ast, CallAst, CustomCallAst } from "../ast/Ast";
 import invariant from "../jslib/invariant";
 import { LogProperties } from "./log";
 import { CompileState } from "./parse";
-import { buildFunctionRegistryForServices } from "../helpers/FunctionRegistryHelpers";
+import { buildSqrlInstanceForServices } from "../helpers/InstanceHelpers";
 import { ArgumentCheck } from "./arg";
 import { SourcePrinter } from "./executable";
 import { SqrlObject, AssertService } from "sqrl-common";
@@ -56,7 +56,7 @@ export abstract class Manipulator {
 }
 
 export interface ExecutableOptions {
-  functionRegistry: FunctionRegistry;
+  instance: Instance;
 }
 
 export interface FeatureMap {
@@ -71,18 +71,17 @@ export interface FunctionInfo {
 }
 
 /**
- * Build a function registry with the default functions included.
+ * Build an instance with the default functions included.
  */
-// @todo: Rename to `createInstance`
-export function buildFunctionRegistry(
+export function createInstance(
   props: {
     config?: Config;
     services?: FunctionServices;
   } = {}
 ) {
-  return new FunctionRegistry(
+  return new Instance(
     props.config || {},
-    buildFunctionRegistryForServices(props.services || {})
+    buildSqrlInstanceForServices(props.services || {})
   );
 }
 
@@ -105,10 +104,9 @@ export interface ImplementedFunctionOptions extends FunctionOptions {
 }
 
 /**
- * The function registry collects all of the functions and transforms available
- * to the SQRL compiler and runtime.
+ * An instanec represents a collection of functions and configuration for the SQRL compiler and runtime
  */
-export class FunctionRegistry {
+export class Instance {
   private mergedConfig = null;
 
   /**
@@ -119,16 +117,16 @@ export class FunctionRegistry {
     /**
      * @hidden
      */
-    public _functionRegistry: _FunctionRegistry,
+    public _instance: _Instance,
     readonly packageName: string = null
   ) {}
 
   createPackageInstance(name: string) {
     invariant(
-      this.packageName === null,
-      "Function registry is already linked to package: " + this.packageName
+      this.packageName === null && this.packageName !== name,
+      "Instance is already linked to package: " + this.packageName
     );
-    return new FunctionRegistry(this.config, this._functionRegistry, name);
+    return new Instance(this.config, this._instance, name);
   }
 
   async importFromPackage(name: string, importedPackage: any) {
@@ -155,10 +153,10 @@ export class FunctionRegistry {
   }
 
   listFunctions(): FunctionInfo[] {
-    return Object.keys(this._functionRegistry.functionProperties)
+    return Object.keys(this._instance.functionProperties)
       .filter(func => !func.startsWith("_"))
       .map(func => {
-        const props = this._functionRegistry.functionProperties[func];
+        const props = this._instance.functionProperties[func];
         return {
           name: func,
           argstring: props.argstring || null,
@@ -172,7 +170,7 @@ export class FunctionRegistry {
     func: (state: Execution, ...args: any) => Promise<any>,
     options: ImplementedFunctionOptions = {}
   ) {
-    this._functionRegistry.save(func, {
+    this._instance.save(func, {
       async: true,
       allowNull: options.allowNull || false,
       allowSqrlObjects: options.allowSqrlObjects || false,
@@ -188,7 +186,7 @@ export class FunctionRegistry {
     func: (...args: any) => any,
     options: ImplementedFunctionOptions = {}
   ) {
-    this._functionRegistry.save(func, {
+    this._instance.save(func, {
       allowNull: options.allowNull || false,
       allowSqrlObjects: options.allowSqrlObjects || false,
       pure: options.pure || false,
@@ -204,7 +202,7 @@ export class FunctionRegistry {
     func: (state: Execution, ...args: any) => Promise<any>,
     options: ImplementedFunctionOptions = {}
   ) {
-    this._functionRegistry.save(func, {
+    this._instance.save(func, {
       statementFeature,
       async: true,
       allowNull: options.allowNull || false,
@@ -226,7 +224,7 @@ export class FunctionRegistry {
       transform.name,
       "registerCustom() must be called with a named function"
     );
-    return this._functionRegistry.save(null, {
+    return this._instance.save(null, {
       name: transform.name,
       customTransform: (state, ast) => {
         return transform(new CompileState(state), ast);
@@ -245,7 +243,7 @@ export class FunctionRegistry {
       transform.name,
       "registerTransform() must be called with a named function"
     );
-    return this._functionRegistry.save(null, {
+    return this._instance.save(null, {
       name: transform.name,
       transformAst: (state, ast) => {
         return transform(new CompileState(state), ast);

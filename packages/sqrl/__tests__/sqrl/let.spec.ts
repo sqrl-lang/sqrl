@@ -8,7 +8,7 @@ import {
   compileToExecution,
   fetchExecutableFeature
 } from "../helpers/runCompile";
-import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
+import { buildTestInstance } from "../../src/testing/runSqrlTest";
 import { executableFromFilesystem, VirtualFilesystem } from "../../src";
 import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
@@ -93,7 +93,7 @@ test("supports where default values", async () => {
 
   await expect(
     executableFromFilesystem(
-      await buildTestFunctionRegistry(),
+      await buildTestInstance(),
       new VirtualFilesystem({
         "main.sqrl": `
     LET Act := "b";
@@ -110,7 +110,7 @@ test("supports where default values", async () => {
   );
 
   const executable = await executableFromFilesystem(
-    await buildTestFunctionRegistry(),
+    await buildTestInstance(),
     new VirtualFilesystem({
       "main.sqrl": `
     LET Choose := input();

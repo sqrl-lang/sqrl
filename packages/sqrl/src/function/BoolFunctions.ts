@@ -5,11 +5,11 @@
  */
 
 import { AstTypes as AT } from "../ast/AstTypes";
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { SqrlObject } from "../object/SqrlObject";
 
-export function registerBoolFunctions(registry: StdlibRegistry) {
-  registry.save(
+export function registerBoolFunctions(instance: StdlibRegistry) {
+  instance.save(
     function _and(...args) {
       let seenNull = false;
       for (const arg of args) {
@@ -31,7 +31,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function _not(value) {
       if (value === null) {
         return null;
@@ -49,7 +49,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     async function _andSequential(state, callbacks) {
       let arg;
       let seenNull = false;
@@ -74,7 +74,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function _isNull(value) {
       return value === null;
     },
@@ -86,7 +86,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     async function choice(state, ...promises) {
       for (const p of promises) {
         const arg = await p;
@@ -108,7 +108,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function coalesce(...args) {
       for (const arg of args) {
         if (arg !== null) {
@@ -125,7 +125,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function _or(...args) {
       let hadNull = false;
       for (const arg of args) {
@@ -146,7 +146,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     async function _orSequential(state, callbacks) {
       let hadNull = false;
       for (const callback of callbacks) {
@@ -170,7 +170,7 @@ export function registerBoolFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function _orParallel(state, ...promises) {
       return new Promise(resolve => {
         let remaining = promises.length;

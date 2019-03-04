@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { Ast, CallAst } from "../ast/Ast";
 
 import { AstTypes as AT } from "../ast/AstTypes";
@@ -44,8 +44,8 @@ function timeMsForValue(value: any) {
 
   throw new Error("Invalid time value passed to timeMs");
 }
-export function registerDateFunctions(registry: StdlibRegistry) {
-  registry.save(null, {
+export function registerDateFunctions(instance: StdlibRegistry) {
+  instance.save(null, {
     name: "dateDiff",
     args: [AT.constant.string, AT.any, AT.any.optional],
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
@@ -82,7 +82,7 @@ export function registerDateFunctions(registry: StdlibRegistry) {
       "Returns the difference between the two dates in the given unit (millisecond, second, minute, hour, day, week)"
   });
 
-  registry.save(
+  instance.save(
     function _dateDiff(msConversion: number, start, end) {
       start = timeMsForValue(start);
       end = timeMsForValue(end);
@@ -93,7 +93,7 @@ export function registerDateFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function _formatDate(timeMs, format) {
       if (timeMs instanceof SqrlObject) {
         timeMs = timeMs.tryGetTimeMs();
@@ -110,7 +110,7 @@ export function registerDateFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(null, {
+  instance.save(null, {
     name: "formatDate",
     args: [AT.any, AT.any.optional],
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
@@ -137,7 +137,7 @@ export function registerDateFunctions(registry: StdlibRegistry) {
       "Format a given date according to a given format (see https://momentjs.com/docs/#/displaying/format/)"
   });
 
-  registry.save(
+  instance.save(
     function _dateAdd(time, duration) {
       time = timeMsForValue(time);
       const value = Moment.utc(time)
@@ -153,7 +153,7 @@ export function registerDateFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(null, {
+  instance.save(null, {
     name: "dateAdd",
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
       sqrlInvariant(
@@ -179,7 +179,7 @@ export function registerDateFunctions(registry: StdlibRegistry) {
     docstring: "Add a given duration (ISO8601 format) to the given date"
   });
 
-  registry.save(
+  instance.save(
     function date(value) {
       return new SqrlDateTime(timeMsForValue(value));
     },
@@ -191,7 +191,7 @@ export function registerDateFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function dateFromMs(ms: number) {
       return ms && new SqrlDateTime(ms);
     },
@@ -203,7 +203,7 @@ export function registerDateFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function timeMs(state: Execution, timeValue) {
       return timeMsForValue(timeValue);
     },

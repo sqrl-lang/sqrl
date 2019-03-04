@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { AstTypes as AT } from "../ast/AstTypes";
 
 import flatten from "../jslib/flatten";
@@ -14,8 +14,8 @@ function _isStringOrArray(v?) {
   return typeof v === "string" || Array.isArray(v);
 }
 
-export function registerArrayFunctions(registry: StdlibRegistry) {
-  registry.save(
+export function registerArrayFunctions(instance: StdlibRegistry) {
+  instance.save(
     function dedupe(arr) {
       if (!Array.isArray(arr)) {
         return null;
@@ -42,7 +42,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function sort(arr) {
       if (!Array.isArray(arr)) {
         return null;
@@ -82,7 +82,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function _flatten(array) {
       if (!array) {
         return null;
@@ -110,7 +110,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function filter(arr) {
       if (!Array.isArray(arr)) {
         return null;
@@ -126,7 +126,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function first(arr) {
       if (!Array.isArray(arr)) {
         return null;
@@ -142,7 +142,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function concat(...items) {
       if (items.every(i => typeof i === "string" || typeof i === "number")) {
         return items.join("");
@@ -159,7 +159,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function join(arr, by) {
       if (!Array.isArray(arr) || typeof by !== "string") {
         return null;
@@ -173,7 +173,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function last(arr) {
       if (!Array.isArray(arr) || !arr.length) {
         return null;
@@ -189,7 +189,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function _contains(seq, value) {
       if (!_isStringOrArray(seq) || seq === null || value === null) {
         return null;
@@ -206,7 +206,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function index(state, seq, index) {
       if (Array.isArray(seq)) {
         return index >= seq.length ? null : seq[index];
@@ -224,7 +224,7 @@ export function registerArrayFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function length(seq) {
       if (!_isStringOrArray(seq)) {
         return null;

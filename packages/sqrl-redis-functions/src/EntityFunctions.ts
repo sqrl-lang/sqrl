@@ -5,7 +5,7 @@
  */
 import {
   AT,
-  FunctionRegistry,
+  Instance,
   CompileState,
   Execution,
   SqrlEntity,
@@ -36,10 +36,10 @@ async function toEntity(
 }
 
 export function registerEntityFunctions(
-  registry: FunctionRegistry,
+  instance: Instance,
   service: UniqueIdService
 ) {
-  registry.register(
+  instance.register(
     async function _entity(state: Execution, type: string, value) {
       // Handle common empty / null values
       if (value === null || typeof value === "undefined" || value === "") {
@@ -53,7 +53,7 @@ export function registerEntityFunctions(
     }
   );
 
-  registry.register(
+  instance.register(
     async function _entityList(state: Execution, type: string, arr: string[]) {
       if (type === null || arr === null || !Array.isArray(arr)) {
         return null;
@@ -69,7 +69,7 @@ export function registerEntityFunctions(
     }
   );
 
-  registry.registerTransform(
+  instance.registerTransform(
     function entity(state: CompileState, ast: CallAst): Ast {
       return AstBuilder.call("_entity", ast.args);
     },
@@ -80,7 +80,7 @@ export function registerEntityFunctions(
     }
   );
 
-  registry.registerTransform(
+  instance.registerTransform(
     function entityList(state: CompileState, ast: CallAst): Ast {
       return AstBuilder.call("_entityList", ast.args);
     },

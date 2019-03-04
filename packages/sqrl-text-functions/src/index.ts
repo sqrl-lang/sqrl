@@ -5,7 +5,7 @@
  */
 import {
   AT,
-  FunctionRegistry,
+  Instance,
   CompileState,
   Ast,
   AstBuilder,
@@ -16,10 +16,10 @@ import { InProcessPatternService } from "./InProcessPatternService";
 import { SimHash } from "simhash-js";
 import { createHash } from "crypto";
 
-export function register(registry: FunctionRegistry) {
+export function register(instance: Instance) {
   const jsSimhash = new SimHash();
 
-  registry.registerSync(
+  instance.registerSync(
     function sha256(data: Buffer | string): string {
       const hasher = createHash("sha256");
       if (data instanceof Buffer) {
@@ -37,7 +37,7 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function simhash(text: string) {
       const hashHex: string = jsSimhash.hash(text).toString(16);
       return hashHex.padStart(8, "0");
@@ -49,7 +49,7 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function _charGrams(string, gramSize) {
       const grams = [];
       for (let i = 0; i <= string.length - gramSize; i++) {
@@ -61,7 +61,7 @@ export function register(registry: FunctionRegistry) {
       args: [AT.any.string, AT.constant.number]
     }
   );
-  registry.registerTransform(
+  instance.registerTransform(
     function charGrams(state: CompileState, ast): Ast {
       const sizeAst = ast.args[1];
       sqrlInvariant(
@@ -78,7 +78,7 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function regexMatch(state, regex, string) {
       return string.match(new RegExp(regex, "g"));
     },
@@ -90,7 +90,7 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function regexTest(state, regex, string) {
       return new RegExp(regex, "g").test(string);
     },
@@ -102,7 +102,7 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function regexReplace(state, regex, replacement, string) {
       return string.replace(new RegExp(regex, "g"), replacement);
     },
@@ -116,7 +116,7 @@ export function register(registry: FunctionRegistry) {
 
   const RE_EMAIL = new RegExp("[^\\d\\w]+", "ig");
 
-  registry.registerSync(
+  instance.registerSync(
     function normalizeEmail(state, email: string) {
       const [handle, domain] = email.toLowerCase().split("@", 2);
       return handle.split("+")[0].replace(RE_EMAIL, "") + "@" + domain;
@@ -128,5 +128,5 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registerPatternFunctions(registry, new InProcessPatternService());
+  registerPatternFunctions(instance, new InProcessPatternService());
 }

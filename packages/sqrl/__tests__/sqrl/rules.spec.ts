@@ -4,18 +4,18 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { AstTypes as AT } from "../../src/ast/AstTypes";
-import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
+import { SqrlInstance } from "../../src/function/Instance";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlTest } from "../../src/testing/SqrlTest";
 import { JestAssertService } from "sqrl-test-utils";
-import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
+import { buildTestInstance } from "../../src/testing/runSqrlTest";
 import { createSimpleContext } from "../../src";
 import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
 test("rules work", async () => {
-  const functionRegistry = new SqrlFunctionRegistry();
-  registerAllFunctions(functionRegistry, { assert: new JestAssertService() });
-  const test = new SqrlTest(functionRegistry, {});
+  const instance = new SqrlInstance();
+  registerAllFunctions(instance, { assert: new JestAssertService() });
+  const test = new SqrlTest(instance, {});
 
   await test.run(
     createSimpleContext(),
@@ -29,11 +29,11 @@ test("rules work", async () => {
 });
 
 test("when context works", async () => {
-  const functionRegistry = await buildTestFunctionRegistry();
+  const instance = await buildTestInstance();
 
   let saveCount = 0;
   let savedContext = null;
-  functionRegistry._functionRegistry.save(
+  instance._instance.save(
     function saveContext(state, whenCause, word) {
       saveCount += 1;
       savedContext = {
@@ -63,7 +63,7 @@ test("when context works", async () => {
   WHEN RuleTwo THEN saveContext("should not fire");
   EXECUTE;
   `,
-    { functionRegistry }
+    { instance }
   );
 
   // We expect saveContext to only fire once
@@ -80,7 +80,7 @@ test("when context works", async () => {
 
   // Try fire it manually (without whenCause)
   await runSqrlTest('saveContext("manual!"); EXECUTE;', {
-    functionRegistry
+    instance
   });
   expect(saveCount).toEqual(2);
   expect(savedContext).toEqual({
@@ -99,7 +99,7 @@ test("when context works", async () => {
   WHEN RuleX THEN saveContext("fire!");
   EXECUTE;
   `,
-    { functionRegistry }
+    { instance }
   );
   expect(saveCount).toEqual(3);
   expect(savedContext).toEqual({

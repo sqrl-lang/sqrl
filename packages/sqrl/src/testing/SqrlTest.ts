@@ -10,7 +10,7 @@ import { SqrlParserState } from "../compile/SqrlParserState";
 
 import { StatementAst } from "../ast/Ast";
 import { parseSqrl } from "../parser/SqrlParse";
-import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
+import { SqrlInstance } from "../function/Instance";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
 import { JsExecutionContext } from "../execute/JsExecutionContext";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
@@ -42,7 +42,7 @@ export class SqrlTest {
   private filesystem: Filesystem;
 
   constructor(
-    private functionRegistry: SqrlFunctionRegistry,
+    private instance: SqrlInstance,
     props: {
       files?: any;
       inputs?: FeatureMap;
@@ -56,7 +56,7 @@ export class SqrlTest {
     } = {}
   ) {
     this.featureTimeout = props.featureTimeout || DEFAULT_FEATURE_TIMEOUT;
-    this.executionContext = new JsExecutionContext(functionRegistry);
+    this.executionContext = new JsExecutionContext(instance);
     this.files = props.files || {};
     this.extendTimeout =
       props.extendTimeout ||
@@ -77,7 +77,7 @@ export class SqrlTest {
 
   async run(ctx: Context, sqrl: string) {
     const statements = parseSqrl(sqrl, {
-      customFunctions: this.functionRegistry.customFunctions
+      customFunctions: this.instance.customFunctions
     }).statements;
     return this.runStatements(ctx, statements);
   }
@@ -169,7 +169,7 @@ export class SqrlTest {
       allowAssertions: true,
       allowReplaceInput: true,
       allowPrivate: this.allowPrivate,
-      functionRegistry: this.functionRegistry,
+      instance: this.instance,
       filesystem: this.filesystem
     });
 

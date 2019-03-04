@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { SqrlObject } from "../object/SqrlObject";
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { AstTypes as AT } from "../ast/AstTypes";
 
 const FLOAT_REGEX = /^-?[0-9]*(\.[0-9]+)?$/;
@@ -37,8 +37,8 @@ function int(value: any): number | null {
 
   return Math.floor(value);
 }
-export function registerTypeFunctions(registry: StdlibRegistry) {
-  registry.save(int, {
+export function registerTypeFunctions(instance: StdlibRegistry) {
+  instance.save(int, {
     args: [AT.any],
     pure: true,
     allowSqrlObjects: true,
@@ -46,7 +46,7 @@ export function registerTypeFunctions(registry: StdlibRegistry) {
     docstring: "Returns the integer value of the given input value"
   });
 
-  registry.save(SqrlObject.isTruthy, {
+  instance.save(SqrlObject.isTruthy, {
     name: "bool",
     args: [AT.any],
     allowSqrlObjects: true,
@@ -55,7 +55,7 @@ export function registerTypeFunctions(registry: StdlibRegistry) {
     docstring: "Returns the boolean value of the given input value"
   });
 
-  registry.save(float, {
+  instance.save(float, {
     args: [AT.any],
     pure: true,
     allowSqrlObjects: true,
@@ -63,7 +63,7 @@ export function registerTypeFunctions(registry: StdlibRegistry) {
     docstring: "Returns the floating point value of the given input value"
   });
 
-  registry.save(
+  instance.save(
     function list(...values) {
       return values;
     },
@@ -75,7 +75,7 @@ export function registerTypeFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function str(value) {
       if (Array.isArray(value)) {
         return "[array]";
@@ -96,7 +96,7 @@ export function registerTypeFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function basic(value) {
       return value;
     },

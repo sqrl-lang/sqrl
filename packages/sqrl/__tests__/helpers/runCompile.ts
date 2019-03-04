@@ -5,7 +5,7 @@
  */
 import { compileParserStateAst } from "../../src/compile/SqrlCompile";
 import { SqrlParserState } from "../../src/compile/SqrlParserState";
-import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
+import { SqrlInstance } from "../../src/function/Instance";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlCompiledOutput } from "../../src/compile/SqrlCompiledOutput";
 import { statementsFromString } from "../../src/helpers/CompileHelpers";
@@ -16,21 +16,21 @@ import { FeatureMap } from "../../src/api/execute";
 import { SimpleManipulator } from "../../src/simple/SimpleManipulator";
 
 export async function runCompile(sqrl: string) {
-  const functionRegistry = new SqrlFunctionRegistry();
-  registerAllFunctions(functionRegistry);
+  const instance = new SqrlInstance();
+  registerAllFunctions(instance);
   const statements = statementsFromString(sqrl);
-  const parserState = new SqrlParserState({ functionRegistry, statements });
+  const parserState = new SqrlParserState({ instance, statements });
   compileParserStateAst(parserState);
   const compiledOutput = new SqrlCompiledOutput(parserState);
   const trace = createDefaultContext();
   const spec = compiledOutput.executableSpec;
-  const context = new JsExecutionContext(functionRegistry);
+  const context = new JsExecutionContext(instance);
   const executable = new SqrlExecutable(context, spec);
 
   return {
     compiledOutput,
     executable,
-    functionRegistry,
+    instance,
     trace
   };
 }

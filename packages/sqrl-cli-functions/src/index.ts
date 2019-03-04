@@ -5,7 +5,7 @@
  */
 
 import {
-  FunctionRegistry,
+  Instance,
   CompileState,
   CallAst,
   AstBuilder,
@@ -18,11 +18,11 @@ import { registerSourceFunction } from "./SourceFunctions";
 import { registerBlockFunctions } from "./BlockFunctions";
 export { CliManipulator } from "./CliManipulator";
 
-export function register(registry: FunctionRegistry) {
-  registerSourceFunction(registry);
-  registerBlockFunctions(registry);
+export function register(instance: Instance) {
+  registerSourceFunction(instance);
+  registerBlockFunctions(instance);
 
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlLogStatements",
     async function log(state: Execution, format: string, ...args) {
       const message = util.format(format, ...args);
@@ -39,7 +39,7 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlLogStatements",
     async function _logFeature(state: Execution, name: string, value: any) {
       if (!(state.manipulator instanceof CliManipulator)) {
@@ -54,7 +54,7 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerTransform(
+  instance.registerTransform(
     function logFeature(state: CompileState, ast: CallAst) {
       const [feature] = ast.args;
       if (feature.type !== "feature") {

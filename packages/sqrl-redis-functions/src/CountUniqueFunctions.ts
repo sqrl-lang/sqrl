@@ -10,7 +10,7 @@ import {
   AstBuilder,
   Context,
   Execution,
-  FunctionRegistry,
+  Instance,
   SqrlKey,
   SqrlObject,
   CompileState,
@@ -78,10 +78,10 @@ export interface CountUniqueService {
 }
 
 export function registerCountUniqueFunctions(
-  registry: FunctionRegistry,
+  instance: Instance,
   service: CountUniqueService
 ) {
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlCountUniqueStatements",
     async function _bumpCountUnique(state: Execution, keys, uniques) {
       uniques = SqrlObject.ensureBasic(uniques);
@@ -111,7 +111,7 @@ export function registerCountUniqueFunctions(
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function _unionCountUnique(left, right) {
       invariant(
         left instanceof Set && right instanceof Set,
@@ -131,7 +131,7 @@ export function registerCountUniqueFunctions(
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function _intersectCountUnique(left, right) {
       invariant(
         left instanceof Set && right instanceof Set,
@@ -151,7 +151,7 @@ export function registerCountUniqueFunctions(
     }
   );
 
-  registry.register(
+  instance.register(
     function _fetchCountUnique(state, keys, windowMs, uniques) {
       uniques = SqrlObject.ensureBasic(uniques).map(value => {
         if (typeof value === "number") {
@@ -175,7 +175,7 @@ export function registerCountUniqueFunctions(
     }
   );
 
-  registry.register(
+  instance.register(
     async function _fetchCountUniqueElements(
       state,
       keys,
@@ -218,7 +218,7 @@ export function registerCountUniqueFunctions(
     }
   );
 
-  registry.registerCustom(
+  instance.registerCustom(
     function countUnique(state: CompileState, ast: CustomCallAst): Ast {
       const args: CountUniqueArguments = parse(ast.source, {
         startRule: "CountUniqueArguments"

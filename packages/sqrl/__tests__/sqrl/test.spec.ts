@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "../../src/function/FunctionRegistry";
+import { SqrlInstance } from "../../src/function/Instance";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlTest } from "../../src/testing/SqrlTest";
 import { JestAssertService } from "sqrl-test-utils";
@@ -12,12 +12,12 @@ import { SimpleContext } from "../../src/platform/Trace";
 import { getGlobalLogger } from "../../src/api/log";
 
 test("Basic test works", async () => {
-  const functionRegistry = new SqrlFunctionRegistry();
-  registerAllFunctions(functionRegistry, {
+  const instance = new SqrlInstance();
+  registerAllFunctions(instance, {
     assert: new JestAssertService()
   });
 
-  const test = new SqrlTest(functionRegistry, {});
+  const test = new SqrlTest(instance, {});
   const trace = new SimpleContext(
     new SimpleDatabaseSet("0"),
     getGlobalLogger()

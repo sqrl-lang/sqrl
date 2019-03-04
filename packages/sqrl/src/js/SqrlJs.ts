@@ -13,7 +13,7 @@ import {
   IfExpr,
   CallExpr
 } from "../expr/Expr";
-import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
+import { SqrlInstance } from "../function/Instance";
 
 class ConstantJsExpr {
   usedPromise: boolean = false;
@@ -68,7 +68,7 @@ class JsState {
   constants: ConstantJsExpr[];
   iterator: boolean;
 
-  constructor(public functionRegistry: SqrlFunctionRegistry) {
+  constructor(public instance: SqrlInstance) {
     this.functionsJs = [];
     this.constants = [];
     this.iterator = false;
@@ -228,7 +228,7 @@ function ifToJs(expr: IfExpr, state: JsState) {
 }
 
 function callToJs(expr: CallExpr, state: JsState): JsExpr {
-  const funcProps = state.functionRegistry.getProps(expr.func);
+  const funcProps = state.instance.getProps(expr.func);
   const exprJs = expr.exprs.map(item => exprToJs(item, state));
 
   if (funcProps.callbackArgs === true) {
@@ -348,8 +348,8 @@ function exprToJs(expr: Expr, state: JsState): JsExpr {
 }
 
 export const SqrlJs = {
-  generateExpr(functionRegistry: SqrlFunctionRegistry, expr: Expr) {
-    const state = new JsState(functionRegistry);
+  generateExpr(instance: SqrlInstance, expr: Expr) {
+    const state = new JsState(instance);
     const js = exprToJs(expr, state);
     return state.buildExpr(js);
   }

@@ -4,14 +4,14 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 // tslint:disable:no-submodule-imports (@TODO)
-import { buildRedisTestFunctionRegistry } from "./helpers/runSqrl";
+import { buildRedisTestInstance } from "./helpers/runSqrl";
 import { executableFromFilesystem, VirtualFilesystem } from "sqrl";
 import "jest-extended";
 
 test("works with counts", async () => {
-  const functionRegistry = await buildRedisTestFunctionRegistry();
+  const instance = await buildRedisTestInstance();
   const executable = await executableFromFilesystem(
-    functionRegistry,
+    instance,
     new VirtualFilesystem({
       "x.sqrl": `
   LET Count := count(BY Ip);

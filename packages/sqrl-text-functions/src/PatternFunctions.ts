@@ -10,7 +10,7 @@ import {
   ConstantAst,
   CompileState,
   Execution,
-  FunctionRegistry,
+  Instance,
   AstBuilder
 } from "sqrl";
 
@@ -20,10 +20,10 @@ export interface PatternService {
 }
 
 export function registerPatternFunctions(
-  registry: FunctionRegistry,
+  instance: Instance,
   service: PatternService
 ) {
-  registry.registerTransform(
+  instance.registerTransform(
     function patternMatches(state: CompileState, ast: CallAst): Ast {
       const nameAst = ast.args[0] as ConstantAst;
       return AstBuilder.call("_patternMatches", [
@@ -39,7 +39,7 @@ export function registerPatternFunctions(
     }
   );
 
-  registry.register(
+  instance.register(
     async function _patternMatches(
       state: Execution,
       patterns: string[],

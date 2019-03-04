@@ -4,13 +4,13 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import chalk from "chalk";
-import { FunctionRegistry, STANDARD_LIBRARY } from "sqrl";
+import { Instance, STANDARD_LIBRARY } from "sqrl";
 
 interface FunctionDescriptions {
   [func: string]: string;
 }
 
-export function renderFunctionsHelp(functionRegistry: FunctionRegistry) {
+export function renderFunctionsHelp(instance: Instance) {
   const stdlib: {
     [name: string]: FunctionDescriptions;
   } = {};
@@ -18,7 +18,7 @@ export function renderFunctionsHelp(functionRegistry: FunctionRegistry) {
     [name: string]: FunctionDescriptions;
   } = {};
   for (const [name, props] of Object.entries(
-    functionRegistry._functionRegistry.functionProperties
+    instance._instance.functionProperties
   ).sort()) {
     if (!name.startsWith("_")) {
       let args = "";

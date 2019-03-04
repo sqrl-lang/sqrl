@@ -14,7 +14,7 @@ import * as expandTilde from "expand-tilde";
 import { existsSync, readFileSync, appendFileSync } from "fs";
 import { EventEmitter } from "eventemitter3";
 import { Ast, StatementAst } from "sqrl/lib/ast/Ast";
-import { SqrlCompileError, SqrlObject, Context, FunctionRegistry } from "sqrl";
+import { SqrlCompileError, SqrlObject, Context, Instance } from "sqrl";
 import chalk from "chalk";
 import { SlotMissingCallbackError } from "sqrl/lib/execute/SqrlExecutionState";
 import { isValidFeatureName } from "sqrl/lib/feature/FeatureName";
@@ -33,7 +33,7 @@ export class SqrlRepl extends EventEmitter {
   private busy = new Semaphore();
 
   constructor(
-    private functionRegistry: FunctionRegistry,
+    private instance: Instance,
     private test: SqrlTest,
     options: {
       traceFactory: () => Context;
@@ -54,7 +54,7 @@ export class SqrlRepl extends EventEmitter {
       returnFeature = input.trim();
     } else {
       const ast = parseRepl(input, {
-        customFunctions: this.functionRegistry._functionRegistry.customFunctions
+        customFunctions: this.instance._instance.customFunctions
       });
       const statements = ast.statements;
       if (!statements.length) {
@@ -67,8 +67,8 @@ export class SqrlRepl extends EventEmitter {
       // If it's a call, make sure it's to a statement otherwise treat as an expression
       if (last.type === "call") {
         if (
-          this.functionRegistry._functionRegistry.has(last.func) &&
-          !this.functionRegistry._functionRegistry.isStatement(last.func)
+          this.instance._instance.has(last.func) &&
+          !this.instance._instance.isStatement(last.func)
         ) {
           last = {
             type: "expr",
@@ -105,7 +105,7 @@ export class SqrlRepl extends EventEmitter {
   }
 
   private printHelp() {
-    console.log(renderFunctionsHelp(this.functionRegistry));
+    console.log(renderFunctionsHelp(this.instance));
   }
 
   private async eval(cmd, context, filename) {

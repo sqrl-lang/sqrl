@@ -11,7 +11,7 @@ import {
   CompileState,
   Context,
   Execution,
-  FunctionRegistry,
+  Instance,
   sqrlInvariant,
   CountValidTimespan,
   Ast,
@@ -263,10 +263,10 @@ export function ensureCounterBump(
 }
 
 export function registerCountFunctions(
-  registry: FunctionRegistry,
+  instance: Instance,
   service: CountService
 ) {
-  registry.registerSync(
+  instance.registerSync(
     function _getBumpBy(bumpBy: number) {
       if (typeof bumpBy !== "number") {
         return null;
@@ -278,7 +278,7 @@ export function registerCountFunctions(
     }
   );
 
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlCountStatements",
     async function _bumpCount(state, keys, by, flags) {
       if (!Array.isArray(keys)) {
@@ -303,7 +303,7 @@ export function registerCountFunctions(
     }
   );
 
-  registry.register(
+  instance.register(
     function _fetchCountsFromDb(state: Execution, keys, suffix) {
       return service.fetch(state.ctx, state.getClockMs(), keys, suffix);
     },
@@ -313,7 +313,7 @@ export function registerCountFunctions(
     }
   );
 
-  registry.register(
+  instance.register(
     async function _fetchTrendingDetails(
       state,
       keys,
@@ -365,7 +365,7 @@ export function registerCountFunctions(
     }
   );
 
-  registry.registerCustom(
+  instance.registerCustom(
     function trending(state: CompileState, ast: CustomCallAst): Ast {
       const args: TrendingArguments = parse(ast.source, {
         startRule: "TrendingArguments"
@@ -502,7 +502,7 @@ export function registerCountFunctions(
     );
   }
 
-  registry.registerCustom(
+  instance.registerCustom(
     function count(state: CompileState, ast: CustomCallAst): Ast {
       const args: CountArguments = parse(ast.source, {
         startRule: "CountArguments"

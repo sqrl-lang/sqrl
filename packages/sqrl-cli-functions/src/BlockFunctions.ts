@@ -1,4 +1,4 @@
-import { WhenCause, AT, FunctionRegistry, Execution } from "sqrl";
+import { WhenCause, AT, Instance, Execution } from "sqrl";
 import { CliManipulator } from "./CliManipulator";
 
 /**
@@ -7,8 +7,8 @@ import { CliManipulator } from "./CliManipulator";
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-export function registerBlockFunctions(registry: FunctionRegistry) {
-  registry.registerStatement(
+export function registerBlockFunctions(instance: Instance) {
+  instance.registerStatement(
     "SqrlBlockStatements",
     async function blockAction(state: Execution, cause: WhenCause) {
       if (!(state.manipulator instanceof CliManipulator)) {
@@ -24,7 +24,7 @@ export function registerBlockFunctions(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlBlockStatements",
     async function whitelistAction(state: Execution, cause: WhenCause) {
       if (!(state.manipulator instanceof CliManipulator)) {
@@ -40,7 +40,7 @@ export function registerBlockFunctions(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function wasBlocked(state: Execution) {
       if (!(state.manipulator instanceof CliManipulator)) {
         throw new Error("Expected CliManipulator for SimpleBlockService");

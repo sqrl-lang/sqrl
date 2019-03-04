@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { SqrlFunctionRegistry } from "./FunctionRegistry";
+import { SqrlInstance } from "./Instance";
 import { registerBoolFunctions } from "./BoolFunctions";
 import { registerTypeFunctions } from "./TypeFunctions";
 import { registerComparisonFunctions } from "./ComparisonFunctions";
@@ -21,24 +21,24 @@ import { registerWhenFunctions } from "./WhenFunctions";
 import { FunctionServices } from "../api/execute";
 
 export function registerAllFunctions(
-  functionRegistry: SqrlFunctionRegistry,
+  instance: SqrlInstance,
   services: FunctionServices = {}
 ) {
-  registerTypeFunctions(functionRegistry.createStdlibRegistry("type"));
-  registerBoolFunctions(functionRegistry.createStdlibRegistry("bool"));
-  registerComparisonFunctions(functionRegistry.createStdlibRegistry("compare"));
-  registerMathFunctions(functionRegistry.createStdlibRegistry("math"));
-  registerControlFunctions(functionRegistry.createStdlibRegistry("control"));
-  registerWhenFunctions(functionRegistry.createStdlibRegistry("when"));
+  registerTypeFunctions(instance.createStdlibRegistry("type"));
+  registerBoolFunctions(instance.createStdlibRegistry("bool"));
+  registerComparisonFunctions(instance.createStdlibRegistry("compare"));
+  registerMathFunctions(instance.createStdlibRegistry("math"));
+  registerControlFunctions(instance.createStdlibRegistry("control"));
+  registerWhenFunctions(instance.createStdlibRegistry("when"));
   registerAssertFunctions(
-    functionRegistry.createStdlibRegistry("assert"),
+    instance.createStdlibRegistry("assert"),
     services.assert
   );
-  registerEntityFunctions(functionRegistry.createStdlibRegistry("entity"));
-  registerKeyFunctions(functionRegistry.createStdlibRegistry("key"));
-  registerArrayFunctions(functionRegistry.createStdlibRegistry("list"));
-  registerDataFunctions(functionRegistry.createStdlibRegistry("data"));
-  registerDateFunctions(functionRegistry.createStdlibRegistry("date-time"));
-  registerTimeFunctions(functionRegistry.createStdlibRegistry("date-time"));
-  registerStringFunctions(functionRegistry.createStdlibRegistry("string"));
+  registerEntityFunctions(instance.createStdlibRegistry("entity"));
+  registerKeyFunctions(instance.createStdlibRegistry("key"));
+  registerArrayFunctions(instance.createStdlibRegistry("list"));
+  registerDataFunctions(instance.createStdlibRegistry("data"));
+  registerDateFunctions(instance.createStdlibRegistry("date-time"));
+  registerTimeFunctions(instance.createStdlibRegistry("date-time"));
+  registerStringFunctions(instance.createStdlibRegistry("string"));
 }

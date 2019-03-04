@@ -7,24 +7,24 @@ import { SimpleManipulator } from "./SimpleManipulator";
 import { createSimpleContext } from "../api/ctx";
 import { SqrlTest } from "../testing/SqrlTest";
 import { LocalFilesystem, Filesystem } from "../api/filesystem";
-import { buildTestFunctionRegistry } from "../testing/runSqrlTest";
-import { FunctionRegistry, Execution } from "../api/execute";
+import { buildTestInstance } from "../testing/runSqrlTest";
+import { Instance, Execution } from "../api/execute";
 import * as path from "path";
 import { Logger } from "../api/log";
 import { Config } from "../api/config";
-import { FunctionCostData } from "../function/FunctionRegistry";
+import { FunctionCostData } from "../function/Instance";
 import { invariant } from "sqrl-common";
 
 export async function runSqrlTest(
   sqrl: string,
   options: {
     config?: Config;
-    functionRegistry?: FunctionRegistry;
+    instance?: Instance;
     functionCost?: FunctionCostData;
     logger?: Logger;
     filesystem?: Filesystem;
     librarySqrl?: string;
-    register?: (instance: FunctionRegistry) => Promise<void>;
+    register?: (instance: Instance) => Promise<void>;
   } = {}
 ): Promise<{
   codedErrors: Error[];
@@ -32,33 +32,33 @@ export async function runSqrlTest(
   lastExecution: Execution;
   lastManipulator: SimpleManipulator;
 }> {
-  let functionRegistry: FunctionRegistry;
+  let instance: Instance;
 
-  if (options.functionRegistry) {
+  if (options.instance) {
     invariant(
       !options.config,
-      "config option not valid when functionRegistry is provided"
+      "config option not valid when instance is provided"
     );
     invariant(
       !options.functionCost,
-      "functionCost option not valid when functionRegistry is provided"
+      "functionCost option not valid when instance is provided"
     );
-    functionRegistry = options.functionRegistry;
+    instance = options.instance;
   } else {
-    functionRegistry = await buildTestFunctionRegistry({
+    instance = await buildTestInstance({
       functionCost: options.functionCost,
       config: options.config
     });
   }
 
   if (options.register) {
-    await options.register(functionRegistry);
+    await options.register(instance);
   }
 
   const filesystem =
     options.filesystem || new LocalFilesystem(path.join(__dirname, ".."));
 
-  const test = new SqrlTest(functionRegistry._functionRegistry, {
+  const test = new SqrlTest(instance._instance, {
     manipulatorFactory: () => new SimpleManipulator(),
     filesystem
   });

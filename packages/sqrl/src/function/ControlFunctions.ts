@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { Ast, CallAst } from "../ast/Ast";
 import { AstTypes as AT } from "../ast/AstTypes";
 
@@ -15,8 +15,8 @@ import { SqrlObject } from "../object/SqrlObject";
 
 export const INPUT_FUNCTION = "input";
 
-export function registerControlFunctions(registry: StdlibRegistry) {
-  registry.save(null, {
+export function registerControlFunctions(instance: StdlibRegistry) {
+  instance.save(null, {
     name: "if",
     allowNull: true,
     transformAst(state: SqrlParserState, ast: CallAst): Ast {
@@ -34,7 +34,7 @@ export function registerControlFunctions(registry: StdlibRegistry) {
       "Returns either the true_result or false_result based on the condition"
   });
 
-  registry.save(
+  instance.save(
     function ifNull(test, valueIfNull) {
       if (test === null) {
         return valueIfNull;
@@ -52,7 +52,7 @@ export function registerControlFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(null, {
+  instance.save(null, {
     name: INPUT_FUNCTION,
     transformAst(state, ast: CallAst) {
       throw new Error(
@@ -63,11 +63,11 @@ export function registerControlFunctions(registry: StdlibRegistry) {
     docstring: "Sets the given feature as an input value"
   });
 
-  registry.save(function _slotWait() {
+  instance.save(function _slotWait() {
     throw new Error("This function is a language builtin");
   });
 
-  registry.save(null, {
+  instance.save(null, {
     name: "wait",
     transformAst(state, ast: CallAst): CallAst {
       return SqrlAst.call(
@@ -85,7 +85,7 @@ export function registerControlFunctions(registry: StdlibRegistry) {
       "Function that returns once all of the input features have been calculated"
   });
 
-  registry.save(
+  instance.save(
     async function _listComprehension(
       state,
       iterator,

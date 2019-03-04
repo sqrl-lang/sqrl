@@ -75,7 +75,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
       });
 
       if (node.type === "call") {
-        cost += this.functionRegistry.getCost(node.func);
+        cost += this.instance.getCost(node.func);
       }
     });
 
@@ -109,7 +109,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
 
     const ast: Ast = slot.finalizedAst();
 
-    const expr = processExprAst(ast, this, this.functionRegistry);
+    const expr = processExprAst(ast, this, this.instance);
 
     this.slotExprMap[slotName] = expr;
 
@@ -313,7 +313,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
         return null;
       }
 
-      return SqrlJs.generateExpr(this.functionRegistry, fetchExpr);
+      return SqrlJs.generateExpr(this.instance, fetchExpr);
     });
   }
 

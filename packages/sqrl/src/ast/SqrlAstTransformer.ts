@@ -80,8 +80,8 @@ export default class SqrlAstTransformer {
   }
 
   assertArgs(ast: CallAst) {
-    const { functionRegistry } = this.state;
-    const props = functionRegistry.getProps(ast.func);
+    const { instance } = this.state;
+    const props = instance.getProps(ast.func);
 
     if (props.args) {
       AT.compileTypesInvariant(ast, props.args);
@@ -89,20 +89,20 @@ export default class SqrlAstTransformer {
   }
 
   customCall(ast: CustomCallAst) {
-    const { functionRegistry } = this.state;
-    const hasFunction = functionRegistry.has(ast.func);
+    const { instance } = this.state;
+    const hasFunction = instance.has(ast.func);
     sqrlInvariant(ast, hasFunction, "Function not found: " + ast.func);
-    const props = functionRegistry.getProps(ast.func);
+    const props = instance.getProps(ast.func);
     const transformed = props.customTransform(this.state, ast);
     return this.transform(transformed);
   }
   call(ast: CallAst) {
-    const { functionRegistry } = this.state;
+    const { instance } = this.state;
 
-    const hasFunction = functionRegistry.has(ast.func);
+    const hasFunction = instance.has(ast.func);
 
     sqrlInvariant(ast, hasFunction, "Function not found: " + ast.func);
-    const props = functionRegistry.getProps(ast.func);
+    const props = instance.getProps(ast.func);
 
     const isPrivate = ast.func.startsWith("_");
     if (isPrivate && ast.hasOwnProperty("location")) {
@@ -179,7 +179,7 @@ export default class SqrlAstTransformer {
         if (allConstant) {
           return {
             type: "constant",
-            value: this.state.functionRegistry.pureFunction[ast.func](
+            value: this.state.instance.pureFunction[ast.func](
               ...args.map(arg => arg.value)
             )
           };

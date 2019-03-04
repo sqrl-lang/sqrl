@@ -5,12 +5,12 @@
  */
 /* eslint-disable no-useless-escape */
 
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { AstTypes as AT } from "../ast/AstTypes";
 import { SqrlObject } from "../object/SqrlObject";
 
-export function registerStringFunctions(registry: StdlibRegistry) {
-  registry.save(
+export function registerStringFunctions(instance: StdlibRegistry) {
+  instance.save(
     function repr(value) {
       if (value === null) {
         return "null";
@@ -36,7 +36,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function stringify(value) {
       return JSON.stringify(value);
     },
@@ -46,7 +46,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
       docstring: "Returns the value encoded as a json string"
     }
   );
-  registry.save(
+  instance.save(
     function hexEncode(string) {
       return Buffer.from(string, "utf-8").toString("hex");
     },
@@ -57,7 +57,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function strip(string) {
       return typeof string === "string" ? string.trim() : null;
     },
@@ -69,7 +69,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function escapeURI(string) {
       return encodeURIComponent(string);
     },
@@ -81,7 +81,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function escapeRegex(state, str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     },
@@ -93,7 +93,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function split(string, by) {
       if (typeof string !== "string" || typeof by !== "string") {
         return null;
@@ -107,7 +107,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function iso8601(value) {
       if (value instanceof SqrlObject) {
         const timeMs = value.getTimeMs();
@@ -123,7 +123,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function lower(string) {
       return typeof string === "string" ? string.toLowerCase() : null;
     },
@@ -133,7 +133,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
       docstring: "Returns the lowercase version of the given string"
     }
   );
-  registry.save(
+  instance.save(
     function upper(string) {
       return typeof string === "string" ? string.toUpperCase() : null;
     },
@@ -143,7 +143,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
       docstring: "Returns the uppercase version of the given string"
     }
   );
-  registry.save(
+  instance.save(
     function hasDigit(string) {
       return typeof string === "string" ? /[0-9]/.test(string) : null;
     },
@@ -154,7 +154,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function startsWith(string, prefix) {
       if (typeof string !== "string" || typeof prefix !== "string") {
         return null;
@@ -168,7 +168,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function endsWith(string, suffix) {
       if (typeof string !== "string" || typeof suffix !== "string") {
         return null;
@@ -182,7 +182,7 @@ export function registerStringFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function substr(state, string, start, end = null) {
       return string.substr(...[start, end].filter(v => v !== null));
     },

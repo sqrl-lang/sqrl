@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Executable, FunctionRegistry, FeatureMap } from "./execute";
+import { Executable, Instance, FeatureMap } from "./execute";
 import { SqrlExecutable } from "../execute/SqrlExecutable";
 import { JsExecutionContext } from "../execute/JsExecutionContext";
 import { ExecutableSpec, FeatureDocMap, RuleSpecMap } from "./spec";
@@ -58,11 +58,11 @@ export class CompiledExecutable {
 }
 
 /**
- * This method creates an SQRL Executable given a function registry and a list
+ * This method creates an SQRL Executable given an instance and a list
  * of statements.
  */
 export async function compileFromStatements(
-  functionRegistry: FunctionRegistry,
+  instance: Instance,
   statements: StatementAst[],
   options: CompileFromStatementsOptions
 ): Promise<{
@@ -72,7 +72,7 @@ export async function compileFromStatements(
 }> {
   const parserState = new SqrlParserState({
     statements,
-    functionRegistry: functionRegistry._functionRegistry,
+    instance: instance._instance,
     setInputs: options.setInputs || {},
     filesystem: options.filesystem
   });
@@ -81,21 +81,21 @@ export async function compileFromStatements(
   const spec = compiledOutput.executableSpec;
   return {
     compiled: new CompiledExecutable(compiledOutput),
-    executable: executableFromSpec(functionRegistry, spec),
+    executable: executableFromSpec(instance, spec),
     spec
   };
 }
 
 /**
- * This method creates an SQRL Executable given a function registry and a list
+ * This method creates an SQRL Executable given an instance and a list
  * of statements.
  */
 export async function executableFromStatements(
-  functionRegistry: FunctionRegistry,
+  instance: Instance,
   statements: StatementAst[],
   options: CompileFromStatementsOptions
 ): Promise<Executable> {
-  return (await compileFromStatements(functionRegistry, statements, options))
+  return (await compileFromStatements(instance, statements, options))
     .executable;
 }
 
@@ -104,11 +104,10 @@ interface CompileFromStringOptions extends CompileFromStatementsOptions {
 }
 
 /**
- * This method creates an SQRL Executable given source code and a function
- * registry.
+ * This method creates an SQRL Executable given source code and an instance
  */
 export async function compileFromString(
-  functionRegistry: FunctionRegistry,
+  instance: Instance,
   source: string,
   options: CompileFromStringOptions = {}
 ) {
@@ -116,30 +115,28 @@ export async function compileFromString(
   if (options.librarySource) {
     libraryStatements = [
       ...statementsFromString(options.librarySource, {
-        customFunctions: functionRegistry._functionRegistry.customFunctions
+        customFunctions: instance._instance.customFunctions
       })
     ];
   }
   const statements: StatementAst[] = [
     ...libraryStatements,
     ...statementsFromString(source, {
-      customFunctions: functionRegistry._functionRegistry.customFunctions
+      customFunctions: instance._instance.customFunctions
     })
   ];
-  return compileFromStatements(functionRegistry, statements, options);
+  return compileFromStatements(instance, statements, options);
 }
 
 /**
- * This method creates an SQRL Executable given source code and a function
- * registry.
+ * This method creates an SQRL Executable given source code and an instance
  */
 export async function executableFromString(
-  functionRegistry: FunctionRegistry,
+  instance: Instance,
   source: string,
   options: CompileFromStringOptions = {}
 ): Promise<Executable> {
-  return (await compileFromString(functionRegistry, source, options))
-    .executable;
+  return (await compileFromString(instance, source, options)).executable;
 }
 
 interface CompileFromFilesystemOptions extends CompileFromStatementsOptions {
@@ -150,7 +147,7 @@ interface CompileFromFilesystemOptions extends CompileFromStatementsOptions {
  * This method creates an compiles given a filesystem of source.
  */
 export async function compileFromFilesystem(
-  functionRegistry: FunctionRegistry,
+  instance: Instance,
   filesystem: Filesystem,
   options: CompileFromFilesystemOptions = {}
 ) {
@@ -158,24 +155,23 @@ export async function compileFromFilesystem(
   const sqrlBuffer = filesystem.tryRead(mainFile);
   invariant(sqrlBuffer, "Expected to find main.sqrl in test fs");
   const statements = statementsFromString(sqrlBuffer.toString("utf-8"), {
-    customFunctions: functionRegistry._functionRegistry.customFunctions
+    customFunctions: instance._instance.customFunctions
   });
-  return compileFromStatements(functionRegistry, statements, {
+  return compileFromStatements(instance, statements, {
     filesystem,
     ...options
   });
 }
 
 /**
- * This method creates an SQRL Executable given source code and a function
- * registry.
+ * This method creates an SQRL Executable given source code and an instance
  */
 export async function executableFromFilesystem(
-  functionRegistry: FunctionRegistry,
+  instance: Instance,
   filesystem: Filesystem,
   options: CompileFromFilesystemOptions = {}
 ): Promise<Executable> {
-  return (await compileFromFilesystem(functionRegistry, filesystem, options))
+  return (await compileFromFilesystem(instance, filesystem, options))
     .executable;
 }
 
@@ -184,9 +180,9 @@ export async function executableFromFilesystem(
  * ExecutableSpec.
  */
 export function executableFromSpec(
-  functionRegistry: FunctionRegistry,
+  instance: Instance,
   spec: ExecutableSpec
 ): Executable {
-  const context = new JsExecutionContext(functionRegistry._functionRegistry);
+  const context = new JsExecutionContext(instance._instance);
   return new Executable(new SqrlExecutable(context, spec));
 }

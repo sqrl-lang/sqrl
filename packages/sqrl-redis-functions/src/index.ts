@@ -14,7 +14,7 @@ import {
 } from "./RateLimitFunctions";
 import { LabelService, registerLabelFunctions } from "./LabelFunctions";
 import { RedisServices } from "./ServiceHelpers";
-import { FunctionRegistry } from "sqrl";
+import { Instance } from "sqrl";
 import { registerEntityFunctions } from "./EntityFunctions";
 import { UniqueIdService } from "./services/RedisUniqueId";
 
@@ -26,12 +26,12 @@ export interface RedisServices {
   uniqueId: UniqueIdService;
 }
 
-export function register(registry: FunctionRegistry) {
-  const services = new RedisServices(registry.getConfig());
+export function register(instance: Instance) {
+  const services = new RedisServices(instance.getConfig());
 
-  registerCountFunctions(registry, services.count);
-  registerCountUniqueFunctions(registry, services.countUnique);
-  registerEntityFunctions(registry, services.uniqueId);
-  registerLabelFunctions(registry, services.label);
-  registerRateLimitFunctions(registry, services.rateLimit);
+  registerCountFunctions(instance, services.count);
+  registerCountUniqueFunctions(instance, services.countUnique);
+  registerEntityFunctions(instance, services.uniqueId);
+  registerLabelFunctions(instance, services.label);
+  registerRateLimitFunctions(instance, services.rateLimit);
 }

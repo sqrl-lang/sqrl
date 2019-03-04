@@ -3,12 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { AstTypes as AT } from "../ast/AstTypes";
 import bluebird = require("bluebird");
 
-export function registerTimeFunctions(registry: StdlibRegistry) {
-  registry.save(
+export function registerTimeFunctions(instance: StdlibRegistry) {
+  instance.save(
     function now() {
       return new Date().toISOString();
     },
@@ -20,7 +20,7 @@ export function registerTimeFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function nowMs() {
       return Date.now();
     },
@@ -33,7 +33,7 @@ export function registerTimeFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function delayMs(state, ms, value) {
       return bluebird.delay(ms).thenReturn(value);
     },

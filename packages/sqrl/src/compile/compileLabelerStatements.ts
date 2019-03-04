@@ -35,7 +35,7 @@ export function labelerPushStatement(
   parserState: SqrlParserState,
   ast: Ast
 ): void {
-  const functionRegistry = parserState.functionRegistry;
+  const instance = parserState.instance;
 
   sqrlInvariant(
     ast,
@@ -90,11 +90,11 @@ export function labelerPushStatement(
     const func = resultAst.func;
     sqrlInvariant(
       ast,
-      functionRegistry.isStatement(func),
+      instance.isStatement(func),
       `Function '${func}' was not registered as a statement`
     );
 
-    const statementFeature = functionRegistry.statementFeature(func);
+    const statementFeature = instance.statementFeature(func);
     const registeredCall = SqrlAst.registerCall(resultAst);
     parserState.addStatement(
       ast,
@@ -104,7 +104,7 @@ export function labelerPushStatement(
   } else if (ast.type === "call") {
     parserState.addCallStatement(ast, ast);
   } else if (ast.type === "listComprehension") {
-    functionRegistry.assertStatementAst(ast.output);
+    instance.assertStatementAst(ast.output);
     const funcAst = ast.output;
     const newAst = Object.assign({}, ast, {
       output: SqrlAst.registerCall(ast.output)
@@ -117,7 +117,7 @@ export function labelerPushStatement(
       );
     }
 
-    const statementFeature = functionRegistry.statementFeature(funcAst.func);
+    const statementFeature = instance.statementFeature(funcAst.func);
     parserState.addStatement(ast, statementFeature, newAst);
   } else if (ast.type === "when") {
     compileWhenBlock(parserState, ast);

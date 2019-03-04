@@ -5,38 +5,38 @@
  */
 import {
   runSqrlTest as runLibSqrl,
-  buildTestFunctionRegistry,
-  FunctionRegistry,
+  buildTestInstance,
+  Instance,
   Logger
 } from "sqrl";
 import { register } from "../../src";
 
-export async function buildRedisTestFunctionRegistry(
+export async function buildRedisTestInstance(
   options: {
     fixedDate?: string;
   } = {}
 ) {
-  const functionRegistry = await buildTestFunctionRegistry({
+  const instance = await buildTestInstance({
     config: {
       "testing.fixed-date": options.fixedDate
     }
   });
-  register(functionRegistry);
-  return functionRegistry;
+  register(instance);
+  return instance;
 }
 
 export async function runSqrl(
   sqrl: string,
   options: {
-    functionRegistry?: FunctionRegistry;
+    instance?: Instance;
     logger?: Logger;
     fixedDate?: string;
   } = {}
 ) {
   return runLibSqrl(sqrl, {
-    functionRegistry:
-      options.functionRegistry ||
-      (await buildRedisTestFunctionRegistry({
+    instance:
+      options.instance ||
+      (await buildRedisTestInstance({
         fixedDate: options.fixedDate
       })),
     logger: options.logger

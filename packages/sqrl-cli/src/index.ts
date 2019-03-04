@@ -8,7 +8,7 @@
 import { cliMain, getCliOutput } from "./cli/CliMain";
 import { promiseFinally } from "sqrl-common";
 import { CloseableGroup } from "./jslib/Closeable";
-import { FunctionRegistry } from "sqrl";
+import { Instance } from "sqrl";
 import { CliOutput } from "./cli/CliOutput";
 import { CliError } from "./cli/CliError";
 import { parseArgs, CliArgs } from "./cli/CliArgs";
@@ -17,7 +17,11 @@ export { CliArgs };
 export { parseArgs };
 export { cliMain };
 
-export function run(registerFunctions?: (registry: FunctionRegistry) => void) {
+export function run(
+  options: {
+    register?: (instance: Instance) => Promise<void>;
+  } = {}
+) {
   const closeables = new CloseableGroup();
   let exitCode = 1;
   let output: CliOutput;
@@ -37,7 +41,7 @@ export function run(registerFunctions?: (registry: FunctionRegistry) => void) {
   }
 
   promiseFinally(
-    cliMain(args, closeables, { registerFunctions, output })
+    cliMain(args, closeables, { register: options.register, output })
       .then(() => {
         exitCode = 0;
       })

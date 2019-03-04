@@ -2,7 +2,7 @@ import {
   AT,
   CallAst,
   Ast,
-  FunctionRegistry,
+  Instance,
   Execution,
   AstBuilder,
   CompileState
@@ -14,8 +14,8 @@ import {
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-export function registerSourceFunction(registry: FunctionRegistry) {
-  registry.registerSync(
+export function registerSourceFunction(instance: Instance) {
+  instance.registerSync(
     function allSource(state, props = {}) {
       return state.sourcePrinter.getHumanAllSource(props);
     },
@@ -26,7 +26,7 @@ export function registerSourceFunction(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerSync(
+  instance.registerSync(
     function featureSource(state: Execution, featureName, props = {}) {
       return state.getSourcePrinter().getSourceForSlotName(featureName, props);
     },
@@ -37,7 +37,7 @@ export function registerSourceFunction(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlLogStatements",
     async function _printSource(state: Execution, featureName?: string) {
       // tslint:disable-next-line:no-console
@@ -48,7 +48,7 @@ export function registerSourceFunction(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlLogStatements",
     async function printAllSource(state: Execution) {
       state.getSourcePrinter().printAllSource();
@@ -60,7 +60,7 @@ export function registerSourceFunction(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerTransform(
+  instance.registerTransform(
     function printSource(state: CompileState, ast: CallAst): Ast {
       const arg = ast.args[0];
       if (arg.type !== "feature") {
@@ -75,7 +75,7 @@ export function registerSourceFunction(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerTransform(
+  instance.registerTransform(
     function source(state: CompileState, ast: CallAst): Ast {
       const feature = ast.args[0];
       if (feature.type !== "feature") {

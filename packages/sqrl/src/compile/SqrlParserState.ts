@@ -25,7 +25,7 @@ import {
   SqrlEmptySlot,
   SqrlInputSlot
 } from "../slot/SqrlSlot";
-import { SqrlFunctionRegistry } from "../function/FunctionRegistry";
+import { SqrlInstance } from "../function/Instance";
 import invariant from "../jslib/invariant";
 import mapObject from "../jslib/mapObject";
 import { SerializedSlot, deserializeSlot } from "../slot/SerializedSlot";
@@ -53,7 +53,7 @@ export interface SqrlParserSourceOptions {
 export interface SqrlParserOptions {
   statements: StatementAst[];
   filesystem?: Filesystem;
-  functionRegistry: SqrlFunctionRegistry;
+  instance: SqrlInstance;
   allowAssertions?: boolean;
   allowPrivate?: boolean;
   baseLibrary?: string;
@@ -84,7 +84,7 @@ export abstract class SqrlParseInfo extends AbstractLogger {
   baseLibrary: string;
   allowAssertions: boolean;
   allowPrivate: boolean;
-  functionRegistry: SqrlFunctionRegistry;
+  instance: SqrlInstance;
   importer: SqrlImporter;
   filesystem: Filesystem;
   remainingInputs: FeatureMap;
@@ -100,12 +100,12 @@ export abstract class SqrlParseInfo extends AbstractLogger {
     this.allowAssertions = options.allowAssertions || false;
     this.allowPrivate = options.allowPrivate || false;
     this.baseLibrary = options.baseLibrary || "common.sqrl";
-    this.functionRegistry = options.functionRegistry;
+    this.instance = options.instance;
     this.allowReplaceInput = options.allowReplaceInput || false;
     this.filesystem = options.filesystem || new EmptyFilesystem();
     this.importer = new SqrlImporter(
       this.filesystem,
-      this.functionRegistry.customFunctions
+      this.instance.customFunctions
     );
     this.remainingInputs = Object.assign({}, options.setInputs || {});
   }
@@ -178,7 +178,7 @@ export class SqrlParserState extends SqrlParseInfo {
   globalWhere: Ast = SqrlAst.constant(true);
   currentIterator: string | null = null;
 
-  functionRegistry: SqrlFunctionRegistry;
+  instance: SqrlInstance;
   usedFiles: Set<string> = new Set();
 
   constructor(options: SqrlParserOptions, serialized: SqrlSerialized = null) {
@@ -189,7 +189,7 @@ export class SqrlParserState extends SqrlParseInfo {
       options
     );
 
-    this.functionRegistry = this.functionRegistry;
+    this.instance = this.instance;
 
     this.setDefaultValue("SqrlMutate", SqrlAst.constant(true));
     this.setDefaultValue("SqrlIsClassify", SqrlAst.constant(true));
@@ -199,7 +199,7 @@ export class SqrlParserState extends SqrlParseInfo {
       null,
       "SqrlExecutionComplete"
     );
-    [...this.functionRegistry.statementFeatures].forEach(name => {
+    [...this.instance.statementFeatures].forEach(name => {
       this.ensureStatementFeature(null, name);
       if (name !== "SqrlAssertionStatements") {
         // Assertion statements often depend on execution
@@ -378,8 +378,8 @@ export class SqrlParserState extends SqrlParseInfo {
   }
 
   addCallStatement(sourceAst, ast: CallAst) {
-    this.functionRegistry.assertStatementAst(ast);
-    const statementFeature = this.functionRegistry.statementFeature(ast.func);
+    this.instance.assertStatementAst(ast);
+    const statementFeature = this.instance.statementFeature(ast.func);
     return this.addStatement(
       sourceAst,
       statementFeature,

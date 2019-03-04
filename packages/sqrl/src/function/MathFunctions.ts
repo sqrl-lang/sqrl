@@ -3,18 +3,18 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 
 import { AstTypes as AT } from "../ast/AstTypes";
 
-export function registerMathFunctions(registry: StdlibRegistry) {
+export function registerMathFunctions(instance: StdlibRegistry) {
   const safeMathOpts = {
     args: [AT.any, AT.any],
     pure: true,
     safe: true
   };
 
-  registry.save(
+  instance.save(
     function abs(value) {
       const result = Math.abs(value);
       return isNaN(result) ? null : result;
@@ -26,7 +26,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function random() {
       return Math.random();
     },
@@ -37,7 +37,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function round(value) {
       const result = Math.round(value);
       return isNaN(result) ? null : result;
@@ -62,7 +62,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   }
 
-  registry.save(
+  instance.save(
     function max(values) {
       values = filterNumberList(values);
       if (values.length === 0) {
@@ -78,7 +78,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function min(values) {
       values = filterNumberList(values);
       if (values.length === 0) {
@@ -94,7 +94,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function sum(values) {
       values = filterNumberList(values);
       if (values.length === 0) {
@@ -110,7 +110,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function log10(value) {
       if (typeof value !== "number") {
         return null;
@@ -125,7 +125,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function _add(left, right) {
       if (typeof left !== "number" || typeof right !== "number") {
         return null;
@@ -138,7 +138,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
       docstring: "Returns the sum of the given numbers"
     }
   );
-  registry.save(
+  instance.save(
     function _subtract(left, right) {
       if (typeof left !== "number" || typeof right !== "number") {
         return null;
@@ -151,7 +151,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
       docstring: "Returns the difference of the given numbers"
     }
   );
-  registry.save(
+  instance.save(
     function _multiply(left, right) {
       if (typeof left !== "number" || typeof right !== "number") {
         return null;
@@ -166,7 +166,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
   );
 
   // modulo is special due to division by zero error
-  registry.save(
+  instance.save(
     function _modulo(state, left, right) {
       if (right === 0) {
         state.logError(new Error("Modulo by zero"));
@@ -184,7 +184,7 @@ export function registerMathFunctions(registry: StdlibRegistry) {
   );
 
   // Divide is special due to division by zero error
-  registry.save(
+  instance.save(
     function _divide(state, left, right) {
       if (typeof left !== "number" || typeof right !== "number") {
         return null;

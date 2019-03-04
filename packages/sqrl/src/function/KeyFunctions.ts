@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 
 import { SqrlKey } from "../object/SqrlKey";
 
@@ -72,8 +72,8 @@ async function getKeyList(
   );
 }
 
-export function registerKeyFunctions(registry: StdlibRegistry) {
-  registry.save(
+export function registerKeyFunctions(instance: StdlibRegistry) {
+  instance.save(
     async function buildKeySqrl(
       state: SqrlExecutionState,
       counterEntity: SqrlEntity,
@@ -92,7 +92,7 @@ export function registerKeyFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     async function getKeyListSqrl(state: SqrlExecutionState, ...args) {
       const keys = await getKeyList(state.ctx, ...args);
       keys.forEach(key => {

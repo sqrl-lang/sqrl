@@ -7,8 +7,8 @@ In order to reduce cost SQRL allows you to optimize `AND` and `OR` conditions. T
 in your production environment and passed into the instance.
 
 ```
-import { buildInstance } from "sqrl";
-const instance = buildInstance({
+import { createInstance } from "sqrl";
+const instance = createInstance({
     functionCost: {
         expensiveFunction: 10000,
         cheapFunction: 35

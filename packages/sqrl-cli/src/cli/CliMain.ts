@@ -15,7 +15,7 @@ import {
   SqrlObject,
   sqrlCompare,
   executableFromSpec,
-  FunctionRegistry,
+  Instance,
   Executable,
   compileFromFilesystem,
   CompiledExecutable,
@@ -129,10 +129,10 @@ export class CliLogService implements LogService {
   }
 }
 
-async function buildInstance(
+async function createInstance(
   args: CliArgs
 ): Promise<{
-  functionRegistry: FunctionRegistry;
+  instance: Instance;
 }> {
   const config: Config = {
     ...getDefaultConfig(),
@@ -149,7 +149,7 @@ async function buildInstance(
     assert: new CliAssertService(),
     log: new CliLogService()
   };
-  const functionRegistry = SQRL.buildFunctionRegistry({ config, services });
+  const instance = SQRL.createInstance({ config, services });
 
   const requires = [
     ...(args.skipDefaultRequires
@@ -164,16 +164,16 @@ async function buildInstance(
   ];
 
   for (const name of requires) {
-    await functionRegistry.importFromPackage(name, await import(name));
+    await instance.importFromPackage(name, await import(name));
   }
 
-  return { functionRegistry };
+  return { instance };
 }
 
-type FunctionRegistrator = (registry: FunctionRegistry) => void;
+type FunctionRegistrator = (instance: Instance) => Promise<void>;
 
 export interface CliMainOptions {
-  registerFunctions?: FunctionRegistrator;
+  register?: FunctionRegistrator;
   output?: CliOutput;
   stdin?: Readable;
   stdout?: Writable;
@@ -195,21 +195,21 @@ export async function cliMain(
     closeables.add(output);
   }
 
-  const { functionRegistry } = await buildInstance(args);
-  if (options.registerFunctions) {
-    options.registerFunctions(functionRegistry);
+  const { instance } = await createInstance(args);
+  if (options.register) {
+    options.register(instance);
   }
 
   if (args.command === "help") {
     if (output instanceof CliPrettyOutput) {
-      console.log(renderFunctionsHelp(functionRegistry));
+      console.log(renderFunctionsHelp(instance));
     } else {
-      output.printFunctions(functionRegistry.listFunctions());
+      output.printFunctions(instance.listFunctions());
     }
   } else if (args.command === "test") {
     const { filesystem, source } = await sourceOptionsFromPath(args.filename);
 
-    const test = new SqrlTest(functionRegistry._functionRegistry, {
+    const test = new SqrlTest(instance._instance, {
       filesystem,
       manipulatorFactory: () => new CliManipulator()
     });
@@ -232,9 +232,9 @@ export async function cliMain(
     const ctx = defaultTrc;
     const { compiled, filename, inputs } = args;
 
-    const { functionRegistry } = await buildInstance(args);
-    if (options.registerFunctions) {
-      options.registerFunctions(functionRegistry);
+    const { instance } = await createInstance(args);
+    if (options.register) {
+      options.register(instance);
     }
 
     // <filename> is sqrl source code
@@ -262,12 +262,12 @@ export async function cliMain(
       if (compiled) {
         spec = await readJsonFile(filename);
         return {
-          executable: executableFromSpec(functionRegistry, spec),
+          executable: executableFromSpec(instance, spec),
           spec: null,
           compiled: null
         };
       } else {
-        return compileFromFilesystem(functionRegistry, filesystem, {
+        return compileFromFilesystem(instance, filesystem, {
           context: ctx,
           mainFile: path.basename(filename),
           setInputs: inputs
@@ -323,7 +323,7 @@ export async function cliMain(
       if (
         args.command !== "compile" &&
         compiledSource &&
-        !functionRegistry.getConfig()["redis.address"]
+        !instance.getConfig()["redis.address"]
       ) {
         for (const func of compiledSource.getUsedFunctions(ctx)) {
           if (STATEFUL_FUNCTIONS.includes(func)) {
@@ -375,13 +375,13 @@ export async function cliMain(
         ({ filesystem } = await sourceOptionsFromPath(args.filename));
         statements.push(SqrlAst.include(path.basename(args.filename)));
       }
-      const test = new SqrlTest(functionRegistry._functionRegistry, {
+      const test = new SqrlTest(instance._instance, {
         filesystem,
         manipulatorFactory: () => new CliManipulator(),
         inputs
       });
       await test.runStatements(ctx, statements);
-      const repl = new SqrlRepl(functionRegistry, test, {
+      const repl = new SqrlRepl(instance, test, {
         traceFactory: () => ctx,
         stdin: options.stdin,
         stdout: options.stdout

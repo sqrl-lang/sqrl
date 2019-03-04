@@ -43,7 +43,7 @@ export function compileWhenBlock(state: SqrlParserState, ast: WhenAst) {
       );
     }
     const { func } = statement;
-    const props = state.functionRegistry.getProps(func);
+    const props = state.instance.getProps(func);
 
     const args = props.args;
     if (!Array.isArray(args)) {
@@ -64,7 +64,7 @@ export function compileWhenBlock(state: SqrlParserState, ast: WhenAst) {
 
     sqrlInvariant(
       statement,
-      state.functionRegistry.isStatement(func) &&
+      state.instance.isStatement(func) &&
         props.stateArg &&
         props.whenCauseArg,
       `Function '${func}' must have a state and when context argument for use in a WHEN block`

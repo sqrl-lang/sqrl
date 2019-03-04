@@ -3,12 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { buildFunctionRegistry, AT, ArgumentCheck } from "../../src/index";
+import { createInstance, AT, ArgumentCheck } from "../../src/index";
 
 test("throw with out of order optional", async () => {
   function tryRegister(args: ArgumentCheck[]) {
-    const functionRegistry = buildFunctionRegistry();
-    functionRegistry.registerSync(
+    const instance = createInstance();
+    instance.registerSync(
       function hello() {
         return "world";
       },

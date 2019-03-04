@@ -3,29 +3,29 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { buildTestFunctionRegistry } from "../../src/testing/runSqrlTest";
-import { FunctionCostData } from "../../src/function/FunctionRegistry";
+import { buildTestInstance } from "../../src/testing/runSqrlTest";
+import { FunctionCostData } from "../../src/function/Instance";
 import { registerTestFunctions } from "../helpers/TestFunctions";
-import { FunctionRegistry } from "../../src/api/execute";
+import { Instance } from "../../src/api/execute";
 import { runSqrlTest } from "../../src/simple/runSqrlTest";
 
 test("works", async () => {
-  let functionRegistry: FunctionRegistry;
+  let instance: Instance;
   const messages = [];
   let output;
 
-  async function rebuildFunctionRegistry(functionCost?: FunctionCostData) {
-    functionRegistry = await buildTestFunctionRegistry({ functionCost });
+  async function recreateInstance(functionCost?: FunctionCostData) {
+    instance = await buildTestInstance({ functionCost });
 
-    registerTestFunctions(functionRegistry._functionRegistry);
-    functionRegistry._functionRegistry.save(function simpleFalse() {
+    registerTestFunctions(instance._instance);
+    instance._instance.save(function simpleFalse() {
       return false;
     });
-    functionRegistry._functionRegistry.save(function logIfRun(msg: string) {
+    instance._instance.save(function logIfRun(msg: string) {
       messages.push(msg);
       return msg;
     });
-    functionRegistry._functionRegistry.save(
+    instance._instance.save(
       function outputSave(value: any) {
         output = value;
       },
@@ -35,7 +35,7 @@ test("works", async () => {
       }
     );
   }
-  await rebuildFunctionRegistry();
+  await recreateInstance();
 
   const librarySqrl = `
   LET SqrlOutput := getSqrlOutput(SqrlExecutionComplete);
@@ -49,7 +49,7 @@ LET ErrorFeature := delayMs(20, logIfRun("Bang!"));
 if(DelayedYes, outputSave(ErrorFeature));
 EXECUTE;
   `,
-    { functionRegistry, librarySqrl }
+    { instance, librarySqrl }
   );
 
   expect(messages.splice(0)).toEqual(["Bang!"]);
@@ -68,7 +68,7 @@ ASSERT (ExpensiveFeature AND SimpleFalseFeature) = false;
 EXECUTE;
   `,
     {
-      functionRegistry,
+      instance,
       librarySqrl
     }
   );
@@ -77,7 +77,7 @@ EXECUTE;
   expect(messages.splice(0)).toEqual([]);
 
   // Use the same code as before, but now with simpleFalse being expensive
-  await rebuildFunctionRegistry({
+  await recreateInstance({
     simpleFalse: 100
   });
 
@@ -89,7 +89,7 @@ EXECUTE;
     if(SimpleFalseFeature, outputSave(logIfRun("if fired")));
     ASSERT (SimpleFalseFeature AND ExpensiveFeature) = false;
         `,
-    { functionRegistry, librarySqrl }
+    { instance, librarySqrl }
   );
 
   // This time round the expensive feature was loaded

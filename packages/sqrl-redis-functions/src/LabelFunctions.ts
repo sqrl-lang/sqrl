@@ -9,7 +9,7 @@ import { ensureArray } from "sqrl-common";
 import {
   Context,
   Execution,
-  FunctionRegistry,
+  Instance,
   Manipulator,
   WhenCause,
   SqrlEntity,
@@ -33,10 +33,10 @@ export interface LabelService {
 }
 
 export function registerLabelFunctions(
-  registry: FunctionRegistry,
+  instance: Instance,
   service: LabelService
 ) {
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlLabelStatements",
     async function addLabel(
       state: Execution,
@@ -64,7 +64,7 @@ export function registerLabelFunctions(
     }
   );
 
-  registry.registerStatement(
+  instance.registerStatement(
     "SqrlLabelStatements",
     async function removeLabel(
       state: Execution,
@@ -92,7 +92,7 @@ export function registerLabelFunctions(
     }
   );
 
-  registry.register(
+  instance.register(
     async function hasLabel(
       state: Execution,
       entity: SqrlEntity,

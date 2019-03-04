@@ -6,17 +6,17 @@
 type autogen_any = any;
 
 import { jsonTemplate } from "sqrl-common";
-import { runSqrl, buildRedisTestFunctionRegistry } from "./helpers/runSqrl";
-import { FunctionRegistry, TestLogger } from "sqrl";
+import { runSqrl, buildRedisTestInstance } from "./helpers/runSqrl";
+import { Instance, TestLogger } from "sqrl";
 import "jest-extended";
 
-let functionRegistry: FunctionRegistry;
+let instance: Instance;
 beforeEach(async () => {
-  functionRegistry = await buildRedisTestFunctionRegistry();
+  instance = await buildRedisTestInstance();
 });
 
 async function getResult(sqrl: string) {
-  return runSqrl(sqrl, { functionRegistry }).then(({ lastExecution }) => {
+  return runSqrl(sqrl, { instance }).then(({ lastExecution }) => {
     return lastExecution.fetchValue("Result");
   });
 }
@@ -36,7 +36,7 @@ test("Basic test works", async () => {
     ASSERT rateLimited(BY Ip MAX 2 EVERY DAY) = false;
     EXECUTE;
     `,
-    { functionRegistry }
+    { instance }
   );
 });
 
@@ -99,7 +99,7 @@ test("works with retries", () =>
       ASSERT Result = 0; EXECUTE;
       ASSERT Blocked = true;
     `,
-    { functionRegistry }
+    { instance }
   ));
 
 test("returns rate limited multi values", () =>
@@ -127,7 +127,7 @@ test("returns rate limited multi values", () =>
     "lunch was good"
   ];
 `,
-    { functionRegistry }
+    { instance }
   ));
 
 test("works with multiple values", async () => {
@@ -139,7 +139,7 @@ LET Value1 := ${JSON.stringify(ip)};
 LET Value2 := ${JSON.stringify(machine)};
 LET Result := rateLimit(BY Value1, Value2 MAX 3 EVERY 60 SECOND);
     `,
-      { functionRegistry, logger }
+      { instance, logger }
     ).then(({ lastExecution }) => {
       return lastExecution.fetchValue("Result");
     });

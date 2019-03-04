@@ -6,19 +6,19 @@
 import * as SQRL from "../../src/index";
 
 test("wrappers work", async () => {
-  const functionRegistry = SQRL.buildFunctionRegistry();
+  const instance = SQRL.createInstance();
 
-  functionRegistry.registerSync(function world() {
+  instance.registerSync(function world() {
     return "world";
   });
 
-  functionRegistry.registerTransform(function excl(state, ast) {
+  instance.registerTransform(function excl(state, ast) {
     return SQRL.AstBuilder.constant("!");
   });
 
   const ctx = SQRL.createSimpleContext();
   const executable = await SQRL.executableFromString(
-    functionRegistry,
+    instance,
     "LET X := concat('Hello ', world(), excl());"
   );
 

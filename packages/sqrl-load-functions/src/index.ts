@@ -12,7 +12,7 @@
 import * as path from "path";
 import * as yaml from "js-yaml";
 import {
-  FunctionRegistry,
+  Instance,
   CompileState,
   CallAst,
   ConstantAst,
@@ -31,8 +31,8 @@ function loadFile(state: CompileState, sourceAst: Ast, filePath: string) {
   return buffer.toString("utf-8");
 }
 
-export function register(registry: FunctionRegistry) {
-  registry.registerTransform(
+export function register(instance: Instance) {
+  instance.registerTransform(
     function loadJson(state: CompileState, ast: CallAst): Ast {
       const pathAst = ast.args[0] as ConstantAst;
       const parsed = yaml.safeLoad(loadFile(state, ast, pathAst.value));
@@ -45,7 +45,7 @@ export function register(registry: FunctionRegistry) {
     }
   );
 
-  registry.registerTransform(
+  instance.registerTransform(
     function loadYaml(state: CompileState, ast: CallAst): Ast {
       const pathAst = ast.args[0] as ConstantAst;
       const parsed = yaml.safeLoad(loadFile(state, ast, pathAst.value));
@@ -59,7 +59,7 @@ export function register(registry: FunctionRegistry) {
   );
 
   // Used by patternMatches
-  registry.registerTransform(
+  instance.registerTransform(
     function loadLines(state: CompileState, ast: CallAst): Ast {
       const pathAst = ast.args[0] as ConstantAst;
       const parsed = loadFile(state, pathAst, pathAst.value)

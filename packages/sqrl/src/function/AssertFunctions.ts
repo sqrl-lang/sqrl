@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "../function/FunctionRegistry";
+import { StdlibRegistry } from "../function/Instance";
 import { AstTypes as AT } from "../ast/AstTypes";
 import { Ast, CallAst } from "../ast/Ast";
 
@@ -41,12 +41,12 @@ export class SimpleAssertService implements AssertService {
 }
 
 export function registerAssertFunctions(
-  registry: StdlibRegistry,
+  instance: StdlibRegistry,
   service?: AssertService
 ) {
   service = service || new SimpleAssertService();
 
-  registry.save(
+  instance.save(
     function _assert(state: SqrlExecutionState, value, arrow) {
       service.ok(state.manipulator, value, arrow);
     },
@@ -59,7 +59,7 @@ export function registerAssertFunctions(
     }
   );
 
-  registry.save(
+  instance.save(
     function _assertCmp(
       state: SqrlExecutionState,
       left: any,
@@ -78,7 +78,7 @@ export function registerAssertFunctions(
     }
   );
 
-  registry.save(null, {
+  instance.save(null, {
     name: "assert",
     statement: true,
     transformAst(state: SqrlParserState, ast: CallAst): Ast {

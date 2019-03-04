@@ -6,7 +6,7 @@
 import { createSimpleContext, Execution, SimpleManipulator } from "sqrl";
 import * as moment from "moment";
 import { jsonTemplate } from "sqrl-common";
-import { runSqrl, buildRedisTestFunctionRegistry } from "./helpers/runSqrl";
+import { runSqrl, buildRedisTestInstance } from "./helpers/runSqrl";
 
 test("debug", async () =>
   runSqrl(`
@@ -186,7 +186,7 @@ test("unique aliases work", async () => {
   let state: Execution;
   let manipulator: SimpleManipulator;
 
-  const functionRegistry = await buildRedisTestFunctionRegistry({
+  const instance = await buildRedisTestInstance({
     fixedDate: "2016-09-26T20:56:14.538Z"
   });
   const run = async (
@@ -200,7 +200,7 @@ LET Ip := ${JSON.stringify(values.Ip || "1.2.3.4")};
 LET Target := ${JSON.stringify(values.Target || "greg")};
 LET UniquesByIp := countUnique(${countStatement} GROUP BY Ip LAST WEEK);
     `,
-      { functionRegistry }
+      { instance }
     );
 
     const state = rv.executions.shift();

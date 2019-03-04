@@ -4,13 +4,13 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import { runSqrl, buildRedisTestFunctionRegistry } from "./helpers/runSqrl";
-import { FunctionRegistry } from "sqrl";
+import { runSqrl, buildRedisTestInstance } from "./helpers/runSqrl";
+import { Instance } from "sqrl";
 import { jsonTemplate } from "sqrl-common";
 
-let functionRegistry: FunctionRegistry;
+let instance: Instance;
 beforeEach(async () => {
-  functionRegistry = await buildRedisTestFunctionRegistry();
+  instance = await buildRedisTestInstance();
 });
 
 test("basic test works", async () => {
@@ -51,6 +51,6 @@ test("basic test works", async () => {
     ASSERT SessionAge = null;
     EXECUTE;
     `,
-    { functionRegistry }
+    { instance }
   );
 });

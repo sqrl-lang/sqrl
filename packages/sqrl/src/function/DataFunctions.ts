@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { StdlibRegistry } from "./FunctionRegistry";
+import { StdlibRegistry } from "./Instance";
 import { Ast } from "../ast/Ast";
 
 import { AstTypes as AT } from "../ast/AstTypes";
@@ -18,8 +18,8 @@ import { sqrlInvariant } from "../api/parse";
 // $[ (digits / single quoted string / double quoted string) ] (anything)
 const JSON_BRAKET_REGEX = /^\$\[([0-9]+|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")\](.*)$/;
 
-export function registerDataFunctions(registry: StdlibRegistry) {
-  registry.save(
+export function registerDataFunctions(instance: StdlibRegistry) {
+  instance.save(
     function attr(data: any, key: string | number): any {
       if (data instanceof SqrlObject) {
         data = data.getBasicValue();
@@ -45,7 +45,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function hasAttr(data, key) {
       if (
         data === null ||
@@ -64,7 +64,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function keys(data) {
       if (data === null || typeof data !== "object") {
         return null;
@@ -79,7 +79,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(
+  instance.save(
     function jsonParse(raw: string) {
       return JSON.parse(raw);
     },
@@ -90,7 +90,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(null, {
+  instance.save(null, {
     name: "jsonValue",
     args: [AT.any, AT.constant.string],
     argstring: "object, path string",
@@ -137,7 +137,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     }
   });
 
-  registry.save(
+  instance.save(
     function _jsonPath(data, path) {
       return jsonpath.query(data, path);
     },
@@ -146,7 +146,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(null, {
+  instance.save(null, {
     name: "jsonPath",
     args: [AT.any, AT.any],
     transformAst(state: SqrlParserState, ast): Ast {
@@ -161,7 +161,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     docstring: "Returns the values matching the given JSONPath query"
   });
 
-  registry.save(
+  instance.save(
     function _createMap(...items) {
       const result = {};
       for (let idx = 0; idx < items.length; idx += 2) {
@@ -176,7 +176,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     }
   );
 
-  registry.save(null, {
+  instance.save(null, {
     name: "createMap",
     transformAst(state, ast): Ast {
       sqrlInvariant(
@@ -191,7 +191,7 @@ export function registerDataFunctions(registry: StdlibRegistry) {
     docstring: "Create a map given the key, value pairs"
   });
 
-  registry.save(
+  instance.save(
     function mergeMaps(...objects) {
       return Object.assign({}, ...objects);
     },
