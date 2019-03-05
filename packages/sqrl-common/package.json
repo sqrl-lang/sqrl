@@ -1,6 +1,6 @@
 {
   "name": "sqrl-common",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - internal shared code",
   "homepage": "https://twitter.github.io/sqrl",
   "license": "Apache-2.0",
@@ -47,6 +47,5 @@
   },
   "engines": {
     "node": ">=6.0.0"
-  },
-  "dependencies": {}
+  }
 }

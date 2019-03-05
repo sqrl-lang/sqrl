@@ -1,7 +1,7 @@
 {
   "name": "sqrl-website",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.5.1",
   "hexo": {
     "version": "3.8.0"
   },
