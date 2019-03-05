@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { AT, Instance, Execution } from "sqrl";
+import { AT, Instance, Execution } from "sqrl-engine";
 
 export function register(instance: Instance) {
   instance.register(

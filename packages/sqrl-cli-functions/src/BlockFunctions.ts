@@ -1,4 +1,4 @@
-import { WhenCause, AT, Instance, Execution } from "sqrl";
+import { WhenCause, AT, Instance, Execution } from "sqrl-engine";
 import { CliManipulator } from "./CliManipulator";
 
 /**

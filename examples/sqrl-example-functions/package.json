@@ -12,7 +12,7 @@
     "watch": "tsc -watch -p ./"
   },
   "peerDependencies": {
-    "sqrl": ">= 0.0.1 < 1"
+    "sqrl-engine": ">= 0.0.1 < 1"
   },
   "devDependencies": {
     "@types/node": "^11.9.5",
@@ -20,6 +20,6 @@
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "sqrl": "file:../../packages/sqrl"
+    "sqrl-engine": "file:../../packages/sqrl-engine"
   }
 }

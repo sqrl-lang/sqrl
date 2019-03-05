@@ -1,7 +1,7 @@
 {
   "name": "sqrl-redis-functions",
   "version": "0.5.0",
-  "description": "> TODO: description",
+  "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - functions for storing state in redis",
   "homepage": "https://twitter.github.io/sqrl",
   "license": "Apache-2.0",
   "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl-redis-functions",
@@ -58,7 +58,7 @@
     "ioredis": "^4.3.0",
     "moment": "^2.23.0",
     "murmurhash-native": "^3.3.0",
-    "sqrl": "file:../sqrl",
+    "sqrl-engine": "file:../sqrl-engine",
     "sqrl-common": "file:../sqrl-common"
   }
 }

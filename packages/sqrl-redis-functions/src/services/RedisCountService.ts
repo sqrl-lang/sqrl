@@ -9,7 +9,7 @@ import {
   TIMESPAN_CONFIG,
   CountServiceBumpProps
 } from "../CountFunctions";
-import { Context, SqrlKey, Manipulator } from "sqrl";
+import { Context, SqrlKey, Manipulator } from "sqrl-engine";
 import {
   RedisSingleWindowApproxCountService,
   RedisTotalCountService,

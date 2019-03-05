@@ -14,7 +14,7 @@ import {
   Execution,
   CompiledExecutable,
   createSimpleContext
-} from "sqrl";
+} from "sqrl-engine";
 import { invariant, SqrlObject, mapObject } from "sqrl-common";
 import * as csvStringify from "csv-stringify";
 import { CliError } from "./CliError";

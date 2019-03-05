@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { docopt } from "docopt";
-import { isValidFeatureName, FeatureMap } from "sqrl";
+import { isValidFeatureName, FeatureMap } from "sqrl-engine";
 import { readJsonFileSync } from "./readJsonFile";
 import { CliError } from "./CliError";
 import { invariant } from "sqrl-common";

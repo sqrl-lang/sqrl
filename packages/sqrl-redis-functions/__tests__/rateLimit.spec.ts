@@ -7,7 +7,7 @@ type autogen_any = any;
 
 import { jsonTemplate } from "sqrl-common";
 import { runSqrl, buildRedisTestInstance } from "./helpers/runSqrl";
-import { Instance, TestLogger } from "sqrl";
+import { Instance, TestLogger } from "sqrl-engine";
 import "jest-extended";
 
 let instance: Instance;

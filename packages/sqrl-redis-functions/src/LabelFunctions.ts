@@ -14,7 +14,7 @@ import {
   WhenCause,
   SqrlEntity,
   AT
-} from "sqrl";
+} from "sqrl-engine";
 
 export interface LabelService {
   addLabel(

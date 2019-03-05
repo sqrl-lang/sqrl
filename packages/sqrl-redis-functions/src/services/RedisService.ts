@@ -8,7 +8,7 @@
 import { addressToHostPort } from "../addressToHostPort";
 import * as Redis from "ioredis";
 import murmurhash = require("murmurhash-native");
-import { Context, DatabaseSet } from "sqrl";
+import { Context, DatabaseSet } from "sqrl-engine";
 import { invariant } from "sqrl-common";
 import { rateLimitFetchLua } from "../lua/rateLimitFetchLua";
 import { sessionizeLua } from "../lua/sessionizeLua";

@@ -5,7 +5,7 @@
  */
 import { LabelService } from "../LabelFunctions";
 import { RedisInterface, redisKey } from "./RedisService";
-import { Context, Manipulator, SqrlEntity, WhenCause } from "sqrl";
+import { Context, Manipulator, SqrlEntity, WhenCause } from "sqrl-engine";
 
 const EXPIRY = 60 * 60 * 24 * 30;
 

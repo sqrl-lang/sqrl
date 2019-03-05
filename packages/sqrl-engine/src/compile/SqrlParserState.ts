@@ -61,6 +61,7 @@ export interface SqrlParserOptions {
   mainFile?: string;
   setInputs?: FeatureMap;
   allowReplaceInput?: boolean;
+  usedFiles?: string[];
 }
 
 export interface SqrlSerialized {
@@ -179,7 +180,7 @@ export class SqrlParserState extends SqrlParseInfo {
   currentIterator: string | null = null;
 
   instance: SqrlInstance;
-  usedFiles: Set<string> = new Set();
+  usedFiles: Set<string>;
 
   constructor(options: SqrlParserOptions, serialized: SqrlSerialized = null) {
     super(
@@ -190,6 +191,7 @@ export class SqrlParserState extends SqrlParseInfo {
     );
 
     this.instance = this.instance;
+    this.usedFiles = new Set(options.usedFiles || []);
 
     this.setDefaultValue("SqrlMutate", SqrlAst.constant(true));
     this.setDefaultValue("SqrlIsClassify", SqrlAst.constant(true));

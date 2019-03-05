@@ -22,7 +22,7 @@
     "jest-extended": "^0.11.0",
     "pegjs": "^0.10.0",
     "rimraf": "^2.6.3",
-    "sqrl": "file:packages/sqrl",
+    "sqrl-engine": "file:packages/sqrl-engine",
     "sqrl-cli": "file:packages/sqrl-cli",
     "sqrl-cli-functions": "file:packages/sqrl-cli-functions",
     "sqrl-common": "file:packages/sqrl-common",

@@ -30,7 +30,7 @@ LET Text := jsonValue(ActionData, "$.text");
 
 Let's fire up the [repl](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) and play with it.
 ```
-$ npm install -g sqrl
+$ npm install -g sqrl-cli
 $ sqrl repl main.sqrl -s ActionData=@tweet.json
 sqrl> Username
 'floydophone'

@@ -20,7 +20,7 @@ import {
   GetTimeMs
 } from "./services/RedisUniqueId";
 import { RedisRateLimit } from "./services/RedisRateLimit";
-import { Config } from "sqrl";
+import { Config } from "sqrl-engine";
 
 interface Closeable {
   close(): void;

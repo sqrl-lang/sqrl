@@ -10,7 +10,7 @@ import {
   Ast,
   AstBuilder,
   sqrlInvariant
-} from "sqrl";
+} from "sqrl-engine";
 import { registerPatternFunctions } from "./PatternFunctions";
 import { InProcessPatternService } from "./InProcessPatternService";
 import { SimHash } from "simhash-js";

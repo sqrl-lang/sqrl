@@ -5,7 +5,7 @@ import {
   WhenCause,
   SqrlKey,
   ManipulatorCallback
-} from "sqrl";
+} from "sqrl-engine";
 
 import { mapObject } from "sqrl-common";
 import { bufferHumanJson } from "./bufferHumanJson";

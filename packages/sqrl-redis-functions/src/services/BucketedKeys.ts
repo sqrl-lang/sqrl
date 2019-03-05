@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { redisKey } from "./RedisService";
-import { DatabaseSet, SqrlKey } from "sqrl";
+import { DatabaseSet, SqrlKey } from "sqrl-engine";
 
 export const MAX_TIME_WINDOW_MS = 60 * 60 * 24 * 30 * 1000;
 

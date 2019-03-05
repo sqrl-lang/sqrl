@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import chalk from "chalk";
-import { Instance, STANDARD_LIBRARY } from "sqrl";
+import { Instance, STANDARD_LIBRARY } from "sqrl-engine";
 
 interface FunctionDescriptions {
   [func: string]: string;

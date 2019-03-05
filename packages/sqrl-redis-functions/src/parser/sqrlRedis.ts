@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { FeatureAst, Ast } from "sqrl";
+import { FeatureAst, Ast } from "sqrl-engine";
 
 export interface AliasedFeature {
   feature: FeatureAst;

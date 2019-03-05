@@ -6,7 +6,7 @@
 import { RedisSingleWindowApproxCountService } from "../src/services/RedisBucketedCount";
 import { RedisInterface } from "../src/services/RedisService";
 import { RedisUniqueIdService } from "../src/services/RedisUniqueId";
-import { SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl";
+import { SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl-engine";
 import { redisTest } from "./helpers/redisTest";
 
 redisTest("works", async (redis: RedisInterface) => {

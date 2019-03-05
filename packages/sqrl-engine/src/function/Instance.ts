@@ -148,10 +148,7 @@ function syncSafetyNet(name: string, fn, config: SafetyNetConfig) {
 }
 
 export class StdlibRegistry {
-  constructor(
-    public wrapped: SqrlInstance,
-    public packageName: string
-  ) {}
+  constructor(public wrapped: SqrlInstance, public packageName: string) {}
 
   save(
     fn: (...args: any[]) => any | null,

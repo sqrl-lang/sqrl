@@ -1,7 +1,7 @@
 {
-  "name": "sqrl",
+  "name": "sqrl-engine",
   "version": "0.5.0",
-  "description": "sqrl",
+  "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - engine",
   "license": "Apache-2.0",
   "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl",
   "author": {

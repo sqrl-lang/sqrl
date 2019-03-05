@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Context, SqrlKey, Manipulator } from "sqrl";
+import { Context, SqrlKey, Manipulator } from "sqrl-engine";
 import { CountUniqueService } from "../CountUniqueFunctions";
 import { RedisInterface, redisKey } from "./RedisService";
 import {

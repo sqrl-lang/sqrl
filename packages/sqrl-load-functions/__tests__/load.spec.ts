@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import * as path from "path";
-import { runSqrlTest, LocalFilesystem } from "sqrl";
+import { runSqrlTest, LocalFilesystem } from "sqrl-engine";
 import { register } from "../src";
 
 test("Loading YAML works", async () => {

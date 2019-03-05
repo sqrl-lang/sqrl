@@ -1,7 +1,7 @@
 {
   "name": "sqrl-load-functions",
   "version": "0.5.0",
-  "description": "> TODO: description",
+  "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - functions for loading data",
   "homepage": "https://twitter.github.io/sqrl",
   "license": "Apache-2.0",
   "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl-load-functions",
@@ -49,6 +49,6 @@
   },
   "dependencies": {
     "js-yaml": "^3.12.1",
-    "sqrl": "file:../sqrl"
+    "sqrl-engine": "file:../sqrl-engine"
   }
 }

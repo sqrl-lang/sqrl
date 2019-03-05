@@ -17,7 +17,7 @@ import {
   AT,
   Manipulator,
   CustomCallAst
-} from "sqrl";
+} from "sqrl-engine";
 import murmurhash = require("murmurhash-native");
 
 import { MAX_TIME_WINDOW_MS } from "./services/BucketedKeys";

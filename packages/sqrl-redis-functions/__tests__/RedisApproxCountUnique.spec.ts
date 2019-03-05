@@ -5,7 +5,7 @@
  */
 import { RedisSingleWindowApproxCountUniqueService } from "../src/services/RedisApproxCountUnique";
 import { RedisUniqueIdService } from "../src/services/RedisUniqueId";
-import { SqrlKey, SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl";
+import { SqrlKey, SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl-engine";
 import { redisTest } from "./helpers/redisTest";
 
 redisTest("works", async redis => {

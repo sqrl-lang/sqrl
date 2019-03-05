@@ -8,7 +8,7 @@ import {
   buildTestInstance,
   Instance,
   Logger
-} from "sqrl";
+} from "sqrl-engine";
 import { register } from "../../src";
 
 export async function buildRedisTestInstance(

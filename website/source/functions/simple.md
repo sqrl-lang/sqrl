@@ -16,7 +16,7 @@ npm install --save sqrl sqrl-cli
 Once the packages are installed you can create a basic registration function
 
 ```
-import {Instance, Execution, AT } from "sqrl"
+import {Instance, Execution, AT } from "sqrl-engine"
 
 function registerFunctions(instance: Instance) => {
     instance.register(async function sayHello(state: Execution, name) {

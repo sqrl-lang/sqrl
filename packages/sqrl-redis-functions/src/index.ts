@@ -14,7 +14,7 @@ import {
 } from "./RateLimitFunctions";
 import { LabelService, registerLabelFunctions } from "./LabelFunctions";
 import { RedisServices } from "./ServiceHelpers";
-import { Instance } from "sqrl";
+import { Instance } from "sqrl-engine";
 import { registerEntityFunctions } from "./EntityFunctions";
 import { UniqueIdService } from "./services/RedisUniqueId";
 

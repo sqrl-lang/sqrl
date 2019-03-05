@@ -5,14 +5,16 @@
  */
 // tslint:disable:no-submodule-imports (@TODO)
 
-import { SqrlExecutionState } from "sqrl/lib/execute/SqrlExecutionState";
 import * as moment from "moment";
 import chalk from "chalk";
-import { SqrlObject } from "sqrl/lib/object/SqrlObject";
 import * as util from "util";
-import { SqrlCompileError } from "sqrl/lib/api/parse";
 import { CliOutputOptions, CliActionOutput } from "./CliOutput";
-import { FeatureMap } from "sqrl";
+import {
+  FeatureMap,
+  SqrlCompileError,
+  Execution,
+  SqrlObject
+} from "sqrl-engine";
 import { spanToShell } from "../spanToShell";
 import { CliError } from "./CliError";
 import { CliManipulator } from "sqrl-cli-functions";
@@ -145,7 +147,7 @@ export class CliPrettyOutput extends CliActionOutput {
 
   action(
     manipulator: CliManipulator,
-    execution: SqrlExecutionState,
+    execution: Execution,
     loggedFeatures: FeatureMap
   ) {
     if (manipulator.wasBlocked()) {
@@ -160,7 +162,7 @@ export class CliPrettyOutput extends CliActionOutput {
 
     this.open();
 
-    const timestamp = moment(execution.getClock());
+    const timestamp = moment(execution.getClockMs());
     const time = " " + chalk.gray(timestamp.format("YYYY-MM-DD HH:mm")) + " ";
     if (manipulator.wasBlocked()) {
       this.line(

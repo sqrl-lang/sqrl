@@ -17,7 +17,7 @@ import {
   Ast,
   Manipulator,
   CustomCallAst
-} from "sqrl";
+} from "sqrl-engine";
 
 import { parse } from "./parser/sqrlRedisParser";
 

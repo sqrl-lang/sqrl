@@ -21,7 +21,7 @@
 
 "use strict";
 
-import { Ast, AstLocation } from "sqrl";
+import { Ast, AstLocation } from "sqrl-engine";
 
 export interface IFilePosition {
   offset: number;

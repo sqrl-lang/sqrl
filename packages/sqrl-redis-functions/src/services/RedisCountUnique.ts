@@ -5,7 +5,7 @@
  */
 import { CountUniqueService } from "../CountUniqueFunctions";
 import { RedisInterface, redisKey } from "./RedisService";
-import { Context, Manipulator, SqrlKey } from "sqrl";
+import { Context, Manipulator, SqrlKey } from "sqrl-engine";
 
 type CountUniqueData = ({
   timestamp: number;

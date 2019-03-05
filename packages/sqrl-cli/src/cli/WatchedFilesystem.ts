@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Filesystem, LocalFilesystem } from "sqrl";
+import { Filesystem, LocalFilesystem } from "sqrl-engine";
 import * as chokidar from "chokidar";
 import { join } from "path";
 

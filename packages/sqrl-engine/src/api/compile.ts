@@ -20,6 +20,7 @@ interface CompileFromStatementsOptions {
   context?: Context;
   filesystem?: Filesystem;
   setInputs?: FeatureMap;
+  usedFiles?: string[];
 }
 
 /**
@@ -74,7 +75,8 @@ export async function compileFromStatements(
     statements,
     instance: instance._instance,
     setInputs: options.setInputs || {},
-    filesystem: options.filesystem
+    filesystem: options.filesystem,
+    usedFiles: options.usedFiles || []
   });
   compileParserStateAst(parserState);
   const compiledOutput = new SqrlCompiledOutput(parserState);
@@ -159,6 +161,7 @@ export async function compileFromFilesystem(
   });
   return compileFromStatements(instance, statements, {
     filesystem,
+    usedFiles: [mainFile],
     ...options
   });
 }

@@ -5,7 +5,7 @@
  */
 // tslint:disable:no-submodule-imports (@TODO)
 import { buildRedisTestInstance } from "./helpers/runSqrl";
-import { executableFromFilesystem, VirtualFilesystem } from "sqrl";
+import { executableFromFilesystem, VirtualFilesystem } from "sqrl-engine";
 import "jest-extended";
 
 test("works with counts", async () => {

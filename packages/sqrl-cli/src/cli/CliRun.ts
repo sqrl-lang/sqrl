@@ -5,12 +5,12 @@
  */
 // tslint:disable:no-console
 // tslint:disable:no-submodule-imports (@TODO)
-import Semaphore from "sqrl/lib/jslib/Semaphore";
+import Semaphore from "sqrl-engine/lib/jslib/Semaphore";
 import * as split2 from "split2";
 import { CliActionOutput } from "./CliOutput";
-import { Context } from "sqrl/lib/api/ctx";
+import { Context } from "sqrl-engine/lib/api/ctx";
 import { promiseFinally, SqrlObject } from "sqrl-common";
-import { FeatureMap, Executable, Execution } from "sqrl";
+import { FeatureMap, Executable, Execution } from "sqrl-engine";
 import { CliManipulator } from "sqrl-cli-functions";
 
 export class CliRun {

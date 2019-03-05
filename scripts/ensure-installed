@@ -2,7 +2,6 @@
 set -eo pipefail
 
 root="$(dirname $0)/.."
-pkg="$root/packages/sqrl"
 
 if [ ! -e "$root/node_modules" ]; then
   echo 'Core dependencies not found!' >&2
