@@ -68,9 +68,10 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       allowNull: true,
       promiseArgs: true,
       callbackArgs: true,
-      stateArg: true,
+      args: [AT.state, AT.any.repeated],
       safe: true,
-      asyncSafe: true
+      asyncSafe: true,
+      async: true
     }
   );
 
@@ -97,12 +98,13 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       return promises[promises.length - 1];
     },
     {
-      stateArg: true,
       promiseArgs: true,
+      args: [AT.state, AT.any.repeated],
       allowSqrlObjects: true,
       allowNull: true,
       safe: true,
       asyncSafe: true,
+      async: true,
       argstring: "value[, ...]",
       docstring: "Returns the first truthy value, otherwise the final value."
     }
@@ -164,9 +166,10 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       callbackArgs: true,
       allowSqrlObjects: true,
       allowNull: true,
-      stateArg: true,
       safe: true,
-      asyncSafe: true
+      async: true,
+      asyncSafe: true,
+      args: [AT.state, AT.any.repeated]
     }
   );
 
@@ -198,7 +201,7 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       allowSqrlObjects: true,
       allowNull: true,
       async: true,
-      stateArg: true
+      args: [AT.state, AT.any.repeated]
     }
   );
 }

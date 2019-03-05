@@ -19,9 +19,14 @@ import { getGlobalLogger } from "../api/log";
 import { WhenCauseArgument, StateArgument, ArgumentCheck } from "../api/arg";
 import { ExecutionErrorProperties, STANDARD_LIBRARY } from "../api/execute";
 
+/**
+ * @note: AsyncFunction here is not required but throws errors if a function is
+ * defined badly. It is not supported by Babel (hence hasAsyncFunction below)
+ */
 const AsyncFunction = Object.getPrototypeOf(async function() {
   /* intentional */
 }).constructor;
+const hasAsyncFunction = AsyncFunction !== Function;
 
 export interface SaveFunctionProperties {
   allowNull?: boolean;
@@ -35,7 +40,6 @@ export interface SaveFunctionProperties {
   callbackArgs?: boolean;
   pure?: boolean;
   safe?: boolean;
-  stateArg?: boolean;
   statement?: boolean;
   statementFeature?: string;
   transformAst?: (state: SqrlParserState, ast: CallAst) => Ast;
@@ -60,6 +64,7 @@ export interface SaveFunctionProperties {
 }
 
 export interface FunctionProperties extends SaveFunctionProperties {
+  stateArg?: boolean;
   whenCauseArg: boolean;
 
   /* cost per million executions * intCostMultiplier */
@@ -325,14 +330,9 @@ export class SqrlInstance {
       }
     }
 
-    let stateArg = props.stateArg;
+    let stateArg = false;
     let whenCauseArg = false;
     if (props.args) {
-      // If args are set, stateArg should be set as one of them
-      invariant(
-        !stateArg,
-        "The .stateArg argument is not valid together with .args"
-      );
       let seenOptional = false;
       props.args.forEach((arg, idx) => {
         if (arg.isOptional) {
@@ -396,10 +396,10 @@ export class SqrlInstance {
     }
 
     let isAsync;
-    if (fn instanceof AsyncFunction) {
+    if (hasAsyncFunction && fn instanceof AsyncFunction) {
       invariant(
-        props.async || !props.hasOwnProperty("async"),
-        "Expected async to be true for async function"
+        props.async,
+        "Async function was missing `async` property: " + name
       );
       fn = bluebird.method(fn);
       isAsync = true;

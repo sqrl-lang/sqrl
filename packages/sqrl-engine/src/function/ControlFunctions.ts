@@ -122,7 +122,8 @@ export function registerControlFunctions(instance: StdlibRegistry) {
     {
       allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any, AT.any]
+      args: [AT.state, AT.any, AT.any, AT.any],
+      async: true
     }
   );
 }

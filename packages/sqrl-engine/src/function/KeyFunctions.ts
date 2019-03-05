@@ -7,6 +7,7 @@ import { StdlibRegistry } from "./Instance";
 
 import { SqrlKey } from "../object/SqrlKey";
 
+import { AstTypes as AT } from "../ast/AstTypes";
 import { murmurhashJsonBuffer } from "../jslib/murmurhashJson";
 import { SqrlObject } from "../object/SqrlObject";
 import { nice } from "node-nice";
@@ -55,7 +56,7 @@ export async function buildKey(
 
 async function getKeyList(
   ctx: Context,
-  counterEntity?,
+  counterEntity: SqrlEntity,
   ...featureValues: Array<any>
 ): Promise<SqrlKey[]> {
   if (counterEntity === null) {
@@ -88,13 +89,18 @@ export function registerKeyFunctions(instance: StdlibRegistry) {
     {
       name: "_buildKey",
       allowSqrlObjects: true,
-      stateArg: true
+      args: [AT.state, AT.any.sqrlEntity, AT.any.repeated],
+      async: true
     }
   );
 
   instance.save(
-    async function getKeyListSqrl(state: SqrlExecutionState, ...args) {
-      const keys = await getKeyList(state.ctx, ...args);
+    async function getKeyListSqrl(
+      state: SqrlExecutionState,
+      counterEntity: SqrlEntity,
+      ...args
+    ) {
+      const keys = await getKeyList(state.ctx, counterEntity, ...args);
       keys.forEach(key => {
         if (state.manipulator) {
           state.manipulator.trackSqrlKey(key);
@@ -104,9 +110,10 @@ export function registerKeyFunctions(instance: StdlibRegistry) {
     },
     {
       name: "_getKeyList",
+      args: [AT.state, AT.any.sqrlEntity, AT.any.repeated],
       allowSqrlObjects: true,
       allowNull: true,
-      stateArg: true
+      async: true
     }
   );
 }
