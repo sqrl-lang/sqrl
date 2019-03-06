@@ -39,6 +39,8 @@ It would not have come together without lots of dogfooding and suggestions from:
 * Alana Glassco
 * Jason Wu
 
+Special thanks to [Justin Tormey](https://github.com/jtormey) for contributing the NPM package namespace.
+
 A full list of [contributors](https://github.com/twitter/sqrl/graphs/contributors?type=a) can be found on GitHub.
 
 Follow [@TwitterOSS](https://twitter.com/twitteross) on Twitter for updates.
