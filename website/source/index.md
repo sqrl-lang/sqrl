@@ -8,6 +8,10 @@ title: Home
 **Powerful** – Rules can declaratively aggregate state, trigger side effects, and call functions in other languages.
 **Auditable** – It's easy to understand why a rule fired or a side effect occured, and rules can be safely replayed.
 
+## Early Preview
+
+This is an early preview of the SQRL (Smyte Query and Rules Language) open-source release. This release is intended to onboard existing community members and prepare us for the full in the near future. Through SQRL, we hope to partner with the open source community, and help better address spam on all websites
+
 ## Community
 
 Come talk to us on the [SQRL discord server](https://discord.gg/mMJwWT6)

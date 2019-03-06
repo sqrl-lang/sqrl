@@ -10,6 +10,10 @@ SQRL is a Safe, Stateful Rules Language for Event Streams
 
 **Auditable** – It’s easy to understand why a rule fired or a side effect occured, and rules can be safely replayed.
 
+## Early Preview
+
+This is an early preview of the SQRL (Smyte Query and Rules Language) open-source release. This release is intended to onboard existing community members and prepare us for the full in the near future. Through SQRL, we hope to partner with the open source community, and help better address spam on all websites
+
 ## Documentation
 
 You can find the **SQRL** (Smyte Query & Rules Language) documentation [on the website](https://twitter.github.io/sqrl).
