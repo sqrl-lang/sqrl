@@ -42,14 +42,13 @@
 <p>The list of available timespans are:</p>
 <ul>
 <li>TOTAL</li>
-<li>LAST MONTH</li>
-<li>LAST TWO WEEKS</li>
-<li>LAST EIGHT DAYS</li>
-<li>LAST TWO DAYS</li>
-<li>LAST DAY</li>
-<li>LAST HOUR</li>
+<li>LAST [X] MONTHS/WEEKS/DAYS/HOURS/MINUTES/SECONDS</li>
 </ul>
-<p><strong>Note:</strong> <em>TOTAL</em> counts will still expire after 90 days if they have not been seen for that period.</p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li><em>TOTAL</em> counts will by default still expire after 90 days if they have not been seen for that period.</li>
+<li><em>MONTH</em> in SQRL is defined as the previous 30 days.</li>
+</ul>
 <h2 id="Conditions"><a href="#Conditions" class="headerlink" title="Conditions"></a>Conditions</h2><p>It is very easy to create more interesting counters by passing in a WHERE statement as well.</p>
 <p>Let&#x2019;s imagine you were interested in tracking users who had a high percentage of messages with profanity. We could easily accomplish this by tracking two counts.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># You could use `patternMatch` for a more powerful profanity filter</span><br><span class="line">LET TextWithStrongProfanity := regexMatch(&apos;\\b(shit)\\b&apos;, Text);</span><br><span class="line"></span><br><span class="line">LET NumMessagesWithProfanity := count(BY User WHERE TextWithStrongProfanity LAST WEEK);</span><br><span class="line">LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK);</span><br></pre></td></tr></table></figure>

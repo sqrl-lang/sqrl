@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CompileFromFilesystemOptions | sqrl</title>
+	<title>CompileFromFilesystemOptions | sqrl-engine</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">sqrl</a>
+					<a href="../index.html" class="title">sqrl-engine</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -91,6 +91,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_compile_.compilefromfilesystemoptions.html#filesystem" class="tsd-kind-icon">filesystem</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="_compile_.compilefromfilesystemoptions.html#mainfile" class="tsd-kind-icon">main<wbr>File</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_compile_.compilefromfilesystemoptions.html#setinputs" class="tsd-kind-icon">set<wbr>Inputs</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_compile_.compilefromfilesystemoptions.html#usedfiles" class="tsd-kind-icon">used<wbr>Files</a></li>
 							</ul>
 						</section>
 					</div>
@@ -105,7 +106,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_compile_.compilefromstatementsoptions.html">CompileFromStatementsOptions</a>.<a href="_compile_.compilefromstatementsoptions.html#context">context</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L20">compile.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d7c4bfb/packages/sqrl-engine/src/api/compile.ts#L20">compile.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -116,7 +117,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_compile_.compilefromstatementsoptions.html">CompileFromStatementsOptions</a>.<a href="_compile_.compilefromstatementsoptions.html#filesystem">filesystem</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L21">compile.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d7c4bfb/packages/sqrl-engine/src/api/compile.ts#L21">compile.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -126,7 +127,7 @@
 					<div class="tsd-signature tsd-kind-icon">main<wbr>File<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L143">compile.ts:143</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d7c4bfb/packages/sqrl-engine/src/api/compile.ts#L145">compile.ts:145</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -137,7 +138,18 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_compile_.compilefromstatementsoptions.html">CompileFromStatementsOptions</a>.<a href="_compile_.compilefromstatementsoptions.html#setinputs">setInputs</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/73e9577/packages/sqrl/src/api/compile.ts#L22">compile.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d7c4bfb/packages/sqrl-engine/src/api/compile.ts#L22">compile.ts:22</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="usedfiles" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> used<wbr>Files</h3>
+					<div class="tsd-signature tsd-kind-icon">used<wbr>Files<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_compile_.compilefromstatementsoptions.html">CompileFromStatementsOptions</a>.<a href="_compile_.compilefromstatementsoptions.html#usedfiles">usedFiles</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/twitter/sqrl/blob/d7c4bfb/packages/sqrl-engine/src/api/compile.ts#L23">compile.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -223,6 +235,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
 								<a href="_compile_.compilefromfilesystemoptions.html#setinputs" class="tsd-kind-icon">set<wbr>Inputs</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="_compile_.compilefromfilesystemoptions.html#usedfiles" class="tsd-kind-icon">used<wbr>Files</a>
 							</li>
 						</ul>
 					</li>

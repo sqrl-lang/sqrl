@@ -32,12 +32,15 @@
     <div class="dc-card">
       <div id="react-search-results-root"></div>
       <div id="page-content" class="doc-formatting">
-        <h1 id="sqrl-redis-functions"><a href="#sqrl-redis-functions" class="headerlink" title="sqrl-redis-functions"></a>sqrl-redis-functions</h1><p>Functions that store state in redis. This consists of counting, labeling and entity to unique id mapping.</p>
+        <h1 id="sqrl-redis-functions"><a href="#sqrl-redis-functions" class="headerlink" title="sqrl-redis-functions"></a>sqrl-redis-functions</h1><p>This package implements some counters on top of redis.</p>
+<p>The <code>count</code>, <code>countUnique</code> and <code>trending</code> functions use buckets to approximate the value. The <code>countUnique</code> function also uses the HyperLogLog algorithm to approximate the unique set count for each bucket.</p>
+<p>Future work could include switching to the <a href="https://hal.archives-ouvertes.fr/hal-00465313/document" target="_blank" rel="noopener">Sliding HyperLogLog</a> algorithm for <code>countUnique</code>. This would enable it to count all time windows together with better accuracy (no need for bucketing) and smaller space requirements.</p>
+<p><strong>Note</strong>: Only the counts that are present in the source file are tracked. This means that all the counts will begin at zero when each counter is first introduced to your source.</p>
 <h2 id="addLabel"><a href="#addLabel" class="headerlink" title="addLabel"></a>addLabel</h2><p><strong>addLabel</strong>(entity | entity list, label)</p>
 <p>Adds the provided label to the specified entities</p>
 <h2 id="count"><a href="#count" class="headerlink" title="count"></a>count</h2><p><strong>count</strong>(BY Feature[, &#x2026;] [WHERE Condition] [LAST Timespan])</p>
-<p>Returns the streaming count</p>
-<p>Timespans: LAST DAY, LAST EIGHT DAYS, LAST HOUR, LAST MONTH, LAST TWO DAYS, LAST TWO WEEKS, LAST WEEK<br>           DAY OVER DAY, DAY OVER WEEK, WEEK OVER WEEK<br>           TOTAL</p>
+<p>Returns the streaming count for the given window</p>
+<p>Timespans: LAST [X] SECONDS/MINUTES/HOURS/DAYS/WEEKS<br>           DAY OVER DAY, DAY OVER WEEK, WEEK OVER WEEK<br>           TOTAL</p>
 <h2 id="countUnique"><a href="#countUnique" class="headerlink" title="countUnique"></a>countUnique</h2><p><strong>countUnique</strong>(Feature[, &#x2026;] [GROUP BY Feature[, &#x2026;]] [WHERE Condition] [LAST Duration] [BEFORE ACTION])</p>
 <p>Performs a sliding window unique set count</p>
 <h2 id="entity"><a href="#entity" class="headerlink" title="entity"></a>entity</h2><p><strong>entity</strong>(type, key)</p>
@@ -56,8 +59,9 @@
 <p>Removes the provided label to the specified entities</p>
 <h2 id="sessionize"><a href="#sessionize" class="headerlink" title="sessionize"></a>sessionize</h2><p><strong>sessionize</strong>(BY Feature[, &#x2026;] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition])</p>
 <p>Creates a new session using a token bucket rate limiter</p>
-<h2 id="trending"><a href="#trending" class="headerlink" title="trending"></a>trending</h2><p><strong>trending</strong>(Feature[, &#x2026;] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK))</p>
+<h2 id="trending"><a href="#trending" class="headerlink" title="trending"></a>trending</h2><p><strong>trending</strong>(Feature[, &#x2026;] [WHERE Condition] [WITH MIN Count EVENTS] (Timespan))</p>
 <p>Returns values whose counts have gone up by an order of magnitude</p>
+<p>Timespans: DAY OVER DAY, DAY OVER WEEK, DAY OVER FULL WEEK</p>
 
         <div id="react-support-footer-root"></div>
       </div>
