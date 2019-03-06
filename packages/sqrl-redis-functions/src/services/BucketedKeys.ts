@@ -3,10 +3,8 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { redisKey } from "./RedisService";
+import { createRedisKey } from "./RedisService";
 import { DatabaseSet, SqrlKey } from "sqrl-engine";
-
-export const MAX_TIME_WINDOW_MS = 60 * 60 * 24 * 30 * 1000;
 
 export function getBucketKey(
   databaseSet: DatabaseSet,
@@ -15,7 +13,7 @@ export function getBucketKey(
   windowMs: number,
   bucketTime: number
 ): Buffer {
-  return redisKey(databaseSet, prefix, key, windowMs, bucketTime);
+  return createRedisKey(databaseSet, prefix, key, windowMs, bucketTime);
 }
 
 export function getAllBucketKeys(

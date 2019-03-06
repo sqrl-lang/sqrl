@@ -50,7 +50,7 @@ export interface RedisInterface {
   mgetNumbers(ctx: Context, keys: Buffer[]): Promise<number[]>;
 }
 
-export function redisKey(
+export function createRedisKey(
   databaseSet: DatabaseSet,
   prefix: string,
   ...keys: Array<string | number | Buffer>

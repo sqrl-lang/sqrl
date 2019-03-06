@@ -2,27 +2,7 @@
 
 # `sqrl-redis-functions` package
 
-This package includes functions for some counters and services running on top of redis. It may be useful as a starting point for creating your own simple SQRL function packs.
- 
-## count()
-
-Provides sliding window simple counters. This is useful for answering questions such as "How many times have I seen this IP addreses in the last hour?".
-
-## countUnique()
-
-Provides sliding window set cardinality counters. This is useful for answering questions such as "How many different IP addreses have I seen for this user in the last hour?".
-
-## rateLimit(), rateLimited()
-
-Provides a token bucket rate limiter. This is useful for answering questions such as "Have I seen more that X requests for this user in the last Y hours?".
-
-## sessionize()
-
-Provides sessionization based on a set of features and time. This is useful for grouping actions by IP addresses or users based on time windows.
-
-## addLabel(), removeLabel(), hasLabel()
-
-Provides basic labeling abilities
+This package includes functions for some counters and services running on top of redis. For more information please see the [sqrl-redis-functions documentation](https://twitter.github.io/sqrl/packages/sqrl-redis-functions.html) on the website.
 
 # SQRL documentation
 

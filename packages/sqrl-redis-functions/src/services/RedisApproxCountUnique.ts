@@ -3,9 +3,8 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Context, SqrlKey, Manipulator } from "sqrl-engine";
-import { CountUniqueService } from "../CountUniqueFunctions";
-import { RedisInterface, redisKey } from "./RedisService";
+import { Context, SqrlKey } from "sqrl-engine";
+import { RedisInterface, createRedisKey } from "./RedisService";
 import {
   getBucketSize,
   getBucketTimeForTimeMs,
@@ -13,50 +12,54 @@ import {
   getCurrentBucketExpirySeconds,
   getAllBucketKeys
 } from "./BucketedKeys";
-import { invariant } from "sqrl-common";
+import { TOTAL_COUNT_EXPIRY_SEC } from "./RedisCountService";
+import { CountUniqueService } from "../Services";
 
-const HOUR = 3600000;
-// hour, day, week, month
-const TIME_WINDOWS = [HOUR, 24 * HOUR, 24 * HOUR * 7, 24 * HOUR * 30].sort();
 const NUM_BUCKETS = 10;
 
 export class RedisApproxCountUniqueService implements CountUniqueService {
-  windows: {
-    [windowMs: number]: RedisSingleWindowApproxCountUniqueService;
-  };
-  constructor(redis: RedisInterface, prefix: string) {
-    this.windows = {};
-    for (const windowMs of TIME_WINDOWS) {
-      this.windows[windowMs] = new RedisSingleWindowApproxCountUniqueService(
-        redis,
-        prefix,
-        windowMs,
-        NUM_BUCKETS
-      );
-    }
-  }
+  constructor(private redis: RedisInterface, private prefix: string) {}
 
-  bump(
-    manipulator: Manipulator,
+  private async bumpTotal(ctx: Context, key: SqrlKey, sortedHashes: string[]) {
+    const redisKey = createRedisKey(
+      ctx.requireDatabaseSet(),
+      this.prefix,
+      key.getHex()
+    );
+    await Promise.all([
+      this.redis.pfadd(ctx, redisKey, sortedHashes),
+      this.redis.expire(ctx, redisKey, TOTAL_COUNT_EXPIRY_SEC)
+    ]);
+  }
+  async bump(
+    ctx: Context,
     props: {
       at: number;
       key: SqrlKey;
       sortedHashes: string[];
-      expireAtMs: number;
+      windowMs: number | null;
     }
   ) {
-    const { at, key, sortedHashes } = props;
-    manipulator.addCallback(async ctx => {
-      await Promise.all(
-        TIME_WINDOWS.map(windowMs =>
-          this.windows[windowMs].bump(ctx, {
-            at,
-            key,
-            hashes: sortedHashes
-          })
-        )
-      );
-    });
+    const { at, key, sortedHashes, windowMs } = props;
+    if (windowMs === null) {
+      return this.bumpTotal(ctx, key, sortedHashes);
+    }
+    const bucketSize = getBucketSize(windowMs, NUM_BUCKETS);
+    const currentBucket = getBucketTimeForTimeMs(at, bucketSize);
+    const redisKey = getBucketKey(
+      ctx.requireDatabaseSet(),
+      this.prefix,
+      key.getHex(),
+      windowMs,
+      currentBucket
+    );
+
+    await this.redis.pfadd(ctx, redisKey, sortedHashes);
+    await this.redis.expire(
+      ctx,
+      redisKey,
+      getCurrentBucketExpirySeconds(windowMs, bucketSize)
+    );
   }
 
   async fetchHashes(
@@ -64,6 +67,24 @@ export class RedisApproxCountUniqueService implements CountUniqueService {
     props: { keys: SqrlKey[]; windowStartMs: number }
   ): Promise<string[]> {
     throw new Error("fetchHashes() is not implemented");
+  }
+
+  async fetchTotal(
+    ctx: Context,
+    key: SqrlKey,
+    at: number,
+    windowMs: number,
+    extraHashesKey: Buffer | null
+  ) {
+    const redisKey = createRedisKey(
+      ctx.requireDatabaseSet(),
+      this.prefix,
+      key.getHex()
+    );
+    return this.redis.pfcount(
+      ctx,
+      extraHashesKey ? [redisKey, extraHashesKey] : [redisKey]
+    );
   }
 
   async fetchCounts(
@@ -76,87 +97,50 @@ export class RedisApproxCountUniqueService implements CountUniqueService {
     }
   ): Promise<number[]> {
     const { at, keys, windowMs, addHashes } = props;
-    const window = this.windows[windowMs];
-    invariant(window, "invalid time window: %s", windowMs);
+    const databaseSet = ctx.requireDatabaseSet();
+
+    let extraHashesKey: Buffer = null;
+    if (addHashes.length) {
+      extraHashesKey = createRedisKey(
+        databaseSet,
+        this.prefix,
+        "temp",
+        ...addHashes
+      );
+
+      // Just inserting these in redis is fine to ensure they are in the pipeline before the
+      // pfcount messages
+      // @todo: This would be better using a redis pipeline but would require a refactor.
+      Promise.all([
+        this.redis.pfadd(ctx, extraHashesKey, addHashes),
+        this.redis.expire(ctx, extraHashesKey, 1)
+      ]).catch(err => {
+        ctx.warn(
+          {},
+          "Error on countUnique() temporary hash insertion: " + err.toString()
+        );
+      });
+    }
+
     return Promise.all(
-      keys.map(key =>
-        window.count(ctx, {
+      keys.map(async key => {
+        if (windowMs === null) {
+          return this.fetchTotal(ctx, key, at, windowMs, extraHashesKey);
+        }
+        const keys = getAllBucketKeys(
+          databaseSet,
+          this.prefix,
           key,
           at,
-          additionalHashes: addHashes
-        })
-      )
-    );
-  }
-}
+          windowMs,
+          NUM_BUCKETS
+        );
 
-export class RedisSingleWindowApproxCountUniqueService {
-  constructor(
-    private redis: RedisInterface,
-    private prefix: string,
-    private windowMs: number,
-    private numBuckets: number
-  ) {
-    /* nothing else */
-  }
-  async bump(
-    ctx: Context,
-    props: {
-      at: number;
-      key: SqrlKey;
-      hashes: string[];
-    }
-  ) {
-    const { at, key, hashes } = props;
-    const bucketSize = getBucketSize(this.windowMs, this.numBuckets);
-    const currentBucket = getBucketTimeForTimeMs(at, bucketSize);
-    const redisKey = getBucketKey(
-      ctx.requireDatabaseSet(),
-      this.prefix,
-      key.getHex(),
-      this.windowMs,
-      currentBucket
+        if (extraHashesKey) {
+          keys.push(extraHashesKey);
+        }
+        return this.redis.pfcount(ctx, keys);
+      })
     );
-
-    await this.redis.pfadd(ctx, redisKey, hashes);
-    await this.redis.expire(
-      ctx,
-      redisKey,
-      getCurrentBucketExpirySeconds(this.windowMs, bucketSize)
-    );
-  }
-
-  async count(
-    ctx: Context,
-    props: {
-      key: SqrlKey;
-      at: number;
-      additionalHashes: string[];
-    }
-  ): Promise<number> {
-    const { key, at, additionalHashes } = props;
-    const databaseSet = ctx.requireDatabaseSet();
-    const keys = getAllBucketKeys(
-      databaseSet,
-      this.prefix,
-      key,
-      at,
-      this.windowMs,
-      this.numBuckets
-    );
-
-    if (additionalHashes.length === 0) {
-      return this.redis.pfcount(ctx, keys);
-    }
-
-    const tempKey = redisKey(
-      databaseSet,
-      this.prefix,
-      "temp",
-      ...additionalHashes
-    );
-    await this.redis.pfadd(ctx, tempKey, additionalHashes);
-    await this.redis.expire(ctx, tempKey, 1);
-    return this.redis.pfcount(ctx, keys.concat([tempKey]));
   }
 }

@@ -4,20 +4,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { Context, SqrlKey } from "sqrl-engine";
-import { RedisInterface, redisKey } from "./RedisService";
-import {
-  getBucketSize,
-  getBucketTimeForTimeMs,
-  getBucketKey,
-  getCurrentBucketExpirySeconds,
-  getAllBucketKeys,
-  getWindowStart
-} from "./BucketedKeys";
-
-/**
- * By default expire total counts if they haven't been seen in 90 days
- */
-export const TOTAL_COUNT_EXPIRY_SEC = 90 * 24 * 3600;
+import { RedisInterface, createRedisKey } from "./RedisService";
+import { TOTAL_COUNT_EXPIRY_SEC } from "./RedisCountService";
 
 export interface RedisBucketCountInterface {
   bump(
@@ -49,7 +37,7 @@ export class RedisTotalCountService implements RedisBucketCountInterface {
       amount: number;
     }
   ): Promise<void> {
-    const key = redisKey(
+    const key = createRedisKey(
       ctx.requireDatabaseSet(),
       this.prefix,
       props.key.getHex()
@@ -68,86 +56,12 @@ export class RedisTotalCountService implements RedisBucketCountInterface {
       at: number;
     }
   ): Promise<number> {
-    const key = redisKey(
+    const key = createRedisKey(
       ctx.requireDatabaseSet(),
       this.prefix,
       props.key.getHex()
     );
     const values = await this.redis.mgetNumbers(ctx, [key]);
     return values[0];
-  }
-}
-
-export class RedisSingleWindowApproxCountService
-  implements RedisBucketCountInterface {
-  constructor(
-    private redis: RedisInterface,
-    private prefix: string,
-    private windowMs: number,
-    private numBuckets: number
-  ) {
-    /* nothing else */
-  }
-  async bump(
-    ctx: Context,
-    props: {
-      at: number;
-      key: SqrlKey;
-      amount: number;
-    }
-  ): Promise<void> {
-    const { at, key, amount } = props;
-
-    const bucketSize = getBucketSize(this.windowMs, this.numBuckets);
-    const currentBucket = getBucketTimeForTimeMs(at, bucketSize);
-    const redisKey = getBucketKey(
-      ctx.requireDatabaseSet(),
-      this.prefix,
-      key.getHex(),
-      this.windowMs,
-      currentBucket
-    );
-
-    await Promise.all([
-      this.redis.increment(ctx, redisKey, amount),
-      this.redis.expire(
-        ctx,
-        redisKey,
-        getCurrentBucketExpirySeconds(this.windowMs, bucketSize)
-      )
-    ]);
-  }
-
-  async count(
-    ctx: Context,
-    props: {
-      key: SqrlKey;
-      at: number;
-    }
-  ): Promise<number> {
-    const { key, at } = props;
-
-    const keys = getAllBucketKeys(
-      ctx.requireDatabaseSet(),
-      this.prefix,
-      key,
-      at,
-      this.windowMs,
-      this.numBuckets
-    );
-
-    // Since the oldest bucket partially exists outside of our time window,
-    // reduce it proportionally.
-    const bucketSize = getBucketSize(this.windowMs, this.numBuckets);
-    const startTime = getWindowStart(at, this.windowMs);
-    const firstBucketTime = getBucketTimeForTimeMs(startTime, bucketSize);
-    const firstBucketTimeToExclude = startTime - firstBucketTime;
-    const percentOfFirstBucketToInclude =
-      (bucketSize - firstBucketTimeToExclude) / bucketSize;
-
-    const values = await this.redis.mgetNumbers(ctx, keys);
-    values[0] *= percentOfFirstBucketToInclude;
-
-    return Math.round(values.reduce((accum, item) => accum + (item || 0), 0));
   }
 }

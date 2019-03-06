@@ -32,7 +32,9 @@ CountArguments = _? "BY"i _ features:AliasFeatureList where:WhereClause? timespa
   return {
     features,
     sumFeature: null,
-    timespan: timespan || 'total',
+    timespan: timespan || {
+      type: 'total'
+    },
     where
   };
 }
@@ -42,7 +44,9 @@ TrendingTimespanClause = _ timespan:(
   "DAY OVER FULL WEEK"i /
   "WEEK OVER WEEK"i
 ) {
-  return camelCase(timespan);
+  return {
+    type: camelCase(timespan),
+  };
 }
 
 TrendingArguments = _?
@@ -60,22 +64,21 @@ TrendingArguments = _?
   };
 }
 
-CountTimespanClause = _ timespan:(
-  "DAY OVER DAY"i /
-  "DAY OVER WEEK"i /
-  "LAST DAY"i / "LAST 1 DAY"i /
-  "LAST EIGHT DAYS"i / "LAST 8 DAYS"i /
-  "LAST HOUR"i / "LAST 1 HOUR"i /
-  "LAST MONTH"i / "LAST 1 MONTH"i /
-  "LAST TWO DAYS"i / "LAST 2 DAYS"i /
-  "LAST TWO WEEKS"i / "LAST 2 WEEKS"i /
-  "LAST WEEK"i / "LAST 1 WEEK"i /
-  "TOTAL"i /
-  "WEEK OVER WEEK"i
+CountTimespanClause = CountSpecialTimespanClause / CountLastTimespanClause;
+
+CountSpecialTimespanClause = _ timespan:(
+  "DAY OVER DAY"i / "DAY OVER WEEK"i / "TOTAL"i / "WEEK OVER WEEK"i
 ) {
-  // Some digits are allowed, replace them with the string representations
-  timespan = timespan.replace(/ 1 /, ' ').replace(/ 2 /, ' TWO ').replace(/ 8 /, ' EIGHT ');
-  return camelCase(timespan);
+  return {
+    type: camelCase(timespan),
+  };
+}
+
+CountLastTimespanClause = ms:LastMsClause {
+  return {
+    type: 'duration',
+    durationMs: ms,
+  }
 }
 
 CountPreviousArguments = _?
@@ -185,7 +188,7 @@ WhereClause = _ "WHERE"i _ expr:Expr {
   return expr;
 }
 
-MinEventsClause = _ "WITH MIN "i _ numEvents:IntLiteral _ "EVENTS"i  {
+MinEventsClause = _ "WITH MIN"i _ numEvents:IntLiteral _ "EVENTS"i  {
   return numEvents;
 }
 

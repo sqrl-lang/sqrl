@@ -110,7 +110,7 @@ export function registerKeyFunctions(instance: StdlibRegistry) {
     },
     {
       name: "_getKeyList",
-      args: [AT.state, AT.any.sqrlEntity, AT.any.repeated],
+      args: [AT.state, AT.any.sqrlEntity, AT.any.repeated.optional],
       allowSqrlObjects: true,
       allowNull: true,
       async: true

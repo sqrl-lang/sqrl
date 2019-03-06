@@ -3,7 +3,13 @@ title: sqrl-redis-functions
 
 # sqrl-redis-functions
 
-Functions that store state in redis. This consists of counting, labeling and entity to unique id mapping.
+This package implements some counters on top of redis.
+
+The `count`, `countUnique` and `trending` functions use buckets to approximate the value. The `countUnique` function also uses the HyperLogLog algorithm to approximate the unique set count for each bucket.
+
+Future work could include switching to the [Sliding HyperLogLog](https://hal.archives-ouvertes.fr/hal-00465313/document) algorithm for `countUnique`. This would enable it to count all time windows together with better accuracy (no need for bucketing) and smaller space requirements.
+
+**Note**: Only the counts that are present in the source file are tracked. This means that all the counts will begin at zero when each counter is first introduced to your source.
 
 ## addLabel
 
@@ -15,9 +21,9 @@ Adds the provided label to the specified entities
 
 **count**(BY Feature[, ...] [WHERE Condition] [LAST Timespan])
 
-Returns the streaming count
+Returns the streaming count for the given window
 
-Timespans: LAST DAY, LAST EIGHT DAYS, LAST HOUR, LAST MONTH, LAST TWO DAYS, LAST TWO WEEKS, LAST WEEK
+Timespans: LAST [X] SECONDS/MINUTES/HOURS/DAYS/WEEKS
            DAY OVER DAY, DAY OVER WEEK, WEEK OVER WEEK
            TOTAL
 
@@ -77,7 +83,9 @@ Creates a new session using a token bucket rate limiter
 
 ## trending
 
-**trending**(Feature[, ...] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK))
+**trending**(Feature[, ...] [WHERE Condition] [WITH MIN Count EVENTS] (Timespan))
 
 Returns values whose counts have gone up by an order of magnitude
+
+Timespans: DAY OVER DAY, DAY OVER WEEK, DAY OVER FULL WEEK
 

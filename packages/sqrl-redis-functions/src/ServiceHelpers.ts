@@ -5,8 +5,6 @@
  */
 // tslint:disable:no-submodule-imports (@TODO)
 
-import { CountService } from "./CountFunctions";
-import { CountUniqueService } from "./CountUniqueFunctions";
 import { LabelService } from "./LabelFunctions";
 import { RateLimitService } from "./RateLimitFunctions";
 import { RedisInterface, RedisService } from "./services/RedisService";
@@ -21,12 +19,13 @@ import {
 } from "./services/RedisUniqueId";
 import { RedisRateLimit } from "./services/RedisRateLimit";
 import { Config } from "sqrl-engine";
+import { CountService, CountUniqueService, Services } from "./Services";
 
 interface Closeable {
   close(): void;
 }
 
-export class RedisServices {
+export class RedisServices implements Services {
   count: CountService;
   countUnique: CountUniqueService;
   label: LabelService;

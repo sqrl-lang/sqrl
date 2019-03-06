@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import { redisKey, RedisInterface } from "./RedisService";
+import { createRedisKey, RedisInterface } from "./RedisService";
 import bignum = require("bignum");
 import { Context, UniqueId } from "sqrl-engine";
 import { invariant } from "sqrl-common";
@@ -71,7 +71,7 @@ export class RedisUniqueIdService implements UniqueIdService {
 
   async create(ctx: Context) {
     const timeMs = this.getTimeMs();
-    const timeKey = redisKey(
+    const timeKey = createRedisKey(
       ctx.requireDatabaseSet(),
       this.prefix,
       "time",
@@ -85,7 +85,7 @@ export class RedisUniqueIdService implements UniqueIdService {
   }
 
   async fetch(ctx: Context, type: string, key: string) {
-    const idKey = redisKey(
+    const idKey = createRedisKey(
       ctx.requireDatabaseSet(),
       this.prefix,
       "id",

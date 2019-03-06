@@ -7,7 +7,7 @@ Sometimes simple counters are not enough and you need more powerful counters. Th
 
 ### Your first unique counter
 
-To get started we're going to count the number of unique credit cards used over your entire account in the last twelve hours. While simple counters are restricted to a small number of windows, with our unique counters you can specify arbitrary time windows.
+To get started we're going to count the number of unique credit cards used over your entire account in the last twelve hours.
 
 ```
 LET NumCreditCards := countUnique(CreditCard LAST 12 HOURS);

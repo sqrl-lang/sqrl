@@ -11,19 +11,17 @@ import {
   Context,
   Execution,
   Instance,
-  SqrlKey,
   SqrlObject,
   CompileState,
   AT,
-  Manipulator,
   CustomCallAst
 } from "sqrl-engine";
 import murmurhash = require("murmurhash-native");
 
-import { MAX_TIME_WINDOW_MS } from "./services/BucketedKeys";
 import { invariant, sqrlCartesianProduct } from "sqrl-common";
 import { parse } from "./parser/sqrlRedisParser";
 import { CountUniqueArguments, AliasedFeature } from "./parser/sqrlRedis";
+import { CountUniqueService } from "./Services";
 
 // This hashes a value to match output from slidingd
 function slidingdHashHex(value) {
@@ -52,38 +50,13 @@ function sortByAlias(features: AliasedFeature[]): AliasedFeature[] {
 
 const tupleToString = tuple => stringify(tuple.map(SqrlObject.ensureBasic));
 
-export interface CountUniqueService {
-  bump(
-    manipulator: Manipulator,
-    props: {
-      at: number;
-      key: SqrlKey;
-      sortedHashes: string[];
-      expireAtMs: number;
-    }
-  ): void;
-  fetchHashes(
-    ctx: Context,
-    props: { keys: SqrlKey[]; windowStartMs: number }
-  ): Promise<string[]>;
-  fetchCounts(
-    ctx: Context,
-    props: {
-      keys: SqrlKey[];
-      at: number;
-      windowMs: number;
-      addHashes: string[];
-    }
-  ): Promise<number[]>;
-}
-
 export function registerCountUniqueFunctions(
   instance: Instance,
   service: CountUniqueService
 ) {
   instance.registerStatement(
     "SqrlCountUniqueStatements",
-    async function _bumpCountUnique(state: Execution, keys, uniques) {
+    async function _bumpCountUnique(state: Execution, keys, uniques, windowMs) {
       uniques = SqrlObject.ensureBasic(uniques);
       if (!keys.length || !isCountable(uniques)) {
         return;
@@ -95,19 +68,24 @@ export function registerCountUniqueFunctions(
         const element = isTuple ? tupleToString(features) : features[0];
         const hashes = [slidingdHashHex(element)];
 
-        for (const key of keys) {
-          service.bump(state.manipulator, {
-            at: state.getClockMs(),
-            key,
-            sortedHashes: hashes,
-            expireAtMs: Date.now() + MAX_TIME_WINDOW_MS
-          });
-        }
+        state.manipulator.addCallback(async ctx => {
+          await Promise.all(
+            keys.map(key => {
+              return service.bump(ctx, {
+                at: state.getClockMs(),
+                key,
+                sortedHashes: hashes,
+                windowMs
+              });
+            })
+          );
+        });
       }
     },
     {
+      allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any]
+      args: [AT.state, AT.any.array, AT.any.array, AT.any]
     }
   );
 
@@ -170,8 +148,9 @@ export function registerCountUniqueFunctions(
       );
     },
     {
+      allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any, AT.any]
+      args: [AT.state, AT.any.array, AT.any, AT.any.array]
     }
   );
 
@@ -231,6 +210,7 @@ export function registerCountUniqueFunctions(
       const sortedGroup: AliasedFeature[] = sortByAlias(args.groups);
 
       const uniquesAst = AstBuilder.list(sortedUniques.map(f => f.feature));
+      const windowMsAst = AstBuilder.constant(args.windowMs);
 
       const groupAliases = args.groups.map(feature => feature.alias);
       const groupFeatures = args.groups.map(feature => feature.feature.value);
@@ -269,14 +249,15 @@ export function registerCountUniqueFunctions(
             originalKeysAst,
             AstBuilder.constant(null)
           ),
-          uniquesAst
+          uniquesAst,
+          windowMsAst
         ])
       );
       state.addStatement("SqrlCountUniqueStatements", slotAst);
 
       let keysAst = originalKeysAst;
       let countExtraUniques: Ast = AstBuilder.branch(
-        whereAst,
+        AstBuilder.and([whereAst, AstBuilder.feature("SqrlIsClassify")]),
         uniquesAst,
         AstBuilder.constant([])
       );
@@ -312,7 +293,7 @@ export function registerCountUniqueFunctions(
 
       const originalCall = AstBuilder.call("_fetchCountUnique", [
         keysAst,
-        AstBuilder.constant(args.windowMs || MAX_TIME_WINDOW_MS),
+        windowMsAst,
         countExtraUniques
       ]);
 

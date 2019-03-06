@@ -3,9 +3,9 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { CountUniqueService } from "../CountUniqueFunctions";
-import { RedisInterface, redisKey } from "./RedisService";
-import { Context, Manipulator, SqrlKey } from "sqrl-engine";
+import { RedisInterface, createRedisKey } from "./RedisService";
+import { Context, SqrlKey } from "sqrl-engine";
+import { CountUniqueService } from "../Services";
 
 type CountUniqueData = ({
   timestamp: number;
@@ -16,17 +16,16 @@ export class RedisCountUniqueService implements CountUniqueService {
   constructor(private redis: RedisInterface, private prefix: string) {
     /* nothing else */
   }
-  bump(
-    manipulator: Manipulator,
+  async bump(
+    ctx: Context,
     props: {
       at: number;
       key: SqrlKey;
       sortedHashes: string[];
-      expireAtMs: number;
+      windowMs: number;
     }
   ) {
     const { at, key, sortedHashes } = props;
-
     const push = sortedHashes.map(hash => {
       return JSON.stringify({
         timestamp: at,
@@ -34,19 +33,17 @@ export class RedisCountUniqueService implements CountUniqueService {
       });
     });
 
-    manipulator.addCallback(async ctx => {
-      await this.redis.listPush(
-        ctx,
-        redisKey(ctx.requireDatabaseSet(), this.prefix, key.getBuffer()),
-        ...push
-      );
-    });
+    await this.redis.listPush(
+      ctx,
+      createRedisKey(ctx.requireDatabaseSet(), this.prefix, key.getBuffer()),
+      ...push
+    );
   }
 
   private async getData(ctx: Context, key: SqrlKey): Promise<CountUniqueData> {
     const data = await this.redis.getList(
       ctx,
-      redisKey(ctx.requireDatabaseSet(), this.prefix, key.getBuffer())
+      createRedisKey(ctx.requireDatabaseSet(), this.prefix, key.getBuffer())
     );
     return data.map(entry => JSON.parse(entry));
   }

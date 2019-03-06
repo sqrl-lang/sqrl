@@ -9,13 +9,10 @@ import {
   AstBuilder,
   SqrlKey,
   CompileState,
-  Context,
   Execution,
   Instance,
   sqrlInvariant,
-  CountValidTimespan,
   Ast,
-  Manipulator,
   CustomCallAst
 } from "sqrl-engine";
 
@@ -25,58 +22,26 @@ import { invariant, removeIndent } from "sqrl-common";
 import {
   CountArguments,
   TrendingArguments,
-  AliasedFeature
+  AliasedFeature,
+  Timespan
 } from "./parser/sqrlRedis";
+import { CountService } from "./Services";
 
 const ENTITY_TYPE = "Counter";
+const HOUR_MS = 3600 * 1000;
+const DAY_MS = HOUR_MS * 24;
 
-export const TIMESPAN_CONFIG = {
-  lastHour: {
-    suffix: "H",
-    flag: 1,
-    windowMs: 3600000
-  },
-  lastDay: {
-    suffix: "D",
-    flag: 2,
-    windowMs: 3600000 * 24
-  },
-  lastWeek: {
-    suffix: "W",
-    flag: 4,
-    windowMs: 3600000 * 24 * 7
-  },
-  lastMonth: {
-    suffix: "M",
-    flag: 8,
-    windowMs: 3600000 * 24 * 30
-  },
-  total: {
-    suffix: "T",
-    flag: 16,
-    windowMs: null
-  },
-  lastTwoDays: {
-    suffix: "D2",
-    flag: 32,
-    windowMs: 3600000 * 24 * 2
-  },
-  lastTwoWeeks: {
-    suffix: "W2",
-    flag: 64,
-    windowMs: 3600000 * 24 * 14
-  },
-  lastEightDays: {
-    suffix: "D8",
-    flag: 128,
-    windowMs: 3600000 * 24 * 8
-  }
-};
+function dayDuration(days: number): Timespan {
+  return {
+    type: "duration",
+    durationMs: days * DAY_MS
+  };
+}
 
 const PREVIOUS_CONFIG: {
   [timespan: string]: {
-    subtractLeft: CountValidTimespan;
-    subtractRight: CountValidTimespan;
+    subtractLeft: Timespan;
+    subtractRight: Timespan;
     allowNegativeValue: boolean;
   };
 } = {
@@ -84,58 +49,58 @@ const PREVIOUS_CONFIG: {
   // smaller one. If they are negative than the value should be ignored
   // (i.e. in the case of not enough data.)
   previousLastDay: {
-    subtractLeft: "lastTwoDays",
-    subtractRight: "lastDay",
+    subtractLeft: dayDuration(2),
+    subtractRight: dayDuration(1),
     allowNegativeValue: false
   },
   previousLastWeek: {
-    subtractLeft: "lastTwoWeeks",
-    subtractRight: "lastWeek",
+    subtractLeft: dayDuration(14),
+    subtractRight: dayDuration(7),
     allowNegativeValue: false
   },
   // dayWeekAgo is internal only
   dayWeekAgo: {
-    subtractLeft: "lastEightDays",
-    subtractRight: "lastWeek",
+    subtractLeft: dayDuration(8),
+    subtractRight: dayDuration(7),
     allowNegativeValue: false
   },
 
   // These x-over-y counters can be negative, but should still be null in
   // the initial missing data cases.
   dayOverDay: {
-    subtractLeft: "lastDay",
-    subtractRight: "previousLastDay",
+    subtractLeft: dayDuration(1),
+    subtractRight: { type: "previousLastDay" },
     allowNegativeValue: true
   },
   dayOverWeek: {
-    subtractLeft: "lastDay",
-    subtractRight: "dayWeekAgo",
+    subtractLeft: dayDuration(1),
+    subtractRight: { type: "dayWeekAgo" },
     allowNegativeValue: true
   },
   weekOverWeek: {
-    subtractLeft: "lastWeek",
-    subtractRight: "previousLastWeek",
+    subtractLeft: dayDuration(7),
+    subtractRight: { type: "previousLastWeek" },
     allowNegativeValue: true
   }
 };
 
 const TRENDING_CONFIG: {
   [timespan: string]: {
-    current: CountValidTimespan;
-    currentAndPrevious: CountValidTimespan;
+    current: Timespan;
+    currentAndPrevious: Timespan;
   };
 } = {
   dayOverDay: {
-    current: "lastDay",
-    currentAndPrevious: "lastTwoDays"
+    current: dayDuration(1),
+    currentAndPrevious: dayDuration(2)
   },
   dayOverFullWeek: {
-    current: "lastDay",
-    currentAndPrevious: "lastWeek"
+    current: dayDuration(1),
+    currentAndPrevious: dayDuration(7)
   },
   weekOverWeek: {
-    current: "lastWeek",
-    currentAndPrevious: "lastTwoWeeks"
+    current: dayDuration(7),
+    currentAndPrevious: dayDuration(14)
   }
 };
 
@@ -143,16 +108,7 @@ export interface CountServiceBumpProps {
   at: number;
   keys: SqrlKey[];
   by: number;
-  flags: number;
-}
-export interface CountService {
-  fetch(
-    ctx: Context,
-    at: number,
-    keys: SqrlKey[],
-    suffix: string
-  ): Promise<number[]>;
-  bump(manipulator: Manipulator, props: CountServiceBumpProps): void;
+  windowMs: number;
 }
 
 function interpretCountArgs(
@@ -217,6 +173,31 @@ function interpretCountArgs(
   };
 }
 
+function getWindowMsForTimespan(timespan: Timespan): number | null {
+  if (timespan.type === "duration") {
+    return timespan.durationMs;
+  } else if (timespan.type === "total") {
+    return null;
+  } else {
+    throw new Error("Unknown duration for timespan type: " + timespan.type);
+  }
+}
+
+function getNameForTimespan(timespan: Timespan): string {
+  if (timespan.type === "duration") {
+    let name = "";
+    let remaining = timespan.durationMs;
+    if (remaining > DAY_MS) {
+      name += Math.floor(remaining / DAY_MS).toString() + "D";
+      remaining = remaining % DAY_MS;
+    }
+    name += remaining.toString();
+    return name;
+  } else {
+    return timespan.type;
+  }
+}
+
 export function ensureCounterBump(
   state: CompileState,
   sourceAst: Ast,
@@ -232,30 +213,20 @@ export function ensureCounterBump(
     keysAst
   } = interpretResult;
 
-  // Only base the counter identity on features/where
+  // [@todo: check] Only base the counter identity on features/where
   if (hasAlias) {
     return interpretResult;
   }
 
-  const timespanConfig = getTimespanConfig(args.timespan);
-
-  // Cache the bump flags on the function cache
-  const flagsSlot = state.setConstantSlot(
-    sourceAst,
-    `flags(${keyedCounterName}`,
-    0
-  );
-  // tslint:disable-next-line:no-bitwise
-  flagsSlot.setValue(flagsSlot.getValue() | timespanConfig.flag);
-
+  const windowMs = getWindowMsForTimespan(args.timespan);
   const slotAst = state.setGlobal(
     sourceAst,
     AstBuilder.call("_bumpCount", [
       AstBuilder.branch(whereAst, keysAst, AstBuilder.constant(null)),
       bumpByAst,
-      AstBuilder.slot(flagsSlot)
+      AstBuilder.constant(windowMs)
     ]),
-    `bump(${keyedCounterName})`
+    `bump(${keyedCounterName}:${windowMs})`
   );
   state.addStatement("SqrlCountStatements", slotAst);
 
@@ -280,34 +251,30 @@ export function registerCountFunctions(
 
   instance.registerStatement(
     "SqrlCountStatements",
-    async function _bumpCount(state, keys, by, flags) {
-      if (!Array.isArray(keys)) {
-        // This should never happen but has been seen in production
-        state.fatal(
-          {},
-          "Keys passed to _bumpCount was not an array:: %j",
-          keys
-        );
+    async function _bumpCount(state, keys, by, windowMs) {
+      if (keys === null || by === null) {
+        return null;
       }
-
-      service.bump(state.manipulator, {
-        at: state.getClockMs(),
-        keys,
-        by,
-        flags
+      state.manipulator.addCallback(async ctx => {
+        await service.bump(ctx, state.getClockMs(), keys, windowMs, by);
       });
     },
     {
+      allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any, AT.any]
+      args: [AT.state, AT.any.array, AT.any, AT.any]
     }
   );
 
   instance.register(
-    function _fetchCountsFromDb(state: Execution, keys, suffix) {
-      return service.fetch(state.ctx, state.getClockMs(), keys, suffix);
+    function _fetchCountsFromDb(state: Execution, keys, windowMs) {
+      if (keys === null) {
+        return null;
+      }
+      return service.fetch(state.ctx, state.getClockMs(), keys, windowMs);
     },
     {
+      allowNull: true,
       allowSqrlObjects: true,
       args: [AT.state, AT.any, AT.any]
     }
@@ -370,20 +337,21 @@ export function registerCountFunctions(
       const args: TrendingArguments = parse(ast.source, {
         startRule: "TrendingArguments"
       });
+      const { timespan } = args;
 
       sqrlInvariant(
         ast,
-        args.timespan === "dayOverDay" ||
-          args.timespan === "weekOverWeek" ||
-          args.timespan === "dayOverFullWeek",
+        timespan.type === "dayOverDay" ||
+          timespan.type === "weekOverWeek" ||
+          timespan.type === "dayOverFullWeek",
         "Invalid timespan for trending. Expecting `DAY OVER DAY` or `WEEK OVER WEEK` or `DAY OVER FULL WEEK`"
       );
 
-      const timespanConfig = TRENDING_CONFIG[args.timespan];
+      const trendingConfig = TRENDING_CONFIG[timespan.type];
       const currentCountArgs: CountArguments = {
         features: args.features,
         sumFeature: null,
-        timespan: timespanConfig.current,
+        timespan: trendingConfig.current,
         where: args.where
       };
 
@@ -395,7 +363,7 @@ export function registerCountFunctions(
 
       const currentAndPreviousCountAst = databaseCountTransform(state, ast, {
         ...currentCountArgs,
-        timespan: timespanConfig.currentAndPrevious
+        timespan: trendingConfig.currentAndPrevious
       });
 
       const { keysAst } = interpretCountArgs(state, ast, currentCountArgs);
@@ -409,9 +377,12 @@ export function registerCountFunctions(
     },
     {
       argstring:
-        "Feature[, ...] [WHERE Condition] [WITH MIN Count EVENTS] (DAY OVER DAY / DAY OVER WEEK / DAY OVER FULL WEEK)",
-      docstring:
-        "Returns values whose counts have gone up by an order of magnitude"
+        "Feature[, ...] [WHERE Condition] [WITH MIN Count EVENTS] (Timespan)",
+      docstring: removeIndent(`
+      Returns values whose counts have gone up by an order of magnitude
+
+      Timespans: DAY OVER DAY, DAY OVER WEEK, DAY OVER FULL WEEK
+      `)
     }
   );
 
@@ -421,10 +392,10 @@ export function registerCountFunctions(
     args: CountArguments
   ): Ast {
     const { keysAst } = ensureCounterBump(state, sourceAst, args);
-    const timespanConfig = getTimespanConfig(args.timespan);
+    const windowMs = getWindowMsForTimespan(args.timespan);
     return AstBuilder.call("_fetchCountsFromDb", [
       keysAst,
-      AstBuilder.constant(timespanConfig.suffix)
+      AstBuilder.constant(windowMs)
     ]);
   }
 
@@ -440,8 +411,8 @@ export function registerCountFunctions(
     );
 
     // Rewrite this count as a subtraction between other counts (whoah)
-    if (PREVIOUS_CONFIG.hasOwnProperty(args.timespan)) {
-      const previousConfig = PREVIOUS_CONFIG[args.timespan];
+    if (PREVIOUS_CONFIG.hasOwnProperty(args.timespan.type)) {
+      const previousConfig = PREVIOUS_CONFIG[args.timespan.type];
 
       // Convert into a subtract(left, right)
       // We transform into calls to count() which in turn will get transformed
@@ -466,7 +437,7 @@ export function registerCountFunctions(
         const subtractionAst = state.setGlobal(
           ast,
           resultAst,
-          `count(${args.timespan}:${keyedCounterName})`
+          `count(${args.timespan.type}:${keyedCounterName})`
         );
         return AstBuilder.branch(
           // if result < 0
@@ -498,7 +469,7 @@ export function registerCountFunctions(
     return state.setGlobal(
       ast,
       resultAst,
-      `count(${args.timespan}:${keyedCounterName})`
+      `count(${getNameForTimespan(args.timespan)}:${keyedCounterName})`
     );
   }
 
@@ -512,21 +483,12 @@ export function registerCountFunctions(
     {
       argstring: "BY Feature[, ...] [WHERE Condition] [LAST Timespan]",
       docstring: removeIndent(`
-      Returns the streaming count
-      
-      Timespans: LAST DAY, LAST EIGHT DAYS, LAST HOUR, LAST MONTH, LAST TWO DAYS, LAST TWO WEEKS, LAST WEEK
+      Returns the streaming count for the given window
+
+      Timespans: LAST [X] SECONDS/MINUTES/HOURS/DAYS/WEEKS
                  DAY OVER DAY, DAY OVER WEEK, WEEK OVER WEEK
                  TOTAL
       `)
     }
   );
-}
-
-export function getTimespanConfig(timespan) {
-  invariant(
-    TIMESPAN_CONFIG.hasOwnProperty(timespan),
-    "Could not find suffix for timespan:: %j",
-    timespan
-  );
-  return TIMESPAN_CONFIG[timespan];
 }

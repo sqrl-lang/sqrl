@@ -3,22 +3,24 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { RedisSingleWindowApproxCountUniqueService } from "../src/services/RedisApproxCountUnique";
 import { RedisUniqueIdService } from "../src/services/RedisUniqueId";
-import { SqrlKey, SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl-engine";
+import {
+  SqrlKey,
+  SqrlEntity,
+  SqrlUniqueId,
+  createSimpleContext,
+  Context
+} from "sqrl-engine";
 import { redisTest } from "./helpers/redisTest";
+import { RedisApproxCountUniqueService } from "../src/services/RedisApproxCountUnique";
 
 redisTest("works", async redis => {
   const ctx = createSimpleContext();
   const prefix = "test" + Date.now();
 
   const uniqueId = new RedisUniqueIdService(redis, () => Date.now(), prefix);
-  const service = new RedisSingleWindowApproxCountUniqueService(
-    redis,
-    prefix,
-    5000,
-    10
-  );
+  const service = new RedisApproxCountUniqueService(redis, prefix);
+  const windowMs = 5000;
 
   async function getKeyForIp(ip): Promise<SqrlKey> {
     const entityUniqueId = new SqrlUniqueId(
@@ -33,22 +35,33 @@ redisTest("works", async redis => {
   await service.bump(ctx, {
     at: Date.now(),
     key,
-    hashes: ["a", "b"]
+    sortedHashes: ["a", "b"],
+    windowMs
   });
 
-  let count = await service.count(ctx, {
-    key,
-    at: Date.now() + 10,
-    additionalHashes: ["b", "c"]
-  });
+  async function getCount(
+    ctx: Context,
+    key: SqrlKey,
+    at: number,
+    addHashes: string[]
+  ) {
+    const values = await service.fetchCounts(ctx, {
+      keys: [key],
+      at,
+      addHashes,
+      windowMs
+    });
+    return values[0];
+  }
+
+  let count = await getCount(ctx, key, Date.now() + 10, ["b", "c"]);
 
   expect(count).toEqual(3);
 
-  count = await service.count(ctx, {
-    key: await getKeyForIp("5.6.7.8"),
-    at: Date.now() + 10,
-    additionalHashes: ["b", "c"]
-  });
+  count = await getCount(ctx, await getKeyForIp("5.6.7.8"), Date.now() + 10, [
+    "b",
+    "c"
+  ]);
 
   expect(count).toEqual(2);
 
@@ -61,15 +74,11 @@ redisTest("works", async redis => {
     await service.bump(ctx, {
       at: currentTime,
       key: newKey,
-      hashes
+      sortedHashes: hashes,
+      windowMs
     });
 
-    const count = await service.count(ctx, {
-      key: newKey,
-      at: currentTime,
-      additionalHashes: []
-    });
-
+    const count = await getCount(ctx, newKey, currentTime, []);
     expect(count).toBe(expectedCount);
 
     currentTime += interval;

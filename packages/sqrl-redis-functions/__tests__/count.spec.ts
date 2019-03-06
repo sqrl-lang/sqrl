@@ -71,7 +71,7 @@ LET UserGeneratedTextTriGrams := [
 LET TrendingTriGramsDayOverDay := count(BY UserGeneratedTextTriGrams ${where} DAY OVER DAY);
 EXECUTE;
 
-LET TrendingTriGramsDayOverDay := trending(UserGeneratedTextTriGrams ${where} DAY OVER DAY );
+LET TrendingTriGramsDayOverDay := trending(UserGeneratedTextTriGrams ${where} DAY OVER DAY);
 # 0 -> 10 is enough to trigger a trending hit.
 ${range(9)
   .map(() => "EXECUTE;")
@@ -89,7 +89,7 @@ ASSERT TrendingTriGramsDayOverDay = [
 ];
 
 LET TrendingTriGramsDayOverDay := trending(
-  UserGeneratedTextTriGrams ${where} WITH MIN EVENTS 11 DAY OVER DAY
+  UserGeneratedTextTriGrams ${where} WITH MIN 11 EVENTS DAY OVER DAY
 );
 ASSERT TrendingTriGramsDayOverDay = [];
 `,
@@ -177,5 +177,86 @@ test("decaying works", async () => {
     ASSERT CountMonth = 1;
     ASSERT CountTotal = 9;
     EXECUTE;
+  `);
+});
+
+test("arbitrary counts work", async () => {
+  await runSqrl(jsonTemplate`
+    LET StartClock := '2019-01-17T20:59:28.874Z';
+    LET SqrlClock := StartClock;
+    LET SqrlIsClassify := false;
+    LET Actor := 'josh';
+
+    LET Count10Min := count(BY Actor LAST 10 MINUTES);
+    LET Count30Min := count(BY Actor LAST 30 MINUTES);
+    LET Count45Min := count(BY Actor LAST 45 MINUTES);
+    LET Count12Day := count(BY Actor LAST 12 DAYS);
+
+    # Bump the counter every minute for 5 minutes
+    LET SqrlClock := dateAdd(StartClock, "PT0M");
+    EXECUTE;
+    LET SqrlClock := dateAdd(StartClock, "PT1M");
+    EXECUTE;
+    LET SqrlClock := dateAdd(StartClock, "PT2M");
+    EXECUTE;
+    LET SqrlClock := dateAdd(StartClock, "PT3M");
+    EXECUTE;
+    LET SqrlClock := dateAdd(StartClock, "PT4M");
+    EXECUTE;
+
+    ASSERT Count10Min = 5;
+    ASSERT Count12Day = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT5M");
+    ASSERT Count10Min = 5;
+    ASSERT Count12Day = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT9M");
+    ASSERT Count10Min = 5;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT10M");
+    ASSERT Count10Min = 5;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT11M");
+    ASSERT Count10Min = 4;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT12M");
+    ASSERT Count10Min = 3;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT13M");
+    ASSERT Count10Min = 2;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT14M");
+    ASSERT Count10Min = 1;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT15M");
+    ASSERT Count10Min = 0;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT35M");
+    ASSERT Count10Min = 0;
+    ASSERT Count30Min = 1;
+
+    LET SqrlClock := dateAdd(StartClock, "PT40M");
+    ASSERT Count30Min = 0;
+    ASSERT Count45Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "P3D");
+    ASSERT Count10Min = 0;
+    ASSERT Count30Min = 0;
+    ASSERT Count45Min = 0;
+    ASSERT Count12Day = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "P13D");
+    ASSERT Count10Min = 0;
+    ASSERT Count30Min = 0;
+    ASSERT Count45Min = 0;
+    ASSERT Count12Day = 0;
   `);
 });

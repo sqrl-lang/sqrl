@@ -97,23 +97,6 @@ export interface FeatureAst extends BaseAst {
   value: string;
 }
 
-export type CountValidTimespan =
-  | "dayOverDay"
-  | "dayOverWeek"
-  | "lastDay"
-  | "lastEightDays"
-  | "lastHour"
-  | "lastMonth"
-  | "last180Days"
-  | "lastTwoDays"
-  | "lastTwoWeeks"
-  | "lastWeek"
-  | "total"
-  | "weekOverWeek"
-  | "previousLastDay"
-  | "previousLastWeek"
-  | "dayWeekAgo";
-
 export interface RulesAst extends BaseAst {
   type: "rules";
   rules: FeatureAst[];

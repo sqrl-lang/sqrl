@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { LabelService } from "../LabelFunctions";
-import { RedisInterface, redisKey } from "./RedisService";
+import { RedisInterface, createRedisKey } from "./RedisService";
 import { Context, Manipulator, SqrlEntity, WhenCause } from "sqrl-engine";
 
 const EXPIRY = 60 * 60 * 24 * 30;
@@ -19,7 +19,7 @@ export class RedisLabelService implements LabelService {
     cause: WhenCause
   ) {
     manipulator.addCallback(async ctx => {
-      const key = redisKey(
+      const key = createRedisKey(
         ctx.requireDatabaseSet(),
         this.prefix,
         "label",
@@ -37,7 +37,7 @@ export class RedisLabelService implements LabelService {
     cause: WhenCause
   ) {
     manipulator.addCallback(async ctx => {
-      const key = redisKey(
+      const key = createRedisKey(
         ctx.requireDatabaseSet(),
         this.prefix,
         "label",
@@ -54,7 +54,7 @@ export class RedisLabelService implements LabelService {
   ): Promise<boolean> {
     const rv = await this.redis.get(
       ctx,
-      redisKey(
+      createRedisKey(
         ctx.requireDatabaseSet(),
         this.prefix,
         "label",

@@ -8,32 +8,6 @@ import * as moment from "moment";
 import { jsonTemplate } from "sqrl-common";
 import { runSqrl, buildRedisTestInstance } from "./helpers/runSqrl";
 
-test("debug", async () =>
-  runSqrl(`
-LET Ip := entity("Ip", "1.2.3.4");
-LET SessionActor := null;
-LET UniquesByIp := countUnique(SessionActor GROUP BY Ip LAST HOUR);
-LET UniquesByIpTotal := countUnique(SessionActor BY Ip);
-
-# Test a unique by josh (without executing)
-LET SessionActor := entity("Object", "user/josh");
-ASSERT UniquesByIp = 1;
-
-# Another unique by greg (without executing) should still be one
-LET SessionActor := entity("Object", "user/greg");
-ASSERT UniquesByIp = 1;
-EXECUTE;
-
-# After execution greg reads 1
-LET SessionActor := entity("Object", "user/greg");
-ASSERT UniquesByIp = 1;
-
-# But a hit from josh reads 2
-LET SessionActor := entity("Object", "user/josh");
-ASSERT UniquesByIp = 2; # josh 2
-EXECUTE;
-`));
-
 test("clears as expected", async () =>
   runSqrl(jsonTemplate`
 LET SqrlClock := ${moment().toISOString()};
@@ -240,4 +214,90 @@ LET UniquesByIp := countUnique(${countStatement} GROUP BY Ip LAST WEEK);
   expect(Array.from(manipulator.sqrlKeys)).toEqual([
     'counter=3fab817c;timeMs=2016-09-26T20:56:14.538Z;features=["1.2.3.4"]'
   ]);
+});
+
+test("arbitrary counts work", async () => {
+  await runSqrl(jsonTemplate`
+    LET StartClock := '2019-01-17T20:59:28.874Z';
+    LET SqrlClock := StartClock;
+    LET SqrlIsClassify := false;
+    LET Actor := 'josh';
+
+    LET Count10Min := countUnique(Actor LAST 10 MINUTES);
+    LET Count30Min := countUnique(Actor LAST 30 MINUTES);
+    LET Count45Min := countUnique(Actor LAST 45 MINUTES);
+    LET Count12Day := countUnique(Actor LAST 12 DAYS);
+
+    # Bump the counter by a different actor every minute for 5 minutes
+    LET Actor := 'a';
+    LET SqrlClock := dateAdd(StartClock, "PT0M");
+    EXECUTE;
+    LET Actor := 'b';
+    LET SqrlClock := dateAdd(StartClock, "PT1M");
+    EXECUTE;
+    LET Actor := 'c';
+    LET SqrlClock := dateAdd(StartClock, "PT2M");
+    EXECUTE;
+    LET Actor := 'd';
+    LET SqrlClock := dateAdd(StartClock, "PT3M");
+    EXECUTE;
+    LET Actor := 'e';
+    LET SqrlClock := dateAdd(StartClock, "PT4M");
+    EXECUTE;
+
+    ASSERT Count10Min = 5;
+    ASSERT Count12Day = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT5M");
+    ASSERT Count10Min = 5;
+    ASSERT Count12Day = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT9M");
+    ASSERT Count10Min = 5;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT10M");
+    ASSERT Count10Min = 5;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT11M");
+    ASSERT Count10Min = 4;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT12M");
+    ASSERT Count10Min = 3;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT13M");
+    ASSERT Count10Min = 2;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT14M");
+    ASSERT Count10Min = 1;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT15M");
+    ASSERT Count10Min = 0;
+    ASSERT Count30Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "PT35M");
+    ASSERT Count10Min = 0;
+    ASSERT Count30Min = 1;
+
+    LET SqrlClock := dateAdd(StartClock, "PT40M");
+    ASSERT Count30Min = 0;
+    ASSERT Count45Min = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "P3D");
+    ASSERT Count10Min = 0;
+    ASSERT Count30Min = 0;
+    ASSERT Count45Min = 0;
+    ASSERT Count12Day = 5;
+
+    LET SqrlClock := dateAdd(StartClock, "P13D");
+    ASSERT Count10Min = 0;
+    ASSERT Count30Min = 0;
+    ASSERT Count45Min = 0;
+    ASSERT Count12Day = 0;
+  `);
 });

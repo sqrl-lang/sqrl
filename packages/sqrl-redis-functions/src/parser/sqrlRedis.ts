@@ -5,6 +5,23 @@
  */
 import { FeatureAst, Ast } from "sqrl-engine";
 
+interface TimespanCustom {
+  type:
+    | "dayOverDay"
+    | "dayOverWeek"
+    | "dayOverFullWeek"
+    | "weekOverWeek"
+    | "previousLastDay"
+    | "previousLastWeek"
+    | "dayWeekAgo"
+    | "total";
+}
+interface TimespanMs {
+  type: "duration";
+  durationMs: number;
+}
+export type Timespan = TimespanCustom | TimespanMs;
+
 export interface AliasedFeature {
   feature: FeatureAst;
   alias: string;
@@ -13,14 +30,14 @@ export interface AliasedFeature {
 export interface CountArguments {
   features: AliasedFeature[];
   sumFeature: FeatureAst | null;
-  timespan: string;
+  timespan: Timespan;
   where: Ast;
 }
 
 export interface TrendingArguments {
   features: AliasedFeature[];
   minEvents: number;
-  timespan: string;
+  timespan: Timespan;
   where: Ast;
 }
 
