@@ -12,7 +12,7 @@ SQRL is a Safe, Stateful Rules Language for Event Streams
 
 ## Early Preview
 
-This is an early preview of the SQRL (Smyte Query and Rules Language) open-source release. This release is intended to onboard existing community members and prepare us for the full in the near future. Through SQRL, we hope to partner with the open source community, and help better address spam on all websites
+This is an early preview of the SQRL (Smyte Query and Rules Language) open-source release. This release is intended to onboard existing community members and prepare us for a full release in the near future. Through SQRL, we hope to partner with the open source community, and help better address spam on all websites.
 
 ## Documentation
 
