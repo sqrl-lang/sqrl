@@ -6,7 +6,7 @@ import {
   Execution,
   AstBuilder,
   CompileState
-} from "sqrl-engine";
+} from "sqrl";
 
 /**
  * Copyright 2018 Twitter, Inc.

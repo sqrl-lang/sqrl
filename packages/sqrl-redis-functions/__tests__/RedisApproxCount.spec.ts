@@ -5,7 +5,7 @@
  */
 import { RedisInterface } from "../src/services/RedisService";
 import { RedisUniqueIdService } from "../src/services/RedisUniqueId";
-import { SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl-engine";
+import { SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl";
 import { redisTest } from "./helpers/redisTest";
 import { RedisCountService } from "../src/services/RedisCountService";
 

@@ -9,7 +9,7 @@ import {
   SessionProps
 } from "../RateLimitFunctions";
 import { RedisInterface } from "./RedisService";
-import { Context, SqrlKey } from "sqrl-engine";
+import { Context, SqrlKey } from "sqrl";
 
 /**
  * Rate limit service based on redis

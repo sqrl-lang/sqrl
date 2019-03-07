@@ -50,6 +50,6 @@
   "dependencies": {
     "bignum": "^0.13.0",
     "sqrl-common": "file:../sqrl-common",
-    "sqrl-engine": "file:../sqrl-engine"
+    "sqrl": "file:../sqrl"
   }
 }

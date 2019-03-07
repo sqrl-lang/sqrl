@@ -1,4 +1,4 @@
-import { runSqrlTest } from "sqrl-engine";
+import { runSqrlTest } from "sqrl";
 import { register as registerCliFunctions } from "../src";
 
 /**

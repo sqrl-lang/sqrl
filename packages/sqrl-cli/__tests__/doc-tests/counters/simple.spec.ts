@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { runCli } from "../../helpers/runCli";
-import { VirtualFilesystem } from "sqrl-engine";
+import { VirtualFilesystem } from "sqrl";
 import * as stripAnsi from "strip-ansi";
 
 test("works", async () => {

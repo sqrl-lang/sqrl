@@ -12,7 +12,7 @@ import {
   Execution,
   Instance,
   AstBuilder
-} from "sqrl-engine";
+} from "sqrl";
 
 export interface PatternService {
   // @todo: We should provide a method to pre-register a pattern as well

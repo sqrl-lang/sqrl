@@ -1,4 +1,4 @@
-import { Context, SqrlKey } from "sqrl-engine";
+import { Context, SqrlKey } from "sqrl";
 import { LabelService } from "./LabelFunctions";
 import { RateLimitService } from "./RateLimitFunctions";
 import { UniqueIdService } from "./services/RedisUniqueId";

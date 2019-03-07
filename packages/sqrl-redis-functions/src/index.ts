@@ -8,7 +8,7 @@ import { registerCountUniqueFunctions } from "./CountUniqueFunctions";
 import { registerRateLimitFunctions } from "./RateLimitFunctions";
 import { registerLabelFunctions } from "./LabelFunctions";
 import { RedisServices } from "./ServiceHelpers";
-import { Instance } from "sqrl-engine";
+import { Instance } from "sqrl";
 import { registerEntityFunctions } from "./EntityFunctions";
 
 export function register(instance: Instance) {

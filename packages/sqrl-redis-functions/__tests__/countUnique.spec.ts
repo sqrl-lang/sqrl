@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { createSimpleContext, Execution, SimpleManipulator } from "sqrl-engine";
+import { createSimpleContext, Execution, SimpleManipulator } from "sqrl";
 import * as moment from "moment";
 import { jsonTemplate } from "sqrl-common";
 import { runSqrl, buildRedisTestInstance } from "./helpers/runSqrl";

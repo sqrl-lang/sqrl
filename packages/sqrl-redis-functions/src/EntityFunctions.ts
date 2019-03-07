@@ -13,7 +13,7 @@ import {
   CallAst,
   AstBuilder,
   Ast
-} from "sqrl-engine";
+} from "sqrl";
 import { UniqueIdService } from "./services/RedisUniqueId";
 
 async function toEntity(

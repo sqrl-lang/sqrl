@@ -14,7 +14,7 @@ import {
   sqrlInvariant,
   Ast,
   CustomCallAst
-} from "sqrl-engine";
+} from "sqrl";
 
 import { parse } from "./parser/sqrlRedisParser";
 

@@ -59,6 +59,6 @@
     "moment": "^2.23.0",
     "murmurhash-native": "^3.3.0",
     "sqrl-common": "file:../sqrl-common",
-    "sqrl-engine": "file:../sqrl-engine"
+    "sqrl": "file:../sqrl"
   }
 }

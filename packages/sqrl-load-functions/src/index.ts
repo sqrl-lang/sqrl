@@ -20,7 +20,7 @@ import {
   AstBuilder,
   AT,
   sqrlInvariant
-} from "sqrl-engine";
+} from "sqrl";
 
 function loadFile(state: CompileState, sourceAst: Ast, filePath: string) {
   const pwd = sourceAst.location.filename

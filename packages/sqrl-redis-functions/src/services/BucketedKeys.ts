@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { createRedisKey } from "./RedisService";
-import { DatabaseSet, SqrlKey } from "sqrl-engine";
+import { DatabaseSet, SqrlKey } from "sqrl";
 
 export function getBucketKey(
   databaseSet: DatabaseSet,

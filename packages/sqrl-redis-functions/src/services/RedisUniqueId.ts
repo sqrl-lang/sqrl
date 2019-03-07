@@ -6,7 +6,7 @@
 
 import { createRedisKey, RedisInterface } from "./RedisService";
 import bignum = require("bignum");
-import { Context, UniqueId } from "sqrl-engine";
+import { Context, UniqueId } from "sqrl";
 import { invariant } from "sqrl-common";
 
 export const TIMESTAMP_BITS = 40;

@@ -11,7 +11,7 @@ import {
   AstBuilder,
   AT,
   Execution
-} from "sqrl-engine";
+} from "sqrl";
 import * as util from "util";
 import { CliManipulator } from "./CliManipulator";
 import { registerSourceFunction } from "./SourceFunctions";

@@ -6,7 +6,7 @@
 import { register as registerTextFunctions } from "../../src";
 import { register as registerLoadFunctions } from "sqrl-load-functions";
 
-import { buildTestInstance, runSqrlTest, Filesystem } from "sqrl-engine";
+import { buildTestInstance, runSqrlTest, Filesystem } from "sqrl";
 
 interface Options {
   filesystem?: Filesystem;

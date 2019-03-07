@@ -8,7 +8,7 @@
 import { cliMain, getCliOutput } from "./cli/CliMain";
 import { promiseFinally } from "sqrl-common";
 import { CloseableGroup } from "./jslib/Closeable";
-import { Instance } from "sqrl-engine";
+import { Instance } from "sqrl";
 import { CliOutput } from "./cli/CliOutput";
 import { CliError } from "./cli/CliError";
 import { parseArgs, CliArgs } from "./cli/CliArgs";

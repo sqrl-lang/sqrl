@@ -7,9 +7,9 @@
 // tslint:disable:no-submodule-imports (@TODO)
 
 import * as repl from "repl";
-import { SqrlTest } from "sqrl-engine/lib/testing/SqrlTest";
-import { parseRepl } from "sqrl-engine/lib/parser/SqrlParse";
-import SqrlAst from "sqrl-engine/lib/ast/SqrlAst";
+import { SqrlTest } from "sqrl/lib/testing/SqrlTest";
+import { parseRepl } from "sqrl/lib/parser/SqrlParse";
+import SqrlAst from "sqrl/lib/ast/SqrlAst";
 import * as expandTilde from "expand-tilde";
 import { existsSync, readFileSync, appendFileSync } from "fs";
 import { EventEmitter } from "eventemitter3";
@@ -21,11 +21,11 @@ import {
   isValidFeatureName,
   StatementAst,
   Ast
-} from "sqrl-engine";
+} from "sqrl";
 import chalk from "chalk";
-import { SlotMissingCallbackError } from "sqrl-engine/lib/execute/SqrlExecutionState";
+import { SlotMissingCallbackError } from "sqrl/lib/execute/SqrlExecutionState";
 import { Readable, Writable } from "stream";
-import Semaphore from "sqrl-engine/lib/jslib/Semaphore";
+import Semaphore from "sqrl/lib/jslib/Semaphore";
 import { invariant } from "sqrl-common";
 import { spanToShell } from "../spanToShell";
 import { renderFunctionsHelp } from "../renderFunctionsHelp";

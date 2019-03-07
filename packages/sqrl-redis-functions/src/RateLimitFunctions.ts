@@ -19,7 +19,7 @@ import {
   SqrlSession,
   SqrlObject,
   CustomCallAst
-} from "sqrl-engine";
+} from "sqrl";
 
 import { flatten } from "sqrl-common";
 import { RateLimitArguments } from "./parser/sqrlRedis";

@@ -5,7 +5,7 @@
  */
 
 import { runSqrl, buildRedisTestInstance } from "./helpers/runSqrl";
-import { Instance } from "sqrl-engine";
+import { Instance } from "sqrl";
 import { jsonTemplate } from "sqrl-common";
 
 let instance: Instance;

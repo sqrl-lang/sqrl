@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { VirtualFilesystem } from "sqrl-engine";
+import { VirtualFilesystem } from "sqrl";
 import { textSqrlTest } from "./helpers/textSqrlTest";
 
 textSqrlTest(

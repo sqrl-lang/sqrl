@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { Context, SqrlKey } from "sqrl-engine";
+import { Context, SqrlKey } from "sqrl";
 import { RedisInterface, createRedisKey } from "./RedisService";
 import { TOTAL_COUNT_EXPIRY_SEC } from "./RedisCountService";
 

@@ -18,7 +18,7 @@ import {
   GetTimeMs
 } from "./services/RedisUniqueId";
 import { RedisRateLimit } from "./services/RedisRateLimit";
-import { Config } from "sqrl-engine";
+import { Config } from "sqrl";
 import { CountService, CountUniqueService, Services } from "./Services";
 
 interface Closeable {

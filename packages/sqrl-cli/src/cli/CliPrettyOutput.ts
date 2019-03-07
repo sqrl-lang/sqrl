@@ -14,7 +14,7 @@ import {
   SqrlCompileError,
   Execution,
   SqrlObject
-} from "sqrl-engine";
+} from "sqrl";
 import { spanToShell } from "../spanToShell";
 import { CliError } from "./CliError";
 import { CliManipulator } from "sqrl-cli-functions";

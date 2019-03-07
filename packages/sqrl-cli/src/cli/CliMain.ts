@@ -6,7 +6,7 @@
 // tslint:disable:no-console
 // tslint:disable:no-submodule-imports (@TODO)
 import { createSqrlServer, ServerWaitCallback } from "../SqrlServer";
-import { SqrlTest } from "sqrl-engine/lib/testing/SqrlTest";
+import { SqrlTest } from "sqrl/lib/testing/SqrlTest";
 import { SqrlRepl } from "../repl/SqrlRepl";
 import * as path from "path";
 import * as waitForSigint from "wait-for-sigint";
@@ -27,11 +27,11 @@ import {
   LogService,
   LocalFilesystem,
   Filesystem
-} from "sqrl-engine";
-import SqrlAst from "sqrl-engine/lib/ast/SqrlAst";
-import { StatementAst } from "sqrl-engine/lib/ast/Ast";
-import { sourceOptionsFromPath } from "sqrl-engine/lib/helpers/CompileHelpers";
-import { createDefaultContext } from "sqrl-engine/lib/helpers/ContextHelpers";
+} from "sqrl";
+import SqrlAst from "sqrl/lib/ast/SqrlAst";
+import { StatementAst } from "sqrl/lib/ast/Ast";
+import { sourceOptionsFromPath } from "sqrl/lib/helpers/CompileHelpers";
+import { createDefaultContext } from "sqrl/lib/helpers/ContextHelpers";
 import { WatchedFilesystem } from "./WatchedFilesystem";
 import { CliPrettyOutput } from "./CliPrettyOutput";
 import { CliRun } from "./CliRun";
@@ -47,19 +47,19 @@ import {
   CliTableOutput,
   CliDotOutput
 } from "./CliOutput";
-import { getGlobalLogger } from "sqrl-engine/lib/api/log";
-import { SimpleDatabaseSet } from "sqrl-engine/lib/platform/DatabaseSet";
-import { SimpleContext } from "sqrl-engine/lib/platform/Trace";
+import { getGlobalLogger } from "sqrl/lib/api/log";
+import { SimpleDatabaseSet } from "sqrl/lib/platform/DatabaseSet";
+import { SimpleContext } from "sqrl/lib/platform/Trace";
 import { Readable, Writable } from "stream";
 import { CloseableGroup } from "../jslib/Closeable";
 
 // tslint:disable-next-line:no-duplicate-imports
-import * as SQRL from "sqrl-engine";
+import * as SQRL from "sqrl";
 import { invariant } from "sqrl-common";
 import { renderFunctionsHelp } from "../renderFunctionsHelp";
 import { CliError } from "./CliError";
 import { CliManipulator } from "sqrl-cli-functions";
-import Semaphore from "sqrl-engine/lib/jslib/Semaphore";
+import Semaphore from "sqrl/lib/jslib/Semaphore";
 import { CliArgs } from "./CliArgs";
 import { readJsonFile } from "./readJsonFile";
 

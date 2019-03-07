@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { RedisInterface, createRedisKey } from "./RedisService";
-import { Context, SqrlKey } from "sqrl-engine";
+import { Context, SqrlKey } from "sqrl";
 import {
   getCurrentBucketExpirySeconds,
   getBucketKey,

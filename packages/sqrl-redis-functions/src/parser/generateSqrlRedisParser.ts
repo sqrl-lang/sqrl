@@ -57,7 +57,7 @@ for (const rule of allowedStartRules) {
     "align"
   ].join(","),
   customHeader: `
-  import { Ast, AstLocation } from "sqrl-engine";
+  import { Ast, AstLocation } from "sqrl";
   `.replace(/^ */gm, ""),
   returnTypes
 };

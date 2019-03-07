@@ -1,4 +1,4 @@
-import { isValidFeatureName, Context, CompiledExecutable } from "sqrl-engine";
+import { isValidFeatureName, Context, CompiledExecutable } from "sqrl";
 import { DefaultDict } from "../jslib/DefaultDict";
 
 interface Options {

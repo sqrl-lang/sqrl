@@ -8,7 +8,7 @@ import * as microQuery from "micro-query";
 // tslint:disable-next-line:no-submodule-imports (it is the documented suggestion)
 import * as dispatch from "micro-route/dispatch";
 import { IncomingMessage, ServerResponse, Server } from "http";
-import { Context, FeatureMap, Executable, Execution, FiredRule } from "sqrl-engine";
+import { Context, FeatureMap, Executable, Execution, FiredRule } from "sqrl";
 import { CliManipulator } from "sqrl-cli-functions";
 
 function userInvariant(cond, message) {

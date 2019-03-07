@@ -69,7 +69,7 @@
     "split2": "^3.1.0",
     "sqrl-cli-functions": "file:../sqrl-cli-functions",
     "sqrl-common": "file:../sqrl-common",
-    "sqrl-engine": "file:../sqrl-engine",
+    "sqrl": "file:../sqrl",
     "sqrl-load-functions": "file:../sqrl-load-functions",
     "sqrl-redis-functions": "file:../sqrl-redis-functions",
     "sqrl-text-functions": "file:../sqrl-text-functions",

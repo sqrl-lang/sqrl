@@ -15,7 +15,7 @@ import {
   CompileState,
   AT,
   CustomCallAst
-} from "sqrl-engine";
+} from "sqrl";
 import murmurhash = require("murmurhash-native");
 
 import { invariant, sqrlCartesianProduct } from "sqrl-common";

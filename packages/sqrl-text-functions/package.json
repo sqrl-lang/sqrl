@@ -52,6 +52,6 @@
     "node-nice": "0.0.1",
     "re2": "^1.8.4",
     "simhash-js": "^1.0.0",
-    "sqrl-engine": "file:../sqrl-engine"
+    "sqrl": "file:../sqrl"
   }
 }

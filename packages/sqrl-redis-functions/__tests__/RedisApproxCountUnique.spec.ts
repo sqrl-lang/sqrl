@@ -10,7 +10,7 @@ import {
   SqrlUniqueId,
   createSimpleContext,
   Context
-} from "sqrl-engine";
+} from "sqrl";
 import { redisTest } from "./helpers/redisTest";
 import { RedisApproxCountUniqueService } from "../src/services/RedisApproxCountUnique";
 
