@@ -1,6 +1,9 @@
 {
   "name": "wikipedia-diff-stream",
   "version": "0.6.0",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "dependencies": {
     "diff-match-patch": "^1.0.4",
     "diff-match-patch-node": "^0.9.1",

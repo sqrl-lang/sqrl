@@ -2,6 +2,9 @@
   "name": "sqrl-example-functions",
   "version": "0.6.1",
   "main": "./lib/index.js",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "author": {
     "name": "Josh Yudaken",
     "email": "j@yud.co.za"

@@ -4,6 +4,9 @@
   "version": "0.6.0",
   "main": "index.js",
   "description": "A documentation theme for Hexo (forked for SQRL)",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "keywords": [
     "hexo",
     "documentation",

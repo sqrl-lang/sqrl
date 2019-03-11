@@ -4,6 +4,9 @@
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - engine",
   "license": "Apache-2.0",
   "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "author": {
     "name": "Twitter, Inc.",
     "url": "https://twitter.com/twitteross"

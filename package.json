@@ -4,6 +4,9 @@
   "homepage": "https://twitter.github.io/sqrl",
   "license": "Apache-2.0",
   "repository": "https://github.com/twitter/sqrl",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "dependencies": {
     "lerna": "^3.10.5"
   },
