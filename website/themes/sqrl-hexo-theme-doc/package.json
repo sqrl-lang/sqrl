@@ -1,7 +1,7 @@
 {
   "name": "sqrl-hexo-theme-doc",
   "private": true,
-  "version": "0.6.0",
+  "version": "0.6.2",
   "main": "index.js",
   "description": "A documentation theme for Hexo (forked for SQRL)",
   "publishConfig": {
