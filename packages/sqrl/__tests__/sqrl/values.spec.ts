@@ -54,20 +54,7 @@ sqrlTest(
   ASSERT hasAttr(DataBlob, "key") = true;
   ASSERT attr(DataBlob, Key) = 0;
   ASSERT hasAttr(DataBlob, Key) = true;
-  ASSERT jsonValue(DataBlob, "$.key") = 0;
-  ASSERT jsonValue(DataBlob, "$.key_2") = 2;
-  ASSERT jsonValue(DataBlob, "$.nested.key") = 1;
-  ASSERT jsonValue(DataBlob, "$.nested.missing") = null;
-  ASSERT jsonValue(DataBlob, "$.null") = null;
-  ASSERT jsonValue(DataBlob, "$.missing") = null;
-  ASSERT jsonValue(DataBlob, "$.array") = [1, 2];
-  ASSERT jsonValue(DataBlob, "$.array[0]") = 1;
-  ASSERT jsonValue(DataBlob, "$.array[1]") = 2;
-  ASSERT jsonValue(DataBlob, \"$['array']\") = [1, 2];
-  ASSERT jsonValue(DataBlob, "$[\\"array\\"]") = [1, 2];
-  ASSERT jsonValue(DataBlob, "$[0]") = "a";
   
-  ASSERT jsonValue(Complex, "$['a-b'][0]['c.\\\\\\"']['\\\\'']") = "OKAY!";
   ASSERT bool(0) = false;
   ASSERT bool([1]) = true;
   ASSERT bool([]) = false;

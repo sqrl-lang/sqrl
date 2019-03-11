@@ -158,6 +158,7 @@ async function createInstance(
           "sqrl-redis-functions",
           "sqrl-text-functions",
           "sqrl-load-functions",
+          "sqrl-jsonpath",
           "sqrl-cli-functions"
         ]),
     ...args.requires

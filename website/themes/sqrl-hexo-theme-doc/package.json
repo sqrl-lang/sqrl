@@ -78,7 +78,7 @@
     "eslint-plugin-react": "^7.2.1",
     "hexo": "^3.3.7",
     "hexo-renderer-ejs": "^0.3.0",
-    "jest": "^20.0.4",
+    "jest": "^24.3.1",
     "jest-junit": "^2.1.0",
     "node-sass": "^4.5.3",
     "nodemon": "^1.12.1",

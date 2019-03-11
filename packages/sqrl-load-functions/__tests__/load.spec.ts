@@ -13,7 +13,7 @@ test("Loading YAML works", async () => {
   await runSqrlTest(
     `
     LET MyData := loadYaml("sample.yaml");
-    ASSERT jsonValue(MyData, "$.string") = "hello world";
+    ASSERT attr(MyData, "string") = "hello world";
     `,
     {
       filesystem,

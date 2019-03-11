@@ -43,7 +43,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.9",
     "@types/node": "^11.9.5",
-    "jest": "^24.1.0",
+    "jest": "^24.3.1",
     "request-promise-native": "^1.0.7",
     "strip-ansi": "^5.0.0",
     "ts-jest": "^24.0.0",
@@ -70,6 +70,7 @@
     "sqrl": "file:../sqrl",
     "sqrl-cli-functions": "file:../sqrl-cli-functions",
     "sqrl-common": "file:../sqrl-common",
+    "sqrl-jsonpath": "file:../sqrl-jsonpath",
     "sqrl-load-functions": "file:../sqrl-load-functions",
     "sqrl-redis-functions": "file:../sqrl-redis-functions",
     "sqrl-text-functions": "file:../sqrl-text-functions",

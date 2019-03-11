@@ -39,7 +39,7 @@ test("works", async () => {
 
   const librarySqrl = `
   LET SqrlOutput := getSqrlOutput(SqrlExecutionComplete);
-  LET SqrlKafka := jsonValue(SqrlOutput, '$.kafka');
+  LET SqrlKafka := attr(SqrlOutput, 'kafka');
   `;
   // First make sure _loggedErrorIfRun() actually works
   await runSqrlTest(

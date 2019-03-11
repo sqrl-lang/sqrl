@@ -39,7 +39,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.9",
     "@types/node": "^11.9.5",
-    "jest": "^24.1.0",
+    "jest": "^24.3.1",
     "sqrl-load-functions": "file:../sqrl-load-functions",
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.2",
