@@ -1,3 +1,7 @@
+## 0.6.2 (March 13, 2019)
+
+Re-release due to build errors
+
 ## 0.6.2 (March 11, 2019)
 
 Split `jsonPath` into `sqrl-json` package.
