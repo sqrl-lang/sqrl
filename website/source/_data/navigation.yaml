@@ -55,7 +55,7 @@ main:
       - text: Text Pattern Matching
         type: link
         path: language/textpattern.html
-      - text: Where Clauses
+      - text: Include and Where Clauses
         type: link
         path: language/where.html
       - text: Cost Optimisation
@@ -127,12 +127,15 @@ main:
   - text: Production Deployments
     type: label
     children:
+      - text: Sync and Async
+        type: link
+        path: deployment/async.html
       - text: Http Server
         type: link
         path: deployment/server.html
-      - text: Async Queues
+      - text: Queues
         type: link
-        path: deployment/async.html
+        path: deployment/queue.html
   - text: External Resources
     type: label
   - text: API Reference
