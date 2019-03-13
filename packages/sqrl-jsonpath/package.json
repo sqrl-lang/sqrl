@@ -1,6 +1,6 @@
 {
   "name": "sqrl-jsonpath",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - functions for querying data",
   "homepage": "https://twitter.github.io/sqrl",
   "license": "Apache-2.0",
