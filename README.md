@@ -8,7 +8,7 @@ SQRL is a Safe, Stateful Rules Language for Event Streams
 
 **Powerful** – Rules can declaratively aggregate state, trigger side effects, and call functions in other languages.
 
-**Auditable** – It’s easy to understand why a rule fired or a side effect occured, and rules can be safely replayed.
+**Auditable** – It’s easy to understand why a rule fired or a side effect occurred, and rules can be safely replayed.
 
 ## Early Preview
 
