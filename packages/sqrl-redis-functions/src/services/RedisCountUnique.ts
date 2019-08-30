@@ -68,7 +68,7 @@ export class RedisCountUniqueService implements CountUniqueService {
     if (keys.length === 0) {
       return [];
     }
-    const rv = new Set();
+    const rv: Set<string> = new Set();
     await Promise.all(
       keys.map(async key => {
         const hashes = await this.getHashes(ctx, key, windowStartMs);

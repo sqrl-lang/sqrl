@@ -3,6 +3,7 @@
 .*.swp
 *.log
 .deploy*/
+.envrc
 .nyc_output
 coverage/
 lib/

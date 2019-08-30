@@ -6,16 +6,16 @@
     "registry": "https://registry.npmjs.org"
   },
   "hexo": {
-    "version": "3.8.0"
+    "version": "3.9.0"
   },
   "dependencies": {
-    "hexo": "^3.8.0",
-    "hexo-cli": "^1.0.3",
+    "hexo": "^3.9.0",
+    "hexo-cli": "^2.0.0",
     "hexo-deployer-git": "^1.0.0",
     "hexo-renderer-ejs": "^0.3.1",
     "hexo-renderer-less": "^1.0.0",
-    "hexo-renderer-marked": "^0.3.2",
-    "hexo-renderer-sass": "^0.3.2",
+    "hexo-renderer-marked": "^2.0.0",
+    "hexo-renderer-sass": "^0.4.0",
     "hexo-server": "^0.3.3",
     "sqrl-hexo-theme-doc": "file:themes/sqrl-hexo-theme-doc"
   },

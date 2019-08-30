@@ -242,7 +242,7 @@ export function walkAst(ast: Ast, walkCallback: (node: Ast) => void): void {
 }
 
 export function astSlotNames(root: Ast): string[] {
-  const slotNames = new Set();
+  const slotNames: Set<string> = new Set();
   walkAst(root, ast => {
     if (ast.type === "feature") {
       slotNames.add(ast.value);

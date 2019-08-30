@@ -3,7 +3,6 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import bignum = require("bignum");
 import { bufferToHexEncodedAscii, mapObject } from "sqrl-common";
 
 function friendlyBuffer(buf) {
@@ -16,7 +15,7 @@ function friendlyBuffer(buf) {
 }
 
 function deepFriendlyMap(obj) {
-  if (obj instanceof bignum) {
+  if (typeof obj === "bigint") {
     return obj.toString();
   } else if (obj instanceof Buffer) {
     return friendlyBuffer(obj);

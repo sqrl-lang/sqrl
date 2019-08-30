@@ -38,26 +38,26 @@
     "watch:test:integration": "npm run test:integration -- --watch"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.9",
+    "@types/jest": "^24.0.18",
     "@types/node": "^11.9.5",
-    "jest": "^24.3.1",
-    "jest-extended": "^0.11.0",
-    "prettier": "^1.15.3",
+    "jest": "^24.9.0",
+    "jest-extended": "^0.11.2",
+    "prettier": "^1.18.2",
     "sqrl-test-utils": "file:../sqrl-test-utils",
-    "ts-jest": "^24.0.0",
-    "ts-node": "^8.0.2",
-    "typescript": "^3.2.4"
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.6.2"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "bignum": "^0.13.0",
-    "bluebird": "^3.5.3",
+    "bigint-buffer": "^1.1.2",
+    "bluebird": "^3.5.5",
     "fast-stable-stringify": "^1.0.0",
-    "ioredis": "^4.3.0",
-    "moment": "^2.23.0",
-    "murmurhash-native": "^3.3.0",
+    "ioredis": "^4.14.0",
+    "moment": "^2.24.0",
+    "murmurhash-native": "^3.4.1",
     "sqrl": "file:../sqrl",
     "sqrl-common": "file:../sqrl-common"
   }

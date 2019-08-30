@@ -48,11 +48,9 @@ class AstExprState {
     return 1;
   }
   sortExprsByCostAsc(exprs: Expr[]): Expr[] {
-    return exprs.sort(
-      (left, right): number => {
-        return this.costForExpr(left) - this.costForExpr(right);
-      }
-    );
+    return exprs.sort((left, right): number => {
+      return this.costForExpr(left) - this.costForExpr(right);
+    });
   }
 
   hasSlot(name: string): boolean {
@@ -459,8 +457,8 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
   );
 }
 
-function _exprExtractLoad(expr?, loaded: Set<SqrlSlot> = new Set()): Expr {
-  const load = new Set();
+function _exprExtractLoad(expr: Expr, loaded: Set<Slot> = new Set()): Expr {
+  const load: Set<Slot> = new Set();
   (expr.load || []).forEach(slot => {
     if (!loaded.has(slot)) {
       load.add(slot);

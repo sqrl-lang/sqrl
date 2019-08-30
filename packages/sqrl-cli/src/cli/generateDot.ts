@@ -100,8 +100,8 @@ export function generateDotFile(
     edges[name].forEach(feature => recurse(feature, edges, recurseSeen));
   }
 
-  const seen = new Set();
-  const seenDepends = new Set();
+  const seen: Set<string> = new Set();
+  const seenDepends: Set<string> = new Set();
   for (const feature of features) {
     recurse(feature, forward, seen);
   }

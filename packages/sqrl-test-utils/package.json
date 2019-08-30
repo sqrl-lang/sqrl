@@ -37,18 +37,18 @@
     "watch:test:integration": "npm run test:integration -- --watch"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.9",
+    "@types/jest": "^24.0.18",
     "@types/node": "^11.9.5",
-    "jest": "^24.3.1",
-    "ts-jest": "^24.0.0",
-    "ts-node": "^8.0.2",
-    "typescript": "^3.2.4"
+    "jest": "^24.9.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.6.2"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "jest-diff": "^24.0.0",
+    "jest-diff": "^24.9.0",
     "sqrl-common": "file:../sqrl-common"
   }
 }

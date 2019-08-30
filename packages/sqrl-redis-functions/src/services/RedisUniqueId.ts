@@ -5,9 +5,9 @@
  */
 
 import { createRedisKey, RedisInterface } from "./RedisService";
-import bignum = require("bignum");
 import { Context, UniqueId } from "sqrl";
 import { invariant } from "sqrl-common";
+import { toBufferBE } from "bigint-buffer";
 
 export const TIMESTAMP_BITS = 40;
 export const TIMESTAMP_SIZE = Math.pow(2, TIMESTAMP_BITS);
@@ -41,15 +41,16 @@ export class SimpleId extends UniqueId {
     return this.remainder;
   }
   getBuffer(): Buffer {
-    return this.getBignum().toBuffer({ endian: "big", size: 8 });
+    return toBufferBE(this.getBigInt(), 8);
   }
-  getBignum(): bignum {
-    return new bignum(this.timeMs)
-      .shiftLeft(TIMESTAMP_BITS)
-      .add(this.remainder);
+  getBigInt(): bigint {
+    return (
+      // tslint:disable-next-line: no-bitwise
+      (BigInt(this.timeMs) << BigInt(TIMESTAMP_BITS)) + BigInt(this.remainder)
+    );
   }
   getNumberString(): string {
-    return this.getBignum().toString();
+    return this.getBigInt().toString();
   }
 }
 

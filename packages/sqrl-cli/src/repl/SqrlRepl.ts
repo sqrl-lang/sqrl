@@ -30,7 +30,8 @@ import { invariant } from "sqrl-common";
 import { spanToShell } from "../spanToShell";
 import { renderFunctionsHelp } from "../renderFunctionsHelp";
 
-export class SqrlRepl extends EventEmitter {
+type EventTypes = "exit";
+export class SqrlRepl extends EventEmitter<EventTypes> {
   private traceFactory: () => Context;
   private server: repl.REPLServer | null = null;
   private historyPath: string = expandTilde("~/.sqrl_repl_history");

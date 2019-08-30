@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import bignum = require("bignum");
+import { toBufferBE } from "bigint-buffer";
 import { DatabaseSet } from "../api/ctx";
 
 export class SimpleDatabaseSet implements DatabaseSet {
@@ -14,6 +14,6 @@ export class SimpleDatabaseSet implements DatabaseSet {
     return this.datasetId;
   }
   getDatasetIdBuffer(): Buffer {
-    return new bignum(this.getDatasetId()).toBuffer({ endian: "big", size: 8 });
+    return toBufferBE(BigInt(this.getDatasetId()), 8);
   }
 }
