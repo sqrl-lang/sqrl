@@ -1,4 +1,8 @@
-## 0.6.2 (March 13, 2019)
+## 0.6.4 (October 29, 2020)
+
+Upgrade dependency versions
+
+## 0.6.3 (March 13, 2019)
 
 Re-release due to build errors
 
