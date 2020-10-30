@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import diff = require("jest-diff");
+import diff from "jest-diff";
 import { AssertService, SqrlObject, sqrlCompare } from "sqrl-common";
 
 export class JestAssertService implements AssertService {

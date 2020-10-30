@@ -5,7 +5,7 @@
  */
 import { PatternService } from "./PatternFunctions";
 import { nice } from "node-nice";
-import * as RE2 from "re2";
+import RE2 = require("re2");
 
 // Regular expression looking for a regular expression
 const REGEXP_REGEXP = /^\/(.*)\/(i)?$/;

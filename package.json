@@ -13,7 +13,6 @@
   "devDependencies": {
     "@types/ioredis": "^4.0.13",
     "@types/jest": "^24.0.15",
-    "@types/jest-diff": "^20.0.1",
     "@types/jsonpath": "^0.2.0",
     "@types/node": "^12.6.3",
     "@types/pegjs": "^0.10.1",
@@ -36,13 +35,13 @@
     "sqrl-test-utils": "file:packages/sqrl-test-utils",
     "sqrl-text-functions": "file:packages/sqrl-text-functions",
     "sqrl-website": "file:website",
-    "ts-jest": "^24.0.2",
+    "ts-jest": "^26.4.3",
     "ts-node": "^8.3.0",
     "ts-pegjs": "^0.2.5",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.19.2",
-    "typescript": "^3.5.3",
+    "typescript": "^3.9.7",
     "wikipedia-diff-stream": "file:packages/wikipedia-diff-stream"
   },
   "scripts": {

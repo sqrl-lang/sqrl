@@ -6,11 +6,11 @@
     "registry": "https://registry.npmjs.org"
   },
   "hexo": {
-    "version": "3.9.0"
+    "version": "5.2.0"
   },
   "dependencies": {
-    "hexo": "^3.9.0",
-    "hexo-cli": "^2.0.0",
+    "hexo": "^5.2.0",
+    "hexo-cli": "^4.2.0",
     "hexo-deployer-git": "^1.0.0",
     "hexo-renderer-ejs": "^0.3.1",
     "hexo-renderer-less": "^1.0.0",

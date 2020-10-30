@@ -42,13 +42,13 @@
     "jest": "^24.9.0",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "jest-diff": "^24.9.0",
+    "jest-diff": "^26.6.1",
     "sqrl-common": "^0.6.4"
   },
   "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"

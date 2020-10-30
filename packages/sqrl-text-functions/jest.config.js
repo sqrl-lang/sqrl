@@ -9,6 +9,5 @@ module.exports = {
   ...base,
   name: package.name,
   rootDir: "../..",
-  setupTestFrameworkScriptFile: "jest-extended",
   testRegex: `<rootDir>/packages/${package.name}/__tests__/.*\\.spec\\.ts$`,
 };
