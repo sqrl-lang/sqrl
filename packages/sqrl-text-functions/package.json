@@ -40,7 +40,7 @@
     "@types/jest": "^24.0.18",
     "@types/node": "^11.9.5",
     "jest": "^24.9.0",
-    "sqrl-load-functions": "file:../sqrl-load-functions",
+    "sqrl-load-functions": "^0.6.4",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "typescript": "^3.6.2"
@@ -52,6 +52,7 @@
     "node-nice": "0.0.1",
     "re2": "^1.15.8",
     "simhash-js": "^1.0.0",
-    "sqrl": "file:../sqrl"
-  }
+    "sqrl": "^0.6.4"
+  },
+  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }

@@ -46,7 +46,7 @@
     "murmurhash-native": "^3.4.1",
     "node-nice": "^0.0.1",
     "prettier": "^1.19.1",
-    "sqrl-common": "file:../sqrl-common"
+    "sqrl-common": "^0.6.4"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
@@ -61,7 +61,7 @@
     "jest-extended": "^0.11.2",
     "pegjs": "^0.10.0",
     "rimraf": "^3.0.0",
-    "sqrl-test-utils": "file:../sqrl-test-utils",
+    "sqrl-test-utils": "^0.6.4",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "ts-pegjs": "^0.2.6",
@@ -72,5 +72,6 @@
   },
   "engines": {
     "node": ">=10.0.0"
-  }
+  },
+  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }

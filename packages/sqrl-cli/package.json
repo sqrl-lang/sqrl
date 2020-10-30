@@ -66,13 +66,14 @@
     "micro-route": "^2.5.0",
     "moment": "^2.24.0",
     "split2": "^3.2.2",
-    "sqrl": "file:../sqrl",
-    "sqrl-cli-functions": "file:../sqrl-cli-functions",
-    "sqrl-common": "file:../sqrl-common",
-    "sqrl-jsonpath": "file:../sqrl-jsonpath",
-    "sqrl-load-functions": "file:../sqrl-load-functions",
-    "sqrl-redis-functions": "file:../sqrl-redis-functions",
-    "sqrl-text-functions": "file:../sqrl-text-functions",
+    "sqrl": "^0.6.4",
+    "sqrl-cli-functions": "^0.6.4",
+    "sqrl-common": "^0.6.4",
+    "sqrl-jsonpath": "^0.6.4",
+    "sqrl-load-functions": "^0.6.4",
+    "sqrl-redis-functions": "^0.6.4",
+    "sqrl-text-functions": "^0.6.4",
     "wait-for-sigint": "^0.1.0"
-  }
+  },
+  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }

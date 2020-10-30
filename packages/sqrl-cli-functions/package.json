@@ -48,7 +48,8 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "sqrl": "file:../sqrl",
-    "sqrl-common": "file:../sqrl-common"
-  }
+    "sqrl": "^0.6.4",
+    "sqrl-common": "^0.6.4"
+  },
+  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }

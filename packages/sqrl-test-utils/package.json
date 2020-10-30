@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "jest-diff": "^24.9.0",
-    "sqrl-common": "file:../sqrl-common"
-  }
+    "sqrl-common": "^0.6.4"
+  },
+  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }

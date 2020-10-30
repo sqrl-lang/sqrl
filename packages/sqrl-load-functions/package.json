@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "js-yaml": "^3.13.1",
-    "sqrl": "file:../sqrl"
-  }
+    "sqrl": "^0.6.4"
+  },
+  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }
