@@ -36,16 +36,16 @@
   },
   "dependencies": {
     "bigint-buffer": "^1.1.2",
-    "bluebird": "^3.5.5",
+    "bluebird": "^3.7.2",
     "double-ended-queue": "^2.1.0-0",
-    "eventemitter3": "^4.0.0",
+    "eventemitter3": "^4.0.7",
     "fast-stable-stringify": "^1.0.0",
     "jsonschema": "^1.2.4",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.26",
+    "moment-timezone": "^0.5.31",
     "murmurhash-native": "^3.4.1",
     "node-nice": "^0.0.1",
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
     "sqrl-common": "file:../sqrl-common"
   },
   "devDependencies": {

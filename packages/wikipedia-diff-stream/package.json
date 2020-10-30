@@ -10,7 +10,7 @@
     "eventsource": "^1.0.7",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "wtf_wikipedia": "^7.7.1"
+    "wtf_wikipedia": "^8.5.1"
   },
   "bin": {
     "wikipedia-diff-stream": "main.js"

@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "node-nice": "0.0.1",
-    "re2": "^1.10.0",
+    "re2": "^1.15.8",
     "simhash-js": "^1.0.0",
     "sqrl": "file:../sqrl"
   }
