@@ -1,6 +1,6 @@
 {
   "name": "sqrl-cli-functions",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - functions intended for command line tools",
   "homepage": "https://twitter.github.io/sqrl",
   "license": "Apache-2.0",

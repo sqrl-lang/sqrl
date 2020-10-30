@@ -1,7 +1,7 @@
 {
   "name": "sqrl-website",
   "private": true,
-  "version": "0.6.3",
+  "version": "0.6.4",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
