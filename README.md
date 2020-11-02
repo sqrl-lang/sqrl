@@ -1,6 +1,6 @@
 # [SQRL](https://twitter.github.io/sqrl/) &middot; [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/twitter/sqrl/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/sqrl.svg?style=flat)](https://www.npmjs.com/package/sqrl) [![Build Status](https://travis-ci.org/twitter/sqrl.svg?branch=master)](https://travis-ci.org/twitter/sqrl.svg?branch=master) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/twitter/sqrl/blob/master/CONTRIBUTING.md)
 
-SQRL is a Safe, Stateful Rules Language for Event Streams
+The Smyte Query and Rules Language (SQRL) is a Safe, Stateful Rules Language for Event Streams
 
 **Instant** – New features and rules can be deployed to production in seconds.
 
@@ -10,9 +10,11 @@ SQRL is a Safe, Stateful Rules Language for Event Streams
 
 **Auditable** – It’s easy to understand why a rule fired or a side effect occurred, and rules can be safely replayed.
 
+If you were looking for the [Secure Quick Reliable Login project, check here](https://www.grc.com/sqrl/sqrl.htm).
+
 ## Early Preview
 
-This is an early preview of the SQRL (Smyte Query and Rules Language) open-source release. This release is intended to onboard existing community members and prepare us for a full release in the near future. Through SQRL, we hope to partner with the open source community, and help better address spam on all websites.
+This is an early preview of SQRL open-source release. This release is intended to onboard existing community members and prepare us for a full release in the near future. Through SQRL, we hope to partner with the open source community, and help better address spam on all websites.
 
 ## Documentation
 
