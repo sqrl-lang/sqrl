@@ -4,7 +4,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { Context, SqrlKey } from "sqrl";
-import { RedisInterface, createRedisKey } from "./RedisService";
 import {
   getBucketSize,
   getBucketTimeForTimeMs,
@@ -14,6 +13,7 @@ import {
 } from "./BucketedKeys";
 import { TOTAL_COUNT_EXPIRY_SEC } from "./RedisCountService";
 import { CountUniqueService } from "../Services";
+import { RedisInterface, createRedisKey } from "./RedisInterface";
 
 const NUM_BUCKETS = 10;
 

@@ -39,7 +39,7 @@ test("saves features", async () => {
     sourceTemplate`
     LET Result := 5;
     ASSERT source(Result) = ${`
-      function() {
+      function () {
         return bluebird.resolve(5);
       }
     `};
@@ -50,7 +50,7 @@ test("saves features", async () => {
     LET Result := (X * Y) / (Z - 1);
     # @NOTE: divide() is not pure for now as it deals with divide by zero
     ASSERT source(Result) = ${`
-      function() {
+      function () {
         return bluebird.resolve(functions._divide(this, 20, 1));
       }
     `};
@@ -66,11 +66,11 @@ test("saves features", async () => {
     LET Choice2 := Fast OR Slow;
     ASSERT source(Choice1) = source(Choice2);
     ASSERT source(Choice1) = ${`
-      function() {
+      function () {
         const f0 = () =>
           functions._orSequential(this, [
             () => bluebird.resolve(this.slots["Fast"].value()),
-            () => this.fetch("Slow")
+            () => this.fetch("Slow"),
           ]);
         return this.load("Fast").then(f0);
       }
@@ -78,7 +78,7 @@ test("saves features", async () => {
 
     LET List := [Fast, Slow];
     ASSERT source(List) = ${`
-      function() {
+      function () {
         return this.load(\"Fast\", \"Slow\");
       }
     `};

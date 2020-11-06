@@ -3,7 +3,6 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { RedisInterface, createRedisKey } from "./RedisService";
 import { Context, SqrlKey } from "sqrl";
 import {
   getCurrentBucketExpirySeconds,
@@ -14,6 +13,7 @@ import {
   getAllBucketKeys
 } from "./BucketedKeys";
 import { CountService } from "../Services";
+import { RedisInterface, createRedisKey } from "./RedisInterface";
 
 const NUM_BUCKETS = 10;
 /**

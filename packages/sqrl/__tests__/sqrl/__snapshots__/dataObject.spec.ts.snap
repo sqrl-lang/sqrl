@@ -2,28 +2,28 @@
 
 exports[`works 1`] = `
 Object {
-  "A": "function() {
+  "A": "function () {
   return bluebird.resolve({});
 }",
-  "B": "function() {
+  "B": "function () {
   return bluebird.resolve({ a: 5 });
 }",
-  "C": "function() {
+  "C": "function () {
   return bluebird.resolve({ a: 6 });
 }",
-  "D": "function() {
+  "D": "function () {
   return bluebird.resolve({ a: 6 });
 }",
-  "E": "function() {
+  "E": "function () {
   return bluebird.resolve({ a: { c: 11 } });
 }",
-  "EmptyList": "function() {
+  "EmptyList": "function () {
   return bluebird.resolve([]);
 }",
-  "F": "function() {
+  "F": "function () {
   return bluebird.resolve({ a: { c: 11 } });
 }",
-  "G": "function() {
+  "G": "function () {
   return bluebird.resolve(
     functions._createMap(
       \\"a\\",
@@ -34,38 +34,38 @@ Object {
     )
   );
 }",
-  "H": "function() {
+  "H": "function () {
   return bluebird.resolve({
     data: {
       credit_card: \\"3158934446506168\\",
       item_id: 74213386,
-      purchase_id: 1849329
+      purchase_id: 1849329,
     },
     http_request: { headers: { \\"x-real-ip\\": \\"216.4.4.170\\" } },
     machine_fingerprints: { marketplace: 91188146 },
     name: \\"purchase_item\\",
     session: {
-      actor: { id: 12345, type: \\"user\\", username: \\"demarion.bauch@hoppe.org\\" }
+      actor: { id: 12345, type: \\"user\\", username: \\"demarion.bauch@hoppe.org\\" },
     },
-    timestamp: \\"2015-10-12T21:53:04.370Z\\"
+    timestamp: \\"2015-10-12T21:53:04.370Z\\",
   });
 }",
-  "IntList": "function() {
+  "IntList": "function () {
   return bluebird.resolve([1, 2, 3]);
 }",
-  "NullFeature": "function() {
+  "NullFeature": "function () {
   return bluebird.resolve(null);
 }",
-  "One": "function() {
+  "One": "function () {
   return bluebird.resolve(1);
 }",
-  "Six": "function() {
+  "Six": "function () {
   return bluebird.resolve(6);
 }",
-  "SqrlAssertionStatements": "function() {
+  "SqrlAssertionStatements": "function () {
   const p0 = bluebird.resolve(true);
   return this.load(
-    \`20:function() {
+    \`20:function () {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -76,7 +76,7 @@ Object {
     )
   );
 }\`,
-    \`21:function() {
+    \`21:function () {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -87,7 +87,7 @@ Object {
     )
   );
 }\`,
-    \`22:function() {
+    \`22:function () {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -98,7 +98,7 @@ Object {
     )
   );
 }\`,
-    \`23:function() {
+    \`23:function () {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -109,7 +109,7 @@ Object {
     )
   );
 }\`,
-    \`24:function() {
+    \`24:function () {
   const p0 = bluebird.resolve(\\"=\\");
   const p1 = bluebird.resolve({ a: 6 });
   const p2 = bluebird.resolve(
@@ -121,22 +121,22 @@ Object {
 }\`
   ).then(() => p0);
 }",
-  "SqrlClock": "function() {
+  "SqrlClock": "function () {
   return bluebird.resolve(functions.now());
 }",
-  "SqrlExecutionComplete": "function() {
+  "SqrlExecutionComplete": "function () {
   return bluebird.resolve(true);
 }",
-  "SqrlIsClassify": "function() {
+  "SqrlIsClassify": "function () {
   return bluebird.resolve(true);
 }",
-  "SqrlMutate": "function() {
+  "SqrlMutate": "function () {
   return bluebird.resolve(true);
 }",
-  "Zero": "function() {
+  "Zero": "function () {
   return bluebird.resolve(0);
 }",
-  "ast:1417de40896f44775ffe300dc51c74c5": "function() {
+  "ast:1417de40896f44775ffe300dc51c74c5": "function () {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -147,7 +147,7 @@ Object {
     )
   );
 }",
-  "ast:6aabb51126bfd37252f23213f39c4676": "function() {
+  "ast:6aabb51126bfd37252f23213f39c4676": "function () {
   const p0 = bluebird.resolve(\\"=\\");
   const p1 = bluebird.resolve({ a: 6 });
   const p2 = bluebird.resolve(
@@ -157,7 +157,7 @@ Object {
     .all([bluebird.resolve(this), this.fetch(\\"C\\"), p0, p1, p2])
     .spread(functions._assertCmp);
 }",
-  "ast:86de5da6a621d67aca0a5a645cc454a2": "function() {
+  "ast:86de5da6a621d67aca0a5a645cc454a2": "function () {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -168,7 +168,7 @@ Object {
     )
   );
 }",
-  "ast:decae6d5c0d938836df4f140215ba419": "function() {
+  "ast:decae6d5c0d938836df4f140215ba419": "function () {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -179,7 +179,7 @@ Object {
     )
   );
 }",
-  "ast:f10850eaa2b96f3aa046a713484c545c": "function() {
+  "ast:f10850eaa2b96f3aa046a713484c545c": "function () {
   return bluebird.resolve(
     functions._assertCmp(
       this,
@@ -190,7 +190,7 @@ Object {
     )
   );
 }",
-  "bool(:)": "function() {
+  "bool(:)": "function () {
   return bluebird.resolve(true);
 }",
 }

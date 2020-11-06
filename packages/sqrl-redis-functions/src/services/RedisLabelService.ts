@@ -4,8 +4,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { LabelService } from "../LabelFunctions";
-import { RedisInterface, createRedisKey } from "./RedisService";
 import { Context, Manipulator, SqrlEntity, WhenCause } from "sqrl";
+import { RedisInterface, createRedisKey } from "./RedisInterface";
 
 const EXPIRY = 60 * 60 * 24 * 30;
 

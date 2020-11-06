@@ -3,7 +3,8 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import prettier = require("prettier");
+import prettier = require("prettier/standalone");
+import prettierBabel = require("prettier/parser-babel");
 
 import invariant from "../jslib/invariant";
 
@@ -129,9 +130,11 @@ export default class SqrlSourcePrinter {
         }
       );
 
+
     const formatted = prettier
       .format("(" + replacedSource + ")()", {
-        parser: "babel"
+        parser: "babel",
+        plugins: [prettierBabel]
       })
       .trim();
     return formatted.slice("(".length, formatted.length - ")();".length);

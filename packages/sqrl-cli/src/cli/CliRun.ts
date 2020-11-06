@@ -72,7 +72,7 @@ export class CliRun {
       // Convert this line to the given feature
       const lineValues = Object.assign({}, options.inputs);
       try {
-        lineValues[options.streamFeature] = JSON.parse(line);
+        lineValues[options.streamFeature] = JSON.parse(line.toString('utf-8'));
       } catch (err) {
         console.error(
           "Error: Invalid JSON value: %s",

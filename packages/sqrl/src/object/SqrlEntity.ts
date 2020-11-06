@@ -11,7 +11,7 @@ import { EntityId } from "../platform/EntityId";
 import { Context } from "../api/ctx";
 import { SqrlKey } from "./SqrlKey";
 import { nice } from "node-nice";
-import { murmurhashJsonBuffer } from "../jslib/murmurhashJson";
+import { murmurhashJson } from "../jslib/murmurhashJson";
 import { sqrlCartesianProduct, RenderedSpan } from "sqrl-common";
 import { mkSpan, indentSpan } from "./span";
 import { UniqueId } from "../api/entity";
@@ -101,7 +101,7 @@ export default class SqrlEntity extends SqrlObject {
     );
     let featuresHash: Buffer;
     if (featureValues.length) {
-      featuresHash = await murmurhashJsonBuffer(basicFeatureValues);
+      featuresHash = await murmurhashJson(basicFeatureValues);
     } else {
       featuresHash = Buffer.alloc(16);
     }

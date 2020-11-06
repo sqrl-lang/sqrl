@@ -3,8 +3,6 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { join, resolve } from "path";
-import { readFileSync, readdirSync } from "fs";
 
 /**
  * This class represents a tree of source code rooted at a single script.
@@ -29,30 +27,6 @@ export class EmptyFilesystem extends Filesystem {
   }
   tryList() {
     return null;
-  }
-}
-
-export class LocalFilesystem extends Filesystem {
-  constructor(private pwd: string) {
-    super();
-  }
-
-  tryList(path: string) {
-    try {
-      return readdirSync(join(this.pwd, path)).filter(filename =>
-        filename.endsWith(".sqrl")
-      );
-    } catch (err) {
-      if (err.code === "ENOENT") {
-        return null;
-      }
-      throw err;
-    }
-  }
-
-  tryRead(filename: string) {
-    const path = resolve(this.pwd, filename);
-    return readFileSync(path);
   }
 }
 

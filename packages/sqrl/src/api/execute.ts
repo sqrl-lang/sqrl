@@ -314,6 +314,21 @@ export interface Execution {
   readonly manipulator: Manipulator;
 
   /**
+   * Fetch a value from the executions data cache
+   */
+  get<T>(symbol: symbol, defaultValue?: T): T;
+
+  /**
+   * Fetch a value from the executions data cache
+   */
+  set<T>(symbol: symbol, value: T): void;
+
+  /**
+   * Get a value on the executions data, setting a default value if not set
+   */
+  setDefault<T>(symbol: symbol, defaultValue?: T): T;
+
+  /**
    * Returns a promise for the given feature name for the execution. If the
    * feature has not been calculated yet this will start the calculation.
    */

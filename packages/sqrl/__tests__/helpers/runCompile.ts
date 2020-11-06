@@ -9,7 +9,7 @@ import { SqrlInstance } from "../../src/function/Instance";
 import { registerAllFunctions } from "../../src/function/registerAllFunctions";
 import { SqrlCompiledOutput } from "../../src/compile/SqrlCompiledOutput";
 import { statementsFromString } from "../../src/helpers/CompileHelpers";
-import { JsExecutionContext } from "../../src/execute/JsExecutionContext";
+import { JsExecutionContext } from "../../src/node/JsExecutionContext";
 import SqrlExecutable from "../../src/execute/SqrlExecutable";
 import { createDefaultContext } from "../../src/helpers/ContextHelpers";
 import { FeatureMap } from "../../src/api/execute";

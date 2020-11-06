@@ -3,8 +3,8 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { createRedisKey } from "./RedisService";
 import { DatabaseSet, SqrlKey } from "sqrl";
+import { createRedisKey } from "./RedisInterface";
 
 export function getBucketKey(
   databaseSet: DatabaseSet,

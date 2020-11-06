@@ -5,7 +5,7 @@
  */
 import { Executable, Instance, FeatureMap } from "./execute";
 import { SqrlExecutable } from "../execute/SqrlExecutable";
-import { JsExecutionContext } from "../execute/JsExecutionContext";
+import { JsExecutionContext } from "../node/JsExecutionContext";
 import { ExecutableSpec, FeatureDocMap, RuleSpecMap } from "./spec";
 import { Context } from "./ctx";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";

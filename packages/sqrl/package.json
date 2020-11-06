@@ -1,6 +1,6 @@
 {
   "name": "sqrl",
-  "version": "0.6.4",
+  "version": "0.6.6-beta.7",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - engine",
   "license": "Apache-2.0",
   "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl",
@@ -17,6 +17,10 @@
   "files": [
     "lib"
   ],
+  "browser": {
+    "./lib/node/LocalFilesystem.js": "./lib/browser/LocalFilesystem.js",
+    "./lib/node/JsExecutionContext.js": "./lib/browser/JsExecutionContext.js"
+  },
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -43,10 +47,10 @@
     "jsonschema": "^1.2.4",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.31",
-    "murmurhash-native": "^3.4.1",
+    "murmurhash3.js": "https://github.com/qix/murmurHash3.js/releases/download/3.0.0-qix-0/murmurhash3.js-3.0.0-qix-0.tgz",
     "node-nice": "^0.0.1",
-    "prettier": "^1.19.1",
-    "sqrl-common": "^0.6.4"
+    "prettier": "^2.1.2",
+    "sqrl-common": "^0.6.6-beta.7"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
@@ -60,7 +64,7 @@
     "jest-extended": "^0.11.2",
     "pegjs": "^0.10.0",
     "rimraf": "^3.0.0",
-    "sqrl-test-utils": "^0.6.4",
+    "sqrl-test-utils": "^0.6.6-beta.7",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "ts-pegjs": "^0.2.6",
@@ -70,7 +74,7 @@
     "typescript": "^3.9.7"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.0.0"
   },
   "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }

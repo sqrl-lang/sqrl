@@ -3,11 +3,11 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { RedisInterface } from "../src/services/RedisService";
 import { RedisUniqueIdService } from "../src/services/RedisUniqueId";
 import { SqrlEntity, SqrlUniqueId, createSimpleContext } from "sqrl";
 import { redisTest } from "./helpers/redisTest";
 import { RedisCountService } from "../src/services/RedisCountService";
+import { RedisInterface } from "../src/services/RedisInterface";
 
 redisTest("works", async (redis: RedisInterface) => {
   const ctx = createSimpleContext();

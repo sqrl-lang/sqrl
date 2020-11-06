@@ -3,11 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { RedisInterface, RedisService } from "../../src/services/RedisService";
+import {  RedisService } from "../../src/services/RedisService";
 import { MockRedisService } from "../../src/mocks/MockRedisService";
 import * as bluebird from "bluebird";
 import { createSimpleContext } from "sqrl";
 import { invariant } from "sqrl-common";
+import { RedisInterface } from "../../src/services/RedisInterface";
 
 export function redisTest(
   name: string,

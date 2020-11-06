@@ -12,7 +12,7 @@ import { StatementAst } from "../ast/Ast";
 import { parseSqrl } from "../parser/SqrlParse";
 import { SqrlInstance } from "../function/Instance";
 import { SqrlCompiledOutput } from "../compile/SqrlCompiledOutput";
-import { JsExecutionContext } from "../execute/JsExecutionContext";
+import { JsExecutionContext } from "../node/JsExecutionContext";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
 import { Filesystem } from "../api/filesystem";
 import { Context } from "../api/ctx";

@@ -8,7 +8,7 @@ import { SqrlExecutionState } from "./SqrlExecutionState";
 import { FeatureMap, Manipulator } from "../api/execute";
 import SqrlSourcePrinter from "../compile/SqrlSourcePrinter";
 import { ExecutableSpec, RuleSpecMap } from "../api/spec";
-import { JsExecutionContext } from "./JsExecutionContext";
+import { JsExecutionContext } from "../node/JsExecutionContext";
 import { Context } from "../api/ctx";
 
 const DEFAULT_FEATURE_TIMEOUT_MS = 1000;

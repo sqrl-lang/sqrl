@@ -8,8 +8,8 @@ import {
   RateLimitProps,
   SessionProps
 } from "../RateLimitFunctions";
-import { RedisInterface } from "./RedisService";
 import { Context, SqrlKey } from "sqrl";
+import { RedisInterface } from "./RedisInterface";
 
 /**
  * Rate limit service based on redis

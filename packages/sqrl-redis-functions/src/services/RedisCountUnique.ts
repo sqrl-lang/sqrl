@@ -3,9 +3,9 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { RedisInterface, createRedisKey } from "./RedisService";
 import { Context, SqrlKey } from "sqrl";
 import { CountUniqueService } from "../Services";
+import { RedisInterface, createRedisKey } from "./RedisInterface";
 
 type CountUniqueData = ({
   timestamp: number;

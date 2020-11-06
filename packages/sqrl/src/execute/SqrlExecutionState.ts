@@ -54,6 +54,7 @@ export class SqrlExecutionState implements Execution {
   private clockMs: number = null;
   public ruleSpecs: RuleSpecMap;
   public ctx: Context;
+  private data = new Map();
 
   _fetch: (slot: number) => bluebird<any>;
 
@@ -98,6 +99,36 @@ export class SqrlExecutionState implements Execution {
         this.names[index]
       );
     });
+  }
+
+  /**
+   * Fetch a value from the executions data cache
+   */
+  get<T>(symbol: symbol, defaultValue?: T): T {
+    if (!this.data.has(symbol)) {
+      if (typeof defaultValue !== 'undefined') {
+        return defaultValue;
+      }
+      throw new Error('Could not find symbol in executions data: ' + symbol.toString());
+    }
+    return this.data.get(symbol);
+  }
+
+  /**
+   * Fetch a value from the executions data cache
+   */
+  set<T>(symbol: symbol, value: T) {
+    this.data.set(symbol, value);
+  }
+
+  /**
+   * Get a value on the executions data, setting a default value if not set
+   */
+  setDefault<T>(symbol: symbol, defaultValue?: T): T {
+    if (!this.data.has(symbol)) {
+      this.data.set(symbol, defaultValue);
+    }
+    return this.data.get(symbol);
   }
 
   async fetchClock() {

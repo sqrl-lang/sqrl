@@ -4,10 +4,10 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import { createRedisKey, RedisInterface } from "./RedisService";
 import { Context, UniqueId } from "sqrl";
 import { invariant } from "sqrl-common";
 import { toBufferBE } from "bigint-buffer";
+import { RedisInterface, createRedisKey } from "./RedisInterface";
 
 export const TIMESTAMP_BITS = 40;
 export const TIMESTAMP_SIZE = Math.pow(2, TIMESTAMP_BITS);

@@ -16,8 +16,7 @@ import {
   AT,
   CustomCallAst
 } from "sqrl";
-import murmurhash = require("murmurhash-native");
-
+import * as murmurJs from "murmurhash3.js";
 import { invariant, sqrlCartesianProduct } from "sqrl-common";
 import { parse } from "./parser/sqrlRedisParser";
 import { CountUniqueArguments, AliasedFeature } from "./parser/sqrlRedis";
@@ -32,7 +31,8 @@ function slidingdHashHex(value) {
     value = stringify(value);
   }
 
-  const hashHex = murmurhash.murmurHash128x64(value, 0, "hex");
+  const data = Buffer.from(murmurJs.x64.hash128(value));
+  const hashHex = data.toString('hex');
   return hashHex.substring(16);
 }
 

@@ -4,7 +4,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import invariant from "../jslib/invariant";
-import murmurhash = require("murmurhash-native");
 
 import { SqrlSlot } from "../slot/SqrlSlot";
 import {
@@ -24,6 +23,7 @@ import {
 } from "./Ast";
 import { SqrlObject } from "../object/SqrlObject";
 import { AstBuilder } from "../helpers/AstBuilder";
+import { murmurhashHexSync } from "../jslib/murmurhashJson";
 
 function invariantAst(ast: Ast): void {
   invariant(
@@ -76,7 +76,7 @@ const SqrlAst = {
   },
 
   hash(ast: Ast): string {
-    return murmurhash.murmurHash128x64(jsonAst(ast), 0, "hex");
+    return murmurhashHexSync(jsonAst(ast));
   },
 
   areEqual(left: Ast, right: Ast): boolean {

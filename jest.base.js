@@ -10,6 +10,6 @@ module.exports = {
   globals: {
     __INTEGRATION__: false
   },
-  moduleFileExtensions: ["ts", "js"],
+  moduleFileExtensions: ["ts", "js", "node"],
   testEnvironment: "node"
 };

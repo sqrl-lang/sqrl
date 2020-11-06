@@ -1,6 +1,6 @@
 {
   "name": "sqrl-redis-functions",
-  "version": "0.6.4",
+  "version": "0.6.6-beta.7",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - functions for storing state in redis",
   "homepage": "https://twitter.github.io/sqrl",
   "license": "Apache-2.0",
@@ -24,6 +24,9 @@
   ],
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "browser": {
+    "./lib/services/RedisService.js": "./lib/browser/RedisService.js"
+  },
   "scripts": {
     "clean": "rimraf lib && rimraf coverage",
     "format": "prettier --write \"{src,__tests__}/**/*.ts\"",
@@ -43,7 +46,7 @@
     "jest": "^24.9.0",
     "jest-extended": "^0.11.2",
     "prettier": "^1.18.2",
-    "sqrl-test-utils": "^0.6.4",
+    "sqrl-test-utils": "^0.6.6-beta.7",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "typescript": "^3.9.7"
@@ -57,9 +60,9 @@
     "fast-stable-stringify": "^1.0.0",
     "ioredis": "^4.19.1",
     "moment": "^2.24.0",
-    "murmurhash-native": "^3.4.1",
-    "sqrl": "^0.6.4",
-    "sqrl-common": "^0.6.4"
+    "murmurhash3.js": "https://github.com/qix/murmurHash3.js/releases/download/3.0.0-qix-0/murmurhash3.js-3.0.0-qix-0.tgz",
+    "sqrl": "^0.6.6-beta.7",
+    "sqrl-common": "^0.6.6-beta.7"
   },
   "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }

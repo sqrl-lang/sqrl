@@ -14,6 +14,7 @@ export * from "./api/expr";
 export * from "./api/feature";
 export * from "./api/filesystem";
 export * from "./api/log";
+export * from "./api/node";
 export * from "./api/object";
 export * from "./api/parse";
 export * from "./api/test";

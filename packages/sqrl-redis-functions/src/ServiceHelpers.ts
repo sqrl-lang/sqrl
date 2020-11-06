@@ -7,7 +7,7 @@
 
 import { LabelService } from "./LabelFunctions";
 import { RateLimitService } from "./RateLimitFunctions";
-import { RedisInterface, RedisService } from "./services/RedisService";
+import { RedisService } from "./services/RedisService";
 import { MockRedisService } from "./mocks/MockRedisService";
 import { RedisCountService } from "./services/RedisCountService";
 import { RedisApproxCountUniqueService } from "./services/RedisApproxCountUnique";
@@ -20,6 +20,7 @@ import {
 import { RedisRateLimit } from "./services/RedisRateLimit";
 import { Config } from "sqrl";
 import { CountService, CountUniqueService, Services } from "./Services";
+import { RedisInterface } from "./services/RedisInterface";
 
 interface Closeable {
   close(): void;

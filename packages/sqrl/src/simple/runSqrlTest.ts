@@ -6,10 +6,9 @@
 import { SimpleManipulator } from "./SimpleManipulator";
 import { createSimpleContext } from "../api/ctx";
 import { SqrlTest } from "../testing/SqrlTest";
-import { LocalFilesystem, Filesystem } from "../api/filesystem";
+import { Filesystem, EmptyFilesystem } from "../api/filesystem";
 import { buildTestInstance } from "../testing/runSqrlTest";
 import { Instance, Execution } from "../api/execute";
-import * as path from "path";
 import { Logger } from "../api/log";
 import { Config } from "../api/config";
 import { FunctionCostData } from "../function/Instance";
@@ -56,7 +55,7 @@ export async function runSqrlTest(
   }
 
   const filesystem =
-    options.filesystem || new LocalFilesystem(path.join(__dirname, ".."));
+    options.filesystem || new EmptyFilesystem();
 
   const test = new SqrlTest(instance._instance, {
     manipulatorFactory: () => new SimpleManipulator(),
@@ -68,9 +67,12 @@ export async function runSqrlTest(
   }
   const rv = await test.run(ctx, sqrl);
 
+  for (const execution of rv.executions) {
+    execution.manipulator.throwFirstError();
+  }
+
   const lastExecution = rv.executions[rv.executions.length - 1];
   const lastManipulator = lastExecution.manipulator as SimpleManipulator;
-  lastManipulator.throwFirstError();
 
   return {
     ...rv,

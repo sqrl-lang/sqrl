@@ -8,7 +8,7 @@ import { StdlibRegistry } from "./Instance";
 import { SqrlKey } from "../object/SqrlKey";
 
 import { AstTypes as AT } from "../ast/AstTypes";
-import { murmurhashJsonBuffer } from "../jslib/murmurhashJson";
+import { murmurhashJson } from "../jslib/murmurhashJson";
 import { SqrlObject } from "../object/SqrlObject";
 import { nice } from "node-nice";
 import { SqrlExecutionState } from "../execute/SqrlExecutionState";
@@ -41,9 +41,9 @@ export async function buildKey(
   );
   let featuresHash: Buffer;
   if (featureValues.length) {
-    featuresHash = await murmurhashJsonBuffer(basicFeatureValues);
+    featuresHash = await murmurhashJson(basicFeatureValues);
   } else {
-    featuresHash = Buffer.alloc(16);
+    featuresHash = new Buffer(16);
   }
   return new SqrlKey(
     ctx.requireDatabaseSet(),

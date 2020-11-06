@@ -5,6 +5,7 @@
  */
 import { SqrlInstance } from "../function/Instance";
 import bluebird = require("bluebird");
+
 import vm = require("vm");
 
 export type JsCallback = () => Promise<any>;

@@ -3,12 +3,12 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import { RedisInterface, RateLimitOptions } from "../services/RedisService";
 import { Context } from "sqrl";
 import { invariant } from "sqrl-common";
 import { MockRedisDatabase } from "./MockRedisDatabase";
 import { mockRateLimitFetch } from "../lua/rateLimitFetchLua";
 import { mockSessionize } from "../lua/sessionizeLua";
+import { RedisInterface, RateLimitOptions } from "../services/RedisInterface";
 
 export class MockRedisService implements RedisInterface, MockRedisDatabase {
   db = {};
