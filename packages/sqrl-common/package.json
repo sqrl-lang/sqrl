@@ -46,7 +46,7 @@
     "typescript": "^3.9.7"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=12.0.0"
   },
   "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }
