@@ -1,6 +1,6 @@
 {
   "name": "sqrl-example-functions",
-  "version": "0.6.6-beta.7",
+  "version": "0.6.7",
   "main": "./lib/index.js",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -23,7 +23,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "sqrl": "^0.6.6-beta.7"
+    "sqrl": "^0.6.7"
   },
   "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }
