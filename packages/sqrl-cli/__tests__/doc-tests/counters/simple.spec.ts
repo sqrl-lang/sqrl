@@ -50,7 +50,7 @@ CREATE RULE HighPercentageProfanityReceived
 WHEN HighPercentageProfanityReceived THEN
     blockAction(),
     addLabel(Target, "harassment_recipient");
-    `
+    `,
   });
   const stdout = await runCli(
     [
@@ -64,11 +64,11 @@ WHEN HighPercentageProfanityReceived THEN
       "Target=greg",
       "-s",
       "Text=poop",
-      "HighPercentageProfanityReceived"
+      "HighPercentageProfanityReceived",
     ],
     "",
     {
-      filesystem
+      filesystem,
     }
   );
 

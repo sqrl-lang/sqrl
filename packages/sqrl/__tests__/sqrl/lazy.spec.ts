@@ -31,7 +31,7 @@ test("works", async () => {
       },
       {
         statement: true,
-        statementFeature: "SqrlOutputStatements"
+        statementFeature: "SqrlOutputStatements",
       }
     );
   }
@@ -69,7 +69,7 @@ EXECUTE;
   `,
     {
       instance,
-      librarySqrl
+      librarySqrl,
     }
   );
 
@@ -78,7 +78,7 @@ EXECUTE;
 
   // Use the same code as before, but now with simpleFalse being expensive
   await recreateInstance({
-    simpleFalse: 100
+    simpleFalse: 100,
   });
 
   await runSqrlTest(

@@ -73,10 +73,7 @@ export type Expectation =
 export class SyntaxError extends Error {
   public static buildMessage(expected: Expectation[], found: string | null) {
     function hex(ch: string): string {
-      return ch
-        .charCodeAt(0)
-        .toString(16)
-        .toUpperCase();
+      return ch.charCodeAt(0).toString(16).toUpperCase();
     }
 
     function literalEscape(s: string): string {
@@ -87,8 +84,8 @@ export class SyntaxError extends Error {
         .replace(/\t/g, "\\t")
         .replace(/\n/g, "\\n")
         .replace(/\r/g, "\\r")
-        .replace(/[\x00-\x0F]/g, ch => "\\x0" + hex(ch))
-        .replace(/[\x10-\x1F\x7F-\x9F]/g, ch => "\\x" + hex(ch));
+        .replace(/[\x00-\x0F]/g, (ch) => "\\x0" + hex(ch))
+        .replace(/[\x10-\x1F\x7F-\x9F]/g, (ch) => "\\x" + hex(ch));
     }
 
     function classEscape(s: string): string {
@@ -101,8 +98,8 @@ export class SyntaxError extends Error {
         .replace(/\t/g, "\\t")
         .replace(/\n/g, "\\n")
         .replace(/\r/g, "\\r")
-        .replace(/[\x00-\x0F]/g, ch => "\\x0" + hex(ch))
-        .replace(/[\x10-\x1F\x7F-\x9F]/g, ch => "\\x" + hex(ch));
+        .replace(/[\x00-\x0F]/g, (ch) => "\\x0" + hex(ch))
+        .replace(/[\x10-\x1F\x7F-\x9F]/g, (ch) => "\\x" + hex(ch));
     }
 
     function describeExpectation(expectation: Expectation) {
@@ -110,7 +107,7 @@ export class SyntaxError extends Error {
         case "literal":
           return '"' + literalEscape(expectation.text) + '"';
         case "class":
-          const escapedParts = expectation.parts.map(part => {
+          const escapedParts = expectation.parts.map((part) => {
             return Array.isArray(part)
               ? classEscape(part[0] as string) +
                   "-" +
@@ -213,86 +210,86 @@ function peg$parse(input: string, options?: IParseOptions) {
     SqrlExpr: peg$parseSqrlExpr,
     SqrlRepl: peg$parseSqrlRepl,
     SqrlScript: peg$parseSqrlScript,
-    Expr: peg$parseExpr
+    Expr: peg$parseExpr,
   };
   let peg$startRuleFunction: () => any = peg$parseSqrlExpr;
 
-  const peg$c0 = function(flag: any, topStatements: any) {
+  const peg$c0 = function (flag: any, topStatements: any) {
     // @TODO: Get rid of sections
     return {
       type: "script",
       flag: flag || null,
       statements: topStatements,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c1 = ";";
   const peg$c2 = peg$literalExpectation(";", false);
-  const peg$c3 = function(topStatements: any, last: any) {
+  const peg$c3 = function (topStatements: any, last: any) {
     return {
       type: "repl",
-      statements: [...topStatements, last].filter(f => f),
-      location: loc()
+      statements: [...topStatements, last].filter((f) => f),
+      location: loc(),
     };
   };
-  const peg$c4 = function(expr: any) {
+  const peg$c4 = function (expr: any) {
     return {
       type: "expr",
       expr: expr,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c5 = "'use migrate';";
   const peg$c6 = peg$literalExpectation("'use migrate';", false);
-  const peg$c7 = function() {
+  const peg$c7 = function () {
     return "migrate";
   };
-  const peg$c8 = function(statement: any) {
+  const peg$c8 = function (statement: any) {
     return statement;
   };
   const peg$c9 = "include";
   const peg$c10 = peg$literalExpectation("INCLUDE", true);
   const peg$c11 = "library";
   const peg$c12 = peg$literalExpectation("LIBRARY", true);
-  const peg$c13 = function(library: any, filename: any, where: any) {
+  const peg$c13 = function (library: any, filename: any, where: any) {
     where = where || { type: "constant", value: true };
     return {
       type: "include",
       filename: filename,
       where: where,
       library: !!library,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c14 = "assert";
   const peg$c15 = peg$literalExpectation("ASSERT", true);
-  const peg$c16 = function(expr: any) {
+  const peg$c16 = function (expr: any) {
     return {
       type: "assert",
       expr: expr,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c17 = "execute";
   const peg$c18 = peg$literalExpectation("EXECUTE", true);
   const peg$c19 = "times";
   const peg$c20 = peg$literalExpectation("TIMES", true);
-  const peg$c21 = function(repeat: any, skipWait: any) {
+  const peg$c21 = function (repeat: any, skipWait: any) {
     return {
       type: "execute",
       repeat: repeat ? repeat[1] : 1,
       skipWait: !!skipWait,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c22 = "default";
   const peg$c23 = peg$literalExpectation("DEFAULT", true);
-  const peg$c24 = function() {
+  const peg$c24 = function () {
     return "default";
   };
   const peg$c25 = ":=";
   const peg$c26 = peg$literalExpectation(":=", false);
-  const peg$c27 = function(
+  const peg$c27 = function (
     keyword: any,
     description: any,
     feature: any,
@@ -315,51 +312,51 @@ function peg$parse(input: string, options?: IParseOptions) {
       final: keyword === "final",
       isDefaultCase,
       location: loc(),
-      where
+      where,
     };
   };
   const peg$c28 = "let";
   const peg$c29 = peg$literalExpectation("LET", true);
   const peg$c30 = "final";
   const peg$c31 = peg$literalExpectation("FINAL", true);
-  const peg$c32 = function() {
+  const peg$c32 = function () {
     return text().toLowerCase();
   };
-  const peg$c33 = function(description: any) {
+  const peg$c33 = function (description: any) {
     return description;
   };
   const peg$c34 = "rollout to";
   const peg$c35 = peg$literalExpectation("ROLLOUT TO", true);
   const peg$c36 = "%";
   const peg$c37 = peg$literalExpectation("%", false);
-  const peg$c38 = function(value: any) {
+  const peg$c38 = function (value: any) {
     return value;
   };
   const peg$c39 = "create";
   const peg$c40 = peg$literalExpectation("CREATE", true);
-  const peg$c41 = function(keyword: any, description: any, rule: any) {
+  const peg$c41 = function (keyword: any, description: any, rule: any) {
     return Object.assign({}, rule, {
       description: description,
-      location: loc()
+      location: loc(),
     });
   };
   const peg$c42 = "when";
   const peg$c43 = peg$literalExpectation("WHEN", true);
   const peg$c44 = "then";
   const peg$c45 = peg$literalExpectation("THEN", true);
-  const peg$c46 = function(rules: any, statements: any) {
+  const peg$c46 = function (rules: any, statements: any) {
     return {
       type: "when",
       rules,
       statements,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c47 = "rule";
   const peg$c48 = peg$literalExpectation("RULE", true);
   const peg$c49 = "alias";
   const peg$c50 = peg$literalExpectation("ALIAS", true);
-  const peg$c51 = function(
+  const peg$c51 = function (
     sync: any,
     name: any,
     alias: any,
@@ -376,70 +373,70 @@ function peg$parse(input: string, options?: IParseOptions) {
       sync: !!sync,
       rolloutPercent: rolloutPercent || 0,
       alias: alias ? alias[3] : null,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c52 = "sync";
   const peg$c53 = peg$literalExpectation("SYNC", true);
   const peg$c54 = "async";
   const peg$c55 = peg$literalExpectation("ASYNC", true);
-  const peg$c56 = function(value: any) {
+  const peg$c56 = function (value: any) {
     return value.toLowerCase() === "sync";
   };
   const peg$c57 = ",";
   const peg$c58 = peg$literalExpectation(",", false);
-  const peg$c59 = function(first: any, rest: any) {
-    return [first].concat(rest.map(item => item[3]));
+  const peg$c59 = function (first: any, rest: any) {
+    return [first].concat(rest.map((item) => item[3]));
   };
   const peg$c60 = "rules";
   const peg$c61 = peg$literalExpectation("RULES", true);
-  const peg$c62 = function(firstRule: any, restRules: any) {
+  const peg$c62 = function (firstRule: any, restRules: any) {
     return {
       type: "rules",
-      rules: [firstRule].concat(restRules.map(arg => arg[3])),
-      location: loc()
+      rules: [firstRule].concat(restRules.map((arg) => arg[3])),
+      location: loc(),
     };
   };
-  const peg$c63 = function(call: any, where: any) {
+  const peg$c63 = function (call: any, where: any) {
     if (where) {
       return {
         type: "call",
         func: "if",
-        args: [where, call]
+        args: [where, call],
       };
     }
     return call;
   };
-  const peg$c64 = function(func: any) {
+  const peg$c64 = function (func: any) {
     return options.customFunctions.has(func);
   };
   const peg$c65 = "(";
   const peg$c66 = peg$literalExpectation("(", false);
   const peg$c67 = ")";
   const peg$c68 = peg$literalExpectation(")", false);
-  const peg$c69 = function(func: any, source: any) {
+  const peg$c69 = function (func: any, source: any) {
     return { type: "customCall", func, source, location: loc() };
   };
   const peg$c70 = /^[()]/;
   const peg$c71 = peg$classExpectation(["(", ")"], false, false);
   const peg$c72 = peg$anyExpectation();
-  const peg$c73 = function(func: any, args: any) {
+  const peg$c73 = function (func: any, args: any) {
     return { type: "call", func: func, args: args || [], location: loc() };
   };
-  const peg$c74 = function(expr: any) {
+  const peg$c74 = function (expr: any) {
     return expr;
   };
-  const peg$c75 = function(expr: any) {
+  const peg$c75 = function (expr: any) {
     return { type: "priority", priority: "lazy", expr: expr, location: loc() };
   };
-  const peg$c76 = function(expr: any) {
+  const peg$c76 = function (expr: any) {
     return { type: "priority", priority: "eager", expr: expr, location: loc() };
   };
   const peg$c77 = "where";
   const peg$c78 = peg$literalExpectation("WHERE", true);
   const peg$c79 = "with reason";
   const peg$c80 = peg$literalExpectation("WITH REASON", true);
-  const peg$c81 = function(string: any) {
+  const peg$c81 = function (string: any) {
     return string;
   };
   const peg$c82 = "without";
@@ -448,24 +445,24 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c85 = peg$literalExpectation("WITH", true);
   const peg$c86 = "wait";
   const peg$c87 = peg$literalExpectation("WAIT", true);
-  const peg$c88 = function(skipWait: any) {
+  const peg$c88 = function (skipWait: any) {
     return skipWait.toLowerCase() === "without";
   };
   const peg$c89 = "{";
   const peg$c90 = peg$literalExpectation("{", false);
   const peg$c91 = "}";
   const peg$c92 = peg$literalExpectation("}", false);
-  const peg$c93 = function() {
+  const peg$c93 = function () {
     return {
       type: "constant",
       value: {},
-      location: loc()
+      location: loc(),
     };
   };
-  const peg$c94 = function(firstPair: any, restExprs: any) {
-    const args = firstPair.concat(...restExprs.map(e => e[3]));
+  const peg$c94 = function (firstPair: any, restExprs: any) {
+    const args = firstPair.concat(...restExprs.map((e) => e[3]));
 
-    if (args.every(arg => arg.type === "constant")) {
+    if (args.every((arg) => arg.type === "constant")) {
       const value = {};
       for (let i = 0; i < args.length; i += 2) {
         value[args[i].value] = args[i + 1].value;
@@ -474,7 +471,7 @@ function peg$parse(input: string, options?: IParseOptions) {
       return {
         value,
         type: "constant",
-        location: loc()
+        location: loc(),
       };
     }
 
@@ -482,18 +479,18 @@ function peg$parse(input: string, options?: IParseOptions) {
       args,
       type: "call",
       func: "createMap",
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c95 = ":";
   const peg$c96 = peg$literalExpectation(":", false);
-  const peg$c97 = function(key: any, val: any) {
+  const peg$c97 = function (key: any, val: any) {
     return [key, val];
   };
-  const peg$c98 = function(feature: any) {
+  const peg$c98 = function (feature: any) {
     return [
       { type: "constant", value: feature, location: loc() },
-      { type: "feature", value: feature, location: loc() }
+      { type: "feature", value: feature, location: loc() },
     ];
   };
   const peg$c99 = "[";
@@ -504,7 +501,12 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c104 = peg$literalExpectation("IN", true);
   const peg$c105 = "]";
   const peg$c106 = peg$literalExpectation("]", false);
-  const peg$c107 = function(output: any, feature: any, input: any, where: any) {
+  const peg$c107 = function (
+    output: any,
+    feature: any,
+    input: any,
+    where: any
+  ) {
     where = where || { type: "constant", value: true };
     const iterator = feature.value;
     const replaceIterator = (ast: Ast): Ast => {
@@ -512,7 +514,7 @@ function peg$parse(input: string, options?: IParseOptions) {
         return {
           type: "iterator",
           name: iterator,
-          location: ast.location
+          location: ast.location,
         };
       } else if (ast.type === "customCall") {
         throw buildSqrlError(
@@ -530,55 +532,55 @@ function peg$parse(input: string, options?: IParseOptions) {
       iterator: {
         type: "iterator",
         name: iterator,
-        location: feature.location
+        location: feature.location,
       },
       where: mapAst(where, replaceIterator),
-      location: loc()
+      location: loc(),
     };
   };
-  const peg$c108 = function() {
+  const peg$c108 = function () {
     return {
       type: "list",
       exprs: [],
-      location: loc()
+      location: loc(),
     };
   };
-  const peg$c109 = function(firstExpr: any, restExprs: any) {
+  const peg$c109 = function (firstExpr: any, restExprs: any) {
     return {
       type: "list",
-      exprs: [firstExpr].concat(restExprs.map(e => e[3])),
-      location: loc()
+      exprs: [firstExpr].concat(restExprs.map((e) => e[3])),
+      location: loc(),
     };
   };
   const peg$c110 = "and";
   const peg$c111 = peg$literalExpectation("AND", true);
   const peg$c112 = "or";
   const peg$c113 = peg$literalExpectation("OR", true);
-  const peg$c114 = function(left: any, op: any, right: any) {
+  const peg$c114 = function (left: any, op: any, right: any) {
     return {
       type: "boolean_expr",
       left: left,
       operator: op.toLowerCase(),
       right: right,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c115 = "not";
   const peg$c116 = peg$literalExpectation("NOT", true);
-  const peg$c117 = function(expr: any) {
+  const peg$c117 = function (expr: any) {
     return { type: "not", expr: expr, location: loc() };
   };
   const peg$c118 = "is not";
   const peg$c119 = peg$literalExpectation("IS NOT", true);
   const peg$c120 = "is";
   const peg$c121 = peg$literalExpectation("IS", true);
-  const peg$c122 = function(left: any, op: any, right: any) {
+  const peg$c122 = function (left: any, op: any, right: any) {
     return {
       type: "binary_expr",
       left: left,
       operator: op.toLowerCase(),
       right: right,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c123 = "=";
@@ -603,13 +605,13 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c142 = peg$literalExpectation("*", false);
   const peg$c143 = "/";
   const peg$c144 = peg$literalExpectation("/", false);
-  const peg$c145 = function(value: any) {
+  const peg$c145 = function (value: any) {
     return { type: "feature", value: value, location: loc() };
   };
   const peg$c146 = peg$otherExpectation("feature name");
   const peg$c147 = ".";
   const peg$c148 = peg$literalExpectation(".", false);
-  const peg$c149 = function() {
+  const peg$c149 = function () {
     return text();
   };
   const peg$c150 = /^[A-Za-z0-9_]/;
@@ -619,12 +621,12 @@ function peg$parse(input: string, options?: IParseOptions) {
     false
   );
   const peg$c152 = peg$otherExpectation("function name");
-  const peg$c153 = function(value: any) {
+  const peg$c153 = function (value: any) {
     return { type: "constant", value: value, location: loc() };
   };
   const peg$c154 = "null";
   const peg$c155 = peg$literalExpectation("NULL", true);
-  const peg$c156 = function() {
+  const peg$c156 = function () {
     return { type: "constant", value: null, location: loc() };
   };
   const peg$c157 = peg$otherExpectation("eager");
@@ -635,19 +637,19 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c162 = peg$literalExpectation("LAZY", true);
   const peg$c163 = peg$otherExpectation("null");
   const peg$c164 = peg$literalExpectation("null", false);
-  const peg$c165 = function() {
+  const peg$c165 = function () {
     return null;
   };
   const peg$c166 = peg$otherExpectation("true");
   const peg$c167 = "true";
   const peg$c168 = peg$literalExpectation("true", false);
-  const peg$c169 = function() {
+  const peg$c169 = function () {
     return true;
   };
   const peg$c170 = peg$otherExpectation("false");
   const peg$c171 = "false";
   const peg$c172 = peg$literalExpectation("false", false);
-  const peg$c173 = function() {
+  const peg$c173 = function () {
     return false;
   };
   const peg$c174 = peg$otherExpectation("literal number");
@@ -657,19 +659,19 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c178 = peg$classExpectation([["1", "9"]], false, false);
   const peg$c179 = /^[0-9]/;
   const peg$c180 = peg$classExpectation([["0", "9"]], false, false);
-  const peg$c181 = function() {
+  const peg$c181 = function () {
     return parseInt(text(), 10);
   };
   const peg$c182 = "0";
   const peg$c183 = peg$literalExpectation("0", false);
-  const peg$c184 = function() {
+  const peg$c184 = function () {
     return 0;
   };
-  const peg$c185 = function() {
+  const peg$c185 = function () {
     return parseFloat(text());
   };
-  const peg$c186 = function(first: any, rest: any) {
-    return first.concat(...rest.map(item => item[1]));
+  const peg$c186 = function (first: any, rest: any) {
+    return first.concat(...rest.map((item) => item[1]));
   };
   const peg$c187 = peg$otherExpectation("whitespace");
   const peg$c188 = /^[ \t\n\r]/;
@@ -685,7 +687,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c198 = peg$otherExpectation("string");
   const peg$c199 = "'";
   const peg$c200 = peg$literalExpectation("'", false);
-  const peg$c201 = function(chars: any) {
+  const peg$c201 = function (chars: any) {
     return chars.join("");
   };
   const peg$c202 = '"';
@@ -694,35 +696,35 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c205 = peg$literalExpectation("\\", false);
   const peg$c206 = "b";
   const peg$c207 = peg$literalExpectation("b", false);
-  const peg$c208 = function() {
+  const peg$c208 = function () {
     return "\b";
   };
   const peg$c209 = "f";
   const peg$c210 = peg$literalExpectation("f", false);
-  const peg$c211 = function() {
+  const peg$c211 = function () {
     return "\f";
   };
   const peg$c212 = "n";
   const peg$c213 = peg$literalExpectation("n", false);
-  const peg$c214 = function() {
+  const peg$c214 = function () {
     return "\n";
   };
   const peg$c215 = "r";
   const peg$c216 = peg$literalExpectation("r", false);
-  const peg$c217 = function() {
+  const peg$c217 = function () {
     return "\r";
   };
   const peg$c218 = "t";
   const peg$c219 = peg$literalExpectation("t", false);
-  const peg$c220 = function() {
+  const peg$c220 = function () {
     return "\t";
   };
   const peg$c221 = "u";
   const peg$c222 = peg$literalExpectation("u", false);
-  const peg$c223 = function(digits: any) {
+  const peg$c223 = function (digits: any) {
     return String.fromCharCode(parseInt(digits, 16));
   };
-  const peg$c224 = function(sequence: any) {
+  const peg$c224 = function (sequence: any) {
     return sequence;
   };
   const peg$c225 = /^[^\0-\x1F"\\]/;
@@ -738,7 +740,14 @@ function peg$parse(input: string, options?: IParseOptions) {
     false
   );
   const peg$c229 = /^[0-9a-f]/i;
-  const peg$c230 = peg$classExpectation([["0", "9"], ["a", "f"]], false, true);
+  const peg$c230 = peg$classExpectation(
+    [
+      ["0", "9"],
+      ["a", "f"],
+    ],
+    false,
+    true
+  );
 
   let peg$currPos = 0;
   let peg$savedPos = 0;
@@ -807,7 +816,7 @@ function peg$parse(input: string, options?: IParseOptions) {
       type: "class",
       parts: parts,
       inverted: inverted,
-      ignoreCase: ignoreCase
+      ignoreCase: ignoreCase,
     };
   }
 
@@ -838,7 +847,7 @@ function peg$parse(input: string, options?: IParseOptions) {
       details = peg$posDetailsCache[p];
       details = {
         line: details.line,
-        column: details.column
+        column: details.column,
       };
 
       while (p < pos) {
@@ -866,13 +875,13 @@ function peg$parse(input: string, options?: IParseOptions) {
       start: {
         offset: startPos,
         line: startPosDetails.line,
-        column: startPosDetails.column
+        column: startPosDetails.column,
       },
       end: {
         offset: endPos,
         line: endPosDetails.line,
-        column: endPosDetails.column
-      }
+        column: endPosDetails.column,
+      },
     };
   }
 
@@ -6322,7 +6331,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  (function() {
+  (function () {
     // @NOTE: These are just here to remove the unused warning in generated ts
     error || expected || peg$anyExpectation;
   })();

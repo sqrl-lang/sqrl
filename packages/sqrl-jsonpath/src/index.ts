@@ -13,7 +13,7 @@ import {
   AT,
   sqrlInvariant,
   AstBuilder,
-  Execution
+  Execution,
 } from "sqrl";
 
 // $[ (digits / single quoted string / double quoted string) ] (anything)
@@ -64,7 +64,7 @@ export function register(instance: Instance) {
     {
       args: [AT.any, AT.constant.string],
       argstring: "object, path string",
-      docstring: "Returns the value at the given path in the JSON object"
+      docstring: "Returns the value at the given path in the JSON object",
     }
   );
 
@@ -83,7 +83,7 @@ export function register(instance: Instance) {
     {
       args: [AT.state, AT.any, AT.constant.string],
       argstring: "object, path string",
-      docstring: "Returns the values matching the given JSONPath query"
+      docstring: "Returns the values matching the given JSONPath query",
     }
   );
 }

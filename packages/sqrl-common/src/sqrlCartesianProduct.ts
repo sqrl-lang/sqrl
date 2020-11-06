@@ -16,7 +16,7 @@ export function sqrlCartesianProduct<T>(
     maxArrays?: number;
   } = {}
 ): T[][] {
-  const hasEmpty: boolean = featureValues.some(v => {
+  const hasEmpty: boolean = featureValues.some((v) => {
     return !SqrlObject.isTruthy(v);
   });
 
@@ -25,10 +25,10 @@ export function sqrlCartesianProduct<T>(
   }
 
   let arrayCount: number = 0;
-  const valueArrays: any[][] = featureValues.map(featureValue => {
+  const valueArrays: any[][] = featureValues.map((featureValue) => {
     if (Array.isArray(featureValue)) {
       arrayCount += 1;
-      return featureValue.filter(i => i);
+      return featureValue.filter((i) => i);
     } else if (featureValue) {
       return [featureValue];
     }

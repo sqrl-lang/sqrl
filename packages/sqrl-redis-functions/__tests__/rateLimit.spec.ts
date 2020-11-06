@@ -163,7 +163,7 @@ LET Result := rateLimit(BY Value1, Value2 MAX 3 EVERY 60 SECOND);
   // Make sure the last line logged an error
   expect(
     logger.popLatest({
-      level: "error"
+      level: "error",
     }).msg
   ).toStartWith(
     "Error in sqrl function _getKeyList: Error: Exceeded sqrl maximum array count:: 2 of 1"

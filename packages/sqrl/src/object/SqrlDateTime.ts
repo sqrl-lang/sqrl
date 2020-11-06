@@ -20,7 +20,7 @@ export default class SqrlDateTime extends SqrlObject {
       mkSpan("type:name", "date"),
       mkSpan("type:syntax", "<"),
       mkSpan("value:date", this.isoString),
-      mkSpan("type:syntax", ">")
+      mkSpan("type:syntax", ">"),
     ]);
   }
 

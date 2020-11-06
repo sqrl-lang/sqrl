@@ -61,8 +61,8 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     let cost = 0;
 
     // Walk through the expr, keep track of everything we load and our own cost
-    walkExpr(expr, node => {
-      (node.load || []).forEach(slot => {
+    walkExpr(expr, (node) => {
+      (node.load || []).forEach((slot) => {
         if (load.has(slot.name)) {
           return;
         }
@@ -71,7 +71,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
 
         // We need to load the given slot, and all it's children
         load.add(slot.name);
-        this.load[slot.name].forEach(slotName => load.add(slotName));
+        this.load[slot.name].forEach((slotName) => load.add(slotName));
       });
 
       if (node.type === "call") {
@@ -80,7 +80,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     });
 
     let recursiveCost = cost;
-    load.forEach(name => {
+    load.forEach((name) => {
       recursiveCost += this.cost[name];
     });
 
@@ -100,7 +100,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     const slot = this.slots[slotName];
     if (slot instanceof SqrlInputSlot) {
       return {
-        type: "input"
+        type: "input",
       };
     }
 
@@ -131,7 +131,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
       let errorMessage: string;
       if (isValidFeatureName(slot.name)) {
         errorMessage = `Feature '${slot.name}' depends on itself`;
-        slotNames = slotNames.filter(name => name !== slot.name);
+        slotNames = slotNames.filter((name) => name !== slot.name);
         if (slotNames.length) {
           errorMessage += ", see " + slotNames.join(", ");
         }
@@ -156,7 +156,10 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
         return;
       } else {
         if (current.has(slot)) {
-          throwLoopError(slot, Array.from(current).map(slot => slot.name));
+          throwLoopError(
+            slot,
+            Array.from(current).map((slot) => slot.name)
+          );
         }
       }
 
@@ -167,7 +170,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
         slotExpr = this.exprForSlot(slot.name);
       } catch (err) {
         if (err instanceof ExprLoopError) {
-          const names = Object.keys(this.slotExprMap).filter(name => {
+          const names = Object.keys(this.slotExprMap).filter((name) => {
             return this.slotExprMap[name] === null;
           });
           throwLoopError(slot, names);
@@ -175,8 +178,8 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
           throw err;
         }
       }
-      walkExpr(slotExpr, expr => {
-        (expr.load || []).forEach(slot => {
+      walkExpr(slotExpr, (expr) => {
+        (expr.load || []).forEach((slot) => {
           if (!used.has(slot)) {
             recurseUsedSlot(slot);
           }
@@ -194,17 +197,17 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
         }
       });
 
-      slotNames = Object.keys(this.slots).filter(name => {
+      slotNames = Object.keys(this.slots).filter((name) => {
         return used.has(this.slots[name]);
       });
     } else {
       slotNames = Object.keys(this.slots);
       // This recurse is required for picking up cycles, might be able to remove one day
-      Object.values(this.slots).forEach(slot => recurseUsedSlot(slot));
+      Object.values(this.slots).forEach((slot) => recurseUsedSlot(slot));
     }
 
     this._slotNames = slotNames;
-    this._usedSlotNames = slotNames.map(name =>
+    this._usedSlotNames = slotNames.map((name) =>
       this.slots.hasOwnProperty(name) ? name : null
     );
   }
@@ -242,7 +245,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     if (this._recursed) {
       return;
     }
-    this.usedSlotNames.forEach(name => {
+    this.usedSlotNames.forEach((name) => {
       if (name) {
         this.recurseSlot(name);
       }
@@ -252,16 +255,16 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
 
   public get slotCosts(): number[] {
     this.recurseAllSlots();
-    return this.usedSlotNames.map(name => name && this.cost[name]);
+    return this.usedSlotNames.map((name) => name && this.cost[name]);
   }
   public get slotRecursiveCosts(): number[] {
     this.recurseAllSlots();
-    return this.usedSlotNames.map(name => name && this.recursiveCost[name]);
+    return this.usedSlotNames.map((name) => name && this.recursiveCost[name]);
   }
   public get slotLoad(): number[][] {
-    return this.usedSlotNames.map(name => {
+    return this.usedSlotNames.map((name) => {
       return Array.from(this.load[name])
-        .map(loadName => {
+        .map((loadName) => {
           const index = this.usedSlotNames.indexOf(loadName);
           invariant(index >= 0, "Could not find slot index: " + loadName);
           return index;
@@ -273,7 +276,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
   get usedFunctions(): string[] {
     const functions: Set<string> = new Set();
     for (const expr of this.slotExprs) {
-      walkExpr(expr, node => {
+      walkExpr(expr, (node) => {
         if (node.type === "call") {
           functions.add(node.func);
         }
@@ -286,16 +289,16 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     this.recurseAllSlots();
 
     const rv: FeatureDocMap = {};
-    this.foreachFeatureSlot(slot => {
+    this.foreachFeatureSlot((slot) => {
       rv[slot.name] = slot.buildDoc({
         cost: this.cost[slot.name],
-        recursiveCost: this.recursiveCost[slot.name]
+        recursiveCost: this.recursiveCost[slot.name],
       });
     });
-    this.foreachRuleSlot(slot => {
+    this.foreachRuleSlot((slot) => {
       rv[slot.name] = slot.buildDoc({
         cost: this.cost[slot.name],
-        recursiveCost: this.recursiveCost[slot.name]
+        recursiveCost: this.recursiveCost[slot.name],
       });
     });
     return rv;
@@ -324,7 +327,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
       slotRecursiveCosts: this.slotRecursiveCosts,
       rules: this.ruleSpecs,
       usedFiles: this.usedFiles,
-      slotJs: this.slotJs
+      slotJs: this.slotJs,
     };
   }
 
@@ -346,7 +349,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
     this.recurseSlot(slotName);
     return {
       cost: this.cost[slotName],
-      recursiveCost: this.recursiveCost[slotName]
+      recursiveCost: this.recursiveCost[slotName],
     };
   }
 
@@ -370,7 +373,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
 
     let slotFilter: SlotFilter = null;
     if (featureSet) {
-      slotFilter = name => featureSet.has(name);
+      slotFilter = (name) => featureSet.has(name);
     }
 
     return new SqrlCompiledOutput(parserState, slotFilter);

@@ -39,7 +39,7 @@ export class TestLogger extends AbstractLogger {
     // tslint:disable-next-line
     this.messages.push({
       msg: message,
-      level
+      level,
     });
     // tslint:disable-next-line:no-console
     console.error(message);

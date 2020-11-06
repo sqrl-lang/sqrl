@@ -38,7 +38,7 @@ export const defaultDocOptArgs: DocOptArgs = {
   "--concurrency": "50",
   "--port": "2288",
   "<feature>": [],
-  "<key=value>": []
+  "<key=value>": [],
 };
 
 export interface DocOptArgs {
@@ -162,8 +162,8 @@ function getBaseArgs(args: DocOptArgs): BaseArgs {
     output: args["--output"],
     config: args["--config"] || null,
     redis: args["--redis"] || null,
-    requires: (args["--require"] || "").split(",").filter(v => v),
-    skipDefaultRequires: args["--skip-default-requires"] || false
+    requires: (args["--require"] || "").split(",").filter((v) => v),
+    skipDefaultRequires: args["--skip-default-requires"] || false,
   };
 }
 
@@ -172,7 +172,7 @@ function getCompiledCommandArgs(args: DocOptArgs): CompiledCommandArgs {
     ...getBaseArgs(args),
     inputs: getInputs(args),
     filename: args["<filename>"] || null,
-    compiled: args["--compiled"] || false
+    compiled: args["--compiled"] || false,
   };
 }
 
@@ -186,37 +186,37 @@ export function docOptToCliArgs(args: DocOptArgs): CliArgs {
   if (args.compile) {
     return {
       command: "compile",
-      ...getCompiledCommandArgs(args)
+      ...getCompiledCommandArgs(args),
     };
   } else if (args.help) {
     return {
       command: "help",
       ...getBaseArgs(args),
-      section: "functions"
+      section: "functions",
     };
   } else if (args.repl) {
     return {
       command: "repl",
-      ...getCompiledCommandArgs(args)
+      ...getCompiledCommandArgs(args),
     };
   } else if (args.run) {
     return {
       command: "run",
       ...getCompiledCommandArgs(args),
       concurrency: intArg(args, "--concurrency"),
-      streamFeature: args["--stream"] || null
+      streamFeature: args["--stream"] || null,
     };
   } else if (args.serve) {
     return {
       command: "serve",
       port: intArg(args, "--port"),
-      ...getCompiledCommandArgs(args)
+      ...getCompiledCommandArgs(args),
     };
   } else if (args.test) {
     return {
       command: "test",
       ...getBaseArgs(args),
-      filename: args["<filename>"]
+      filename: args["<filename>"],
     };
   } else {
     throw new Error("Unknown docopt command");
@@ -231,8 +231,8 @@ export function parseArgs(argv?: string[]): CliArgs {
     defaultDocOptArgs,
     ...docopt(CliDoc, {
       version: 0.1,
-      argv
-    })
+      argv,
+    }),
   };
 
   return docOptToCliArgs(args);

@@ -67,10 +67,7 @@ export type Expectation =
 export class SyntaxError extends Error {
   public static buildMessage(expected: Expectation[], found: string | null) {
     function hex(ch: string): string {
-      return ch
-        .charCodeAt(0)
-        .toString(16)
-        .toUpperCase();
+      return ch.charCodeAt(0).toString(16).toUpperCase();
     }
 
     function literalEscape(s: string): string {
@@ -81,8 +78,8 @@ export class SyntaxError extends Error {
         .replace(/\t/g, "\\t")
         .replace(/\n/g, "\\n")
         .replace(/\r/g, "\\r")
-        .replace(/[\x00-\x0F]/g, ch => "\\x0" + hex(ch))
-        .replace(/[\x10-\x1F\x7F-\x9F]/g, ch => "\\x" + hex(ch));
+        .replace(/[\x00-\x0F]/g, (ch) => "\\x0" + hex(ch))
+        .replace(/[\x10-\x1F\x7F-\x9F]/g, (ch) => "\\x" + hex(ch));
     }
 
     function classEscape(s: string): string {
@@ -95,8 +92,8 @@ export class SyntaxError extends Error {
         .replace(/\t/g, "\\t")
         .replace(/\n/g, "\\n")
         .replace(/\r/g, "\\r")
-        .replace(/[\x00-\x0F]/g, ch => "\\x0" + hex(ch))
-        .replace(/[\x10-\x1F\x7F-\x9F]/g, ch => "\\x" + hex(ch));
+        .replace(/[\x00-\x0F]/g, (ch) => "\\x0" + hex(ch))
+        .replace(/[\x10-\x1F\x7F-\x9F]/g, (ch) => "\\x" + hex(ch));
     }
 
     function describeExpectation(expectation: Expectation) {
@@ -104,7 +101,7 @@ export class SyntaxError extends Error {
         case "literal":
           return '"' + literalEscape(expectation.text) + '"';
         case "class":
-          const escapedParts = expectation.parts.map(part => {
+          const escapedParts = expectation.parts.map((part) => {
             return Array.isArray(part)
               ? classEscape(part[0] as string) +
                   "-" +
@@ -212,13 +209,13 @@ function peg$parse(input: string, options?: IParseOptions) {
     CountPreviousArguments: peg$parseCountPreviousArguments,
     StreamingStatsArguments: peg$parseStreamingStatsArguments,
     CountUniqueArguments: peg$parseCountUniqueArguments,
-    SumArguments: peg$parseSumArguments
+    SumArguments: peg$parseSumArguments,
   };
   let peg$startRuleFunction: () => any = peg$parseCountArguments;
 
   const peg$c0 = "by";
   const peg$c1 = peg$literalExpectation("BY", true);
-  const peg$c2 = function(
+  const peg$c2 = function (
     sumFeature: any,
     features: any,
     where: any,
@@ -229,18 +226,18 @@ function peg$parse(input: string, options?: IParseOptions) {
       features,
       sumFeature,
       timespan: timespan || "total",
-      where
+      where,
     };
   };
-  const peg$c3 = function(features: any, where: any, timespan: any) {
+  const peg$c3 = function (features: any, where: any, timespan: any) {
     where = where || { type: "constant", value: true };
     return {
       features,
       sumFeature: null,
       timespan: timespan || {
-        type: "total"
+        type: "total",
       },
-      where
+      where,
     };
   };
   const peg$c4 = "day over day";
@@ -249,12 +246,12 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c7 = peg$literalExpectation("DAY OVER FULL WEEK", true);
   const peg$c8 = "week over week";
   const peg$c9 = peg$literalExpectation("WEEK OVER WEEK", true);
-  const peg$c10 = function(timespan: any) {
+  const peg$c10 = function (timespan: any) {
     return {
-      type: camelCase(timespan)
+      type: camelCase(timespan),
     };
   };
-  const peg$c11 = function(
+  const peg$c11 = function (
     features: any,
     where: any,
     minEvents: any,
@@ -265,37 +262,37 @@ function peg$parse(input: string, options?: IParseOptions) {
       features,
       minEvents: minEvents || 1,
       timespan,
-      where
+      where,
     };
   };
   const peg$c12 = "day over week";
   const peg$c13 = peg$literalExpectation("DAY OVER WEEK", true);
   const peg$c14 = "total";
   const peg$c15 = peg$literalExpectation("TOTAL", true);
-  const peg$c16 = function(ms: any) {
+  const peg$c16 = function (ms: any) {
     return {
       type: "duration",
-      durationMs: ms
+      durationMs: ms,
     };
   };
   const peg$c17 = "last day";
   const peg$c18 = peg$literalExpectation("LAST DAY", true);
   const peg$c19 = "LAST WEEK";
   const peg$c20 = peg$literalExpectation("LAST WEEK", false);
-  const peg$c21 = function(features: any, where: any, previousTimespan: any) {
+  const peg$c21 = function (features: any, where: any, previousTimespan: any) {
     where = where || { type: "constant", value: true };
     return {
       features,
       sumFeature: null,
       timespan: camelCase("previous " + previousTimespan),
-      where
+      where,
     };
   };
   const peg$c22 = "intersect";
   const peg$c23 = peg$literalExpectation("INTERSECT", true);
   const peg$c24 = "union";
   const peg$c25 = peg$literalExpectation("UNION", true);
-  const peg$c26 = function(
+  const peg$c26 = function (
     uniques: any,
     groups: any,
     setOperation: any,
@@ -310,19 +307,19 @@ function peg$parse(input: string, options?: IParseOptions) {
       setOperation: setOperation
         ? {
             operation: setOperation[1].toLowerCase(),
-            features: setOperation[3]
+            features: setOperation[3],
           }
         : null,
       windowMs: windowMs || null,
       beforeAction: beforeAction === true,
-      where
+      where,
     };
   };
   const peg$c27 = "max";
   const peg$c28 = peg$literalExpectation("MAX", true);
   const peg$c29 = "every";
   const peg$c30 = peg$literalExpectation("EVERY", true);
-  const peg$c31 = function(
+  const peg$c31 = function (
     features: any,
     max: any,
     refillTimeMs: any,
@@ -343,53 +340,53 @@ function peg$parse(input: string, options?: IParseOptions) {
       refillAmount,
       tokenAmount,
       strict,
-      where
+      where,
     };
   };
   const peg$c32 = "refill";
   const peg$c33 = peg$literalExpectation("REFILL", true);
-  const peg$c34 = function(value: any) {
+  const peg$c34 = function (value: any) {
     return value;
   };
   const peg$c35 = "take";
   const peg$c36 = peg$literalExpectation("TAKE", true);
   const peg$c37 = "strict";
   const peg$c38 = peg$literalExpectation("STRICT", true);
-  const peg$c39 = function() {
+  const peg$c39 = function () {
     return true;
   };
-  const peg$c40 = function(feature: any, groupFeatures: any, where: any) {
+  const peg$c40 = function (feature: any, groupFeatures: any, where: any) {
     where = where || { type: "constant", value: true };
     return {
       groupFeatures: groupFeatures ? groupFeatures[3] : [],
       feature,
-      where
+      where,
     };
   };
   const peg$c41 = ",";
   const peg$c42 = peg$literalExpectation(",", false);
-  const peg$c43 = function(percentile: any, percentileArgs: any) {
+  const peg$c43 = function (percentile: any, percentileArgs: any) {
     return {
       ...percentileArgs,
-      percentile
+      percentile,
     };
   };
-  const peg$c44 = function(percentileArgs: any) {
+  const peg$c44 = function (percentileArgs: any) {
     return percentileArgs;
   };
-  const peg$c45 = function(feature: any, group: any, where: any) {
+  const peg$c45 = function (feature: any, group: any, where: any) {
     where = where || { type: "constant", value: true };
     return {
       feature,
       group: group ? group[3] : null,
-      where
+      where,
     };
   };
   const peg$c46 = "(";
   const peg$c47 = peg$literalExpectation("(", false);
   const peg$c48 = ")";
   const peg$c49 = peg$literalExpectation(")", false);
-  const peg$c50 = function(expr: any) {
+  const peg$c50 = function (expr: any) {
     return expr;
   };
   const peg$c51 = "where";
@@ -398,12 +395,12 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c54 = peg$literalExpectation("WITH MIN", true);
   const peg$c55 = "events";
   const peg$c56 = peg$literalExpectation("EVENTS", true);
-  const peg$c57 = function(numEvents: any) {
+  const peg$c57 = function (numEvents: any) {
     return numEvents;
   };
   const peg$c58 = "last";
   const peg$c59 = peg$literalExpectation("LAST", true);
-  const peg$c60 = function(lastMs: any) {
+  const peg$c60 = function (lastMs: any) {
     return lastMs;
   };
   const peg$c61 = "before action";
@@ -432,7 +429,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c84 = peg$literalExpectation("MONTHS", true);
   const peg$c85 = "month";
   const peg$c86 = peg$literalExpectation("MONTH", true);
-  const peg$c87 = function(timespan: any) {
+  const peg$c87 = function (timespan: any) {
     return {
       second: 1,
       seconds: 1,
@@ -445,10 +442,10 @@ function peg$parse(input: string, options?: IParseOptions) {
       week: 60 * 60 * 24 * 7,
       weeks: 60 * 60 * 24 * 7,
       month: 60 * 60 * 24 * 30,
-      months: 60 * 60 * 24 * 30
+      months: 60 * 60 * 24 * 30,
     }[timespan.toLowerCase()];
   };
-  const peg$c88 = function(quantity: any, timespanSeconds: any) {
+  const peg$c88 = function (quantity: any, timespanSeconds: any) {
     quantity = quantity ? quantity[0] : 1;
     return quantity * timespanSeconds * 1000;
   };
@@ -456,49 +453,49 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c90 = peg$literalExpectation("[", false);
   const peg$c91 = "]";
   const peg$c92 = peg$literalExpectation("]", false);
-  const peg$c93 = function() {
+  const peg$c93 = function () {
     return {
       type: "list",
       exprs: [],
-      location: loc()
+      location: loc(),
     };
   };
-  const peg$c94 = function(firstExpr: any, restExprs: any) {
+  const peg$c94 = function (firstExpr: any, restExprs: any) {
     return {
       type: "list",
-      exprs: [firstExpr].concat(restExprs.map(e => e[3])),
-      location: loc()
+      exprs: [firstExpr].concat(restExprs.map((e) => e[3])),
+      location: loc(),
     };
   };
   const peg$c95 = "and";
   const peg$c96 = peg$literalExpectation("AND", true);
   const peg$c97 = "or";
   const peg$c98 = peg$literalExpectation("OR", true);
-  const peg$c99 = function(left: any, op: any, right: any) {
+  const peg$c99 = function (left: any, op: any, right: any) {
     return {
       type: "boolean_expr",
       left: left,
       operator: op.toLowerCase(),
       right: right,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c100 = "not";
   const peg$c101 = peg$literalExpectation("NOT", true);
-  const peg$c102 = function(expr: any) {
+  const peg$c102 = function (expr: any) {
     return { type: "not", expr: expr, location: loc() };
   };
   const peg$c103 = "is not";
   const peg$c104 = peg$literalExpectation("IS NOT", true);
   const peg$c105 = "is";
   const peg$c106 = peg$literalExpectation("IS", true);
-  const peg$c107 = function(left: any, op: any, right: any) {
+  const peg$c107 = function (left: any, op: any, right: any) {
     return {
       type: "binary_expr",
       left: left,
       operator: op.toLowerCase(),
       right: right,
-      location: loc()
+      location: loc(),
     };
   };
   const peg$c108 = "=";
@@ -527,26 +524,26 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c131 = peg$literalExpectation("/", false);
   const peg$c132 = "%";
   const peg$c133 = peg$literalExpectation("%", false);
-  const peg$c134 = function(first: any, rest: any) {
-    return [first].concat(rest.map(item => item[3]));
+  const peg$c134 = function (first: any, rest: any) {
+    return [first].concat(rest.map((item) => item[3]));
   };
   const peg$c135 = "as";
   const peg$c136 = peg$literalExpectation("AS", true);
-  const peg$c137 = function(feature: any, alias: any) {
+  const peg$c137 = function (feature: any, alias: any) {
     return {
       type: "aliasedFeature",
       feature,
       alias: alias ? alias[3] : feature.value,
-      location: loc()
+      location: loc(),
     };
   };
-  const peg$c138 = function(feature: any) {
+  const peg$c138 = function (feature: any) {
     return { type: "feature", value: feature, location: loc() };
   };
   const peg$c139 = peg$otherExpectation("feature name");
   const peg$c140 = ".";
   const peg$c141 = peg$literalExpectation(".", false);
-  const peg$c142 = function() {
+  const peg$c142 = function () {
     return text();
   };
   const peg$c143 = /^[A-Za-z0-9_]/;
@@ -557,18 +554,18 @@ function peg$parse(input: string, options?: IParseOptions) {
   );
   const peg$c145 = "group";
   const peg$c146 = peg$literalExpectation("GROUP", true);
-  const peg$c147 = function() {};
-  const peg$c148 = function(value: any) {
+  const peg$c147 = function () {};
+  const peg$c148 = function (value: any) {
     return { type: "constant", value: value, location: loc() };
   };
   const peg$c149 = "null";
   const peg$c150 = peg$literalExpectation("NULL", true);
-  const peg$c151 = function() {
+  const peg$c151 = function () {
     return { type: "constant", value: null, location: loc() };
   };
   const peg$c152 = peg$otherExpectation("null");
   const peg$c153 = peg$literalExpectation("null", false);
-  const peg$c154 = function() {
+  const peg$c154 = function () {
     return null;
   };
   const peg$c155 = peg$otherExpectation("true");
@@ -577,7 +574,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c158 = peg$otherExpectation("false");
   const peg$c159 = "false";
   const peg$c160 = peg$literalExpectation("false", false);
-  const peg$c161 = function() {
+  const peg$c161 = function () {
     return false;
   };
   const peg$c162 = peg$otherExpectation("literal number");
@@ -587,19 +584,19 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c166 = peg$classExpectation([["1", "9"]], false, false);
   const peg$c167 = /^[0-9]/;
   const peg$c168 = peg$classExpectation([["0", "9"]], false, false);
-  const peg$c169 = function() {
+  const peg$c169 = function () {
     return parseInt(text(), 10);
   };
   const peg$c170 = "0";
   const peg$c171 = peg$literalExpectation("0", false);
-  const peg$c172 = function() {
+  const peg$c172 = function () {
     return 0;
   };
-  const peg$c173 = function() {
+  const peg$c173 = function () {
     return parseFloat(text());
   };
-  const peg$c174 = function(first: any, rest: any) {
-    return first.concat(...rest.map(item => item[1]));
+  const peg$c174 = function (first: any, rest: any) {
+    return first.concat(...rest.map((item) => item[1]));
   };
   const peg$c175 = peg$otherExpectation("whitespace");
   const peg$c176 = /^[ \t\n\r]/;
@@ -615,7 +612,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c186 = peg$otherExpectation("string");
   const peg$c187 = "'";
   const peg$c188 = peg$literalExpectation("'", false);
-  const peg$c189 = function(chars: any) {
+  const peg$c189 = function (chars: any) {
     return chars.join("");
   };
   const peg$c190 = '"';
@@ -624,35 +621,35 @@ function peg$parse(input: string, options?: IParseOptions) {
   const peg$c193 = peg$literalExpectation("\\", false);
   const peg$c194 = "b";
   const peg$c195 = peg$literalExpectation("b", false);
-  const peg$c196 = function() {
+  const peg$c196 = function () {
     return "\b";
   };
   const peg$c197 = "f";
   const peg$c198 = peg$literalExpectation("f", false);
-  const peg$c199 = function() {
+  const peg$c199 = function () {
     return "\f";
   };
   const peg$c200 = "n";
   const peg$c201 = peg$literalExpectation("n", false);
-  const peg$c202 = function() {
+  const peg$c202 = function () {
     return "\n";
   };
   const peg$c203 = "r";
   const peg$c204 = peg$literalExpectation("r", false);
-  const peg$c205 = function() {
+  const peg$c205 = function () {
     return "\r";
   };
   const peg$c206 = "t";
   const peg$c207 = peg$literalExpectation("t", false);
-  const peg$c208 = function() {
+  const peg$c208 = function () {
     return "\t";
   };
   const peg$c209 = "u";
   const peg$c210 = peg$literalExpectation("u", false);
-  const peg$c211 = function(digits: any) {
+  const peg$c211 = function (digits: any) {
     return String.fromCharCode(parseInt(digits, 16));
   };
-  const peg$c212 = function(sequence: any) {
+  const peg$c212 = function (sequence: any) {
     return sequence;
   };
   const peg$c213 = /^[^\0-\x1F"\\]/;
@@ -668,7 +665,14 @@ function peg$parse(input: string, options?: IParseOptions) {
     false
   );
   const peg$c217 = /^[0-9a-f]/i;
-  const peg$c218 = peg$classExpectation([["0", "9"], ["a", "f"]], false, true);
+  const peg$c218 = peg$classExpectation(
+    [
+      ["0", "9"],
+      ["a", "f"],
+    ],
+    false,
+    true
+  );
 
   let peg$currPos = 0;
   let peg$savedPos = 0;
@@ -737,7 +741,7 @@ function peg$parse(input: string, options?: IParseOptions) {
       type: "class",
       parts: parts,
       inverted: inverted,
-      ignoreCase: ignoreCase
+      ignoreCase: ignoreCase,
     };
   }
 
@@ -768,7 +772,7 @@ function peg$parse(input: string, options?: IParseOptions) {
       details = peg$posDetailsCache[p];
       details = {
         line: details.line,
-        column: details.column
+        column: details.column,
       };
 
       while (p < pos) {
@@ -796,13 +800,13 @@ function peg$parse(input: string, options?: IParseOptions) {
       start: {
         offset: startPos,
         line: startPosDetails.line,
-        column: startPosDetails.column
+        column: startPosDetails.column,
       },
       end: {
         offset: endPos,
         line: endPosDetails.line,
-        column: endPosDetails.column
-      }
+        column: endPosDetails.column,
+      },
     };
   }
 
@@ -5406,7 +5410,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     return s0;
   }
 
-  (function() {
+  (function () {
     // @NOTE: These are just here to remove the unused warning in generated ts
     error || expected || peg$anyExpectation;
   })();
@@ -5420,7 +5424,7 @@ function peg$parse(input: string, options?: IParseOptions) {
     // * Remove all spaces
     return string
       .toLowerCase()
-      .replace(/\b\w/g, function(chr, idx) {
+      .replace(/\b\w/g, function (chr, idx) {
         return idx > 0 ? chr.toUpperCase() : chr;
       })
       .replace(/\s+/g, "");

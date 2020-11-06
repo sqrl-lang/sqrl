@@ -107,7 +107,7 @@ export class MockRedisService implements RedisInterface, MockRedisDatabase {
     }
     invariant(Array.isArray(this.db[key]), "Expected array in mock redis");
     this.db[key].push(
-      ...values.map(value => {
+      ...values.map((value) => {
         if (typeof value === "number") {
           return "" + value;
         } else if (value instanceof Buffer) {
@@ -147,7 +147,7 @@ export class MockRedisService implements RedisInterface, MockRedisDatabase {
 
   async mgetNumbers(ctx: Context, bufferKeys: Buffer[]): Promise<number[]> {
     return bufferKeys.map(
-      bufferKey => this.db[bufferKey.toString("hex")] || null
+      (bufferKey) => this.db[bufferKey.toString("hex")] || null
     );
   }
 }

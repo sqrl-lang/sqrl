@@ -21,7 +21,7 @@ export async function buildKey(
   counterEntity: SqrlEntity,
   ...featureValues: Array<any>
 ): Promise<SqrlKey | null> {
-  const hasEmpty = featureValues.some(v => {
+  const hasEmpty = featureValues.some((v) => {
     return v === null || v === "";
   });
   if (hasEmpty) {
@@ -68,8 +68,8 @@ async function getKeyList(
 
   return Promise.all(
     sqrlCartesianProduct(featureValues, {
-      maxArrays: 1
-    }).map(values => buildKey(ctx, counterEntity, ...values))
+      maxArrays: 1,
+    }).map((values) => buildKey(ctx, counterEntity, ...values))
   );
 }
 
@@ -90,7 +90,7 @@ export function registerKeyFunctions(instance: StdlibRegistry) {
       name: "_buildKey",
       allowSqrlObjects: true,
       args: [AT.state, AT.any.sqrlEntity, AT.any.repeated],
-      async: true
+      async: true,
     }
   );
 
@@ -101,7 +101,7 @@ export function registerKeyFunctions(instance: StdlibRegistry) {
       ...args
     ) {
       const keys = await getKeyList(state.ctx, counterEntity, ...args);
-      keys.forEach(key => {
+      keys.forEach((key) => {
         if (state.manipulator) {
           state.manipulator.trackSqrlKey(key);
         }
@@ -113,7 +113,7 @@ export function registerKeyFunctions(instance: StdlibRegistry) {
       args: [AT.state, AT.any.sqrlEntity, AT.any.repeated.optional],
       allowSqrlObjects: true,
       allowNull: true,
-      async: true
+      async: true,
     }
   );
 }

@@ -22,12 +22,12 @@ const VALID_TIMESPANS = {
   MINUTE: 60 * 1000.0,
   HOUR: 60 * 60 * 1000.0,
   DAY: 24 * 60 * 60 * 1000.0,
-  WEEK: 7 * 24 * 60 * 60 * 1000.0
+  WEEK: 7 * 24 * 60 * 60 * 1000.0,
 };
 
 const ISO_8601_DURATION_REGEXES = [
   /^P([0-9]+Y)?([0-9]+M)?([0-9]+W)?([0-9]+D)?(T([0-9]+H)?([0-9]+M)?([0-9]+(\\.[0-9]+)?S)?)?$/,
-  /^P([^T]+|.*T.+)$/
+  /^P([^T]+|.*T.+)$/,
 ];
 
 function timeMsForValue(value: any) {
@@ -74,12 +74,12 @@ export function registerDateFunctions(instance: StdlibRegistry) {
       return SqrlAst.call("_dateDiff", [
         SqrlAst.constant(VALID_TIMESPANS[timeUnitAst.value]),
         startDateAst,
-        endDateAst || SqrlAst.feature("SqrlClock")
+        endDateAst || SqrlAst.feature("SqrlClock"),
       ]);
     },
     argstring: "unit, start, end?",
     docstring:
-      "Returns the difference between the two dates in the given unit (millisecond, second, minute, hour, day, week)"
+      "Returns the difference between the two dates in the given unit (millisecond, second, minute, hour, day, week)",
   });
 
   instance.save(
@@ -89,7 +89,7 @@ export function registerDateFunctions(instance: StdlibRegistry) {
       return (end - start) / msConversion;
     },
     {
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
     }
   );
 
@@ -101,12 +101,10 @@ export function registerDateFunctions(instance: StdlibRegistry) {
       if (typeof timeMs !== "number") {
         return null;
       }
-      return Moment(timeMs, "x")
-        .utcOffset(0)
-        .format(format);
+      return Moment(timeMs, "x").utcOffset(0).format(format);
     },
     {
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
     }
   );
 
@@ -134,22 +132,20 @@ export function registerDateFunctions(instance: StdlibRegistry) {
     },
     argstring: "date, format",
     docstring:
-      "Format a given date according to a given format (see https://momentjs.com/docs/#/displaying/format/)"
+      "Format a given date according to a given format (see https://momentjs.com/docs/#/displaying/format/)",
   });
 
   instance.save(
     function _dateAdd(time, duration) {
       time = timeMsForValue(time);
-      const value = Moment.utc(time)
-        .add(Moment.duration(duration))
-        .valueOf();
+      const value = Moment.utc(time).add(Moment.duration(duration)).valueOf();
       if (!value) {
         throw new Error("Got null timeMs value from moment");
       }
       return new SqrlDateTime(value);
     },
     {
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
     }
   );
 
@@ -167,7 +163,7 @@ export function registerDateFunctions(instance: StdlibRegistry) {
       sqrlInvariant(
         durationAst,
         durationAst.type !== "constant" ||
-          ISO_8601_DURATION_REGEXES.every(regex => {
+          ISO_8601_DURATION_REGEXES.every((regex) => {
             return regex.test(durationAst.value);
           }),
         "Expected a valid ISO8601 duration for dateAdd second parameter"
@@ -176,7 +172,7 @@ export function registerDateFunctions(instance: StdlibRegistry) {
       return SqrlAst.call("_dateAdd", ast.args);
     },
     argstring: "date, duration",
-    docstring: "Add a given duration (ISO8601 format) to the given date"
+    docstring: "Add a given duration (ISO8601 format) to the given date",
   });
 
   instance.save(
@@ -187,7 +183,7 @@ export function registerDateFunctions(instance: StdlibRegistry) {
       allowSqrlObjects: true,
       args: [AT.any],
       argstring: "value",
-      docstring: "Convert the given object or ISO8601 string to a date"
+      docstring: "Convert the given object or ISO8601 string to a date",
     }
   );
 
@@ -199,7 +195,7 @@ export function registerDateFunctions(instance: StdlibRegistry) {
       args: [AT.any.number],
       argstring: "value",
       docstring:
-        "Converts a count of milliseconds since the unix epoch to a date"
+        "Converts a count of milliseconds since the unix epoch to a date",
     }
   );
 
@@ -212,7 +208,7 @@ export function registerDateFunctions(instance: StdlibRegistry) {
       args: [AT.state, AT.any],
       argstring: "date",
       docstring:
-        "Returns the count of milliseconds since the unix epoch for the provided value"
+        "Returns the count of milliseconds since the unix epoch for the provided value",
     }
   );
 }

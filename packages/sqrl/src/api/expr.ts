@@ -82,7 +82,7 @@ export function serializeExpr(expr: Expr): SerializedExpr {
   return Object.assign({}, expr, {
     slot: (expr as any).slot ? (expr as any).slot.getIndex() : undefined,
     exprs: expr.exprs ? expr.exprs.map(serializeExpr) : undefined,
-    load: expr.load ? expr.load.map(slot => slot.getIndex()) : undefined,
-    location: undefined
+    load: expr.load ? expr.load.map((slot) => slot.getIndex()) : undefined,
+    location: undefined,
   });
 }

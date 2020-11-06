@@ -7,7 +7,7 @@ import Semaphore from "../../src/jslib/Semaphore";
 import * as bluebird from "bluebird";
 
 const setImmediatePromise = () => {
-  return new Promise(resolve => setImmediate(resolve));
+  return new Promise((resolve) => setImmediate(resolve));
 };
 
 test("hits promise when it gets to zero", async () => {
@@ -45,10 +45,10 @@ test("locks as expected", async () => {
 
   // Take two of the three
   let value = 0;
-  counter.increment().then(function() {
+  counter.increment().then(function () {
     value++;
   });
-  counter.increment().then(function() {
+  counter.increment().then(function () {
     value++;
   });
 
@@ -57,7 +57,7 @@ test("locks as expected", async () => {
   expect(value).toEqual(2);
 
   // Third one
-  counter.increment().then(function() {
+  counter.increment().then(function () {
     value++;
   });
   await setImmediatePromise();
@@ -65,7 +65,7 @@ test("locks as expected", async () => {
   expect(counts).toEqual([1, 2, 3]);
 
   // Fourth (of three?!)
-  counter.increment().then(function() {
+  counter.increment().then(function () {
     value++;
   });
   await setImmediatePromise();
@@ -76,7 +76,7 @@ test("locks as expected", async () => {
 
   // Start a coroutine
   let coroutineStarted = false;
-  const coroutinePromise = counter.withLock(async function() {
+  const coroutinePromise = counter.withLock(async function () {
     coroutineStarted = true;
     await bluebird.delay(150);
     return "OKAY!";
@@ -111,7 +111,7 @@ test("locks as expected", async () => {
   // Reset the value, and add a ton of counters
   value = 0;
   for (let i = 0; i < 50; i++) {
-    counter.increment().then(function() {
+    counter.increment().then(function () {
       value++;
     });
   }

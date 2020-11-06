@@ -129,7 +129,7 @@ function featureCombinations(features, callback) {
   // Create initial truth table value map all of false
   const values = {};
 
-  const calculateCombinations = featureIndex => {
+  const calculateCombinations = (featureIndex) => {
     if (featureIndex === features.length) {
       callback(values);
     } else {
@@ -168,7 +168,7 @@ export function reduceTruthTable(
     );
     return {
       features: [],
-      truthTable: ""
+      truthTable: "",
     };
   }
 
@@ -187,7 +187,7 @@ export function reduceTruthTable(
 
   return {
     features,
-    truthTable
+    truthTable,
   };
 }
 

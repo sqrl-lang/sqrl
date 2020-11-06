@@ -35,7 +35,7 @@ export function registerDataFunctions(instance: StdlibRegistry) {
       allowSqrlObjects: true,
       args: [AT.any, AT.any],
       argstring: "object, key",
-      docstring: "Returns the given attribute off the data"
+      docstring: "Returns the given attribute off the data",
     }
   );
 
@@ -54,7 +54,7 @@ export function registerDataFunctions(instance: StdlibRegistry) {
       allowNull: true,
       args: [AT.any, AT.any],
       argstring: "object, key",
-      docstring: "Returns true if the given attribute is set on the data"
+      docstring: "Returns true if the given attribute is set on the data",
     }
   );
 
@@ -69,7 +69,7 @@ export function registerDataFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any],
       argstring: "object",
-      docstring: "Returns a list of all the keys in the given object"
+      docstring: "Returns a list of all the keys in the given object",
     }
   );
 
@@ -80,7 +80,7 @@ export function registerDataFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any.string],
       argstring: "string",
-      docstring: "Parses the provided JSON encoded string"
+      docstring: "Parses the provided JSON encoded string",
     }
   );
 
@@ -95,7 +95,7 @@ export function registerDataFunctions(instance: StdlibRegistry) {
     {
       allowSqrlObjects: true,
       allowNull: true,
-      pure: true
+      pure: true,
     }
   );
 
@@ -111,7 +111,7 @@ export function registerDataFunctions(instance: StdlibRegistry) {
     },
     pure: true,
     argstring: "key, value, (key, value)...",
-    docstring: "Create a map given the key, value pairs"
+    docstring: "Create a map given the key, value pairs",
   });
 
   instance.save(
@@ -121,7 +121,7 @@ export function registerDataFunctions(instance: StdlibRegistry) {
     {
       allowSqrlObjects: true,
       argstring: "map, map...",
-      docstring: "Merges the given maps together"
+      docstring: "Merges the given maps together",
     }
   );
 }

@@ -13,7 +13,7 @@ import {
   Manipulator,
   WhenCause,
   SqrlEntity,
-  AT
+  AT,
 } from "sqrl";
 
 export interface LabelService {
@@ -44,7 +44,7 @@ export function registerLabelFunctions(
       entities: SqrlEntity | SqrlEntity[],
       label: string
     ) {
-      ensureArray(entities).forEach(entity => {
+      ensureArray(entities).forEach((entity) => {
         if (entity !== null) {
           service.addLabel(state.manipulator, entity, label, cause);
         }
@@ -55,12 +55,12 @@ export function registerLabelFunctions(
         AT.state,
         AT.whenCause,
         AT.any.sqrlEntityOrEntities,
-        AT.constant.string
+        AT.constant.string,
       ],
       allowNull: true,
       allowSqrlObjects: true,
       argstring: "entity | entity list, label",
-      docstring: "Adds the provided label to the specified entities"
+      docstring: "Adds the provided label to the specified entities",
     }
   );
 
@@ -72,7 +72,7 @@ export function registerLabelFunctions(
       entities: SqrlEntity | SqrlEntity[],
       label: string
     ) {
-      ensureArray(entities).forEach(entity => {
+      ensureArray(entities).forEach((entity) => {
         if (entity !== null) {
           service.removeLabel(state.manipulator, entity, label, cause);
         }
@@ -83,12 +83,12 @@ export function registerLabelFunctions(
         AT.state,
         AT.whenCause,
         AT.any.sqrlEntityOrEntities,
-        AT.constant.string
+        AT.constant.string,
       ],
       allowNull: true,
       allowSqrlObjects: true,
       argstring: "entity | entity list, label",
-      docstring: "Removes the provided label to the specified entities"
+      docstring: "Removes the provided label to the specified entities",
     }
   );
 
@@ -104,7 +104,7 @@ export function registerLabelFunctions(
       args: [AT.state, AT.any.sqrlEntity, AT.constant.string],
       allowSqrlObjects: true,
       argstring: "entity, label",
-      docstring: "Returns true if the provided entity has the given label"
+      docstring: "Returns true if the provided entity has the given label",
     }
   );
 }

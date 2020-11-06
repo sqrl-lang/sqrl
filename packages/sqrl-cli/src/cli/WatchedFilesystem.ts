@@ -18,7 +18,7 @@ export class WatchedFilesystem extends Filesystem {
       persistent: false,
 
       // @todo: This is not ideal, but on OSX changes are not picked up without it.
-      usePolling: true
+      usePolling: true,
     });
   }
 

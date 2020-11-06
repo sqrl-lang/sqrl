@@ -38,7 +38,7 @@ export class SqrlKey extends SqrlObject {
       this.databaseSet.getDatasetIdBuffer(),
       this.counterEntity.uniqueId.getBuffer(),
       timeMsBuffer,
-      this.featuresHash
+      this.featuresHash,
     ]);
   }
 
@@ -66,7 +66,7 @@ export class SqrlKey extends SqrlObject {
         "value:features",
         this.featureValues ? stringify(this.featureValues) : "<none>"
       ),
-      mkSpan("", "\n}")
+      mkSpan("", "\n}"),
     ]);
   }
 
@@ -96,7 +96,7 @@ export class SqrlKey extends SqrlObject {
       shardValue: this.getShardValue(),
       counter: this.counterEntity.getData(),
       time: new Date(this.timeMs).toISOString(),
-      featureValues: this.featureValues
+      featureValues: this.featureValues,
     };
   }
 

@@ -101,7 +101,7 @@ export default class SqrlSourcePrinter {
     // ** This does not produce valid javascript code and is intended for
     //    testing and debugging only!
     //
-    const transformName = slot => {
+    const transformName = (slot) => {
       let source;
       if (!props.astHash && this.slotNames[slot].startsWith("ast:")) {
         source = this.getHumanSlotSource(slot, props);
@@ -130,11 +130,10 @@ export default class SqrlSourcePrinter {
         }
       );
 
-
     const formatted = prettier
       .format("(" + replacedSource + ")()", {
         parser: "babel",
-        plugins: [prettierBabel]
+        plugins: [prettierBabel],
       })
       .trim();
     return formatted.slice("(".length, formatted.length - ")();".length);

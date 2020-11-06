@@ -36,7 +36,7 @@ export default class SqrlSession extends SqrlObject {
     return {
       id: this.id,
       key: this.key.getData(),
-      startMs: this.startMs
+      startMs: this.startMs,
     };
   }
 
@@ -48,7 +48,7 @@ export default class SqrlSession extends SqrlObject {
       mkSpan("key:time", "  start: "),
       mkSpan("value:time", new Date(this.startMs).toISOString() + "\n"),
       indentSpan(this.key.render(), 2),
-      mkSpan("", "\n}")
+      mkSpan("", "\n}"),
     ]);
   }
 

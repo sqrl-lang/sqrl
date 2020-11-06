@@ -20,7 +20,7 @@ test("works with counts", async () => {
   LET Action := input();
   LET Ip := input();
   INCLUDE "x.sqrl" WHERE Action="x";
-  `
+  `,
     })
   );
 

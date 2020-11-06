@@ -10,7 +10,7 @@ import {
   getBucketTimeForTimeMs,
   getBucketSize,
   getWindowStart,
-  getAllBucketKeys
+  getAllBucketKeys,
 } from "./BucketedKeys";
 import { CountService } from "../Services";
 import { RedisInterface, createRedisKey } from "./RedisInterface";
@@ -32,7 +32,7 @@ export class RedisCountService implements CountService {
     by: number
   ) {
     await Promise.all(
-      keys.map(key => {
+      keys.map((key) => {
         const redisKey = createRedisKey(
           ctx.requireDatabaseSet(),
           this.prefix,
@@ -40,7 +40,7 @@ export class RedisCountService implements CountService {
         );
         return Promise.all([
           this.redis.increment(ctx, redisKey, by),
-          this.redis.expire(ctx, redisKey, TOTAL_COUNT_EXPIRY_SEC)
+          this.redis.expire(ctx, redisKey, TOTAL_COUNT_EXPIRY_SEC),
         ]);
       })
     );
@@ -51,7 +51,7 @@ export class RedisCountService implements CountService {
     at: number,
     keys: SqrlKey[]
   ): Promise<number[]> {
-    const redisKeys = keys.map(key => {
+    const redisKeys = keys.map((key) => {
       return createRedisKey(
         ctx.requireDatabaseSet(),
         this.prefix,
@@ -72,7 +72,7 @@ export class RedisCountService implements CountService {
       return this.bumpTotal(ctx, at, keys, by);
     }
     await Promise.all(
-      keys.map(key => {
+      keys.map((key) => {
         const bucketSize = getBucketSize(windowMs, NUM_BUCKETS);
         const currentBucket = getBucketTimeForTimeMs(at, bucketSize);
         const redisKey = getBucketKey(
@@ -89,7 +89,7 @@ export class RedisCountService implements CountService {
             ctx,
             redisKey,
             getCurrentBucketExpirySeconds(windowMs, bucketSize)
-          )
+          ),
         ]);
       })
     );
@@ -105,7 +105,7 @@ export class RedisCountService implements CountService {
       return this.fetchTotal(ctx, at, keys);
     }
     return Promise.all(
-      keys.map(async key => {
+      keys.map(async (key) => {
         const keys = getAllBucketKeys(
           ctx.requireDatabaseSet(),
           this.prefix,

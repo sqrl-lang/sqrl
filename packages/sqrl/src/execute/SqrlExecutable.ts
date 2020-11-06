@@ -18,7 +18,7 @@ function zipToObjects(keys: string[], objects: any) {
 
   keys.forEach((key, idx) => {
     rv[key] = {};
-    objectNames.forEach(obj => {
+    objectNames.forEach((obj) => {
       rv[key][obj] = objects[obj][idx];
     });
   });
@@ -64,7 +64,7 @@ export class SqrlExecutable {
 
     this.sourcePrinter = new SqrlSourcePrinter({
       slotNames,
-      slotJs
+      slotJs,
     });
   }
 
@@ -88,7 +88,7 @@ export class SqrlExecutable {
         sourcePrinter: this.sourcePrinter,
         slotCost: this.slotCosts,
         requiredSlots: this.requiredSlots,
-        ruleSpecs: this.ruleSpecs
+        ruleSpecs: this.ruleSpecs,
       },
       options.inputs || {}
     );
@@ -101,7 +101,7 @@ export class SqrlExecutable {
   } {
     return zipToObjects(this.slotNames, {
       cost: this.slotCosts,
-      recursiveCost: this.slotRecursiveCosts
+      recursiveCost: this.slotRecursiveCosts,
     });
   }
 
@@ -110,7 +110,7 @@ export class SqrlExecutable {
   }
 
   getRequiredSlotNames() {
-    return this.requiredSlots.map(idx => this.slotNames[idx]);
+    return this.requiredSlots.map((idx) => this.slotNames[idx]);
   }
 }
 

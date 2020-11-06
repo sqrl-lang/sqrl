@@ -45,7 +45,7 @@ export class RedisTotalCountService implements RedisBucketCountInterface {
 
     await Promise.all([
       this.redis.increment(ctx, key, props.amount),
-      this.redis.expire(ctx, key, TOTAL_COUNT_EXPIRY_SEC)
+      this.redis.expire(ctx, key, TOTAL_COUNT_EXPIRY_SEC),
     ]);
   }
 

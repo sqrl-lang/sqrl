@@ -11,7 +11,7 @@ import {
   AssertService,
   comparisonSymbols,
   sqrlCompare,
-  SqrlObject
+  SqrlObject,
 } from "sqrl-common";
 import SqrlAst from "../ast/SqrlAst";
 
@@ -55,7 +55,7 @@ export function registerAssertFunctions(
       allowNull: true,
       args: [AT.state, AT.any, AT.any],
       statement: true,
-      statementFeature: "SqrlAssertionStatements"
+      statementFeature: "SqrlAssertionStatements",
     }
   );
 
@@ -74,7 +74,7 @@ export function registerAssertFunctions(
       allowNull: true,
       args: [AT.state, AT.any, AT.any, AT.any, AT.any],
       statement: true,
-      statementFeature: "SqrlAssertionStatements"
+      statementFeature: "SqrlAssertionStatements",
     }
   );
 
@@ -98,13 +98,13 @@ export function registerAssertFunctions(
             testAst.left,
             SqrlAst.constant(testAst.operator),
             testAst.right,
-            sourceArrowAst
+            sourceArrowAst,
           ]);
         }
       }
       return SqrlAst.call("_assert", [testAst, sourceArrowAst]);
     },
     argstring: "condition",
-    docstring: "Assert that an expected condition is true"
+    docstring: "Assert that an expected condition is true",
   });
 }

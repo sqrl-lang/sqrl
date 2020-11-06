@@ -17,7 +17,7 @@
  */
 
 function makeEmptyFunction(arg) {
-  return function() {
+  return function () {
     return arg;
   };
 }
@@ -29,7 +29,7 @@ function makeEmptyFunction(arg) {
  */
 interface EmptyFunction {
   (): void;
-  thatReturns: <T>(value: T) => (() => T);
+  thatReturns: <T>(value: T) => () => T;
   thatReturnsFalse: () => boolean;
   thatReturnsTrue: () => boolean;
   thatReturnsNull: () => null;
@@ -37,7 +37,7 @@ interface EmptyFunction {
   thatReturnsArgument: <T>(value: T) => T;
 }
 
-export const emptyFunction = function() {} as EmptyFunction;
+export const emptyFunction = function () {} as EmptyFunction;
 
 Object.assign(emptyFunction as any, {
   thatReturns: makeEmptyFunction,
@@ -49,5 +49,5 @@ Object.assign(emptyFunction as any, {
   },
   thatReturnsArgument(arg) {
     return arg;
-  }
+  },
 });

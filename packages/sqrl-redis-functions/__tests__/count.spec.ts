@@ -48,14 +48,14 @@ test("multi aliases work", async () => {
 
   expect(Array.from(lastManipulator.sqrlKeys).sort()).toEqual([
     'counter=054c84dc;timeMs=2019-01-17T20:51:27.017Z;features=["josh"]',
-    'counter=054c84dc;timeMs=2019-01-17T20:51:27.017Z;features=["julian"]'
+    'counter=054c84dc;timeMs=2019-01-17T20:51:27.017Z;features=["julian"]',
   ]);
 });
 
 test("trending works ", async () => {
   const counterHash = {
     "WHERE SomeCondition": "741a4d97",
-    "": "a7274005"
+    "": "a7274005",
   };
   for (const where of ["WHERE SomeCondition", ""]) {
     const { lastManipulator } = await runSqrl(
@@ -97,9 +97,7 @@ ASSERT TrendingTriGramsDayOverDay = [];
     );
 
     expect(Array.from(lastManipulator.sqrlKeys)).toEqual([
-      `counter=${
-        counterHash[where]
-      };timeMs=2019-01-17T20:51:27.017Z;features=["a trending trigram"]`
+      `counter=${counterHash[where]};timeMs=2019-01-17T20:51:27.017Z;features=["a trending trigram"]`,
     ]);
   }
 });

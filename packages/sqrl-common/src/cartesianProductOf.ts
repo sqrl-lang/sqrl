@@ -10,8 +10,8 @@ export function cartesianProductOf<T>(args: T[][]): T[][] {
   const initial: T[][] = [[]];
   return args.reduce((a, b) => {
     const ret: T[][] = [];
-    a.forEach(a => {
-      b.forEach(b => {
+    a.forEach((a) => {
+      b.forEach((b) => {
         ret.push(a.concat([b]));
       });
     });

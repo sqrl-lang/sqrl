@@ -3,10 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import {
-  SqrlInstance,
-  FunctionCostData
-} from "../function/Instance";
+import { SqrlInstance, FunctionCostData } from "../function/Instance";
 import { registerAllFunctions } from "../function/registerAllFunctions";
 import { AssertService } from "sqrl-common";
 import { Instance, FunctionServices } from "../api/execute";
@@ -52,7 +49,7 @@ export async function buildTestInstance(
   } = {}
 ) {
   const instance = new SqrlInstance({
-    functionCost: options.functionCost
+    functionCost: options.functionCost,
   });
 
   let assert: AssertService;
@@ -66,13 +63,13 @@ export async function buildTestInstance(
 
   registerAllFunctions(instance, {
     assert,
-    ...(options.services || {})
+    ...(options.services || {}),
   });
   return new Instance(
     {
       ...getDefaultConfig(),
       "state.allow-in-memory": true,
-      ...(options.config || {})
+      ...(options.config || {}),
     },
     instance
   );

@@ -77,7 +77,7 @@ export class SqrlTest {
 
   async run(ctx: Context, sqrl: string) {
     const statements = parseSqrl(sqrl, {
-      customFunctions: this.instance.customFunctions
+      customFunctions: this.instance.customFunctions,
     }).statements;
     return this.runStatements(ctx, statements);
   }
@@ -118,7 +118,7 @@ export class SqrlTest {
           if (this.mutate) {
             await this.mutate(state, {
               skipWait: statement.skipWait,
-              repeat: statement.repeat || 1
+              repeat: statement.repeat || 1,
             });
           } else if (state.manipulator) {
             await state.manipulator.mutate(ctx);
@@ -137,7 +137,7 @@ export class SqrlTest {
           SqrlAst.isConstantTrue(statement.where)
         ) {
           const replace = this.statements.findIndex(
-            s => s.type === "let" && s.feature === statement.feature
+            (s) => s.type === "let" && s.feature === statement.feature
           );
           if (replace >= 0) {
             this.statements[replace] = statement;
@@ -155,7 +155,7 @@ export class SqrlTest {
 
     return {
       codedErrors,
-      executions
+      executions,
     };
   }
 
@@ -170,18 +170,18 @@ export class SqrlTest {
       allowReplaceInput: true,
       allowPrivate: this.allowPrivate,
       instance: this.instance,
-      filesystem: this.filesystem
+      filesystem: this.filesystem,
     });
 
     const compiled = await SqrlCompiledOutput.build(ctx, parserState, {
-      skipCostCalculations: !this.calculateCost
+      skipCostCalculations: !this.calculateCost,
     });
 
     const slotCallback = this.executionContext.compileSlots(compiled.slotJs);
 
     const sourcePrinter = new SqrlSourcePrinter({
       slotNames: compiled.slotNames,
-      slotJs: compiled.slotJs
+      slotJs: compiled.slotJs,
     });
 
     // sourcePrinter.printAllSource();
@@ -199,7 +199,7 @@ export class SqrlTest {
       {
         sourcePrinter,
         featureTimeout: this.featureTimeout,
-        ruleSpecs: compiled.ruleSpecs
+        ruleSpecs: compiled.ruleSpecs,
       },
       this.inputs
     );
@@ -213,7 +213,7 @@ export class SqrlTest {
         ? state
             .fetchByName("SqrlExecutionComplete")
             .then(() => this.extendTimeout())
-        : Promise.resolve()
+        : Promise.resolve(),
     ]);
 
     return state;

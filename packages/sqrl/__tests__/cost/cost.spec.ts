@@ -25,7 +25,7 @@ test("works", async () => {
     "ASSERT (a(false) OR b(false)) = false;",
     "ASSERT (a(true) AND b(true)) = true;",
     "LET A := a(false); LET B := b(false); ASSERT (A or B)  = false;",
-    "LET A := a(true);  LET B := b(true);  ASSERT (A AND B) = true;"
+    "LET A := a(true);  LET B := b(true);  ASSERT (A AND B) = true;",
   ];
 
   for (const statement of statements) {
@@ -40,8 +40,8 @@ test("works", async () => {
       register,
       functionCost: {
         a: 1000,
-        b: 1
-      }
+        b: 1,
+      },
     });
     expect(aTick).toEqual(3);
     expect(bTick).toEqual(2);
@@ -50,8 +50,8 @@ test("works", async () => {
       register,
       functionCost: {
         a: 1,
-        b: 1000
-      }
+        b: 1000,
+      },
     });
     expect(aTick).toEqual(4);
     expect(bTick).toEqual(5);

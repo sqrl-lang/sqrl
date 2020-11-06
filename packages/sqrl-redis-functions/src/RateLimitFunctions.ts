@@ -18,7 +18,7 @@ import {
   sqrlInvariant,
   SqrlSession,
   SqrlObject,
-  CustomCallAst
+  CustomCallAst,
 } from "sqrl";
 
 import { flatten } from "sqrl-common";
@@ -48,7 +48,7 @@ export interface RateLimitService {
 
 function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
   const args: RateLimitArguments = parse(ast.source, {
-    startRule: "RateLimitArguments"
+    startRule: "RateLimitArguments",
   });
   const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
     args.where
@@ -68,7 +68,7 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
     features: args.features,
     maxAmount: args.maxAmount,
     refillTimeMs: args.refillTimeMs,
-    refillAmount: args.refillAmount
+    refillAmount: args.refillAmount,
   });
 
   const keysAst = state.setGlobal(
@@ -98,8 +98,8 @@ function setupRateLimitAst(state: CompileState, ast: CustomCallAst) {
         refillAmount: AstBuilder.constant(args.refillAmount),
         take: takeAst,
         at: AstBuilder.call("timeMs", [AstBuilder.feature("SqrlClock")]),
-        strict: AstBuilder.constant(args.strict)
-      })
+        strict: AstBuilder.constant(args.strict),
+      }),
     ]),
     entityId.getIdString()
   );
@@ -119,7 +119,7 @@ export function registerRateLimitFunctions(
     },
     {
       args: [AT.state, AT.any],
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
     }
   );
 
@@ -132,7 +132,7 @@ export function registerRateLimitFunctions(
     },
     {
       args: [AT.state, AT.any],
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
     }
   );
 
@@ -141,7 +141,7 @@ export function registerRateLimitFunctions(
       return typeof val !== "number" ? null : Math.floor(val);
     },
     {
-      pure: true
+      pure: true,
     }
   );
 
@@ -156,7 +156,7 @@ export function registerRateLimitFunctions(
       return AstBuilder.call("_parseInt", ast.args);
     },
     {
-      args: [AT.any]
+      args: [AT.any],
     }
   );
 
@@ -169,7 +169,7 @@ export function registerRateLimitFunctions(
       argstring:
         "BY Feature[, ...] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
       docstring:
-        "Returns the number of tokens left in the token bucket ratelimiter before decrementing"
+        "Returns the number of tokens left in the token bucket ratelimiter before decrementing",
     }
   );
 
@@ -185,12 +185,12 @@ export function registerRateLimitFunctions(
               return keys[i].getFeatureValues();
             }
           })
-          .filter(v => v)
+          .filter((v) => v)
       );
     },
     {
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any]
+      args: [AT.state, AT.any, AT.any],
     }
   );
 
@@ -203,14 +203,14 @@ export function registerRateLimitFunctions(
       argstring:
         "BY Feature[, ...] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
       docstring:
-        "Returns the values that were rate limited by the token bucket rate limiter"
+        "Returns the values that were rate limited by the token bucket rate limiter",
     }
   );
 
   instance.registerCustom(
     function rateLimited(state: CompileState, ast: CustomCallAst): Ast {
       const args: RateLimitArguments = parse(ast.source, {
-        startRule: "RateLimitArguments"
+        startRule: "RateLimitArguments",
       });
       const { whereAst } = state.combineGlobalWhere(args.where);
 
@@ -242,7 +242,7 @@ export function registerRateLimitFunctions(
       argstring:
         "BY Feature[, ...] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
       docstring:
-        "Returns true if the token bucket rate limiter has no tokens left, false otherwise"
+        "Returns true if the token bucket rate limiter has no tokens left, false otherwise",
     }
   );
 
@@ -252,14 +252,14 @@ export function registerRateLimitFunctions(
       return new SqrlSession(key, startMs);
     },
     {
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
     }
   );
 
   instance.registerCustom(
     function sessionize(state: CompileState, ast: CustomCallAst): Ast {
       const args: RateLimitArguments = parse(ast.source, {
-        startRule: "RateLimitArguments"
+        startRule: "RateLimitArguments",
       });
       const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
         args.where
@@ -280,7 +280,7 @@ export function registerRateLimitFunctions(
         features: args.features,
         maxAmount: args.maxAmount,
         refillTimeMs: args.refillTimeMs,
-        refillAmount: args.refillAmount
+        refillAmount: args.refillAmount,
       });
 
       const keyAst = state.setGlobal(
@@ -309,20 +309,20 @@ export function registerRateLimitFunctions(
             refillTimeMs: AstBuilder.constant(args.refillTimeMs),
             refillAmount: AstBuilder.constant(args.refillAmount),
             take: takeAst,
-            at: AstBuilder.call("timeMs", [AstBuilder.feature("SqrlClock")])
-          })
+            at: AstBuilder.call("timeMs", [AstBuilder.feature("SqrlClock")]),
+          }),
         ])
       );
 
       return AstBuilder.call("_sessionize", [
         keyAst, // Key for the session rate limit
-        sessionTimestampSlot
+        sessionTimestampSlot,
       ]);
     },
     {
       argstring:
         "BY Feature[, ...] [MAX Tokens] EVERY Duration [REFILL Count] [TAKE Count] [STRICT] [WHERE Condition]",
-      docstring: "Creates a new session using a token bucket rate limiter"
+      docstring: "Creates a new session using a token bucket rate limiter",
     }
   );
 }

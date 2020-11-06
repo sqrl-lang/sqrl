@@ -13,7 +13,7 @@ import {
   SerializedStatementSlot,
   SerializedConstantSlot,
   SerializedFixedSlot,
-  registerSlotClass
+  registerSlotClass,
 } from "./SerializedSlot";
 
 export abstract class SqrlSlot {
@@ -33,7 +33,7 @@ export abstract class SqrlSlot {
   serialize(): SerializedSlot {
     return {
       class: this.constructor.name,
-      name: this.name
+      name: this.name,
     } as any;
   }
   deserializor(data: SerializedSlot): void {
@@ -75,7 +75,7 @@ export class SqrlStatementSlot extends SqrlSlot {
   serialize(): SerializedStatementSlot {
     return {
       ...(super.serialize() as SerializedStatementSlot),
-      referencedSlots: Array.from(this.referencedSlots).sort()
+      referencedSlots: Array.from(this.referencedSlots).sort(),
     };
   }
   deserializor(data: SerializedStatementSlot) {
@@ -88,7 +88,7 @@ export class SqrlStatementSlot extends SqrlSlot {
     this.finalized = true;
     return SqrlAst.call(
       "_slotWait",
-      Array.from(this.referencedSlots).map(slotName =>
+      Array.from(this.referencedSlots).map((slotName) =>
         SqrlAst.slotName(slotName)
       )
     );
@@ -124,7 +124,7 @@ export class SqrlConstantSlot extends SqrlSlot {
     jsonAst(this.ast);
     return {
       ...(super.serialize() as SerializedConstantSlot),
-      ast: this.ast
+      ast: this.ast,
     };
   }
 
@@ -178,7 +178,7 @@ export class SqrlFixedSlot extends SqrlSlot {
     return {
       ...(super.serialize() as SerializedFixedSlot),
       ast: this.ast,
-      replaceable: this.replaceable
+      replaceable: this.replaceable,
     };
   }
 

@@ -11,7 +11,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 const source = readFileSync(join(__dirname, "sqrlRedis.pegjs"), {
-  encoding: "utf-8"
+  encoding: "utf-8",
 });
 
 const allowedStartRules = [
@@ -23,18 +23,18 @@ const allowedStartRules = [
   "CountPreviousArguments",
   "StreamingStatsArguments",
   "CountUniqueArguments",
-  "SumArguments"
+  "SumArguments",
 ];
 const pegOptions: pegjs.OutputFormatAmdCommonjs = {
   allowedStartRules,
   cache: true,
   output: "source",
   format: "commonjs",
-  plugins: [tspegjs]
+  plugins: [tspegjs],
 };
 
 const returnTypes: { [type: string]: string } = {
-  RepeatClause: "number"
+  RepeatClause: "number",
 };
 for (const rule of allowedStartRules) {
   returnTypes[rule] = "Ast";
@@ -54,12 +54,12 @@ for (const rule of allowedStartRules) {
     "one-variable-per-declaration",
     "max-line-length",
     "no-consecutive-blank-lines",
-    "align"
+    "align",
   ].join(","),
   customHeader: `
   import { Ast, AstLocation } from "sqrl";
   `.replace(/^ */gm, ""),
-  returnTypes
+  returnTypes,
 };
 
 const output = pegjs.generate(source, pegOptions);

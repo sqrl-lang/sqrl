@@ -55,7 +55,7 @@ async function run(
   const execution: Execution = await executable.execute(ctx, {
     manipulator,
     inputs,
-    featureTimeoutMs
+    featureTimeoutMs,
   });
 
   await execution.fetchFeature("SqrlExecutionComplete");
@@ -63,7 +63,7 @@ async function run(
   const rules: ApiRulesResponse = {};
   function ruleToName(rule: FiredRule) {
     rules[rule.name] = {
-      reason: rule.reason
+      reason: rule.reason,
     };
     return rule.name;
   }
@@ -72,9 +72,9 @@ async function run(
     allow: !manipulator.wasBlocked(),
     verdict: {
       blockRules: manipulator.blockedRules.map(ruleToName) || [],
-      whitelistRules: manipulator.whitelistedRules.map(ruleToName) || []
+      whitelistRules: manipulator.whitelistedRules.map(ruleToName) || [],
     },
-    rules
+    rules,
   };
 
   if (query.features) {
@@ -82,7 +82,7 @@ async function run(
     try {
       rv.features = {};
       await Promise.all(
-        featureNames.map(async featureName => {
+        featureNames.map(async (featureName) => {
           rv.features[featureName] = await execution.fetchValue(featureName);
         })
       );

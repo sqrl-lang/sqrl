@@ -45,9 +45,9 @@ test("works", async () => {
     ASSERT jsonValue(Complex, "$['a-b'][0]['c.\\\\\\"']['\\\\'']") = "OKAY!";
 `,
     {
-      register: async instance => {
+      register: async (instance) => {
         await register(instance);
-      }
+      },
     }
   );
 });

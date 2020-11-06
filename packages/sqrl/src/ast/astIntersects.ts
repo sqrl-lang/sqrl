@@ -67,7 +67,7 @@ function extractFeatureValueSets(
    */
   if (ast.type === "feature") {
     return {
-      [ast.value]: booleanSet
+      [ast.value]: booleanSet,
     };
   } else if (ast.type === "not") {
     return extractFeatureValueSets(ast.expr);
@@ -95,7 +95,7 @@ function extractFeatureValueSets(
             results[feature] !== booleanSet,
             "Invalid where: feature must be defined as boolean or equality"
           );
-          values.forEach(value => results[feature].add(value));
+          values.forEach((value) => results[feature].add(value));
         }
       });
     }
@@ -118,7 +118,7 @@ function extractFeatureValueSets(
     }
 
     return {
-      [ast.left.value]: new Set([ast.right.value])
+      [ast.left.value]: new Set([ast.right.value]),
     };
   } else {
     throw buildSqrlError(
@@ -133,7 +133,7 @@ function setCombinations(sets, callback) {
 
   const keys = Object.keys(sets);
 
-  const calculateCombinations = idx => {
+  const calculateCombinations = (idx) => {
     if (idx === keys.length) {
       callback(currentValues);
     } else {
@@ -157,9 +157,9 @@ function astIntersects(asts: Ast[]): boolean {
   const valueSets = extractFeatureValueSets(SqrlAst.or(...asts));
 
   let intersected = false;
-  setCombinations(valueSets, values => {
+  setCombinations(valueSets, (values) => {
     intersected =
-      intersected || asts.filter(ast => calculate(ast, values)).length > 1;
+      intersected || asts.filter((ast) => calculate(ast, values)).length > 1;
   });
   return intersected;
 }

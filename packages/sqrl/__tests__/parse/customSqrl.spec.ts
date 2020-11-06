@@ -9,40 +9,40 @@ test("parses as a custom call", () => {
   expect(parseExpr("myfunc()")).toMatchObject({
     type: "call",
     func: "myfunc",
-    args: []
+    args: [],
   });
 
   expect(
     parseExpr("myfunc()", {
-      customFunctions: new Set(["otherfunc"])
+      customFunctions: new Set(["otherfunc"]),
     })
   ).toMatchObject({
     type: "call",
     func: "myfunc",
-    args: []
+    args: [],
   });
 
   expect(
     parseExpr("myfunc()", {
-      customFunctions: new Set(["myfunc"])
+      customFunctions: new Set(["myfunc"]),
     })
   ).toMatchObject({
     type: "customCall",
     func: "myfunc",
-    source: ""
+    source: "",
   });
 });
 
 function parseArgs(sqrl: string) {
   const parsed = parseExpr(sqrl, {
-    customFunctions: new Set(["f"])
+    customFunctions: new Set(["f"]),
   });
   if (parsed.type !== "customCall") {
     throw new Error("Expected customCall result");
   }
   expect(parsed).toMatchObject({
     type: "customCall",
-    func: "f"
+    func: "f",
   });
   return parsed.source;
 }

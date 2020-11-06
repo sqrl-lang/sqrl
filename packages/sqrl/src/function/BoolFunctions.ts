@@ -27,7 +27,7 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       allowNull: true,
       argstring: "value[, ...]",
       docstring:
-        "Return true if all of the input values are truthy, false otherwise"
+        "Return true if all of the input values are truthy, false otherwise",
     }
   );
 
@@ -45,7 +45,7 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       allowNull: true,
       pure: true,
       argstring: "value",
-      docstring: "Return false if the value is truthy, true if it is falsy"
+      docstring: "Return false if the value is truthy, true if it is falsy",
     }
   );
 
@@ -71,7 +71,7 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       args: [AT.state, AT.any.repeated],
       safe: true,
       asyncSafe: true,
-      async: true
+      async: true,
     }
   );
 
@@ -83,7 +83,7 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       allowNull: true,
       args: [AT.any],
       argstring: "value",
-      docstring: "Returns true if the given value is null, false otherwise"
+      docstring: "Returns true if the given value is null, false otherwise",
     }
   );
 
@@ -106,7 +106,7 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       asyncSafe: true,
       async: true,
       argstring: "value[, ...]",
-      docstring: "Returns the first truthy value, otherwise the final value."
+      docstring: "Returns the first truthy value, otherwise the final value.",
     }
   );
 
@@ -123,7 +123,7 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       allowSqrlObjects: true,
       allowNull: true,
       argstring: "value[, ...]",
-      docstring: "Returns the first value that is not null"
+      docstring: "Returns the first value that is not null",
     }
   );
 
@@ -144,7 +144,8 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       safe: true,
       allowNull: true,
       argstring: "value[, ...]",
-      docstring: "Returns true if any of the values are truthy, false otherwise"
+      docstring:
+        "Returns true if any of the values are truthy, false otherwise",
     }
   );
 
@@ -169,17 +170,17 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       safe: true,
       async: true,
       asyncSafe: true,
-      args: [AT.state, AT.any.repeated]
+      args: [AT.state, AT.any.repeated],
     }
   );
 
   instance.save(
     function _orParallel(state, ...promises) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         let remaining = promises.length;
         let hadNull = false;
         for (const promise of promises) {
-          promise.then(result => {
+          promise.then((result) => {
             if (resolve && SqrlObject.isTruthy(result)) {
               resolve(true);
               resolve = null;
@@ -201,7 +202,7 @@ export function registerBoolFunctions(instance: StdlibRegistry) {
       allowSqrlObjects: true,
       allowNull: true,
       async: true,
-      args: [AT.state, AT.any.repeated]
+      args: [AT.state, AT.any.repeated],
     }
   );
 }

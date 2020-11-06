@@ -18,7 +18,7 @@ export class RedisLabelService implements LabelService {
     label: string,
     cause: WhenCause
   ) {
-    manipulator.addCallback(async ctx => {
+    manipulator.addCallback(async (ctx) => {
       const key = createRedisKey(
         ctx.requireDatabaseSet(),
         this.prefix,
@@ -36,7 +36,7 @@ export class RedisLabelService implements LabelService {
     label: string,
     cause: WhenCause
   ) {
-    manipulator.addCallback(async ctx => {
+    manipulator.addCallback(async (ctx) => {
       const key = createRedisKey(
         ctx.requireDatabaseSet(),
         this.prefix,

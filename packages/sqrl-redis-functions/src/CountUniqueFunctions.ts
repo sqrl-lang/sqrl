@@ -14,7 +14,7 @@ import {
   SqrlObject,
   CompileState,
   AT,
-  CustomCallAst
+  CustomCallAst,
 } from "sqrl";
 import * as murmurJs from "murmurhash3.js";
 import { invariant, sqrlCartesianProduct } from "sqrl-common";
@@ -32,12 +32,12 @@ function slidingdHashHex(value) {
   }
 
   const data = Buffer.from(murmurJs.x64.hash128(value));
-  const hashHex = data.toString('hex');
+  const hashHex = data.toString("hex");
   return hashHex.substring(16);
 }
 
 function isCountable(features) {
-  return features.every(v => {
+  return features.every((v) => {
     return v !== null && v !== "" && !(Array.isArray(v) && v.length === 0);
   });
 }
@@ -48,7 +48,7 @@ function sortByAlias(features: AliasedFeature[]): AliasedFeature[] {
   });
 }
 
-const tupleToString = tuple => stringify(tuple.map(SqrlObject.ensureBasic));
+const tupleToString = (tuple) => stringify(tuple.map(SqrlObject.ensureBasic));
 
 export function registerCountUniqueFunctions(
   instance: Instance,
@@ -68,14 +68,14 @@ export function registerCountUniqueFunctions(
         const element = isTuple ? tupleToString(features) : features[0];
         const hashes = [slidingdHashHex(element)];
 
-        state.manipulator.addCallback(async ctx => {
+        state.manipulator.addCallback(async (ctx) => {
           await Promise.all(
-            keys.map(key => {
+            keys.map((key) => {
               return service.bump(ctx, {
                 at: state.getClockMs(),
                 key,
                 sortedHashes: hashes,
-                windowMs
+                windowMs,
               });
             })
           );
@@ -85,7 +85,7 @@ export function registerCountUniqueFunctions(
     {
       allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any.array, AT.any.array, AT.any]
+      args: [AT.state, AT.any.array, AT.any.array, AT.any],
     }
   );
 
@@ -96,7 +96,7 @@ export function registerCountUniqueFunctions(
         "expected left and right to be Sets"
       );
       let count = left.size;
-      right.forEach(element => {
+      right.forEach((element) => {
         if (!left.has(element)) {
           count++;
         }
@@ -105,7 +105,7 @@ export function registerCountUniqueFunctions(
     },
     {
       allowSqrlObjects: true,
-      args: [AT.any, AT.any]
+      args: [AT.any, AT.any],
     }
   );
 
@@ -116,7 +116,7 @@ export function registerCountUniqueFunctions(
         "expected left and right to be Sets"
       );
       let count = 0;
-      left.forEach(element => {
+      left.forEach((element) => {
         if (right.has(element)) {
           count++;
         }
@@ -125,13 +125,13 @@ export function registerCountUniqueFunctions(
     },
     {
       allowSqrlObjects: true,
-      args: [AT.any, AT.any]
+      args: [AT.any, AT.any],
     }
   );
 
   instance.register(
     function _fetchCountUnique(state, keys, windowMs, uniques) {
-      uniques = SqrlObject.ensureBasic(uniques).map(value => {
+      uniques = SqrlObject.ensureBasic(uniques).map((value) => {
         if (typeof value === "number") {
           return "" + value;
         } else {
@@ -150,7 +150,7 @@ export function registerCountUniqueFunctions(
     {
       allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any.array, AT.any, AT.any.array]
+      args: [AT.state, AT.any.array, AT.any, AT.any.array],
     }
   );
 
@@ -172,35 +172,35 @@ export function registerCountUniqueFunctions(
       uniques = SqrlObject.ensureBasic(uniques);
       if (isCountable(uniques)) {
         const products = sqrlCartesianProduct(uniques);
-        elements = products.map(features => {
+        elements = products.map((features) => {
           const isTuple = features.length > 1;
           return isTuple ? tupleToString(features) : features[0];
         });
       }
 
-      elements.forEach(element => {
+      elements.forEach((element) => {
         hexElements.add(slidingdHashHex(element));
       });
 
       const hashes = await service.fetchHashes(state.ctx, {
         keys,
-        windowStartMs
+        windowStartMs,
       });
-      hashes.forEach(hash => {
+      hashes.forEach((hash) => {
         hexElements.add(hash);
       });
       return hexElements;
     },
     {
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any, AT.any]
+      args: [AT.state, AT.any, AT.any, AT.any],
     }
   );
 
   instance.registerCustom(
     function countUnique(state: CompileState, ast: CustomCallAst): Ast {
       const args: CountUniqueArguments = parse(ast.source, {
-        startRule: "CountUniqueArguments"
+        startRule: "CountUniqueArguments",
       });
       const { whereAst, whereFeatures, whereTruth } = state.combineGlobalWhere(
         args.where
@@ -209,25 +209,25 @@ export function registerCountUniqueFunctions(
       const sortedUniques: AliasedFeature[] = sortByAlias(args.uniques);
       const sortedGroup: AliasedFeature[] = sortByAlias(args.groups);
 
-      const uniquesAst = AstBuilder.list(sortedUniques.map(f => f.feature));
+      const uniquesAst = AstBuilder.list(sortedUniques.map((f) => f.feature));
       const windowMsAst = AstBuilder.constant(args.windowMs);
 
-      const groupAliases = args.groups.map(feature => feature.alias);
-      const groupFeatures = args.groups.map(feature => feature.feature.value);
+      const groupAliases = args.groups.map((feature) => feature.alias);
+      const groupFeatures = args.groups.map((feature) => feature.feature.value);
       const groupHasAliases = args.groups.some(
-        f => f.feature.value !== f.alias
+        (f) => f.feature.value !== f.alias
       );
-      const sortedGroupAliases = sortedGroup.map(feature => feature.alias);
+      const sortedGroupAliases = sortedGroup.map((feature) => feature.alias);
 
       const { entityId, entityAst } = state.addHashedEntity(
         ast,
         "UniqueCounter",
         {
           groups: sortedGroupAliases,
-          uniques: sortedUniques.map(feature => feature.alias),
+          uniques: sortedUniques.map((feature) => feature.alias),
 
           // Only include the where clauses if they're non-empty
-          ...(whereTruth ? { whereFeatures, whereTruth } : {})
+          ...(whereTruth ? { whereFeatures, whereTruth } : {}),
         }
       );
 
@@ -235,7 +235,7 @@ export function registerCountUniqueFunctions(
         ast,
         AstBuilder.call("_getKeyList", [
           entityAst,
-          ...groupAliases.map(alias => AstBuilder.feature(alias))
+          ...groupAliases.map((alias) => AstBuilder.feature(alias)),
         ]),
         `key(${entityId.getIdString()})`
       );
@@ -250,7 +250,7 @@ export function registerCountUniqueFunctions(
             AstBuilder.constant(null)
           ),
           uniquesAst,
-          windowMsAst
+          windowMsAst,
         ])
       );
       state.addStatement("SqrlCountUniqueStatements", slotAst);
@@ -267,7 +267,7 @@ export function registerCountUniqueFunctions(
           ast,
           AstBuilder.call("_getKeyList", [
             entityAst,
-            ...groupFeatures.map(feature => AstBuilder.feature(feature))
+            ...groupFeatures.map((feature) => AstBuilder.feature(feature)),
           ]),
           `key(${entityId.getIdString()}:${groupFeatures.join(",")})`
         );
@@ -275,10 +275,12 @@ export function registerCountUniqueFunctions(
         // If we're using aliases we only count the uniques in this request if
         // they exactly match the aliases that we used
         const aliasesEqualAst = AstBuilder.call("_cmpE", [
-          AstBuilder.list(groupAliases.map(alias => AstBuilder.feature(alias))),
           AstBuilder.list(
-            groupFeatures.map(feature => AstBuilder.feature(feature))
-          )
+            groupAliases.map((alias) => AstBuilder.feature(alias))
+          ),
+          AstBuilder.list(
+            groupFeatures.map((feature) => AstBuilder.feature(feature))
+          ),
         ]);
         countExtraUniques = AstBuilder.branch(
           aliasesEqualAst,
@@ -294,7 +296,7 @@ export function registerCountUniqueFunctions(
       const originalCall = AstBuilder.call("_fetchCountUnique", [
         keysAst,
         windowMsAst,
-        countExtraUniques
+        countExtraUniques,
       ]);
 
       if (args.setOperation) {
@@ -334,7 +336,7 @@ export function registerCountUniqueFunctions(
     {
       argstring:
         "Feature[, ...] [GROUP BY Feature[, ...]] [WHERE Condition] [LAST Duration] [BEFORE ACTION]",
-      docstring: "Performs a sliding window unique set count"
+      docstring: "Performs a sliding window unique set count",
     }
   );
 
@@ -354,7 +356,7 @@ export function registerCountUniqueFunctions(
     let elements = [];
     if (isCountable(uniques)) {
       const products = sqrlCartesianProduct(uniques);
-      elements = products.map(features => {
+      elements = products.map((features) => {
         const isTuple = features.length > 1;
         return isTuple ? tupleToString(features) : features[0];
       });
@@ -366,7 +368,7 @@ export function registerCountUniqueFunctions(
       keys,
       at: clockMs,
       windowMs,
-      addHashes: elements
+      addHashes: elements,
     });
     return Math.round(Math.max(0, ...results));
   }

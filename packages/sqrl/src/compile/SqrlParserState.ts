@@ -12,7 +12,7 @@ import {
   walkAst,
   astSlotNames,
   RuleAst,
-  StatementAst
+  StatementAst,
 } from "../ast/Ast";
 import SqrlAst from "../ast/SqrlAst";
 import SqrlAstTransformer from "../ast/SqrlAstTransformer";
@@ -23,7 +23,7 @@ import {
   SqrlFixedSlot,
   SqrlIteratorSlot,
   SqrlEmptySlot,
-  SqrlInputSlot
+  SqrlInputSlot,
 } from "../slot/SqrlSlot";
 import { SqrlInstance } from "../function/Instance";
 import invariant from "../jslib/invariant";
@@ -116,7 +116,7 @@ export abstract class SqrlParseInfo extends AbstractLogger {
   }
 
   mapToSlots(names: string[]): SqrlSlot[] {
-    return names.map(name => {
+    return names.map((name) => {
       invariant(
         this.slots.hasOwnProperty(name),
         "Could not find slot:: " + name
@@ -127,14 +127,14 @@ export abstract class SqrlParseInfo extends AbstractLogger {
 
   // These two could be generalised with some typescript magic
   foreachRuleSlot(callback: (slot: SqrlRuleSlot) => void) {
-    Object.values(this.slots).forEach(slot => {
+    Object.values(this.slots).forEach((slot) => {
       if (slot instanceof SqrlRuleSlot) {
         callback(slot);
       }
     });
   }
   foreachFeatureSlot(callback: (slot: SqrlFeatureSlot) => void) {
-    Object.values(this.slots).forEach(slot => {
+    Object.values(this.slots).forEach((slot) => {
       if (slot instanceof SqrlFeatureSlot) {
         callback(slot);
       }
@@ -142,12 +142,12 @@ export abstract class SqrlParseInfo extends AbstractLogger {
   }
 
   resetReplaceableFeatures() {
-    this.foreachFeatureSlot(slot => slot.allowReplace());
+    this.foreachFeatureSlot((slot) => slot.allowReplace());
   }
 
   getRuleSlots() {
     const rv: { [name: string]: SqrlRuleSlot } = {};
-    this.foreachRuleSlot(slot => {
+    this.foreachRuleSlot((slot) => {
       rv[slot.name] = slot;
     });
     return rv;
@@ -158,7 +158,7 @@ export abstract class SqrlParseInfo extends AbstractLogger {
   }
 
   getRuleSpecs(): RuleSpecMap {
-    return mapObject(this.getRuleSlots(), value => {
+    return mapObject(this.getRuleSlots(), (value) => {
       return value.ruleSpec;
     });
   }
@@ -185,7 +185,7 @@ export class SqrlParserState extends SqrlParseInfo {
   constructor(options: SqrlParserOptions, serialized: SqrlSerialized = null) {
     super(
       serialized
-        ? mapObject(serialized.slots, data => deserializeSlot(data))
+        ? mapObject(serialized.slots, (data) => deserializeSlot(data))
         : {},
       options
     );
@@ -201,7 +201,7 @@ export class SqrlParserState extends SqrlParseInfo {
       null,
       "SqrlExecutionComplete"
     );
-    [...this.instance.statementFeatures].forEach(name => {
+    [...this.instance.statementFeatures].forEach((name) => {
       this.ensureStatementFeature(null, name);
       if (name !== "SqrlAssertionStatements") {
         // Assertion statements often depend on execution
@@ -329,7 +329,7 @@ export class SqrlParserState extends SqrlParseInfo {
   }
 
   ensureAllSlots(slotNames: string[]): void {
-    slotNames.forEach(name => {
+    slotNames.forEach((name) => {
       if (!this.slots.hasOwnProperty(name)) {
         this.slots[name] = new SqrlEmptySlot(name);
       }
@@ -338,7 +338,7 @@ export class SqrlParserState extends SqrlParseInfo {
 
   astContainsCurrentIterator(ast: Ast): boolean {
     let seenIterator = false;
-    walkAst(ast, node => {
+    walkAst(ast, (node) => {
       if (node.type === "iterator") {
         seenIterator = true;
       }
@@ -370,9 +370,9 @@ export class SqrlParserState extends SqrlParseInfo {
     const registeredCall = SqrlAst.registerCall(ast);
 
     this.addStatement(sourceAst, "SqrlWhenStatements", registeredCall, name);
-    basicLabelOperations.forEach(labelOperation => {
+    basicLabelOperations.forEach((labelOperation) => {
       const waitNames = labelOperationWaitNames(labelOperation);
-      waitNames.forEach(waitName => {
+      waitNames.forEach((waitName) => {
         this.ensureStatementFeature(sourceAst, waitName);
         this.addStatement(sourceAst, waitName, registeredCall);
       });
@@ -523,7 +523,7 @@ export class SqrlParserState extends SqrlParseInfo {
         current.add(slot.name);
       }
 
-      astSlotNames(slot.finalizedAst()).forEach(slotName => {
+      astSlotNames(slot.finalizedAst()).forEach((slotName) => {
         printLevel(this.slots[slotName], prefix + slot.name + " > ");
       });
 
@@ -551,7 +551,7 @@ export class SqrlParserState extends SqrlParseInfo {
 
     const {
       features: whereFeatures,
-      truthTable: whereTruth
+      truthTable: whereTruth,
     } = reduceTruthTable(combinedAst);
 
     whereAst = SqrlAst.bool(combinedAst);
@@ -620,7 +620,7 @@ export class SqrlParserState extends SqrlParseInfo {
 
   serialize(): SqrlSerialized {
     return {
-      slots: mapObject(this.slots, slot => slot.serialize())
+      slots: mapObject(this.slots, (slot) => slot.serialize()),
     };
   }
 
@@ -651,7 +651,7 @@ export class SqrlParserState extends SqrlParseInfo {
   extractListConstantStrings(ast: ListAst): string[] {
     sqrlInvariant(ast, ast.type === "list", "Expected list");
 
-    return ast.exprs.map(e => {
+    return ast.exprs.map((e) => {
       if (e.type !== "constant" || typeof e.value !== "string") {
         throw buildSqrlError(ast, "Expected constant string here");
       }

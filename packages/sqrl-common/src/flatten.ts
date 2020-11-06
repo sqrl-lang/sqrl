@@ -13,7 +13,7 @@ export function flatten(array) {
   if (!array.length) {
     return array;
   }
-  array.forEach(function(inner) {
+  array.forEach(function (inner) {
     invariant(
       Array.isArray(inner),
       "Every inner element of the array must be an array"

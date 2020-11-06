@@ -11,7 +11,7 @@ import { ArgumentCheck } from "../ast/ArgumentCheck";
 export {
   ArgumentCheck,
   StateArgument,
-  WhenCauseArgument
+  WhenCauseArgument,
 } from "../ast/ArgumentCheck";
 
 interface OptRepArgumentCheck extends ArgumentCheck {

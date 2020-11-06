@@ -22,11 +22,11 @@ export class CliRun {
   triggerRecompile(compileCallback: () => Promise<Executable>): Promise<void> {
     this.output.sourceRecompiling();
     return compileCallback()
-      .then(rv => {
+      .then((rv) => {
         this.executable = rv;
         this.output.sourceUpdated();
       })
-      .catch(err => {
+      .catch((err) => {
         this.output.sourceRecompileError(err);
       });
   }
@@ -36,7 +36,7 @@ export class CliRun {
     const execution: Execution = await this.executable.execute(trc, {
       featureTimeoutMs: 10000,
       inputs,
-      manipulator
+      manipulator,
     });
 
     const loggedFeatures: {
@@ -44,7 +44,7 @@ export class CliRun {
     } = {};
 
     await Promise.all(
-      features.map(async featureName => {
+      features.map(async (featureName) => {
         const value = await execution.fetchFeature(featureName);
         loggedFeatures[featureName] = value;
       })
@@ -68,11 +68,11 @@ export class CliRun {
     const stream: NodeJS.ReadStream = process.stdin.pipe(split2());
     const busy = new Semaphore();
 
-    stream.on("data", line => {
+    stream.on("data", (line) => {
       // Convert this line to the given feature
       const lineValues = Object.assign({}, options.inputs);
       try {
-        lineValues[options.streamFeature] = JSON.parse(line.toString('utf-8'));
+        lineValues[options.streamFeature] = JSON.parse(line.toString("utf-8"));
       } catch (err) {
         console.error(
           "Error: Invalid JSON value: %s",
@@ -84,9 +84,11 @@ export class CliRun {
       // @todo: Perhaps we want to run serially to ensure output is more easily digestable
       promiseFinally(
         busy.wrap(
-          this.action(options.ctx, lineValues, options.features).catch(err => {
-            console.error("Error: " + err.toString());
-          })
+          this.action(options.ctx, lineValues, options.features).catch(
+            (err) => {
+              console.error("Error: " + err.toString());
+            }
+          )
         ),
         () => {
           stream.resume();
@@ -101,7 +103,7 @@ export class CliRun {
     // Wait for the stream to finish
     await new Promise((resolve, reject) => {
       stream.on("end", () => resolve());
-      stream.on("error", err => reject(err));
+      stream.on("error", (err) => reject(err));
     });
     await busy.waitForZero();
   }

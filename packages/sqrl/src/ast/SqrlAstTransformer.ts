@@ -14,7 +14,7 @@ import {
   CallAst,
   FeatureAst,
   RuleAst,
-  SwitchAst
+  SwitchAst,
 } from "./Ast";
 import { SqrlParserState } from "../compile/SqrlParserState";
 import { sqrlInvariant } from "../api/parse";
@@ -40,7 +40,7 @@ const ignoreTypes = [
   "state",
   "value",
   "verdict_side_effect",
-  "whenCause"
+  "whenCause",
 ];
 
 const entriesToObj = (o, [k, v]) => Object.assign(o, { [k]: v });
@@ -72,7 +72,7 @@ export default class SqrlAstTransformer {
       script: this.transformProps.bind(this, ["statements"]),
       switch: this.switch.bind(this),
       when: this.transformProps.bind(this, ["rules", "statements"]),
-      priority: this.priority.bind(this)
+      priority: this.priority.bind(this),
     };
     for (const type of ignoreTypes) {
       this.transformers[type] = (ast: Ast) => ast;
@@ -142,19 +142,19 @@ export default class SqrlAstTransformer {
 
         if (astArgs.length === 0 || astArgs[0].type !== "whenCause") {
           astArgs.unshift({
-            type: "whenCause"
+            type: "whenCause",
           });
         }
       }
 
       if (astArgs.length === 0 || astArgs[0].type !== "state") {
         astArgs.unshift({
-          type: "state"
+          type: "state",
         });
       }
 
       ast = Object.assign({}, ast, {
-        args: astArgs
+        args: astArgs,
       });
     }
 
@@ -175,19 +175,19 @@ export default class SqrlAstTransformer {
       });
 
       if (props.pure) {
-        const allConstant = args.every(arg => arg.type === "constant");
+        const allConstant = args.every((arg) => arg.type === "constant");
         if (allConstant) {
           return {
             type: "constant",
             value: this.state.instance.pureFunction[ast.func](
-              ...args.map(arg => arg.value)
-            )
+              ...args.map((arg) => arg.value)
+            ),
           };
         }
       }
 
       ast = Object.assign({}, ast, {
-        args
+        args,
       });
     }
     return ast;
@@ -199,7 +199,7 @@ export default class SqrlAstTransformer {
       return this.transform(
         SqrlAst.call("_fetchGraphChild", [
           SqrlAst.feature(ast.value.substring(0, dotIndex)),
-          SqrlAst.constant(ast.value.substring(dotIndex + 1))
+          SqrlAst.constant(ast.value.substring(dotIndex + 1)),
         ])
       );
     }
@@ -233,13 +233,13 @@ export default class SqrlAstTransformer {
   switch(ast: SwitchAst) {
     return Object.assign({}, ast, {
       cases: ast.cases.map(this.transformCase),
-      defaultCase: this.transform(this.transform(ast.defaultCase))
+      defaultCase: this.transform(this.transform(ast.defaultCase)),
     });
   }
 
   transformProps(props, ast: Ast) {
     const transformed = props
-      .map(k => {
+      .map((k) => {
         invariantCb(
           ast[k],
           () =>
@@ -256,7 +256,7 @@ export default class SqrlAstTransformer {
 
   transform(ast: Ast) {
     if (Array.isArray(ast)) {
-      return ast.map(a => this.transform(a));
+      return ast.map((a) => this.transform(a));
     }
     const transformer = this.transformers[ast.type];
     invariantCb(

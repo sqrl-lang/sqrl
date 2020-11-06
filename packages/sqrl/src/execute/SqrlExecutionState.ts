@@ -20,7 +20,7 @@ import {
   Manipulator,
   ExecutionErrorProperties,
   FeatureMap,
-  Execution
+  Execution,
 } from "../api/execute";
 import { SqrlBoxed } from "sqrl-common";
 import { SourcePrinter } from "../api/executable";
@@ -92,7 +92,7 @@ export class SqrlExecutionState implements Execution {
     };
 
     this.setFeatures(features);
-    (props.requiredSlots || []).forEach(index => {
+    (props.requiredSlots || []).forEach((index) => {
       invariant(
         this.slots[index],
         "Slot %s required for execution",
@@ -106,10 +106,12 @@ export class SqrlExecutionState implements Execution {
    */
   get<T>(symbol: symbol, defaultValue?: T): T {
     if (!this.data.has(symbol)) {
-      if (typeof defaultValue !== 'undefined') {
+      if (typeof defaultValue !== "undefined") {
         return defaultValue;
       }
-      throw new Error('Could not find symbol in executions data: ' + symbol.toString());
+      throw new Error(
+        "Could not find symbol in executions data: " + symbol.toString()
+      );
     }
     return this.data.get(symbol);
   }
@@ -278,7 +280,7 @@ export class SqrlExecutionState implements Execution {
   }
 
   fetchBasicByName(name) {
-    return this.fetchByName(name).then(result =>
+    return this.fetchByName(name).then((result) =>
       SqrlObject.ensureBasic(result)
     );
   }
@@ -287,7 +289,7 @@ export class SqrlExecutionState implements Execution {
     return bluebird.resolve(this.prepare_(slotIndexes));
   }
   prepare_(slotIndexes: number[]): Promise<void> {
-    return niceForEach(slotIndexes, idx => {
+    return niceForEach(slotIndexes, (idx) => {
       if (!this.slots[idx]) {
         this.slots[idx] = this._fetch(idx);
       }
@@ -317,12 +319,12 @@ export class SqrlExecutionState implements Execution {
   load(slotIndexes) {
     // Fetch all the given slots and return an array containing the values
     return this.prepare(slotIndexes).then(() => {
-      return bluebird.all(slotIndexes.map(idx => this.slots[idx]));
+      return bluebird.all(slotIndexes.map((idx) => this.slots[idx]));
     });
   }
 
   loadByNames(featureNames) {
-    return this.load(featureNames.map(name => this.getSlot(name)));
+    return this.load(featureNames.map((name) => this.getSlot(name)));
   }
 
   logCodedErrorMessage(format: string, ...args: Array<any>) {
@@ -352,7 +354,7 @@ export class SqrlExecutionState implements Execution {
     const errorProps = Object.assign(
       {
         err,
-        errorType
+        errorType,
       },
       props
     );
@@ -365,6 +367,6 @@ export class SqrlExecutionState implements Execution {
 
   getNamedGlobals() {
     const sortedNames = Array.from(this.names).sort();
-    return sortedNames.filter(name => !name.startsWith("ast:"));
+    return sortedNames.filter((name) => !name.startsWith("ast:"));
   }
 }

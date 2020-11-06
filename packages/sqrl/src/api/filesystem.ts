@@ -45,8 +45,8 @@ export class VirtualFilesystem extends Filesystem {
       return null;
     }
     return Object.keys(this.source)
-      .filter(path => path.startsWith(folder + "/"))
-      .map(path => path.substring((folder + "/").length));
+      .filter((path) => path.startsWith(folder + "/"))
+      .map((path) => path.substring((folder + "/").length));
   }
   tryRead(path: string) {
     if (this.source[path]) {

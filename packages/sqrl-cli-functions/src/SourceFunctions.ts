@@ -5,7 +5,7 @@ import {
   Instance,
   Execution,
   AstBuilder,
-  CompileState
+  CompileState,
 } from "sqrl";
 
 /**
@@ -22,7 +22,7 @@ export function registerSourceFunction(instance: Instance) {
     {
       args: [AT.state, AT.any.optional],
       argstring: "",
-      docstring: "Returns all of the source code for this execution"
+      docstring: "Returns all of the source code for this execution",
     }
   );
 
@@ -33,7 +33,7 @@ export function registerSourceFunction(instance: Instance) {
     {
       args: [AT.state, AT.constant.string, AT.any.optional],
       argstring: "feature",
-      docstring: "Returns the source code for the given feature"
+      docstring: "Returns the source code for the given feature",
     }
   );
 
@@ -44,7 +44,7 @@ export function registerSourceFunction(instance: Instance) {
       console.log(state.getSourcePrinter().getSourceForSlotName(featureName));
     },
     {
-      args: [AT.state, AT.constant.string.optional]
+      args: [AT.state, AT.constant.string.optional],
     }
   );
 
@@ -56,7 +56,7 @@ export function registerSourceFunction(instance: Instance) {
     {
       args: [AT.state],
       argstring: "",
-      docstring: "Prints the SQRL execution source"
+      docstring: "Prints the SQRL execution source",
     }
   );
 
@@ -71,7 +71,7 @@ export function registerSourceFunction(instance: Instance) {
     {
       args: [AT.feature],
       argstring: "feature",
-      docstring: "Prints the SQRL source of the given feature"
+      docstring: "Prints the SQRL source of the given feature",
     }
   );
 
@@ -83,14 +83,14 @@ export function registerSourceFunction(instance: Instance) {
       }
       return AstBuilder.call("featureSource", [
         AstBuilder.constant(feature.value),
-        ...ast.args.slice(1)
+        ...ast.args.slice(1),
       ]);
     },
     {
       args: [AT.feature, AT.any.optional],
 
       argstring: "feature",
-      docstring: "Returns the source code of the given feature"
+      docstring: "Returns the source code of the given feature",
     }
   );
 }

@@ -31,7 +31,7 @@ export function registerControlFunctions(instance: StdlibRegistry) {
     },
     argstring: "condition, true_result, false_result",
     docstring:
-      "Returns either the true_result or false_result based on the condition"
+      "Returns either the true_result or false_result based on the condition",
   });
 
   instance.save(
@@ -48,7 +48,7 @@ export function registerControlFunctions(instance: StdlibRegistry) {
       args: [AT.any, AT.any],
       pure: true,
       argstring: "value, valueIfNull",
-      docstring: "Returns the value, or valueIfNull if it is null"
+      docstring: "Returns the value, or valueIfNull if it is null",
     }
   );
 
@@ -60,7 +60,7 @@ export function registerControlFunctions(instance: StdlibRegistry) {
       );
     },
     argstring: "",
-    docstring: "Sets the given feature as an input value"
+    docstring: "Sets the given feature as an input value",
   });
 
   instance.save(function _slotWait() {
@@ -72,7 +72,7 @@ export function registerControlFunctions(instance: StdlibRegistry) {
     transformAst(state, ast: CallAst): CallAst {
       return SqrlAst.call(
         "_slotWait",
-        ast.args.map(arg => {
+        ast.args.map((arg) => {
           if (arg.type !== "feature") {
             throw buildSqrlError(arg, "wait only allows features as arguments");
           }
@@ -82,7 +82,7 @@ export function registerControlFunctions(instance: StdlibRegistry) {
     },
     argstring: "feature[, ...]",
     docstring:
-      "Function that returns once all of the input features have been calculated"
+      "Function that returns once all of the input features have been calculated",
   });
 
   instance.save(
@@ -103,11 +103,13 @@ export function registerControlFunctions(instance: StdlibRegistry) {
 
       let promise;
       if (whereFn === true) {
-        promise = Promise.all(values.map(value => outputFn.call(state, value)));
+        promise = Promise.all(
+          values.map((value) => outputFn.call(state, value))
+        );
       } else {
         promise = Promise.all(
-          values.map(value => {
-            return whereFn.call(state, value).then(filterResult => {
+          values.map((value) => {
+            return whereFn.call(state, value).then((filterResult) => {
               return SqrlObject.isTruthy(filterResult)
                 ? outputFn.call(state, value)
                 : null;
@@ -117,13 +119,13 @@ export function registerControlFunctions(instance: StdlibRegistry) {
       }
 
       const rv = await promise;
-      return rv.filter(v => v !== null);
+      return rv.filter((v) => v !== null);
     },
     {
       allowNull: true,
       allowSqrlObjects: true,
       args: [AT.state, AT.any, AT.any, AT.any],
-      async: true
+      async: true,
     }
   );
 }

@@ -82,7 +82,7 @@ expect.extend({
           source
       : () => {
           const diffString = diff(expected, received, {
-            expand: (this as any).expand
+            expand: (this as any).expand,
           });
           return (
             this.utils.matcherHint(".toBe") +
@@ -97,5 +97,5 @@ expect.extend({
         };
 
     return { actual: received, message, pass };
-  }
+  },
 });

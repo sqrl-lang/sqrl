@@ -17,8 +17,8 @@ export function promiseFinally<T>(
     return (promise as any).finally(onFinally);
   }
   return promise.then(
-    res => Promise.resolve(onFinally()).then(() => res),
-    err =>
+    (res) => Promise.resolve(onFinally()).then(() => res),
+    (err) =>
       Promise.resolve(onFinally()).then(() => {
         throw err;
       })

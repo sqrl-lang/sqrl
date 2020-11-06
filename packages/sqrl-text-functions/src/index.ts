@@ -9,7 +9,7 @@ import {
   CompileState,
   Ast,
   AstBuilder,
-  sqrlInvariant
+  sqrlInvariant,
 } from "sqrl";
 import { registerPatternFunctions } from "./PatternFunctions";
 import { InProcessPatternService } from "./InProcessPatternService";
@@ -33,7 +33,7 @@ export function register(instance: Instance) {
       args: [AT.any],
       pure: true,
       argstring: "value",
-      docstring: "Returns the sha256 hash of the given value as hex"
+      docstring: "Returns the sha256 hash of the given value as hex",
     }
   );
 
@@ -45,7 +45,7 @@ export function register(instance: Instance) {
     {
       args: [AT.any.string],
       argstring: "text",
-      docstring: "Return the simhash of the given text"
+      docstring: "Return the simhash of the given text",
     }
   );
 
@@ -58,7 +58,7 @@ export function register(instance: Instance) {
       return grams;
     },
     {
-      args: [AT.any.string, AT.constant.number]
+      args: [AT.any.string, AT.constant.number],
     }
   );
   instance.registerTransform(
@@ -74,7 +74,7 @@ export function register(instance: Instance) {
     {
       args: [AT.any, AT.constant.number],
       argstring: "text, size",
-      docstring: "Returns all the chargrams of a given size from the text"
+      docstring: "Returns all the chargrams of a given size from the text",
     }
   );
 
@@ -86,7 +86,7 @@ export function register(instance: Instance) {
       args: [AT.state, AT.any.string, AT.any.string],
       argstring: "regex, string",
       docstring:
-        "Returns the matches of the given regular expression against the string"
+        "Returns the matches of the given regular expression against the string",
     }
   );
 
@@ -98,7 +98,7 @@ export function register(instance: Instance) {
       args: [AT.state, AT.any.string, AT.any.string],
       argstring: "regex, string",
       docstring:
-        "Returns true if the given regular expression matches the string"
+        "Returns true if the given regular expression matches the string",
     }
   );
 
@@ -110,7 +110,7 @@ export function register(instance: Instance) {
       args: [AT.state, AT.any.string, AT.any.string, AT.any],
       argstring: "regex, replacement, string",
       docstring:
-        "Replaces each match of the given regular expression in the string"
+        "Replaces each match of the given regular expression in the string",
     }
   );
 
@@ -124,7 +124,7 @@ export function register(instance: Instance) {
     {
       args: [AT.state, AT.any.string],
       argstring: "email",
-      docstring: "Returns the normalized form of the given email address"
+      docstring: "Returns the normalized form of the given email address",
     }
   );
 

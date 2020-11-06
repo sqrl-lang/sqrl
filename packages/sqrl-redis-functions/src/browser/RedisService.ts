@@ -10,12 +10,20 @@ import { RedisInterface, RateLimitOptions } from "../services/RedisInterface";
 
 export class RedisService implements RedisInterface {
   constructor() {
-    throw new Error('Redis connections are not available in browser')
+    throw new Error("Redis connections are not available in browser");
   }
-  rateLimitFetch(ctx: Context, key: Buffer, opt: RateLimitOptions): Promise<number> {
+  rateLimitFetch(
+    ctx: Context,
+    key: Buffer,
+    opt: RateLimitOptions
+  ): Promise<number> {
     throw new Error("Method not implemented.");
   }
-  sessionize(ctx: Context, key: Buffer, opt: RateLimitOptions): Promise<number> {
+  sessionize(
+    ctx: Context,
+    key: Buffer,
+    opt: RateLimitOptions
+  ): Promise<number> {
     throw new Error("Method not implemented.");
   }
   increment(ctx: Context, key: Buffer, amount?: number): Promise<number> {
@@ -27,13 +35,22 @@ export class RedisService implements RedisInterface {
   del(ctx: Context, ...keys: Buffer[]): Promise<number> {
     throw new Error("Method not implemented.");
   }
-  set(ctx: Context, key: Buffer, value: string, mode?: "NX" | "XX"): Promise<boolean> {
+  set(
+    ctx: Context,
+    key: Buffer,
+    value: string,
+    mode?: "NX" | "XX"
+  ): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
   getList(ctx: Context, key: Buffer): Promise<string[]> {
     throw new Error("Method not implemented.");
   }
-  listPush(ctx: Context, key: Buffer, ...values: (string | number | Buffer)[]): Promise<void> {
+  listPush(
+    ctx: Context,
+    key: Buffer,
+    ...values: (string | number | Buffer)[]
+  ): Promise<void> {
     throw new Error("Method not implemented.");
   }
   pfcount(ctx: Context, keys: Buffer[]): Promise<number> {

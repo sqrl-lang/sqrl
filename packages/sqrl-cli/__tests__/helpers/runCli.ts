@@ -34,7 +34,7 @@ export async function runCli(
     await cliMain(args, closeables, {
       ...options,
       stdin,
-      stdout
+      stdout,
     });
   } finally {
     closeables.close();

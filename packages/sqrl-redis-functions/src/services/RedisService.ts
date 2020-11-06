@@ -23,11 +23,11 @@ export class RedisService implements RedisInterface {
     this.conn = new Redis({ host, port });
     this.conn.defineCommand("rateLimitFetch", {
       lua: rateLimitFetchLua(),
-      numberOfKeys: 1
+      numberOfKeys: 1,
     });
     this.conn.defineCommand("sessionize", {
       lua: sessionizeLua(),
-      numberOfKeys: 1
+      numberOfKeys: 1,
     });
   }
 
@@ -79,7 +79,7 @@ export class RedisService implements RedisInterface {
 
   async mgetNumbers(ctx: Context, keys: Buffer[]): Promise<number[]> {
     const values = await this.conn.mget(...keys);
-    return values.map(value => {
+    return values.map((value) => {
       if (value === null) {
         return value;
       }

@@ -39,14 +39,10 @@ ASSERT UniquesByIp = 3; # ... and tim=3
 EXECUTE;
 
 # If we fast-forward the clock thirty minutes it's still good
-LET SqrlClock := ${moment()
-    .add(30, "minute")
-    .toISOString()};
+LET SqrlClock := ${moment().add(30, "minute").toISOString()};
 ASSERT UniquesByIp = 3;
 
-LET SqrlClock := ${moment()
-    .add(70, "minute")
-    .toISOString()};
+LET SqrlClock := ${moment().add(70, "minute").toISOString()};
 ASSERT UniquesByIp = 1; # ...but in an hour the result is just tim
 ASSERT UniquesByIpTotal = 3; # total is still 3
 `));
@@ -161,7 +157,7 @@ test("unique aliases work", async () => {
   let manipulator: SimpleManipulator;
 
   const instance = await buildRedisTestInstance({
-    fixedDate: "2016-09-26T20:56:14.538Z"
+    fixedDate: "2016-09-26T20:56:14.538Z",
   });
   const run = async (
     countStatement?: string,
@@ -181,7 +177,7 @@ LET UniquesByIp := countUnique(${countStatement} GROUP BY Ip LAST WEEK);
     await state.fetchValue("SqrlExecutionComplete");
     return {
       state,
-      manipulator: rv.lastManipulator
+      manipulator: rv.lastManipulator,
     };
   };
   const ctx = createSimpleContext();
@@ -190,7 +186,7 @@ LET UniquesByIp := countUnique(${countStatement} GROUP BY Ip LAST WEEK);
   expect(await state.fetchValue("UniquesByIp")).toEqual(1);
   await manipulator.mutate(ctx);
   ({ state, manipulator } = await run("SessionActor", {
-    SessionActor: "Actor2"
+    SessionActor: "Actor2",
   }));
   expect(await state.fetchValue("UniquesByIp")).toEqual(2);
   await manipulator.mutate(ctx);
@@ -198,7 +194,7 @@ LET UniquesByIp := countUnique(${countStatement} GROUP BY Ip LAST WEEK);
   // Get the count as if the Target was the Actor we saw before. Not a new unique value.
   ({ state, manipulator } = await run("Target AS SessionActor", {
     Target: "OriginalActor",
-    SessionActor: "Actor3"
+    SessionActor: "Actor3",
   }));
   expect(await state.fetchValue("UniquesByIp")).toEqual(2);
   await manipulator.mutate(ctx);
@@ -206,13 +202,13 @@ LET UniquesByIp := countUnique(${countStatement} GROUP BY Ip LAST WEEK);
   // Fetch for Target as SessionActor but as a new value.
   ({ state, manipulator } = await run("Target AS SessionActor", {
     Target: "Actor3",
-    SessionActor: "Winnie"
+    SessionActor: "Winnie",
   }));
   expect(await state.fetchValue("UniquesByIp")).toEqual(3);
   await manipulator.mutate(ctx);
 
   expect(Array.from(manipulator.sqrlKeys)).toEqual([
-    'counter=3fab817c;timeMs=2016-09-26T20:56:14.538Z;features=["1.2.3.4"]'
+    'counter=3fab817c;timeMs=2016-09-26T20:56:14.538Z;features=["1.2.3.4"]',
   ]);
 });
 

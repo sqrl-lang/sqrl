@@ -20,7 +20,7 @@ export class Assertion {
 
     this.stack = new Error().stack
       .split("\n")
-      .filter(line => {
+      .filter((line) => {
         return !line.includes(__dirname + "/");
       })
       .join("\n");
@@ -31,8 +31,8 @@ export class AssertionList extends Assertion {
   assertions: Assertion[];
 
   constructor(assertions: Assertion[], format?: string, ...args: any[]) {
-    const failed = assertions.filter(a => !a.result);
-    const failedMessages = failed.map(a => a.message);
+    const failed = assertions.filter((a) => !a.result);
+    const failedMessages = failed.map((a) => a.message);
 
     let message: string;
     if (format) {
@@ -66,7 +66,7 @@ class OpAssertion extends Assertion {
       ">": (actual, expected) => actual > expected,
       ">=": (actual, expected) => actual >= expected,
       "<": (actual, expected) => actual < expected,
-      "<=": (actual, expected) => actual <= expected
+      "<=": (actual, expected) => actual <= expected,
     };
     invariant(OPERATORS.hasOwnProperty(op), "Operator not defined: %s", op);
 
@@ -107,7 +107,7 @@ export class DeepEqualAssertion extends AssertionList {
   constructor(actual, expected, ...msg: any[]) {
     const assertions = [new TypeAssertion(actual, expected)];
 
-    if (assertions.every(a => a.result)) {
+    if (assertions.every((a) => a.result)) {
       if (Array.isArray(actual)) {
         assertions.push(
           new OpAssertion(
@@ -119,7 +119,7 @@ export class DeepEqualAssertion extends AssertionList {
             expected.length
           )
         );
-        if (assertions.every(a => a.result)) {
+        if (assertions.every((a) => a.result)) {
           assertions.push(
             ...actual.map((value, idx) => {
               return new DeepEqualAssertion(
@@ -140,9 +140,9 @@ export class DeepEqualAssertion extends AssertionList {
             "keys(actual) (=) keys(expected)"
           )
         );
-        if (assertions.every(a => a.result)) {
+        if (assertions.every((a) => a.result)) {
           assertions.push(
-            ...Object.keys(actual).map(key => {
+            ...Object.keys(actual).map((key) => {
               return new DeepEqualAssertion(
                 actual[key],
                 expected[key],
@@ -242,7 +242,7 @@ export default class Assert {
 
   withStack(stack, callback) {
     const list = this.withCapture(callback);
-    list.forEach(assertion => {
+    list.forEach((assertion) => {
       assertion.stack = stack;
       this.capture(assertion);
     });
@@ -285,7 +285,7 @@ export default class Assert {
 
   not(cb, format?: string, ...msg: any[]) {
     const list = this.withCapture(cb);
-    const passed = list.filter(a => a.result);
+    const passed = list.filter((a) => a.result);
 
     // This is a really basic `not` assertion, that should ideally be replaced
     // with assertions that generate better messages, but that needs to be done
@@ -293,7 +293,7 @@ export default class Assert {
     const message =
       (format ? util.format(format, ...msg) : "Not:\n") +
       passed
-        .map(a => {
+        .map((a) => {
           return a.message;
         })
         .join("\n");

@@ -7,7 +7,7 @@ import { Ast } from "../ast/Ast";
 import {
   SqrlParserState,
   SqrlParserOptions,
-  SqrlSerialized
+  SqrlSerialized,
 } from "./SqrlParserState";
 import { parseSqrlFiles, parseSqrl } from "../parser/SqrlParse";
 import { labelerPushStatement } from "./compileLabelerStatements";
@@ -34,15 +34,15 @@ export function createParserState(
   return new SqrlParserState(
     {
       statements: mainAst.statements,
-      ...props.parserOptions
+      ...props.parserOptions,
     },
     props.serialized || null
   );
 }
 
 export function compileParserStateAst(parserState: SqrlParserState) {
-  parserState.setPushStatement(ast => labelerPushStatement(parserState, ast));
-  parserState.statements.forEach(stmt => {
+  parserState.setPushStatement((ast) => labelerPushStatement(parserState, ast));
+  parserState.statements.forEach((stmt) => {
     parserState.pushStatement(stmt);
   });
 }

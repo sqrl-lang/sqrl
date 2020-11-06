@@ -25,7 +25,7 @@ export default class SqrlImporter {
     sqrlInvariant(sourceAst, source, "Could not find sqrl file: " + path);
     return parseSqrl(source.toString("utf-8"), {
       filename: path,
-      customFunctions: this.customFunctions
+      customFunctions: this.customFunctions,
     });
   }
 
@@ -49,11 +49,11 @@ export default class SqrlImporter {
 
   getIncludeFiles(
     ast: IncludeAst
-  ): ({
+  ): {
     ast: ScriptAst;
     filename: string;
     where: Ast;
-  })[] {
+  }[] {
     const match = DYNAMIC_INCLUDE_REGEX.exec(ast.filename);
     if (!match) {
       const { scriptAst, path } = this.getReferencedFileAst(
@@ -65,8 +65,8 @@ export default class SqrlImporter {
         {
           ast: scriptAst,
           filename: path,
-          where: SqrlAst.constant(true)
-        }
+          where: SqrlAst.constant(true),
+        },
       ];
     }
 
@@ -83,8 +83,8 @@ export default class SqrlImporter {
     sqrlInvariant(ast, matchedFiles, `The ${dir}/ directory was not found`);
 
     return matchedFiles
-      .filter(filename => filename.endsWith(extension))
-      .map(filename => {
+      .filter((filename) => filename.endsWith(extension))
+      .map((filename) => {
         const filePath = join(pwd, `features/${filename}`);
         const value = filename.substring(0, filename.length - extension.length);
         const fileAst = this.readAst(ast, filePath);
@@ -93,7 +93,7 @@ export default class SqrlImporter {
         return {
           ast: fileAst,
           filename,
-          where: SqrlAst.featureEquals(feature, value)
+          where: SqrlAst.featureEquals(feature, value),
         };
       });
   }

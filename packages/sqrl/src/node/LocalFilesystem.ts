@@ -9,7 +9,7 @@ export class LocalFilesystem extends Filesystem {
 
   tryList(dirPath: string) {
     try {
-      return readdirSync(path.join(this.pwd, dirPath)).filter(filename =>
+      return readdirSync(path.join(this.pwd, dirPath)).filter((filename) =>
         filename.endsWith(".sqrl")
       );
     } catch (err) {
@@ -27,21 +27,23 @@ export class LocalFilesystem extends Filesystem {
 }
 
 export function pathDirname(filePath: string) {
-    return path.dirname(filePath);
+  return path.dirname(filePath);
 }
 export function pathBasename(filePath: string) {
-    return path.basename(filePath);
+  return path.basename(filePath);
 }
 export function pathJoin(...paths: string[]) {
-    return path.join(...paths);
+  return path.join(...paths);
 }
 
-export function splitPath(filePath: string): {
-    dirname: string,
-    basename: string
+export function splitPath(
+  filePath: string
+): {
+  dirname: string;
+  basename: string;
 } {
-    return {
-        dirname: path.dirname(filePath),
-        basename: path.basename(filePath)
-    };
+  return {
+    dirname: path.dirname(filePath),
+    basename: path.basename(filePath),
+  };
 }

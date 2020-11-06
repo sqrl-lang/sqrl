@@ -7,7 +7,7 @@ import { runExecutable, fetchExecutableFeature } from "../helpers/runCompile";
 import {
   executableFromFilesystem,
   buildTestInstance,
-  VirtualFilesystem
+  VirtualFilesystem,
 } from "../../src";
 
 test("supports include statements", async () => {
@@ -38,7 +38,7 @@ LET Message := concat(
   if(C IS NULL, "", C)
 );
 LET NullMessage := concat(A, B, C);
-  `
+  `,
     })
   );
 
@@ -67,31 +67,31 @@ LET Thing := "from bar action";
 LET Action := input();
 LET Thing := "from default" DEFAULT;
 INCLUDE "features/\${Action}.sqrl";
-`
+`,
     })
   );
 
   await expect(
     fetchExecutableFeature(executable._wrapped, "Thing", {
       inputs: {
-        Action: "abc_action"
-      }
+        Action: "abc_action",
+      },
     })
   ).resolves.toEqual("from default");
 
   await expect(
     fetchExecutableFeature(executable._wrapped, "Thing", {
       inputs: {
-        Action: "foo_action"
-      }
+        Action: "foo_action",
+      },
     })
   ).resolves.toEqual("from foo action");
 
   await expect(
     fetchExecutableFeature(executable._wrapped, "Thing", {
       inputs: {
-        Action: "bar_action"
-      }
+        Action: "bar_action",
+      },
     })
   ).resolves.toEqual("from bar action");
   await expect(
@@ -105,7 +105,7 @@ LET Thing := "from foo action";
 LET Action := input();
 LET Sample := input();
 INCLUDE "features/\${Action}.sqrl" WHERE Sample;
-`
+`,
       })
     )
   ).rejects.toThrowError(/Expected empty where clause for dynamic include/);

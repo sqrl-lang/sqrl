@@ -14,7 +14,7 @@ import { getGlobalLogger } from "../../src/api/log";
 test("Basic test works", async () => {
   const instance = new SqrlInstance();
   registerAllFunctions(instance, {
-    assert: new JestAssertService()
+    assert: new JestAssertService(),
   });
 
   const test = new SqrlTest(instance, {});

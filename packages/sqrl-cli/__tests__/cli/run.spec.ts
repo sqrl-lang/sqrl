@@ -13,7 +13,7 @@ test("works", async () => {
     examplePath("hello.sqrl"),
     "-s",
     'Name="Josh"',
-    "Text"
+    "Text",
   ]);
 
   expect(stripAnsi(stdout).replace(/[0-9]/g, "x")).toEqual(
@@ -30,7 +30,7 @@ test("does not work with set after text", async () => {
         examplePath("hello.sqrl"),
         "Text",
         "-s",
-        'Name="Josh"'
+        'Name="Josh"',
       ]);
 
       expect(stripAnsi(stdout).replace(/[0-9]/g, "x")).toEqual(

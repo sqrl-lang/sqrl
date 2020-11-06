@@ -57,11 +57,8 @@ test("works", async () => {
   `);
 
   expect(
-    executions
-      .shift()
-      .getSourcePrinter()
-      .getHumanAllSource({
-        excludeSlotNumbers: true
-      })
+    executions.shift().getSourcePrinter().getHumanAllSource({
+      excludeSlotNumbers: true,
+    })
   ).toMatchSnapshot();
 });

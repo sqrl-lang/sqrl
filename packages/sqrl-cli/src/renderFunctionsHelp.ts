@@ -58,13 +58,13 @@ export function renderFunctionsHelp(instance: Instance) {
   return [
     ...Object.keys(stdlib)
       .sort()
-      .map(pkg => {
+      .map((pkg) => {
         return renderPackageHelp("stdlib", pkg, stdlib[pkg]);
       }),
     ...Object.keys(packages)
       .sort()
-      .map(pkg => {
+      .map((pkg) => {
         return renderPackageHelp("package", pkg, packages[pkg]);
-      })
+      }),
   ].join("\n\n");
 }

@@ -154,14 +154,14 @@ export class Instance {
 
   listFunctions(): FunctionInfo[] {
     return Object.keys(this._instance.functionProperties)
-      .filter(func => !func.startsWith("_"))
-      .map(func => {
+      .filter((func) => !func.startsWith("_"))
+      .map((func) => {
         const props = this._instance.functionProperties[func];
         return {
           name: func,
           argstring: props.argstring || null,
           docstring: props.docstring || null,
-          package: props.package || null
+          package: props.package || null,
         };
       });
   }
@@ -178,7 +178,7 @@ export class Instance {
       args: options.args,
       package: this.packageName,
       argstring: options.argstring,
-      docstring: options.docstring
+      docstring: options.docstring,
     });
   }
 
@@ -193,7 +193,7 @@ export class Instance {
       args: options.args,
       package: this.packageName,
       argstring: options.argstring,
-      docstring: options.docstring
+      docstring: options.docstring,
     });
   }
 
@@ -212,7 +212,7 @@ export class Instance {
       args: options.args,
       package: this.packageName,
       argstring: options.argstring,
-      docstring: options.docstring
+      docstring: options.docstring,
     });
   }
 
@@ -231,7 +231,7 @@ export class Instance {
       },
       package: this.packageName,
       argstring: options.argstring,
-      docstring: options.docstring
+      docstring: options.docstring,
     });
   }
 
@@ -251,7 +251,7 @@ export class Instance {
       package: this.packageName,
       args: options.args,
       argstring: options.argstring,
-      docstring: options.docstring
+      docstring: options.docstring,
     });
   }
 }
@@ -279,7 +279,7 @@ export class Executable {
     return this._wrapped.startExecution(ctx, {
       manipulator: options.manipulator,
       inputs: options.inputs,
-      featureTimeoutMs: options.featureTimeoutMs
+      featureTimeoutMs: options.featureTimeoutMs,
     });
   }
 
@@ -294,7 +294,7 @@ export class Executable {
    * Get all the slot names that are available
    */
   getFeatures(): string[] {
-    return this._wrapped.getNames().filter(name => isValidFeatureName(name));
+    return this._wrapped.getNames().filter((name) => isValidFeatureName(name));
   }
 
   /**

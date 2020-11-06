@@ -31,7 +31,7 @@ export async function runCompile(sqrl: string) {
     compiledOutput,
     executable,
     instance,
-    trace
+    trace,
   };
 }
 
@@ -48,7 +48,7 @@ export async function runExecutable(
   const execution = await executable.startExecution(trace, {
     manipulator,
     inputs: options.inputs || {},
-    featureTimeoutMs: 1000
+    featureTimeoutMs: 1000,
   });
   return { executable, execution, trace };
 }
@@ -71,7 +71,7 @@ export async function compileToExecution(sqrl: string) {
   const manipulator = new SimpleManipulator();
   const execution = await executable.startExecution(trace, {
     manipulator,
-    featureTimeoutMs: 1000
+    featureTimeoutMs: 1000,
   });
   return { executable, execution, trace };
 }

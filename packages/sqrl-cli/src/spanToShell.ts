@@ -11,7 +11,7 @@ const classColor = {
   "type:syntax": "magenta",
   value: "blueBright",
   separator: "blue",
-  "value:json": "gray"
+  "value:json": "gray",
 };
 
 export function spanToShell(span: RenderedSpan): string {
@@ -23,7 +23,7 @@ export function spanToShell(span: RenderedSpan): string {
 
   let rv: string;
   if (span.children) {
-    rv = span.children.map(child => spanToShell(child)).join("");
+    rv = span.children.map((child) => spanToShell(child)).join("");
   } else {
     rv = span.text;
   }

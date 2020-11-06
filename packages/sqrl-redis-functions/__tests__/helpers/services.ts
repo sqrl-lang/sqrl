@@ -18,6 +18,6 @@ export function buildServices(): RedisServices {
     countUnique: new RedisApproxCountUniqueService(redis, "countUnique~"),
     rateLimit: new RedisRateLimit(redis, "ratelimit~"),
     label: new RedisLabelService(redis, "label~"),
-    uniqueId: new RedisUniqueIdService(redis, "uniqueId~")
+    uniqueId: new RedisUniqueIdService(redis, "uniqueId~"),
   };
 }

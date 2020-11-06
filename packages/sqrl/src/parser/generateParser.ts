@@ -11,7 +11,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 const source = readFileSync(join(__dirname, "sqrl.pegjs"), {
-  encoding: "utf-8"
+  encoding: "utf-8",
 });
 
 const allowedStartRules = ["SqrlExpr", "SqrlRepl", "SqrlScript", "Expr"];
@@ -20,11 +20,11 @@ const pegOptions: pegjs.OutputFormatAmdCommonjs = {
   cache: true,
   output: "source",
   format: "commonjs",
-  plugins: [tspegjs]
+  plugins: [tspegjs],
 };
 
 const returnTypes: { [type: string]: string } = {
-  RepeatClause: "number"
+  RepeatClause: "number",
 };
 for (const rule of allowedStartRules) {
   returnTypes[rule] = "Ast";
@@ -44,13 +44,13 @@ for (const rule of allowedStartRules) {
     "one-variable-per-declaration",
     "max-line-length",
     "no-consecutive-blank-lines",
-    "align"
+    "align",
   ].join(","),
   customHeader: `
   import { buildSqrlError } from '../compile/buildSqrlError';
   import { Ast, AstLocation, mapAst } from '../ast/Ast';
   `.replace(/^ */gm, ""),
-  returnTypes
+  returnTypes,
 };
 
 const output = pegjs.generate(source, pegOptions);

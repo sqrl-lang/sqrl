@@ -17,7 +17,7 @@ export function statementsFromString(
   } = {}
 ): StatementAst[] {
   return parseSqrl(source, {
-    customFunctions: options.customFunctions
+    customFunctions: options.customFunctions,
   }).statements;
 }
 
@@ -33,12 +33,12 @@ export function sourceOptionsFromFilesystem(
   const source = sourceBuffer.toString("utf-8");
   const statements = parseSqrl(source, {
     filename: mainFilename,
-    customFunctions: options.customFunctions
+    customFunctions: options.customFunctions,
   }).statements;
   return {
     statements,
     source,
-    filesystem
+    filesystem,
   };
 }
 export function sourceOptionsFromPath(
@@ -47,7 +47,7 @@ export function sourceOptionsFromPath(
     customFunctions?: Set<string>;
   } = {}
 ): SqrlParserSourceOptions {
-  const {basename,dirname} = splitPath(path);
+  const { basename, dirname } = splitPath(path);
   return sourceOptionsFromFilesystem(
     new LocalFilesystem(dirname),
     basename,

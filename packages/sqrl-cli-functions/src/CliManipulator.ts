@@ -4,7 +4,7 @@ import {
   FeatureMap,
   WhenCause,
   SqrlKey,
-  ManipulatorCallback
+  ManipulatorCallback,
 } from "sqrl";
 
 import { mapObject } from "sqrl-common";
@@ -55,10 +55,10 @@ export class CliManipulator extends Manipulator {
   getCurrentHumanOutput() {
     return {
       kafka: mapObject(this.kafkaOutput, (messages, topic) => {
-        return messages.map(msg => {
+        return messages.map((msg) => {
           return bufferHumanJson(msg);
         });
-      })
+      }),
     };
   }
 
@@ -82,7 +82,7 @@ export class CliManipulator extends Manipulator {
   }
 
   async mutate(ctx): Promise<void> {
-    await Promise.all(this.callbacks.map(cb => cb(ctx)));
+    await Promise.all(this.callbacks.map((cb) => cb(ctx)));
   }
   private callbacks: ManipulatorCallback[] = [];
   addCallback(cb: ManipulatorCallback) {

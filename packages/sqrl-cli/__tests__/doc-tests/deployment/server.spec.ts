@@ -15,7 +15,7 @@ LET Remaining := rateLimit(BY Ip MAX 2 EVERY 30 SECONDS);
 CREATE RULE BlockedByRateLimit WHERE Remaining = 0
   WITH REASON "Saw more than two requests in the last thirty seconds.";
 WHEN BlockedByRateLimit THEN blockAction();
-`
+`,
   });
 
   let ranTests = false;
@@ -31,22 +31,22 @@ WHEN BlockedByRateLimit THEN blockAction();
         method: "post",
         uri: `http://127.0.0.1:${address.port}/run`,
         qs: {
-          features: "BlockedByRateLimit,Remaining"
+          features: "BlockedByRateLimit,Remaining",
         },
         json: true,
         body: {
-          Ip: "1.2.3.4"
-        }
+          Ip: "1.2.3.4",
+        },
       });
 
       expect(res).toEqual({
         allow: true,
         features: { BlockedByRateLimit: false, Remaining: 2 },
         rules: {},
-        verdict: { blockRules: [], whitelistRules: [] }
+        verdict: { blockRules: [], whitelistRules: [] },
       });
       ranTests = true;
-    }
+    },
   });
   expect(ranTests).toBeTruthy();
 });

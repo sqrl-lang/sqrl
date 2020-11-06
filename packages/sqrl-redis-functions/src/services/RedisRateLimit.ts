@@ -6,7 +6,7 @@
 import {
   RateLimitService,
   RateLimitProps,
-  SessionProps
+  SessionProps,
 } from "../RateLimitFunctions";
 import { Context, SqrlKey } from "sqrl";
 import { RedisInterface } from "./RedisInterface";
@@ -34,7 +34,7 @@ export class RedisRateLimit implements RateLimitService {
               refillAmount: props.refillAmount,
               take: props.take,
               at: props.at,
-              strict: props.strict
+              strict: props.strict,
             }
           );
         }
@@ -52,7 +52,7 @@ export class RedisRateLimit implements RateLimitService {
         refillAmount: props.refillAmount,
         take: props.take,
         at: props.at,
-        strict: props.strict
+        strict: props.strict,
       }
     );
   }

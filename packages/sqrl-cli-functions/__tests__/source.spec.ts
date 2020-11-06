@@ -20,13 +20,13 @@ function cleanSource(source) {
 
   // Calculate common indent
   let indent = lines[0].length;
-  lines.forEach(line => {
+  lines.forEach((line) => {
     const [spaces] = /^ */.exec(line);
     indent = Math.min(indent, spaces.length);
   });
 
   // Remove indent and return joined
-  return lines.map(line => line.slice(indent)).join("\n");
+  return lines.map((line) => line.slice(indent)).join("\n");
 }
 function sourceTemplate(strings: TemplateStringsArray, ...args: any[]): string {
   return strings.reduce((accum: string, part: string, idx: number) => {
@@ -86,7 +86,7 @@ test("saves features", async () => {
     {
       async register(instance) {
         await registerCliFunctions(instance);
-      }
+      },
     }
   );
 });

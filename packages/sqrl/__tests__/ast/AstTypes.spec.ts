@@ -16,7 +16,7 @@ test("works", async () => {
       SqrlAst.constant("hello"),
       SqrlAst.feature("Joe"),
       SqrlAst.call("anything", []),
-      SqrlAst.constant("optional")
+      SqrlAst.constant("optional"),
     ]),
     types
   );
@@ -25,7 +25,7 @@ test("works", async () => {
     SqrlAst.call(func, [
       SqrlAst.constant("hello"),
       SqrlAst.feature("Joe"),
-      SqrlAst.call("anything", [])
+      SqrlAst.call("anything", []),
     ]),
     types
   );
@@ -44,7 +44,7 @@ test("works", async () => {
       SqrlAst.call(func, [
         SqrlAst.include("x"),
         SqrlAst.include("y"),
-        SqrlAst.include("z")
+        SqrlAst.include("z"),
       ]),
       types
     )

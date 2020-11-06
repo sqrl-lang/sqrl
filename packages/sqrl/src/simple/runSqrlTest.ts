@@ -46,7 +46,7 @@ export async function runSqrlTest(
   } else {
     instance = await buildTestInstance({
       functionCost: options.functionCost,
-      config: options.config
+      config: options.config,
     });
   }
 
@@ -54,12 +54,11 @@ export async function runSqrlTest(
     await options.register(instance);
   }
 
-  const filesystem =
-    options.filesystem || new EmptyFilesystem();
+  const filesystem = options.filesystem || new EmptyFilesystem();
 
   const test = new SqrlTest(instance._instance, {
     manipulatorFactory: () => new SimpleManipulator(),
-    filesystem
+    filesystem,
   });
   const ctx = createSimpleContext(options.logger);
   if (options.librarySqrl) {
@@ -77,6 +76,6 @@ export async function runSqrlTest(
   return {
     ...rv,
     lastExecution,
-    lastManipulator
+    lastManipulator,
   };
 }

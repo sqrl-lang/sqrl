@@ -23,7 +23,7 @@ CREATE RULE MultiRiskyCountryCreditCard WHERE NumRiskyCountries > 0
 WHEN MultiRiskyCountryCreditCard THEN
   blockAction(),
   addLabel(CreditCard, "bad_credit_card");
-  `
+  `,
   });
   const stdout = await runCli(
     [
@@ -33,11 +33,11 @@ WHEN MultiRiskyCountryCreditCard THEN
       "Country=ZA",
       "-s",
       "CreditCardNum=1234",
-      "NumRiskyCountries"
+      "NumRiskyCountries",
     ],
     "",
     {
-      filesystem
+      filesystem,
     }
   );
 

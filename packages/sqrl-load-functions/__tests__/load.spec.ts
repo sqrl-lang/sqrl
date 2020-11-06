@@ -17,9 +17,9 @@ test("Loading YAML works", async () => {
     `,
     {
       filesystem,
-      register: async instance => {
+      register: async (instance) => {
         await register(instance);
-      }
+      },
     }
   );
 });

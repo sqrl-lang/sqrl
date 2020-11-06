@@ -22,13 +22,13 @@ test("works", async () => {
         uri: `http://127.0.0.1:${address.port}/run?features=Text`,
         json: true,
         body: {
-          Name: "SQRL Server Test"
-        }
+          Name: "SQRL Server Test",
+        },
       });
 
       expect(res.features.Text).toEqual("Hello, SQRL Server Test!");
       ranTests = true;
-    }
+    },
   });
 
   // The callback logic above is a little tricky, so make sure we actually ran the tests

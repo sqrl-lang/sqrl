@@ -28,7 +28,7 @@ const binaryOperatorToFunction = {
   "%": "_modulo",
   or: "_or",
   and: "_and",
-  contains: "_contains"
+  contains: "_contains",
 };
 
 class AstExprState {
@@ -83,7 +83,7 @@ class AstExprState {
 function constantExpr(value): ConstantExpr {
   return {
     type: "constant",
-    value
+    value,
   };
 }
 
@@ -101,7 +101,7 @@ function ifExpr(exprs: Expr[]): Expr {
     type: "if",
     exprs,
     // We can safely load the condition upfront, but be lazy on the other expressions
-    load: condition.load
+    load: condition.load,
   };
 }
 
@@ -111,11 +111,11 @@ function _astToExprList(
   props: Expr,
   lazy = false
 ) {
-  const exprs = exprAsts.map(exprAst => _astToExpr(exprAst, state));
+  const exprs = exprAsts.map((exprAst) => _astToExpr(exprAst, state));
   return {
     load: lazy ? [] : exprLoad(exprs),
     exprs,
-    ...props
+    ...props,
   };
 }
 
@@ -137,7 +137,7 @@ function slotExpr(state: AstExprState, name: string): Expr {
   return {
     type: "value",
     load: [slot],
-    slot
+    slot,
   };
 }
 
@@ -146,7 +146,7 @@ function boolExpr(state: AstExprState, expr: Expr): Expr {
     load: expr.load,
     type: "call",
     func: "bool",
-    exprs: [expr]
+    exprs: [expr],
   };
 }
 
@@ -154,7 +154,7 @@ function exprLoad(exprs: Expr[]): Slot[] {
   const load: Set<Slot> = new Set();
   for (const expr of exprs) {
     if (expr.load) {
-      expr.load.forEach(slot => load.add(slot));
+      expr.load.forEach((slot) => load.add(slot));
     }
   }
   return Array.from(load);
@@ -168,15 +168,15 @@ function exprOrderedMinimalLoad(exprs: Expr[]): Slot[] {
    */
   let hasIterator = false;
   for (const expr of exprs) {
-    walkExpr(expr, node => {
+    walkExpr(expr, (node) => {
       hasIterator = hasIterator || node.type === "iterator";
     });
   }
 
   if (hasIterator) {
     const set: Set<Slot> = new Set();
-    exprs.forEach(expr => {
-      expr.load.forEach(slot => set.add(slot));
+    exprs.forEach((expr) => {
+      expr.load.forEach((slot) => set.add(slot));
     });
     return Array.from(set);
   } else {
@@ -188,8 +188,8 @@ function andExpr(state: AstExprState, args: Ast[]): Expr {
   let hadFalse = false;
   let hadNull = false;
   const exprs = args
-    .map(arg => _astToExpr(arg, state))
-    .filter(expr => {
+    .map((arg) => _astToExpr(arg, state))
+    .filter((expr) => {
       if (expr.type === "constant") {
         if (SqrlObject.isTruthy(expr.value)) {
           // Filter out truthy values
@@ -218,7 +218,7 @@ function andExpr(state: AstExprState, args: Ast[]): Expr {
     type: "call",
     func: "_andSequential",
     exprs: [{ type: "state" }, ...sortedExprs],
-    load: exprOrderedMinimalLoad(sortedExprs)
+    load: exprOrderedMinimalLoad(sortedExprs),
   };
 }
 
@@ -226,8 +226,8 @@ function orExpr(state: AstExprState, args: Ast[]): Expr {
   let hadTrue = false;
   let hadNull = false;
   const exprs = args
-    .map(arg => _astToExpr(arg, state))
-    .filter(expr => {
+    .map((arg) => _astToExpr(arg, state))
+    .filter((expr) => {
       if (expr.type === "constant") {
         if (SqrlObject.isTruthy(expr.value)) {
           hadTrue = true;
@@ -268,7 +268,7 @@ function makeCall(func: string, exprs: Expr[], load?: Slot[]): CallExpr {
     type: "call",
     func,
     exprs,
-    load
+    load,
   };
 }
 
@@ -277,10 +277,10 @@ function callExpr(state: AstExprState, func: string, args: Ast[]): Expr {
   const props = instance.getProps(func);
 
   if (props.pure) {
-    const argExprs = args.map(arg => _astToExpr(arg, state));
-    const allConstant = argExprs.every(expr => expr.type === "constant");
+    const argExprs = args.map((arg) => _astToExpr(arg, state));
+    const allConstant = argExprs.every((expr) => expr.type === "constant");
     if (allConstant) {
-      const constantExprs: ConstantExpr[] = argExprs.map(expr => {
+      const constantExprs: ConstantExpr[] = argExprs.map((expr) => {
         // @TODO: This is an unfortunate hack to make typescript happy
         if (expr.type !== "constant") {
           throw new Error("expected constant");
@@ -288,7 +288,7 @@ function callExpr(state: AstExprState, func: string, args: Ast[]): Expr {
         return expr;
       });
       const rv = state.instance.pureFunction[func](
-        ...constantExprs.map(expr => expr.value)
+        ...constantExprs.map((expr) => expr.value)
       );
       return constantExpr(rv);
     }
@@ -297,17 +297,17 @@ function callExpr(state: AstExprState, func: string, args: Ast[]): Expr {
   if (func === "_slotWait") {
     return Object.assign(constantExpr(true), {
       load: args
-        .filter(arg => {
+        .filter((arg) => {
           // Filter out wait for anything that is constant
           const expr = _astToExpr(arg, state);
           return expr.type !== "constant";
         })
-        .map(arg => {
+        .map((arg) => {
           if (arg.type !== "slot") {
             throw new Error("Expected slot ast for wait call");
           }
           return state.getSlot(arg.slotName);
-        })
+        }),
     });
   }
 
@@ -319,7 +319,7 @@ function callExpr(state: AstExprState, func: string, args: Ast[]): Expr {
 function _astToExpr(ast: Ast, state: AstExprState): Expr {
   return sqrlErrorWrap(
     {
-      location: ast.location
+      location: ast.location,
     },
     (): Expr => {
       if (ast.type === "iterator") {
@@ -331,7 +331,7 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
         );
         return {
           type: "iterator",
-          name: ast.name
+          name: ast.name,
         };
       } else if (ast.type === "feature") {
         sqrlInvariant(
@@ -355,10 +355,10 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
         const exprAsts: Ast[] = [
           ast.condition,
           ast.trueBranch,
-          ast.falseBranch
+          ast.falseBranch,
         ];
 
-        return ifExpr(exprAsts.map(ast => _astToExpr(ast, state)));
+        return ifExpr(exprAsts.map((ast) => _astToExpr(ast, state)));
       } else if (ast.type === "switch") {
         let result = ast.defaultCase
           ? _astToExpr(ast.defaultCase, state)
@@ -387,7 +387,7 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
         return state.wrapIterator(ast.iterator.name, () => {
           return _astToExprList([ast.input, ast.output, ast.where], state, {
             type: "listComprehension",
-            iterator: ast.iterator.name
+            iterator: ast.iterator.name,
           });
         });
       } else if (ast.type === "not") {
@@ -407,7 +407,7 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
             args = [
               ...args.slice(0, args.length - 1),
               nextAst.left,
-              nextAst.right
+              nextAst.right,
             ];
             nextAst = args[args.length - 1];
           }
@@ -448,7 +448,7 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
         return callExpr(state, func, args);
       } else if (ast.type === "list") {
         return _astToExprList(ast.exprs, state, {
-          type: "list"
+          type: "list",
         });
       } else {
         throw new Error("Unhandled ast: " + jsonAst(ast));
@@ -459,7 +459,7 @@ function _astToExpr(ast: Ast, state: AstExprState): Expr {
 
 function _exprExtractLoad(expr: Expr, loaded: Set<Slot> = new Set()): Expr {
   const load: Set<Slot> = new Set();
-  (expr.load || []).forEach(slot => {
+  (expr.load || []).forEach((slot) => {
     if (!loaded.has(slot)) {
       load.add(slot);
     }
@@ -473,12 +473,12 @@ function _exprExtractLoad(expr: Expr, loaded: Set<Slot> = new Set()): Expr {
     return {
       type: "load",
       load: Array.from(load),
-      exprs: [_exprExtractLoad(expr, new Set([...load, ...loaded]))]
+      exprs: [_exprExtractLoad(expr, new Set([...load, ...loaded]))],
     };
   }
 
   if (expr.exprs) {
-    expr.exprs = expr.exprs.map(e => _exprExtractLoad(e, loaded));
+    expr.exprs = expr.exprs.map((e) => _exprExtractLoad(e, loaded));
   }
   return expr;
 }

@@ -45,10 +45,7 @@ def write_docs(folder, name, title, functions):
     with open(path, "w") as f:
         f.write("title: %s\n---\n\n# %s\n\n%s" % (title, title, intro))
         for props in sorted(functions, key=lambda p: p["name"]):
-            f.write(
-                "## %(name)s\n\n**%(name)s**(%(argstring)s)\n\n%(docstring)s\n\n"
-                % props
-            )
+            f.write("## %(name)s\n\n**%(name)s**(%(argstring)s)\n\n%(docstring)s\n\n" % props)
 
     print("      - text: %s" % title)
     print("        type: link")

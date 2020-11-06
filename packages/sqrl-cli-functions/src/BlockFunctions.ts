@@ -20,7 +20,7 @@ export function registerBlockFunctions(instance: Instance) {
       args: [AT.state, AT.whenCause],
       allowNull: true,
       argstring: "",
-      docstring: "Mark the current action as blocked"
+      docstring: "Mark the current action as blocked",
     }
   );
 
@@ -36,7 +36,7 @@ export function registerBlockFunctions(instance: Instance) {
       args: [AT.state, AT.whenCause],
       allowNull: true,
       argstring: "",
-      docstring: "Mark the current action as whitelisted"
+      docstring: "Mark the current action as whitelisted",
     }
   );
 
@@ -50,7 +50,7 @@ export function registerBlockFunctions(instance: Instance) {
     {
       args: [AT.state, AT.feature],
       argstring: "",
-      docstring: "Check if the current action was marked as blocked"
+      docstring: "Check if the current action was marked as blocked",
     }
   );
 }

@@ -9,7 +9,7 @@ export class DefaultDict<T> {
             target[name] = constr();
           }
           return target[name];
-        }
+        },
       }
     );
   }

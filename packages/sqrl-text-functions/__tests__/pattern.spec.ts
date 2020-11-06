@@ -32,7 +32,7 @@ ASSERT patternMatches('./BlacklistedKeywords.txt', Bar) = [
     `,
   {
     filesystem: new VirtualFilesystem({
-      "BlacklistedKeywords.txt": "badkeyword\n" + "/ba+d2/\n"
-    })
+      "BlacklistedKeywords.txt": "badkeyword\n" + "/ba+d2/\n",
+    }),
   }
 );

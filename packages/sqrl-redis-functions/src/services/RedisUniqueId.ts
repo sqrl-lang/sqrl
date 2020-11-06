@@ -80,7 +80,7 @@ export class RedisUniqueIdService implements UniqueIdService {
     );
     const [remainder] = await Promise.all([
       this.redis.increment(ctx, timeKey),
-      this.redis.expire(ctx, timeKey, 1)
+      this.redis.expire(ctx, timeKey, 1),
     ]);
     return new SimpleId(timeMs, remainder);
   }
@@ -104,7 +104,7 @@ export class RedisUniqueIdService implements UniqueIdService {
     const attemptNew = await this.create(ctx);
     const save = JSON.stringify([
       attemptNew.getTimeMs(),
-      attemptNew.getRemainder()
+      attemptNew.getRemainder(),
     ]);
     const rv = await this.redis.set(ctx, idKey, save, "NX");
     if (rv) {

@@ -6,5 +6,5 @@
 export const defaultStatementFeatures = [
   "SqrlAssertionStatements",
   "SqrlLogStatements",
-  "SqrlExecutionComplete"
+  "SqrlExecutionComplete",
 ];

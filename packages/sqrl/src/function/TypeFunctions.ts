@@ -43,7 +43,7 @@ export function registerTypeFunctions(instance: StdlibRegistry) {
     pure: true,
     allowSqrlObjects: true,
     argstring: "value",
-    docstring: "Returns the integer value of the given input value"
+    docstring: "Returns the integer value of the given input value",
   });
 
   instance.save(SqrlObject.isTruthy, {
@@ -52,7 +52,7 @@ export function registerTypeFunctions(instance: StdlibRegistry) {
     allowSqrlObjects: true,
     pure: true,
     argstring: "value",
-    docstring: "Returns the boolean value of the given input value"
+    docstring: "Returns the boolean value of the given input value",
   });
 
   instance.save(float, {
@@ -60,7 +60,7 @@ export function registerTypeFunctions(instance: StdlibRegistry) {
     pure: true,
     allowSqrlObjects: true,
     argstring: "value",
-    docstring: "Returns the floating point value of the given input value"
+    docstring: "Returns the floating point value of the given input value",
   });
 
   instance.save(
@@ -71,7 +71,7 @@ export function registerTypeFunctions(instance: StdlibRegistry) {
       allowSqrlObjects: true,
       pure: true,
       argstring: "value[, ...]",
-      docstring: "Returns a list of the provided values"
+      docstring: "Returns a list of the provided values",
     }
   );
 
@@ -92,7 +92,7 @@ export function registerTypeFunctions(instance: StdlibRegistry) {
       args: [AT.any],
       pure: true,
       argstring: "value",
-      docstring: "Creates a string representation of the given value"
+      docstring: "Creates a string representation of the given value",
     }
   );
 
@@ -104,7 +104,7 @@ export function registerTypeFunctions(instance: StdlibRegistry) {
       args: [AT.any],
       pure: true,
       argstring: "value",
-      docstring: "Returns the basic representation of the given value"
+      docstring: "Returns the basic representation of the given value",
     }
   );
 }

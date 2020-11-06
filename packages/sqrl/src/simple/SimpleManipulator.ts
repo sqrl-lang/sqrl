@@ -35,7 +35,7 @@ export class SimpleManipulator extends Manipulator {
   }
 
   async mutate(ctx): Promise<void> {
-    await Promise.all(this.callbacks.map(cb => cb(ctx)));
+    await Promise.all(this.callbacks.map((cb) => cb(ctx)));
   }
   private callbacks: ManipulatorCallback[] = [];
   addCallback(cb: ManipulatorCallback) {

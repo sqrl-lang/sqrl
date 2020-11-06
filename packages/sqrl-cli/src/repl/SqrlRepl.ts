@@ -20,7 +20,7 @@ import {
   Instance,
   isValidFeatureName,
   StatementAst,
-  Ast
+  Ast,
 } from "sqrl";
 import chalk from "chalk";
 import { SlotMissingCallbackError } from "sqrl/lib/execute/SqrlExecutionState";
@@ -61,7 +61,7 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
       returnFeature = input.trim();
     } else {
       const ast = parseRepl(input, {
-        customFunctions: this.instance._instance.customFunctions
+        customFunctions: this.instance._instance.customFunctions,
       });
       const statements = ast.statements;
       if (!statements.length) {
@@ -80,7 +80,7 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
           last = {
             type: "expr",
             location: last.location,
-            expr: last
+            expr: last,
           };
         }
       }
@@ -93,7 +93,7 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
         statements.push(
           SqrlAst.letStatement("SqrlReplOutput", expr, {
             description: null,
-            location
+            location,
           })
         );
         returnFeature = "SqrlReplOutput";
@@ -162,7 +162,7 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
       return readFileSync(this.historyPath, { encoding: "utf-8" })
         .split("\n")
         .reverse()
-        .filter(line => line.trim());
+        .filter((line) => line.trim());
     } else {
       return [];
     }
@@ -184,10 +184,10 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
       ignoreUndefined: true,
       eval: (cmd, context, filename, callback) => {
         this.eval(cmd, context, filename).then(
-          rv => callback(null, rv),
-          err => callback(err, null)
+          (rv) => callback(null, rv),
+          (err) => callback(err, null)
         );
-      }
+      },
     });
     this.server.on("exit", () => {
       this.server = null;
@@ -196,7 +196,7 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
 
     // Internal api to push history
     if ((this.server as any).history) {
-      this.readHistory().map(line => (this.server as any).history.push(line));
+      this.readHistory().map((line) => (this.server as any).history.push(line));
     }
   }
 

@@ -13,7 +13,7 @@ import {
   Instance,
   sqrlInvariant,
   Ast,
-  CustomCallAst
+  CustomCallAst,
 } from "sqrl";
 
 import { parse } from "./parser/sqrlRedisParser";
@@ -23,7 +23,7 @@ import {
   CountArguments,
   TrendingArguments,
   AliasedFeature,
-  Timespan
+  Timespan,
 } from "./parser/sqrlRedis";
 import { CountService } from "./Services";
 
@@ -34,7 +34,7 @@ const DAY_MS = HOUR_MS * 24;
 function dayDuration(days: number): Timespan {
   return {
     type: "duration",
-    durationMs: days * DAY_MS
+    durationMs: days * DAY_MS,
   };
 }
 
@@ -51,18 +51,18 @@ const PREVIOUS_CONFIG: {
   previousLastDay: {
     subtractLeft: dayDuration(2),
     subtractRight: dayDuration(1),
-    allowNegativeValue: false
+    allowNegativeValue: false,
   },
   previousLastWeek: {
     subtractLeft: dayDuration(14),
     subtractRight: dayDuration(7),
-    allowNegativeValue: false
+    allowNegativeValue: false,
   },
   // dayWeekAgo is internal only
   dayWeekAgo: {
     subtractLeft: dayDuration(8),
     subtractRight: dayDuration(7),
-    allowNegativeValue: false
+    allowNegativeValue: false,
   },
 
   // These x-over-y counters can be negative, but should still be null in
@@ -70,18 +70,18 @@ const PREVIOUS_CONFIG: {
   dayOverDay: {
     subtractLeft: dayDuration(1),
     subtractRight: { type: "previousLastDay" },
-    allowNegativeValue: true
+    allowNegativeValue: true,
   },
   dayOverWeek: {
     subtractLeft: dayDuration(1),
     subtractRight: { type: "dayWeekAgo" },
-    allowNegativeValue: true
+    allowNegativeValue: true,
   },
   weekOverWeek: {
     subtractLeft: dayDuration(7),
     subtractRight: { type: "previousLastWeek" },
-    allowNegativeValue: true
-  }
+    allowNegativeValue: true,
+  },
 };
 
 const TRENDING_CONFIG: {
@@ -92,16 +92,16 @@ const TRENDING_CONFIG: {
 } = {
   dayOverDay: {
     current: dayDuration(1),
-    currentAndPrevious: dayDuration(2)
+    currentAndPrevious: dayDuration(2),
   },
   dayOverFullWeek: {
     current: dayDuration(1),
-    currentAndPrevious: dayDuration(7)
+    currentAndPrevious: dayDuration(7),
   },
   weekOverWeek: {
     current: dayDuration(7),
-    currentAndPrevious: dayDuration(14)
-  }
+    currentAndPrevious: dayDuration(14),
+  },
 };
 
 export interface CountServiceBumpProps {
@@ -128,7 +128,7 @@ function interpretCountArgs(
   } = {
     features: args.features.map((feature: AliasedFeature) => feature.alias),
     whereFeatures,
-    whereTruth
+    whereTruth,
   };
 
   // Include sumFeature in the key if provided - otherwise we will
@@ -145,10 +145,10 @@ function interpretCountArgs(
     counterProps
   );
 
-  const featuresAst = args.features.map(aliasFeature =>
+  const featuresAst = args.features.map((aliasFeature) =>
     AstBuilder.feature(aliasFeature.feature.value)
   );
-  const featureString = featuresAst.map(ast => ast.value).join("~");
+  const featureString = featuresAst.map((ast) => ast.value).join("~");
   const keyedCounterName = `${entityId.getIdString()}~${featureString}`;
   const keysAst = state.setGlobal(
     sourceAst,
@@ -169,7 +169,7 @@ function interpretCountArgs(
     entityId,
     whereAst,
     whereFeatures,
-    whereTruth
+    whereTruth,
   };
 }
 
@@ -210,7 +210,7 @@ export function ensureCounterBump(
     whereAst,
     keyedCounterName,
     bumpByAst,
-    keysAst
+    keysAst,
   } = interpretResult;
 
   // [@todo: check] Only base the counter identity on features/where
@@ -224,7 +224,7 @@ export function ensureCounterBump(
     AstBuilder.call("_bumpCount", [
       AstBuilder.branch(whereAst, keysAst, AstBuilder.constant(null)),
       bumpByAst,
-      AstBuilder.constant(windowMs)
+      AstBuilder.constant(windowMs),
     ]),
     `bump(${keyedCounterName}:${windowMs})`
   );
@@ -245,7 +245,7 @@ export function registerCountFunctions(
       return bumpBy > 0 ? bumpBy : null;
     },
     {
-      args: [AT.feature]
+      args: [AT.feature],
     }
   );
 
@@ -255,14 +255,14 @@ export function registerCountFunctions(
       if (keys === null || by === null) {
         return null;
       }
-      state.manipulator.addCallback(async ctx => {
+      state.manipulator.addCallback(async (ctx) => {
         await service.bump(ctx, state.getClockMs(), keys, windowMs, by);
       });
     },
     {
       allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any.array, AT.any, AT.any]
+      args: [AT.state, AT.any.array, AT.any, AT.any],
     }
   );
 
@@ -276,7 +276,7 @@ export function registerCountFunctions(
     {
       allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any]
+      args: [AT.state, AT.any, AT.any],
     }
   );
 
@@ -320,7 +320,7 @@ export function registerCountFunctions(
             current: currentCount,
             previous: previousCount,
             delta: 2 * currentCount - currentAndPreviousCount,
-            magnitude
+            magnitude,
           });
         }
       });
@@ -328,14 +328,14 @@ export function registerCountFunctions(
     },
     {
       args: [AT.state, AT.any, AT.any, AT.any, AT.any],
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
     }
   );
 
   instance.registerCustom(
     function trending(state: CompileState, ast: CustomCallAst): Ast {
       const args: TrendingArguments = parse(ast.source, {
-        startRule: "TrendingArguments"
+        startRule: "TrendingArguments",
       });
       const { timespan } = args;
 
@@ -352,7 +352,7 @@ export function registerCountFunctions(
         features: args.features,
         sumFeature: null,
         timespan: trendingConfig.current,
-        where: args.where
+        where: args.where,
       };
 
       const currentCountAst = databaseCountTransform(
@@ -363,7 +363,7 @@ export function registerCountFunctions(
 
       const currentAndPreviousCountAst = databaseCountTransform(state, ast, {
         ...currentCountArgs,
-        timespan: trendingConfig.currentAndPrevious
+        timespan: trendingConfig.currentAndPrevious,
       });
 
       const { keysAst } = interpretCountArgs(state, ast, currentCountArgs);
@@ -372,7 +372,7 @@ export function registerCountFunctions(
         keysAst,
         currentCountAst,
         currentAndPreviousCountAst,
-        AstBuilder.constant(args.minEvents)
+        AstBuilder.constant(args.minEvents),
       ]);
     },
     {
@@ -382,7 +382,7 @@ export function registerCountFunctions(
       Returns values whose counts have gone up by an order of magnitude
 
       Timespans: DAY OVER DAY, DAY OVER WEEK, DAY OVER FULL WEEK
-      `)
+      `),
     }
   );
 
@@ -395,7 +395,7 @@ export function registerCountFunctions(
     const windowMs = getWindowMsForTimespan(args.timespan);
     return AstBuilder.call("_fetchCountsFromDb", [
       keysAst,
-      AstBuilder.constant(windowMs)
+      AstBuilder.constant(windowMs),
     ]);
   }
 
@@ -425,12 +425,12 @@ export function registerCountFunctions(
       const resultAst = AstBuilder.call("_subtract", [
         classifyCountTransform(state, ast, {
           ...args,
-          timespan: previousConfig.subtractLeft
+          timespan: previousConfig.subtractLeft,
         }),
         classifyCountTransform(state, ast, {
           ...args,
-          timespan: previousConfig.subtractRight
-        })
+          timespan: previousConfig.subtractRight,
+        }),
       ]);
 
       if (!previousConfig.allowNegativeValue) {
@@ -462,9 +462,9 @@ export function registerCountFunctions(
       AstBuilder.call("max", [
         AstBuilder.call("concat", [
           AstBuilder.constant([0]),
-          databaseCountTransform(state, ast, args)
-        ])
-      ])
+          databaseCountTransform(state, ast, args),
+        ]),
+      ]),
     ]);
     return state.setGlobal(
       ast,
@@ -476,7 +476,7 @@ export function registerCountFunctions(
   instance.registerCustom(
     function count(state: CompileState, ast: CustomCallAst): Ast {
       const args: CountArguments = parse(ast.source, {
-        startRule: "CountArguments"
+        startRule: "CountArguments",
       });
       return classifyCountTransform(state, ast, args);
     },
@@ -488,7 +488,7 @@ export function registerCountFunctions(
       Timespans: LAST [X] SECONDS/MINUTES/HOURS/DAYS/WEEKS
                  DAY OVER DAY, DAY OVER WEEK, WEEK OVER WEEK
                  TOTAL
-      `)
+      `),
     }
   );
 }

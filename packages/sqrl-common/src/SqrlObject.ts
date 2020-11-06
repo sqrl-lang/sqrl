@@ -41,7 +41,7 @@ export class SqrlObject {
   render(): RenderedSpan {
     return {
       class: ["value", "json"],
-      text: JSON.stringify(this.getData(), undefined, 2) + "\n"
+      text: JSON.stringify(this.getData(), undefined, 2) + "\n",
     };
   }
 
@@ -57,7 +57,7 @@ export class SqrlObject {
       return obj.length > 0;
     } else if (Array.isArray(obj)) {
       // Truthy arrays must contain at least one non null value.
-      return obj.some(v => v !== null);
+      return obj.some((v) => v !== null);
     } else if (obj instanceof Set) {
       // Sets are truthy if their size>0
       return obj.size > 0;
@@ -83,7 +83,7 @@ export class SqrlObject {
         return true;
       } else {
         let basic = true;
-        foreachObject(val, subValue => {
+        foreachObject(val, (subValue) => {
           basic = basic && SqrlObject.isBasic(subValue);
         });
         return basic;
@@ -98,7 +98,7 @@ export class SqrlObject {
     if (value === null) {
       return {
         type: null,
-        value: null
+        value: null,
       };
     } else {
       let type = "Any";
@@ -107,7 +107,7 @@ export class SqrlObject {
       }
       return {
         type,
-        value: SqrlObject.ensureBasic(value, expandData)
+        value: SqrlObject.ensureBasic(value, expandData),
       };
     }
   }
@@ -135,10 +135,10 @@ export class SqrlObject {
       // return val.toString('utf-8');
       return val.toString("hex");
     } else if (Array.isArray(val)) {
-      return val.map(v => SqrlObject.ensureBasic(v, expandData));
+      return val.map((v) => SqrlObject.ensureBasic(v, expandData));
     } else if (typeof val === "object" && !hasConstructor(val)) {
       // @TODO: We should disallow these later
-      return mapObject(val, v => SqrlObject.ensureBasic(v, expandData));
+      return mapObject(val, (v) => SqrlObject.ensureBasic(v, expandData));
     } else {
       return val;
     }

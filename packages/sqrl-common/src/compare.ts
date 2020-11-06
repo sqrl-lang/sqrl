@@ -21,7 +21,7 @@ export function cmpE(left, right) {
     const keys = Object.keys(left).sort();
     rv =
       cmpE(keys, Object.keys(right).sort()) &&
-      keys.every(key => {
+      keys.every((key) => {
         return cmpE(left[key], right[key]);
       });
   } else {
@@ -52,7 +52,7 @@ const functions = {
   cmpG,
   cmpGE,
   cmpL,
-  cmpLE
+  cmpLE,
 };
 
 const symbolToNameMap = {
@@ -61,9 +61,9 @@ const symbolToNameMap = {
   ">": "cmpG",
   ">=": "cmpGE",
   "<": "cmpL",
-  "<=": "cmpLE"
+  "<=": "cmpLE",
 };
-const symbolToFuncMap = mapObject(symbolToNameMap, name => functions[name]);
+const symbolToFuncMap = mapObject(symbolToNameMap, (name) => functions[name]);
 
 export const comparisonSymbols = new Set(Object.keys(symbolToNameMap));
 export function sqrlCompare(left: any, operator: string, right: any): boolean {

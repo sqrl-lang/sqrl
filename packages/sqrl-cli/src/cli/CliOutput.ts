@@ -13,7 +13,7 @@ import {
   FunctionInfo,
   Execution,
   CompiledExecutable,
-  createSimpleContext
+  createSimpleContext,
 } from "sqrl";
 import { invariant, SqrlObject, mapObject } from "sqrl-common";
 import * as csvStringify from "csv-stringify";
@@ -66,8 +66,8 @@ export class CliExprOutput extends CliCompileOutput {
       jsonStableStringify({
         slotExprs: compiledOutput
           .getSlotExprs()
-          .map(expr => serializeExpr(expr)),
-        slotNames: compiledOutput.getSlotNames()
+          .map((expr) => serializeExpr(expr)),
+        slotNames: compiledOutput.getSlotNames(),
       }) + "\n"
     );
   }
@@ -78,7 +78,7 @@ export class CliSlotJsOutput extends CliCompileOutput {
     console.log(
       jsonStableStringify({
         ...compiledOutput.getExecutableSpec(),
-        features: compiledOutput.getFeatureDocs()
+        features: compiledOutput.getFeatureDocs(),
       })
     );
   }
@@ -88,7 +88,7 @@ export class CliDotOutput extends CliCompileOutput {
   async compiled(compiledOutput: CompiledExecutable) {
     console.log(
       generateDotFile(createSimpleContext(), compiledOutput, [
-        "SqrlExecutionComplete"
+        "SqrlExecutionComplete",
       ])
     );
   }
@@ -155,7 +155,7 @@ export class CliCsvOutput extends CliActionOutput {
       }
     }
 
-    const row = this.features.map(name => {
+    const row = this.features.map((name) => {
       return SqrlObject.ensureBasic(loggedFeatures[name]);
     });
 
@@ -205,13 +205,13 @@ export class CliTableOutput extends CliActionOutput {
     }
 
     if (this.includeLogMessages) {
-      manipulator.logged.forEach(message => {
+      manipulator.logged.forEach((message) => {
         console.error(message);
       });
     }
 
-    this.rows.push(mapObject(loggedFeatures, val => val.getBasicValue()));
-    Object.keys(loggedFeatures).forEach(name => {
+    this.rows.push(mapObject(loggedFeatures, (val) => val.getBasicValue()));
+    Object.keys(loggedFeatures).forEach((name) => {
       this.headers.add(name);
     });
 
@@ -224,7 +224,7 @@ export class CliTableOutput extends CliActionOutput {
     // Put the selected features first, then any additional logged features sorted
     const headers = this.features.concat(
       Array.from(this.headers)
-        .filter(feature => !this.features.includes(feature))
+        .filter((feature) => !this.features.includes(feature))
         .sort()
     );
 

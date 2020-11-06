@@ -6,7 +6,7 @@
 import {
   runCompile,
   compileToExecution,
-  fetchExecutableFeature
+  fetchExecutableFeature,
 } from "../helpers/runCompile";
 import { buildTestInstance } from "../../src/testing/runSqrlTest";
 import { executableFromFilesystem, VirtualFilesystem } from "../../src";
@@ -47,15 +47,15 @@ test("supports where clauses", async () => {
   await expect(
     fetchExecutableFeature(executable, "A", {
       inputs: {
-        Select: "one"
-      }
+        Select: "one",
+      },
     })
   ).resolves.toEqual(1);
   await expect(
     fetchExecutableFeature(executable, "A", {
       inputs: {
-        Select: "two"
-      }
+        Select: "two",
+      },
     })
   ).resolves.toEqual(2);
 
@@ -102,7 +102,7 @@ test("supports where default values", async () => {
   `,
         "a.sqrl": `
   LET Something := "x" DEFAULT;
-  `
+  `,
       })
     )
   ).rejects.toThrow(
@@ -120,29 +120,29 @@ test("supports where default values", async () => {
   `,
       "default.sqrl": 'LET Color := "none" DEFAULT;',
       "blue.sqrl": 'LET Color := "cloudy blue";',
-      "red.sqrl": 'LET Color := "deep dark red";'
+      "red.sqrl": 'LET Color := "deep dark red";',
     })
   );
 
   await expect(
     fetchExecutableFeature(executable._wrapped, "Color", {
       inputs: {
-        Choose: "pink"
-      }
+        Choose: "pink",
+      },
     })
   ).resolves.toEqual("none");
   await expect(
     fetchExecutableFeature(executable._wrapped, "Color", {
       inputs: {
-        Choose: "red"
-      }
+        Choose: "red",
+      },
     })
   ).resolves.toEqual("deep dark red");
   await expect(
     fetchExecutableFeature(executable._wrapped, "Color", {
       inputs: {
-        Choose: "blue"
-      }
+        Choose: "blue",
+      },
     })
   ).resolves.toEqual("cloudy blue");
 });

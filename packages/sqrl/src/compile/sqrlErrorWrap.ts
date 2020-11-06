@@ -28,7 +28,7 @@ export function asyncSqrlErrorWrap<T>(
   options: SqrlParseErrorOptions,
   callback: () => Promise<T>
 ): Promise<T> {
-  return callback().catch(err => {
+  return callback().catch((err) => {
     if (err instanceof SqrlCompileError) {
       err.update(options);
     }

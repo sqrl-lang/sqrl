@@ -32,7 +32,7 @@ export function generateDotFile(
     includeCost: false,
     reverseEdges: false,
     fillColor: "",
-    includeSlots: false
+    includeSlots: false,
   }
 ) {
   const {
@@ -40,7 +40,7 @@ export function generateDotFile(
     includeSlots,
     reverseEdges,
     clusterRules,
-    clusterFeatures
+    clusterFeatures,
   } = options;
   const ignoreSet = new Set(ignore);
   const nodes: {
@@ -54,7 +54,7 @@ export function generateDotFile(
   const slotNames = compiled.getSlotNames();
   const slotLoad = compiled.getSlotLoad();
   slotNames.forEach((slotName, idx) => {
-    slotLoad[idx].forEach(loadIdx => {
+    slotLoad[idx].forEach((loadIdx) => {
       const feature = slotNames[loadIdx];
       forward[slotName].add(feature);
       reverse[feature].add(slotName);
@@ -65,7 +65,7 @@ export function generateDotFile(
       feature: false,
       rule: false,
       cost: 0,
-      recursiveCost: 0
+      recursiveCost: 0,
     };
   });
 
@@ -76,7 +76,7 @@ export function generateDotFile(
       feature: true,
       rule: false,
       cost: doc.cost,
-      recursiveCost: doc.recursiveCost
+      recursiveCost: doc.recursiveCost,
     };
   });
 
@@ -97,7 +97,7 @@ export function generateDotFile(
       return;
     }
     recurseSeen.add(name);
-    edges[name].forEach(feature => recurse(feature, edges, recurseSeen));
+    edges[name].forEach((feature) => recurse(feature, edges, recurseSeen));
   }
 
   const seen: Set<string> = new Set();
@@ -115,8 +115,8 @@ export function generateDotFile(
 
   const renderNodes = Array.from(render)
     .sort()
-    .filter(name => !ignoreSet.has(name))
-    .map(name => nodes[name]);
+    .filter((name) => !ignoreSet.has(name))
+    .map((name) => nodes[name]);
 
   /*
   const maxCost = Math.max(...renderNodes.map(node => node.recursiveCost));
@@ -131,7 +131,7 @@ export function generateDotFile(
     subgraph: string
   ) {
     let nodesDot = filteredNodes
-      .map(node => {
+      .map((node) => {
         let label = node.name;
 
         if (!includeSlots && !isValidFeatureName(node.name)) {
@@ -167,20 +167,20 @@ export function generateDotFile(
   }
 
   rv += nodesToDot(
-    renderNodes.filter(node => node.rule),
+    renderNodes.filter((node) => node.rule),
     "red",
     clusterRules ? "cluster_rules" : null
   );
   rv += nodesToDot(
-    renderNodes.filter(node => !node.rule),
+    renderNodes.filter((node) => !node.rule),
     "blue",
     clusterFeatures ? "cluster_features" : null
   );
 
-  renderNodes.forEach(node => {
+  renderNodes.forEach((node) => {
     Array.from(forward[node.name])
       .sort()
-      .forEach(feature => {
+      .forEach((feature) => {
         if (render.has(feature) && !ignoreSet.has(feature)) {
           if (reverseEdges) {
             rv += `${quoteName(node.name)} -> ${quoteName(feature)};\n`;

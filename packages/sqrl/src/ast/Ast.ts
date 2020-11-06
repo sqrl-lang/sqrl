@@ -78,7 +78,7 @@ jsonFields.rule = [
   "name",
   "reason",
   "sync",
-  "rolloutPercent"
+  "rolloutPercent",
 ];
 recurseFields.list = ["exprs"];
 jsonFields.list = [];
@@ -117,10 +117,10 @@ function mapFields(source: Ast, fields: string[], callback: (Ast) => Ast): Ast {
    */
   let changed = false;
   const out = {};
-  fields.forEach(field => {
+  fields.forEach((field) => {
     if (source.hasOwnProperty(field) && source[field] !== null) {
       if (Array.isArray(source[field])) {
-        out[field] = source[field].map(entry => {
+        out[field] = source[field].map((entry) => {
           const rv = mapAst(entry, callback);
           changed = changed || rv !== entry;
           return rv;
@@ -144,10 +144,10 @@ function walkFields(
   fields: string[],
   callback: (Ast) => void
 ): void {
-  fields.forEach(field => {
+  fields.forEach((field) => {
     if (source.hasOwnProperty(field) && source[field] !== null) {
       if (Array.isArray(source[field])) {
-        source[field].forEach(entry => {
+        source[field].forEach((entry) => {
           walkAst(entry, callback);
         });
       } else {
@@ -168,7 +168,7 @@ export function jsonAst(ast: Ast): Buffer {
   // Start with the type
   const rv = [Buffer.from(`{"type":"${ast.type}"`)];
 
-  recurseFields[ast.type].forEach(field => {
+  recurseFields[ast.type].forEach((field) => {
     if (ast.hasOwnProperty(field) && ast[field] !== null) {
       const value = ast[field];
       if (Array.isArray(value)) {
@@ -190,14 +190,14 @@ export function jsonAst(ast: Ast): Buffer {
     }
   });
 
-  jsonFields[ast.type].forEach(field => {
+  jsonFields[ast.type].forEach((field) => {
     if (ast.hasOwnProperty(field)) {
       rv.push(Buffer.from(`,"${field}":${stringify(ast[field])}`));
     }
   });
 
   // @TODO: In some future this could be removed, but for now (and safety!) it should be here
-  Object.keys(ast).forEach(key => {
+  Object.keys(ast).forEach((key) => {
     if (
       !skipFields.includes(key) &&
       !jsonFields[ast.type].includes(key) &&
@@ -243,7 +243,7 @@ export function walkAst(ast: Ast, walkCallback: (node: Ast) => void): void {
 
 export function astSlotNames(root: Ast): string[] {
   const slotNames: Set<string> = new Set();
-  walkAst(root, ast => {
+  walkAst(root, (ast) => {
     if (ast.type === "feature") {
       slotNames.add(ast.value);
     } else if (ast.type === "slot") {
@@ -254,5 +254,5 @@ export function astSlotNames(root: Ast): string[] {
 }
 
 export function extractAstFeatures(root: Ast): string[] {
-  return astSlotNames(root).filter(name => isValidFeatureName(name));
+  return astSlotNames(root).filter((name) => isValidFeatureName(name));
 }

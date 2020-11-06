@@ -19,7 +19,7 @@ import {
   jsonAst,
   NotAst,
   BinaryExprAst,
-  IncludeAst
+  IncludeAst,
 } from "./Ast";
 import { SqrlObject } from "../object/SqrlObject";
 import { AstBuilder } from "../helpers/AstBuilder";
@@ -40,7 +40,7 @@ const SqrlAst = {
       type: "binary_expr",
       left: SqrlAst.feature(feature),
       operator: "=",
-      right: SqrlAst.constant(val)
+      right: SqrlAst.constant(val),
     };
   },
 
@@ -58,14 +58,14 @@ const SqrlAst = {
       where: SqrlAst.constant(true),
       final: false,
       description: null,
-      isDefaultCase: false
+      isDefaultCase: false,
     };
     Object.assign(rv, options);
     return rv;
   },
 
   removeLocation(input: Ast): Ast {
-    return mapAst(input, ast => {
+    return mapAst(input, (ast) => {
       if (ast.hasOwnProperty("location")) {
         const rv: Ast = Object.assign({}, ast);
         delete rv.location;
@@ -103,24 +103,24 @@ const SqrlAst = {
   },
 
   and(...asts: Ast[]): Ast {
-    asts.forEach(ast => invariantAst(ast));
+    asts.forEach((ast) => invariantAst(ast));
     return AstBuilder.and(asts);
   },
 
   or(...asts: Ast[]): Ast {
-    asts.forEach(ast => invariantAst(ast));
+    asts.forEach((ast) => invariantAst(ast));
     return AstBuilder.or(asts);
   },
 
   not(ast: Ast): NotAst {
     return {
       type: "not",
-      expr: ast
+      expr: ast,
     };
   },
 
   areAllConstant(asts: Ast[]): asts is ConstantAst[] {
-    return asts.every(ast => ast.type === "constant");
+    return asts.every((ast) => ast.type === "constant");
   },
 
   isExactConstant(ast: Ast, value: any): boolean {
@@ -168,14 +168,14 @@ const SqrlAst = {
   registerCall(ast) {
     invariant(ast.type === "call", "must be call");
     return Object.assign({}, ast, {
-      type: "registeredCall"
+      type: "registeredCall",
     });
   },
 
   slotName(slotName: string): SlotAst {
     return {
       type: "slot",
-      slotName
+      slotName,
     };
   },
 
@@ -183,7 +183,7 @@ const SqrlAst = {
     return {
       type: "include",
       filename,
-      where: SqrlAst.constant(true)
+      where: SqrlAst.constant(true),
     };
   },
 
@@ -191,7 +191,7 @@ const SqrlAst = {
     invariant(slot instanceof SqrlSlot, "Expected SqrlSlot object");
     return {
       type: "slot",
-      slotName: slot.name
+      slotName: slot.name,
     };
   },
   feature(name: string): FeatureAst {
@@ -231,7 +231,7 @@ const SqrlAst = {
       table += filenames[i] + "  " + lines[i].trim();
     }
     return table;
-  }
+  },
 };
 
 export default SqrlAst;

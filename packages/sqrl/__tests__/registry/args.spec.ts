@@ -13,7 +13,7 @@ test("throw with out of order optional", async () => {
         return "world";
       },
       {
-        args
+        args,
       }
     );
   }

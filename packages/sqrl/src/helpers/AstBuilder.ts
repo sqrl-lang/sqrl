@@ -10,7 +10,7 @@ import {
   CallAst,
   IfAst,
   ListAst,
-  FeatureAst
+  FeatureAst,
 } from "../api/ast";
 import { ConstantSlot } from "../api/parse";
 import { invariant } from "sqrl-common";
@@ -22,14 +22,14 @@ export class AstBuilder {
   static constant(value: any): ConstantAst {
     return {
       type: "constant",
-      value
+      value,
     };
   }
 
   static slot(value: ConstantSlot): SlotAst {
     return {
       type: "slot",
-      slotName: value._wrapped.name
+      slotName: value._wrapped.name,
     };
   }
 
@@ -37,7 +37,7 @@ export class AstBuilder {
     return {
       type: "call",
       func: functionName,
-      args
+      args,
     };
   }
 
@@ -54,7 +54,7 @@ export class AstBuilder {
       type: "if",
       condition,
       trueBranch,
-      falseBranch
+      falseBranch,
     };
   }
 
@@ -84,7 +84,7 @@ export class AstBuilder {
                 type: "boolean_expr",
                 operator: "and",
                 left: ast,
-                right: result
+                right: result,
               };
       }
     }
@@ -113,7 +113,7 @@ export class AstBuilder {
                 type: "boolean_expr",
                 operator: "or",
                 left: ast,
-                right: result
+                right: result,
               };
       }
     }
@@ -123,7 +123,7 @@ export class AstBuilder {
   static list(asts: Ast[]): ListAst {
     return {
       type: "list",
-      exprs: asts
+      exprs: asts,
     };
   }
 }

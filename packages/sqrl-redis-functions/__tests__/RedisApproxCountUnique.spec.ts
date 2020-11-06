@@ -9,12 +9,12 @@ import {
   SqrlEntity,
   SqrlUniqueId,
   createSimpleContext,
-  Context
+  Context,
 } from "sqrl";
 import { redisTest } from "./helpers/redisTest";
 import { RedisApproxCountUniqueService } from "../src/services/RedisApproxCountUnique";
 
-redisTest("works", async redis => {
+redisTest("works", async (redis) => {
   const ctx = createSimpleContext();
   const prefix = "test" + Date.now();
 
@@ -36,7 +36,7 @@ redisTest("works", async redis => {
     at: Date.now(),
     key,
     sortedHashes: ["a", "b"],
-    windowMs
+    windowMs,
   });
 
   async function getCount(
@@ -49,7 +49,7 @@ redisTest("works", async redis => {
       keys: [key],
       at,
       addHashes,
-      windowMs
+      windowMs,
     });
     return values[0];
   }
@@ -60,7 +60,7 @@ redisTest("works", async redis => {
 
   count = await getCount(ctx, await getKeyForIp("5.6.7.8"), Date.now() + 10, [
     "b",
-    "c"
+    "c",
   ]);
 
   expect(count).toEqual(2);
@@ -75,7 +75,7 @@ redisTest("works", async redis => {
       at: currentTime,
       key: newKey,
       sortedHashes: hashes,
-      windowMs
+      windowMs,
     });
 
     const count = await getCount(ctx, newKey, currentTime, []);

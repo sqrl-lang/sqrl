@@ -15,7 +15,7 @@ import { buildDocDefinition, CostProps } from "./SqrlFeatureSlot";
 export const REASON_FEATURE_REGEX = /\$\{([A-Za-z0-9_.]+)\}/g;
 
 function getFeaturesFromReason(reason: string): string[] {
-  return mapRegExpMatches(REASON_FEATURE_REGEX, reason, result => result[1]);
+  return mapRegExpMatches(REASON_FEATURE_REGEX, reason, (result) => result[1]);
 }
 
 @registerSlotClass
@@ -46,7 +46,7 @@ export default class SqrlRuleSlot extends SqrlSlot {
       definition: this.definition,
       ast: this.ast,
       where: this.where,
-      ruleSpec: this.ruleSpec
+      ruleSpec: this.ruleSpec,
     };
   }
 
@@ -100,7 +100,7 @@ export default class SqrlRuleSlot extends SqrlSlot {
     const spec: RuleSpec = {
       name: ast.name,
       reason: ast.reason,
-      features: getFeaturesFromReason(ast.reason)
+      features: getFeaturesFromReason(ast.reason),
     };
 
     this.ruleSpec = spec;

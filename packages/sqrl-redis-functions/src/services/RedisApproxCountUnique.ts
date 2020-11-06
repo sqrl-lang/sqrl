@@ -9,7 +9,7 @@ import {
   getBucketTimeForTimeMs,
   getBucketKey,
   getCurrentBucketExpirySeconds,
-  getAllBucketKeys
+  getAllBucketKeys,
 } from "./BucketedKeys";
 import { TOTAL_COUNT_EXPIRY_SEC } from "./RedisCountService";
 import { CountUniqueService } from "../Services";
@@ -28,7 +28,7 @@ export class RedisApproxCountUniqueService implements CountUniqueService {
     );
     await Promise.all([
       this.redis.pfadd(ctx, redisKey, sortedHashes),
-      this.redis.expire(ctx, redisKey, TOTAL_COUNT_EXPIRY_SEC)
+      this.redis.expire(ctx, redisKey, TOTAL_COUNT_EXPIRY_SEC),
     ]);
   }
   async bump(
@@ -113,8 +113,8 @@ export class RedisApproxCountUniqueService implements CountUniqueService {
       // @todo: This would be better using a redis pipeline but would require a refactor.
       Promise.all([
         this.redis.pfadd(ctx, extraHashesKey, addHashes),
-        this.redis.expire(ctx, extraHashesKey, 1)
-      ]).catch(err => {
+        this.redis.expire(ctx, extraHashesKey, 1),
+      ]).catch((err) => {
         ctx.warn(
           {},
           "Error on countUnique() temporary hash insertion: " + err.toString()
@@ -123,7 +123,7 @@ export class RedisApproxCountUniqueService implements CountUniqueService {
     }
 
     return Promise.all(
-      keys.map(async key => {
+      keys.map(async (key) => {
         if (windowMs === null) {
           return this.fetchTotal(ctx, key, at, windowMs, extraHashesKey);
         }

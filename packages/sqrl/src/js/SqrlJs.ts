@@ -11,7 +11,7 @@ import {
   ListComprehensionExpr,
   ConstantExpr,
   IfExpr,
-  CallExpr
+  CallExpr,
 } from "../expr/Expr";
 import { SqrlInstance } from "../function/Instance";
 
@@ -86,11 +86,9 @@ class JsState {
     return (
       "function(){" +
       this.constants
-        .map(constant => {
+        .map((constant) => {
           if (constant.usedPromise) {
-            return `const p${constant.index}=bluebird.resolve(${
-              constant.json
-            });`;
+            return `const p${constant.index}=bluebird.resolve(${constant.json});`;
           } else {
             return "";
           }
@@ -149,11 +147,11 @@ class JsState {
 }
 
 function loadToJs(expr: Expr, state: JsState) {
-  const loadAsSlots = expr.load.map(slot => ({
+  const loadAsSlots = expr.load.map((slot) => ({
     slot,
-    type: "value"
+    type: "value",
   }));
-  const slots = expr.load.map(slot => slot.getIndex());
+  const slots = expr.load.map((slot) => slot.getIndex());
   const loadJson = JSON.stringify(slots);
 
   if (expr.exprs.length === 1) {
@@ -174,7 +172,7 @@ function loadToJs(expr: Expr, state: JsState) {
       if (
         deepEqual(subexpr, {
           exprs: loadAsSlots,
-          func: subexpr.func
+          func: subexpr.func,
         })
       ) {
         if (expr.load.length === 1) {
@@ -192,7 +190,7 @@ function loadToJs(expr: Expr, state: JsState) {
   // @TODO: At some point we should handle more than one expression here
   invariant(expr.exprs.length === 1, "Expected single expression");
 
-  const [subexpr] = expr.exprs.map(e => exprToJs(e, state));
+  const [subexpr] = expr.exprs.map((e) => exprToJs(e, state));
   const fnCallJs = state.pushExprJs(subexpr).toCallableString();
   return new PromiseJsExpr(`this.load(${loadJson}).then(${fnCallJs})`);
 }
@@ -203,7 +201,7 @@ function constantToJs(expr: ConstantExpr, state: JsState) {
 
 function ifToJs(expr: IfExpr, state: JsState) {
   invariant(expr.exprs.length === 3, "Incorrect subexpr count");
-  const subexprs = expr.exprs.map(e => exprToJs(e, state));
+  const subexprs = expr.exprs.map((e) => exprToJs(e, state));
 
   const condition = subexprs[0];
   let trueBranch = subexprs[1];
@@ -229,14 +227,14 @@ function ifToJs(expr: IfExpr, state: JsState) {
 
 function callToJs(expr: CallExpr, state: JsState): JsExpr {
   const funcProps = state.instance.getProps(expr.func);
-  const exprJs = expr.exprs.map(item => exprToJs(item, state));
+  const exprJs = expr.exprs.map((item) => exprToJs(item, state));
 
   if (funcProps.callbackArgs === true) {
     invariant(
       exprJs.length >= 1 && exprJs[0] === "this",
       "Expected function taking promiseArgs to receive state as first argument"
     );
-    const exprCallbackJs = exprJs.slice(1).map(expr => {
+    const exprCallbackJs = exprJs.slice(1).map((expr) => {
       return `()=>${PromiseJsExpr.ensure(expr)}`;
     });
     return new PromiseJsExpr(
@@ -252,13 +250,13 @@ function callToJs(expr: CallExpr, state: JsState): JsExpr {
       exprJs.length >= 1 && exprJs[0] === "this",
       "Expected function taking promiseArgs to receive state as first argument"
     );
-    const promiseArgs = exprJs.slice(1).map(e => PromiseJsExpr.ensure(e));
+    const promiseArgs = exprJs.slice(1).map((e) => PromiseJsExpr.ensure(e));
     return new PromiseJsExpr(
       `functions.${expr.func}(this,${promiseArgs.join(",")})`
     );
   }
 
-  const hasPromise = exprJs.some(expr => expr instanceof PromiseJsExpr);
+  const hasPromise = exprJs.some((expr) => expr instanceof PromiseJsExpr);
   if (hasPromise) {
     if (exprJs.length === 1) {
       return new PromiseJsExpr(
@@ -277,7 +275,7 @@ function callToJs(expr: CallExpr, state: JsState): JsExpr {
 }
 
 function listToJs(expr: Expr, state: JsState): JsExpr {
-  const exprJs = expr.exprs.map(item => exprToJs(item, state));
+  const exprJs = expr.exprs.map((item) => exprToJs(item, state));
   const hasPromise = exprJs.some(
     (expr: JsExpr) => expr instanceof PromiseJsExpr
   );
@@ -292,7 +290,7 @@ function listComprehensionToJs(
   expr: ListComprehensionExpr,
   state: JsState
 ): JsExpr {
-  const [input, output, where] = expr.exprs.map(i => exprToJs(i, state));
+  const [input, output, where] = expr.exprs.map((i) => exprToJs(i, state));
   const [outputFn, whereFn] = state.withIterator(() => {
     return [state.pushExprJs(output), state.pushExprJs(where)];
   });
@@ -311,7 +309,7 @@ function listComprehensionToJs(
     "this",
     JSON.stringify(expr.iterator),
     outputFn.toCallableString(),
-    whereString
+    whereString,
   ].join(",");
   if (input instanceof PromiseJsExpr) {
     return new PromiseJsExpr(
@@ -352,5 +350,5 @@ export const SqrlJs = {
     const state = new JsState(instance);
     const js = exprToJs(expr, state);
     return state.buildExpr(js);
-  }
+  },
 };

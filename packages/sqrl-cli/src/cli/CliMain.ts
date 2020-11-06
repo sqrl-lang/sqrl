@@ -26,7 +26,7 @@ import {
   FunctionServices,
   LogService,
   LocalFilesystem,
-  Filesystem
+  Filesystem,
 } from "sqrl";
 import SqrlAst from "sqrl/lib/ast/SqrlAst";
 import { StatementAst } from "sqrl/lib/ast/Ast";
@@ -45,7 +45,7 @@ import {
   CliExprOutput,
   CliSlotJsOutput,
   CliTableOutput,
-  CliDotOutput
+  CliDotOutput,
 } from "./CliOutput";
 import { getGlobalLogger } from "sqrl/lib/api/log";
 import { SimpleDatabaseSet } from "sqrl/lib/platform/DatabaseSet";
@@ -72,7 +72,7 @@ export function getCliOutput(
   const outputOptions: CliOutputOptions = {
     stdout,
     features: args.features,
-    onlyBlocked: args.onlyBlocked
+    onlyBlocked: args.onlyBlocked,
   };
   if (args.output === "pretty") {
     if (args.command === "compile") {
@@ -137,7 +137,7 @@ async function createInstance(
   const config: Config = {
     ...getDefaultConfig(),
     "state.allow-in-memory": true,
-    ...(args.config ? await readJsonFile(args.config) : {})
+    ...(args.config ? await readJsonFile(args.config) : {}),
   };
 
   // Allow the --redis argument to override the config
@@ -147,7 +147,7 @@ async function createInstance(
 
   const services: FunctionServices = {
     assert: new CliAssertService(),
-    log: new CliLogService()
+    log: new CliLogService(),
   };
   const instance = SQRL.createInstance({ config, services });
 
@@ -159,9 +159,9 @@ async function createInstance(
           "sqrl-text-functions",
           "sqrl-load-functions",
           "sqrl-jsonpath",
-          "sqrl-cli-functions"
+          "sqrl-cli-functions",
         ]),
-    ...args.requires
+    ...args.requires,
   ];
 
   for (const name of requires) {
@@ -212,7 +212,7 @@ export async function cliMain(
 
     const test = new SqrlTest(instance._instance, {
       filesystem,
-      manipulatorFactory: () => new CliManipulator()
+      manipulatorFactory: () => new CliManipulator(),
     });
 
     // @todo: If we're using stateful storage this might cause conflicts
@@ -265,13 +265,13 @@ export async function cliMain(
         return {
           executable: executableFromSpec(instance, spec),
           spec: null,
-          compiled: null
+          compiled: null,
         };
       } else {
         return compileFromFilesystem(instance, filesystem, {
           context: ctx,
           mainFile: path.basename(filename),
-          setInputs: inputs
+          setInputs: inputs,
         });
       }
     }
@@ -291,7 +291,7 @@ export async function cliMain(
           await compilingLock.take();
           try {
             await run.triggerRecompile(() => {
-              return loadSource().then(rv => rv.executable);
+              return loadSource().then((rv) => rv.executable);
             });
           } finally {
             compilingLock.release();
@@ -308,7 +308,7 @@ export async function cliMain(
         for (const feature of executable.getRequiredFeatures()) {
           if (!inputs.hasOwnProperty(feature) && streamFeature !== feature) {
             throw new CliError("Required input was not provided: " + feature, {
-              suggestion: `Try add: -s ${feature}=<value>`
+              suggestion: `Try add: -s ${feature}=<value>`,
             });
           }
         }
@@ -356,7 +356,7 @@ export async function cliMain(
           inputs,
           concurrency,
           streamFeature,
-          features: args.features
+          features: args.features,
         });
       } else {
         await run.action(ctx, inputs, args.features);
@@ -379,16 +379,16 @@ export async function cliMain(
       const test = new SqrlTest(instance._instance, {
         filesystem,
         manipulatorFactory: () => new CliManipulator(),
-        inputs
+        inputs,
       });
       await test.runStatements(ctx, statements);
       const repl = new SqrlRepl(instance, test, {
         traceFactory: () => ctx,
         stdin: options.stdin,
-        stdout: options.stdout
+        stdout: options.stdout,
       });
       repl.start();
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         repl.on("exit", resolve);
       });
     } else if (args.command === "serve") {
@@ -398,7 +398,7 @@ export async function cliMain(
 
       await new Promise((resolve, reject) => {
         server.on("listening", resolve);
-        server.on("error", err => reject(err));
+        server.on("error", (err) => reject(err));
       });
 
       try {

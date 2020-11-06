@@ -11,7 +11,7 @@ import {
   RuleAst,
   extractAstFeatures,
   SwitchAst,
-  jsonAst
+  jsonAst,
 } from "../ast/Ast";
 import astIntersects from "../ast/astIntersects";
 import SqrlAst from "../ast/SqrlAst";
@@ -39,7 +39,7 @@ export function buildDocDefinition(
     description: ast.description,
     source: location.source.slice(location.start.offset, location.end.offset),
     includedWhere: definitionIncludedWhere(globalWhere),
-    features
+    features,
   };
 }
 
@@ -89,7 +89,7 @@ export default class SqrlFeatureSlot extends SqrlSlot {
       definitions: this.definitions,
       final: this.final,
       ast: this.ast,
-      where: this.where
+      where: this.where,
     };
   }
 
@@ -130,7 +130,7 @@ export default class SqrlFeatureSlot extends SqrlSlot {
     let msg = `Multiple definitions of ${this.name}`;
 
     const otherLocations = previousDefinitions
-      .map(ast => ast.location)
+      .map((ast) => ast.location)
       .filter(Boolean);
     if (otherLocations.length) {
       msg += "\n" + SqrlAst.srcLines(otherLocations);
@@ -217,17 +217,19 @@ export default class SqrlFeatureSlot extends SqrlSlot {
         ast,
         expr,
         truthTableWhere: combinedAst,
-        where: whereAst
+        where: whereAst,
       };
 
       cases.push(thisCase);
 
       // make sure we don't add conflicting where clauses
-      const hasIntersection = astIntersects(cases.map(c => c.truthTableWhere));
+      const hasIntersection = astIntersects(
+        cases.map((c) => c.truthTableWhere)
+      );
       if (hasIntersection) {
         this.throwMultipleDefinitionsError(
           ast,
-          cases.slice(0, -1).map(c => c.ast)
+          cases.slice(0, -1).map((c) => c.ast)
         );
       }
 

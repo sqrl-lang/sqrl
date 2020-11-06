@@ -7,10 +7,10 @@ import { Context, SqrlKey } from "sqrl";
 import { CountUniqueService } from "../Services";
 import { RedisInterface, createRedisKey } from "./RedisInterface";
 
-type CountUniqueData = ({
+type CountUniqueData = {
   timestamp: number;
   value: string;
-})[];
+}[];
 
 export class RedisCountUniqueService implements CountUniqueService {
   constructor(private redis: RedisInterface, private prefix: string) {
@@ -26,10 +26,10 @@ export class RedisCountUniqueService implements CountUniqueService {
     }
   ) {
     const { at, key, sortedHashes } = props;
-    const push = sortedHashes.map(hash => {
+    const push = sortedHashes.map((hash) => {
       return JSON.stringify({
         timestamp: at,
-        value: hash
+        value: hash,
       });
     });
 
@@ -45,7 +45,7 @@ export class RedisCountUniqueService implements CountUniqueService {
       ctx,
       createRedisKey(ctx.requireDatabaseSet(), this.prefix, key.getBuffer())
     );
-    return data.map(entry => JSON.parse(entry));
+    return data.map((entry) => JSON.parse(entry));
   }
 
   private async getHashes(ctx: Context, key: SqrlKey, windowStartMs: number) {
@@ -70,7 +70,7 @@ export class RedisCountUniqueService implements CountUniqueService {
     }
     const rv: Set<string> = new Set();
     await Promise.all(
-      keys.map(async key => {
+      keys.map(async (key) => {
         const hashes = await this.getHashes(ctx, key, windowStartMs);
         for (const hash of hashes) {
           rv.add(hash);
@@ -92,10 +92,10 @@ export class RedisCountUniqueService implements CountUniqueService {
     const { keys, at, windowMs, addHashes } = props;
     const windowStartMs = at - windowMs;
     return Promise.all(
-      keys.map(async key => {
+      keys.map(async (key) => {
         const hashes = await this.fetchHashes(ctx, {
           keys: [key],
-          windowStartMs
+          windowStartMs,
         });
         return new Set([...hashes, ...addHashes]).size;
       })

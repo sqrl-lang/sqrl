@@ -11,7 +11,7 @@ import {
   CompileState,
   Execution,
   Instance,
-  AstBuilder
+  AstBuilder,
 } from "sqrl";
 
 export interface PatternService {
@@ -28,14 +28,14 @@ export function registerPatternFunctions(
       const nameAst = ast.args[0] as ConstantAst;
       return AstBuilder.call("_patternMatches", [
         AstBuilder.call("loadLines", [nameAst]),
-        ast.args[1]
+        ast.args[1],
       ]);
     },
     {
       args: [AT.constant.string, AT.any],
       argstring: "filename, text",
       docstring:
-        "Match a list of patterns in the given file against the provided text"
+        "Match a list of patterns in the given file against the provided text",
     }
   );
 
@@ -58,7 +58,7 @@ export function registerPatternFunctions(
       for (const pattern of patterns) {
         for (const candidate of candidates) {
           promises.push(
-            service.matches(pattern, candidate).then(matches => {
+            service.matches(pattern, candidate).then((matches) => {
               rv.push(...matches);
             })
           );
@@ -71,7 +71,7 @@ export function registerPatternFunctions(
     {
       allowNull: true,
       allowSqrlObjects: true,
-      args: [AT.state, AT.any, AT.any]
+      args: [AT.state, AT.any, AT.any],
     }
   );
 }

@@ -11,5 +11,5 @@ export async function runRepl(args: string[], code: string) {
     code.trim().replace(/^ */g, "") + "\n"
   );
 
-  return stdout.split(/\n?sqrl> /gm).filter(v => v);
+  return stdout.split(/\n?sqrl> /gm).filter((v) => v);
 }

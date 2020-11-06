@@ -15,7 +15,7 @@ import { RedisLabelService } from "./services/RedisLabelService";
 import {
   RedisUniqueIdService,
   UniqueIdService,
-  GetTimeMs
+  GetTimeMs,
 } from "./services/RedisUniqueId";
 import { RedisRateLimit } from "./services/RedisRateLimit";
 import { Config } from "sqrl";
@@ -68,6 +68,6 @@ export class RedisServices implements Services {
   }
 
   close() {
-    this.shutdown.forEach(svc => svc.close());
+    this.shutdown.forEach((svc) => svc.close());
   }
 }

@@ -14,7 +14,7 @@ import { ensureArray } from "sqrl-common";
 import {
   StateArgument,
   WhenCauseArgument,
-  ArgumentCheck
+  ArgumentCheck,
 } from "./ArgumentCheck";
 
 // @TODO: The types in this file are pretty tough
@@ -80,13 +80,13 @@ const runtimeCheckers = {
   object: ensureRuntimeTypeOf("object"),
   sqrlEntity: ensureRuntimeInstanceOf(SqrlEntity),
   sqrlEntityOrEntities: ensureRuntimeInstanceOf(SqrlEntity, true),
-  string: ensureRuntimeTypeOf("string")
+  string: ensureRuntimeTypeOf("string"),
 };
 
 const compileCheckers = {
   any: typeChecker(() => true),
   constant: {
-    array: ensureConstant("array", ast => Array.isArray(ast.value)),
+    array: ensureConstant("array", (ast) => Array.isArray(ast.value)),
     boolean: constantType("boolean"),
     number: constantNumber(),
     string: constantType("string"),
@@ -99,7 +99,7 @@ const compileCheckers = {
 
     // @TODO: constant.object only ensures that the object keys are constant,
     // not that the entire object is constant.
-    object: typeChecker(ensureObjectWithConstantKeys)
+    object: typeChecker(ensureObjectWithConstantKeys),
   },
   feature: ensureAstType("feature"),
   list: ensureAstType("list"),
@@ -108,7 +108,7 @@ const compileCheckers = {
   custom: typeChecker,
 
   compileTypesInvariant,
-  validateRuntime
+  validateRuntime,
 };
 
 function ensure(message, checker) {
@@ -133,7 +133,7 @@ function ensureRuntimeTypeOf(expected?) {
 }
 
 function ensureRuntimeInstanceOf(expected, allowArray: boolean = false) {
-  return actual => {
+  return (actual) => {
     if (!allowArray && Array.isArray(actual)) {
       return `Expected instance of ${expected.name}, saw array`;
     }
@@ -169,7 +169,7 @@ function constantNumber() {
       ensureConstant(
         `number < ${expected}`,
         (ast?) => typeof ast.value === "number" && ast.value < expected
-      )
+      ),
   });
 }
 
@@ -209,7 +209,7 @@ function compileTypesInvariant(fnAst: CallAst, types: ArgumentCheck[]) {
 
   const providedArgs = args.length;
   const repeatedLast = types.length && types[types.length - 1].isRepeated;
-  const optArgs = types.filter(t => t.isOptional).length;
+  const optArgs = types.filter((t) => t.isOptional).length;
   const maxArgs = repeatedLast ? providedArgs : types.length;
   const minArgs = types.length - optArgs;
 
@@ -251,8 +251,8 @@ function validateRuntime(fnArgs: any[], types: ArgumentCheck[]) {
           index: i,
           value: fnArgs[i],
           type: checker,
-          message: error
-        }
+          message: error,
+        },
       ];
     }
   }
@@ -268,13 +268,13 @@ function createRuntimeCheckers(
     {
       compileTimeCheck,
       isOptional,
-      isRepeated
+      isRepeated,
     },
     mapToObj(Object.keys(runtimeCheckers), (k?) => ({
       compileTimeCheck,
       runtimeChecker: runtimeCheckers[k],
       isOptional,
-      isRepeated
+      isRepeated,
     }))
   );
 }

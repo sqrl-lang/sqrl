@@ -11,7 +11,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
   const safeMathOpts = {
     args: [AT.any, AT.any],
     pure: true,
-    safe: true
+    safe: true,
   };
 
   instance.save(
@@ -22,7 +22,8 @@ export function registerMathFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any.number],
       argstring: "number",
-      docstring: "Returns the absolute (non-negative) value of the given number"
+      docstring:
+        "Returns the absolute (non-negative) value of the given number",
     }
   );
 
@@ -34,7 +35,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any.number],
       argstring: "number",
-      docstring: "Returns the rounded value of the given number"
+      docstring: "Returns the rounded value of the given number",
     }
   );
 
@@ -43,8 +44,8 @@ export function registerMathFunctions(instance: StdlibRegistry) {
    * there are any non-numbers
    */
   function filterNumberList(values: any[]): number[] {
-    values = values.filter(v => v !== null);
-    if (values.some(v => typeof v !== "number" || isNaN(v))) {
+    values = values.filter((v) => v !== null);
+    if (values.some((v) => typeof v !== "number" || isNaN(v))) {
       return [];
     } else {
       return values;
@@ -63,7 +64,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
       allowNull: true,
       args: [AT.any.array],
       argstring: "number list",
-      docstring: "Returns the maximum value in the list provided"
+      docstring: "Returns the maximum value in the list provided",
     }
   );
 
@@ -79,7 +80,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
       allowNull: true,
       args: [AT.any.array],
       argstring: "number list",
-      docstring: "Returns the minimum value in the list provided"
+      docstring: "Returns the minimum value in the list provided",
     }
   );
 
@@ -95,7 +96,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
       allowNull: true,
       args: [AT.any.array],
       argstring: "number list",
-      docstring: "Returns the sum of the values in the list provided"
+      docstring: "Returns the sum of the values in the list provided",
     }
   );
 
@@ -110,7 +111,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any.number],
       argstring: "number",
-      docstring: "Returns the base 10 logarithm of the given number"
+      docstring: "Returns the base 10 logarithm of the given number",
     }
   );
 
@@ -124,7 +125,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
     {
       ...safeMathOpts,
       argstring: "number, number",
-      docstring: "Returns the sum of the given numbers"
+      docstring: "Returns the sum of the given numbers",
     }
   );
   instance.save(
@@ -137,7 +138,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
     {
       ...safeMathOpts,
       argstring: "number, number",
-      docstring: "Returns the difference of the given numbers"
+      docstring: "Returns the difference of the given numbers",
     }
   );
   instance.save(
@@ -150,7 +151,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
     {
       ...safeMathOpts,
       argstring: "number, number",
-      docstring: "Returns the product of the given numbers"
+      docstring: "Returns the product of the given numbers",
     }
   );
 
@@ -168,7 +169,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
       args: [AT.state, AT.any.number, AT.any.number],
       pure: false,
       argstring: "dividend, divisor",
-      docstring: "Return the remainder of the division"
+      docstring: "Return the remainder of the division",
     }
   );
 
@@ -189,7 +190,7 @@ export function registerMathFunctions(instance: StdlibRegistry) {
       pure: false,
 
       argstring: "dividend, divisor",
-      docstring: "Return the floating point result of the division"
+      docstring: "Return the floating point result of the division",
     }
   );
 }

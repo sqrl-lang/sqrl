@@ -7,7 +7,7 @@ import {
   runSqrlTest as runLibSqrl,
   buildTestInstance,
   Instance,
-  Logger
+  Logger,
 } from "sqrl";
 import { register } from "../../src";
 
@@ -18,8 +18,8 @@ export async function buildRedisTestInstance(
 ) {
   const instance = await buildTestInstance({
     config: {
-      "testing.fixed-date": options.fixedDate
-    }
+      "testing.fixed-date": options.fixedDate,
+    },
   });
   register(instance);
   return instance;
@@ -37,8 +37,8 @@ export async function runSqrl(
     instance:
       options.instance ||
       (await buildRedisTestInstance({
-        fixedDate: options.fixedDate
+        fixedDate: options.fixedDate,
       })),
-    logger: options.logger
+    logger: options.logger,
   });
 }

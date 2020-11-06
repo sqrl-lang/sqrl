@@ -26,7 +26,7 @@ export function parse(
       options.location ||
       Object.assign({}, location, {
         filename: options.filename || null,
-        source: queryText
+        source: queryText,
       })
     );
   };
@@ -35,7 +35,7 @@ export function parse(
     return sqrl.parse(queryText, {
       customFunctions,
       mergeLocation,
-      startRule
+      startRule,
     });
   } catch (e) {
     if (!(e instanceof sqrl.SyntaxError)) {
@@ -75,12 +75,12 @@ export function parseSqrlFiles(files: {
 }): { [filename: string]: ScriptAst } {
   return sqrlErrorWrap(
     {
-      files
+      files,
     },
     () => {
       const resultAst = mapObject(files, (source: string, filename: string) => {
         return parseSqrl(source, {
-          filename
+          filename,
         });
       });
 

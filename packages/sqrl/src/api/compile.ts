@@ -76,7 +76,7 @@ export async function compileFromStatements(
     instance: instance._instance,
     setInputs: options.setInputs || {},
     filesystem: options.filesystem,
-    usedFiles: options.usedFiles || []
+    usedFiles: options.usedFiles || [],
   });
   compileParserStateAst(parserState);
   const compiledOutput = new SqrlCompiledOutput(parserState);
@@ -84,7 +84,7 @@ export async function compileFromStatements(
   return {
     compiled: new CompiledExecutable(compiledOutput),
     executable: executableFromSpec(instance, spec),
-    spec
+    spec,
   };
 }
 
@@ -117,15 +117,15 @@ export async function compileFromString(
   if (options.librarySource) {
     libraryStatements = [
       ...statementsFromString(options.librarySource, {
-        customFunctions: instance._instance.customFunctions
-      })
+        customFunctions: instance._instance.customFunctions,
+      }),
     ];
   }
   const statements: StatementAst[] = [
     ...libraryStatements,
     ...statementsFromString(source, {
-      customFunctions: instance._instance.customFunctions
-    })
+      customFunctions: instance._instance.customFunctions,
+    }),
   ];
   return compileFromStatements(instance, statements, options);
 }
@@ -157,12 +157,12 @@ export async function compileFromFilesystem(
   const sqrlBuffer = filesystem.tryRead(mainFile);
   invariant(sqrlBuffer, "Expected to find main.sqrl in test fs");
   const statements = statementsFromString(sqrlBuffer.toString("utf-8"), {
-    customFunctions: instance._instance.customFunctions
+    customFunctions: instance._instance.customFunctions,
   });
   return compileFromStatements(instance, statements, {
     filesystem,
     usedFiles: [mainFile],
-    ...options
+    ...options,
   });
 }
 

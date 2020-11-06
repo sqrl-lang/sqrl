@@ -45,7 +45,7 @@ export function run(
       .then(() => {
         exitCode = 0;
       })
-      .catch(err => {
+      .catch((err) => {
         output.error(err);
       }),
     () => {

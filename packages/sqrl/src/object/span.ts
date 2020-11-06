@@ -13,12 +13,12 @@ export function mkSpan(
   if (typeof contents === "string") {
     return {
       class: classes,
-      text: contents
+      text: contents,
     };
   } else {
     return {
       class: classes,
-      children: contents
+      children: contents,
     };
   }
 }
@@ -27,12 +27,14 @@ function indentRecurse(span: RenderedSpan, indentString: string) {
   if (span.children) {
     return {
       ...span,
-      children: span.children.map(child => indentRecurse(child, indentString))
+      children: span.children.map((child) =>
+        indentRecurse(child, indentString)
+      ),
     };
   } else {
     return {
       ...span,
-      text: span.text.replace(/\n/g, `\n${indentString}`)
+      text: span.text.replace(/\n/g, `\n${indentString}`),
     };
   }
 }
@@ -41,6 +43,6 @@ export function indentSpan(span: RenderedSpan, spaces: number): RenderedSpan {
   const indentString = " ".repeat(spaces);
   return mkSpan("", [
     mkSpan("", indentString),
-    indentRecurse(span, indentString)
+    indentRecurse(span, indentString),
   ]);
 }

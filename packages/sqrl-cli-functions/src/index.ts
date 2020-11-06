@@ -10,7 +10,7 @@ import {
   CallAst,
   AstBuilder,
   AT,
-  Execution
+  Execution,
 } from "sqrl";
 import * as util from "util";
 import { CliManipulator } from "./CliManipulator";
@@ -35,7 +35,7 @@ export function register(instance: Instance) {
       allowNull: true,
       args: [AT.state, AT.any.string, AT.any.repeated],
       argstring: "format string, value...",
-      docstring: "Logs a message using sprintf style formatting"
+      docstring: "Logs a message using sprintf style formatting",
     }
   );
 
@@ -50,7 +50,7 @@ export function register(instance: Instance) {
     {
       allowSqrlObjects: true,
       allowNull: true,
-      args: [AT.state, AT.constant.string, AT.any]
+      args: [AT.state, AT.constant.string, AT.any],
     }
   );
 
@@ -62,13 +62,13 @@ export function register(instance: Instance) {
       }
       return AstBuilder.call("_logFeature", [
         AstBuilder.constant(feature.value),
-        feature
+        feature,
       ]);
     },
     {
       args: [AT.feature],
       argstring: "feature",
-      docstring: "Logs the given feature and its value"
+      docstring: "Logs the given feature and its value",
     }
   );
 }

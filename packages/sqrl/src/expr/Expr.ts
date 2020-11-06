@@ -7,7 +7,7 @@ import { Expr } from "../api/expr";
 export * from "../api/expr";
 
 export function walkExpr(root: Expr, walkCallback: (node: Expr) => void): void {
-  (root.exprs || []).forEach(expr => {
+  (root.exprs || []).forEach((expr) => {
     walkExpr(expr, walkCallback);
   });
   walkCallback(root);

@@ -10,7 +10,7 @@ export function range(n: number): number[];
 export function range<T>(n: number, valueFactory: (n: number) => T): T[];
 export function range(n, valueFactory?) {
   invariant(typeof n === "number", "expected range(<number>, [factory])");
-  valueFactory = valueFactory || (v => v);
+  valueFactory = valueFactory || ((v) => v);
   return rangeFromTo(0, n, valueFactory);
 }
 

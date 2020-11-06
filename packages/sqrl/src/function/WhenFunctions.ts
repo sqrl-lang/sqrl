@@ -40,7 +40,7 @@ export function registerWhenFunctions(instance: StdlibRegistry) {
 
         firedRules.push({
           name,
-          reason
+          reason,
         });
       });
       if (firedRules.length === 0) {
@@ -50,7 +50,7 @@ export function registerWhenFunctions(instance: StdlibRegistry) {
     },
     {
       args: [AT.state, AT.any, AT.any],
-      allowSqrlObjects: true
+      allowSqrlObjects: true,
     }
   );
 }

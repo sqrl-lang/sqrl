@@ -18,7 +18,7 @@ export class JsExecutionContext {
     this.sandbox = vm.createContext({
       console,
       functions: instance.functions,
-      bluebird
+      bluebird,
     });
   }
 
@@ -31,6 +31,6 @@ export class JsExecutionContext {
   }
 
   compileSlots(slotJs: string[]): JsCallback[] {
-    return slotJs.map(js => this.compileSlotJs(js));
+    return slotJs.map((js) => this.compileSlotJs(js));
   }
 }

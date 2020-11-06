@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import {  RedisService } from "../../src/services/RedisService";
+import { RedisService } from "../../src/services/RedisService";
 import { MockRedisService } from "../../src/mocks/MockRedisService";
 import * as bluebird from "bluebird";
 import { createSimpleContext } from "sqrl";
@@ -34,7 +34,7 @@ export function redisTest(
           )
         )
         .timeout(100)
-        .catch(err => {
+        .catch((err) => {
           return "Redis write failed: " + err.toString();
         });
       expect(setResult).toEqual(true);

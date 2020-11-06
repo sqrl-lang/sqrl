@@ -12,7 +12,7 @@ export function runCompile(args: string[] = []) {
       "--output",
       "expr",
       __dirname + "/../../../../examples/hello.sqrl",
-      ...args
+      ...args,
     ],
     ""
   );

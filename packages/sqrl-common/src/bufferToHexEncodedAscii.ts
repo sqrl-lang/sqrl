@@ -7,9 +7,9 @@ export function bufferToHexEncodedAscii(buffer: Buffer): string {
   let output = "";
   const min = " ".charCodeAt(0);
   const max = "~".charCodeAt(0);
-  const escapeCharCode = "\"'\\".split("").map(s => s.charCodeAt(0));
+  const escapeCharCode = "\"'\\".split("").map((s) => s.charCodeAt(0));
 
-  buffer.forEach(chr => {
+  buffer.forEach((chr) => {
     if (chr < min || chr > max || escapeCharCode.includes(chr)) {
       output += "\\x" + (chr < 16 ? "0" : "") + chr.toString(16);
     } else {

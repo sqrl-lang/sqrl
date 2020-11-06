@@ -38,7 +38,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       allowSqrlObjects: true,
       allowNull: true,
       argstring: "list",
-      docstring: "Removes duplicate entries from a list"
+      docstring: "Removes duplicate entries from a list",
     }
   );
 
@@ -51,14 +51,14 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       }
 
       const basic = new WeakMap();
-      arr.forEach(v => {
+      arr.forEach((v) => {
         basic[v] = SqrlObject.ensureBasic(v);
       });
 
       const type = typeof basic[arr[0]];
 
       invariant(
-        arr.every(val => typeof basic[val] === type),
+        arr.every((val) => typeof basic[val] === type),
         "Every value in the array must be of the same type"
       );
 
@@ -78,7 +78,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       args: [AT.any],
       allowSqrlObjects: true,
       argstring: "list",
-      docstring: "Returns the provided list in sorted order"
+      docstring: "Returns the provided list in sorted order",
     }
   );
 
@@ -90,7 +90,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
 
       invariant(Array.isArray(array), `Invalid array received:: ${array}`);
 
-      const filtered = array.filter(a => a);
+      const filtered = array.filter((a) => a);
       invariant(
         filtered.every((f?) => Array.isArray(f)),
         "every element must be an array"
@@ -106,7 +106,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       name: "flatten",
       allowNull: true,
       argstring: "list",
-      docstring: "Reduces multiple levels of lists into a single flat list"
+      docstring: "Reduces multiple levels of lists into a single flat list",
     }
   );
 
@@ -115,14 +115,14 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       if (!Array.isArray(arr)) {
         return null;
       }
-      return arr.filter(value => SqrlObject.isTruthy(value));
+      return arr.filter((value) => SqrlObject.isTruthy(value));
     },
     {
       allowNull: true,
       allowSqrlObjects: true,
       args: [AT.any],
       argstring: "list",
-      docstring: "Removes any falsy values from the given list"
+      docstring: "Removes any falsy values from the given list",
     }
   );
 
@@ -138,15 +138,15 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       allowSqrlObjects: true,
       args: [AT.any],
       argstring: "list",
-      docstring: "Returns the first item in the provided list"
+      docstring: "Returns the first item in the provided list",
     }
   );
 
   instance.save(
     function concat(...items) {
-      if (items.every(i => typeof i === "string" || typeof i === "number")) {
+      if (items.every((i) => typeof i === "string" || typeof i === "number")) {
         return items.join("");
-      } else if (items.every(i => Array.isArray(i))) {
+      } else if (items.every((i) => Array.isArray(i))) {
         return [].concat(...items);
       } else {
         throw new Error("Invalid values provided to function");
@@ -155,7 +155,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any, AT.any.repeated],
       argstring: "value, value...",
-      docstring: "Concatenates the given arguments (strings or lists) together"
+      docstring: "Concatenates the given arguments (strings or lists) together",
     }
   );
 
@@ -169,7 +169,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any, AT.any],
       argstring: "list, string",
-      docstring: "Joins the provided list together using a string"
+      docstring: "Joins the provided list together using a string",
     }
   );
 
@@ -185,7 +185,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       args: [AT.any],
       allowSqrlObjects: true,
       argstring: "list",
-      docstring: "Returns the last item in the provided list"
+      docstring: "Returns the last item in the provided list",
     }
   );
 
@@ -202,7 +202,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       pure: true,
       argstring: "list | string, value",
       docstring:
-        "Tests if a given list or string contains the provided search value"
+        "Tests if a given list or string contains the provided search value",
     }
   );
 
@@ -220,7 +220,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
       allowNull: true,
       args: [AT.state, AT.any, AT.any.number],
       argstring: "list, index",
-      docstring: "Returns the item at the specified index in a list"
+      docstring: "Returns the item at the specified index in a list",
     }
   );
 
@@ -234,7 +234,7 @@ export function registerArrayFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any],
       argstring: "list",
-      docstring: "Returns the length of a provided list"
+      docstring: "Returns the length of a provided list",
     }
   );
 }

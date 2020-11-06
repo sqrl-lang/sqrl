@@ -13,7 +13,7 @@ export function register(instance: Instance) {
     },
     {
       // @todo: Add argument documentation
-      args: [AT.state, AT.any]
+      args: [AT.state, AT.any],
     }
   );
 }

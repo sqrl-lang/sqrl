@@ -23,7 +23,7 @@ import { ExecutionErrorProperties, STANDARD_LIBRARY } from "../api/execute";
  * @note: AsyncFunction here is not required but throws errors if a function is
  * defined badly. It is not supported by Babel (hence hasAsyncFunction below)
  */
-const AsyncFunction = Object.getPrototypeOf(async function() {
+const AsyncFunction = Object.getPrototypeOf(async function () {
   /* intentional */
 }).constructor;
 const hasAsyncFunction = AsyncFunction !== Function;
@@ -98,11 +98,11 @@ function asyncSafetyNet(
     "async function [%s] requires state argument as it is likely to fail due to timeouts",
     name
   );
-  return function(state) {
+  return function (state) {
     return wrapped
       .apply(null, arguments)
       .timeout(state.featureTimeout, `Timeout after ${state.featureTimeout}`)
-      .catch(err => {
+      .catch((err) => {
         state.logError(err, errorProps);
         return null;
       });
@@ -117,7 +117,7 @@ function syncSafetyNet(name: string, fn, config: SafetyNetConfig) {
     if (vital) {
       errorProps.fatal = true;
     }
-    return function(state) {
+    return function (state) {
       try {
         const result = wrapped.apply(null, arguments);
         if (isPromise(result)) {
@@ -130,7 +130,7 @@ function syncSafetyNet(name: string, fn, config: SafetyNetConfig) {
       }
     };
   } else {
-    return function() {
+    return function () {
       try {
         const result = wrapped.apply(null, arguments);
         if (isPromise(result)) {
@@ -161,7 +161,7 @@ export class StdlibRegistry {
   ): void {
     return this.wrapped.save(fn, {
       package: STANDARD_LIBRARY + "." + this.packageName,
-      ...props
+      ...props,
     });
   }
 }
@@ -222,17 +222,17 @@ export class SqrlInstance {
     this.functionStats[name] = stats;
 
     if (isAsync) {
-      return function() {
+      return function () {
         const start = process.hrtime();
         const promise = wrapped.apply(null, arguments);
-        return promise.then(rv => {
+        return promise.then((rv) => {
           stats.asyncTimeNano += hrtimeToNs(process.hrtime(start));
           stats.callCount += 1;
           return rv;
         });
       };
     } else {
-      return function() {
+      return function () {
         const start = process.hrtime();
         const rv = wrapped.apply(null, arguments);
         stats.syncTimeNano += hrtimeToNs(process.hrtime(start));
@@ -260,7 +260,7 @@ export class SqrlInstance {
   }
 
   resetFunctionStats() {
-    Object.values(this.functionStats).forEach(stats => {
+    Object.values(this.functionStats).forEach((stats) => {
       stats.callCount = 0;
       stats.asyncTimeNano = 0;
       stats.syncTimeNano = 0;
@@ -438,7 +438,7 @@ export class SqrlInstance {
       } else {
         const safetyNetConfig: SafetyNetConfig = {
           stateArg,
-          vital: !!props.vital
+          vital: !!props.vital,
         };
         if (isAsync) {
           fn = asyncSafetyNet(name, fn, safetyNetConfig);
@@ -449,7 +449,7 @@ export class SqrlInstance {
     }
 
     const propsArgs = props.args;
-    if (Array.isArray(propsArgs) && propsArgs.some(p => !!p.runtimeChecker)) {
+    if (Array.isArray(propsArgs) && propsArgs.some((p) => !!p.runtimeChecker)) {
       invariant(fn !== null, "Runtime type check not valid without callback");
       invariant(
         !props.transformAst && !props.customTransform,
@@ -457,14 +457,14 @@ export class SqrlInstance {
         name
       );
       const wrapped = fn;
-      fn = function(...args) {
+      fn = function (...args) {
         const errors = AT.validateRuntime(args, propsArgs);
         if (errors.length > 0) {
           if (stateArg) {
             args[0].logCodedErrorMessage(
               [
                 `arg error calling ${name}`,
-                ...errors.map(e => `arg ${e.index}: ${e.message}`)
+                ...errors.map((e) => `arg ${e.index}: ${e.message}`),
               ].join("\n")
             );
           }
@@ -483,11 +483,11 @@ export class SqrlInstance {
       invariant(promiseArgs === false, "promiseArgs requires allowSqrlObjects");
       const wrapped = fn;
       if (stateArg) {
-        fn = function(state, ...args) {
+        fn = function (state, ...args) {
           return wrapped.call(null, state, ...SqrlObject.ensureBasic(args));
         };
       } else {
-        fn = function(...args) {
+        fn = function (...args) {
           return wrapped.apply(null, SqrlObject.ensureBasic(args));
         };
       }
@@ -498,7 +498,7 @@ export class SqrlInstance {
 
       const wrapped = fn;
       const nullValue = isAsync ? bluebird.resolve(null) : null;
-      fn = function(...args) {
+      fn = function (...args) {
         for (const value of args) {
           if (value === null) {
             return nullValue;
@@ -524,7 +524,7 @@ export class SqrlInstance {
         "Background functions must be provided a function"
       );
       const wrapped = fn;
-      fn = function(...args) {
+      fn = function (...args) {
         return nice(() => wrapped.apply(null, args));
       };
       isAsync = true;
@@ -555,7 +555,7 @@ export class SqrlInstance {
       lazyArguments,
       async: isAsync,
       stateArg,
-      whenCauseArg
+      whenCauseArg,
     });
   }
 }

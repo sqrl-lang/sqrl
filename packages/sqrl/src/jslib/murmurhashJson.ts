@@ -24,7 +24,7 @@ export async function murmurhashJson(data: any): Promise<Buffer> {
 }
 
 export function murmurhashHexSync(data: Buffer): string {
-  return murmurhashSync(data).toString('hex');
+  return murmurhashSync(data).toString("hex");
 }
 export function murmurhashSync(data: Buffer): Buffer {
   return Buffer.from(murmurJs.x64.hash128(data));

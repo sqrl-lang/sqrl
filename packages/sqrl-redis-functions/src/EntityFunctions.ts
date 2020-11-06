@@ -12,7 +12,7 @@ import {
   SqrlUniqueId,
   CallAst,
   AstBuilder,
-  Ast
+  Ast,
 } from "sqrl";
 import { UniqueIdService } from "./services/RedisUniqueId";
 
@@ -49,7 +49,7 @@ export function registerEntityFunctions(
     },
     {
       allowNull: true,
-      args: [AT.state, AT.constant.string, AT.any]
+      args: [AT.state, AT.constant.string, AT.any],
     }
   );
 
@@ -59,13 +59,13 @@ export function registerEntityFunctions(
         return null;
       }
       const entities = await Promise.all(
-        arr.map(v => toEntity(service, state, type, v))
+        arr.map((v) => toEntity(service, state, type, v))
       );
       return entities.filter((v?) => v !== null);
     },
     {
       allowNull: true,
-      args: [AT.state, AT.any.string, AT.any]
+      args: [AT.state, AT.any.string, AT.any],
     }
   );
 
@@ -76,7 +76,7 @@ export function registerEntityFunctions(
     {
       args: [AT.constant.string, AT.any],
       argstring: "type, key",
-      docstring: "Create an entity of the given type"
+      docstring: "Create an entity of the given type",
     }
   );
 
@@ -86,7 +86,7 @@ export function registerEntityFunctions(
     },
     {
       argstring: "type, keys",
-      docstring: "Create a list of entities of the given type"
+      docstring: "Create a list of entities of the given type",
     }
   );
 }

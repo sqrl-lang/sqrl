@@ -9,12 +9,7 @@ import * as moment from "moment";
 import chalk from "chalk";
 import * as util from "util";
 import { CliOutputOptions, CliActionOutput } from "./CliOutput";
-import {
-  FeatureMap,
-  SqrlCompileError,
-  Execution,
-  SqrlObject
-} from "sqrl";
+import { FeatureMap, SqrlCompileError, Execution, SqrlObject } from "sqrl";
 import { spanToShell } from "../spanToShell";
 import { CliError } from "./CliError";
 import { CliManipulator } from "sqrl-cli-functions";
@@ -27,7 +22,7 @@ enum State {
   none = 1,
   unknown,
   recompiling,
-  summary
+  summary,
 }
 
 function prefixLines(text, prefix) {
@@ -91,7 +86,7 @@ export class CliPrettyOutput extends CliActionOutput {
       return err.toSqrlErrorOutput({
         codedError: false,
         source: true,
-        stacktrace: false
+        stacktrace: false,
       });
     } else if (err instanceof CliError) {
       let output = chalk.redBright("Error: ") + err.message;
@@ -168,7 +163,7 @@ export class CliPrettyOutput extends CliActionOutput {
       this.line(
         chalk.red.bold(CROSS) + time + chalk.red("action was blocked.")
       );
-      manipulator.blockedRules.forEach(details => {
+      manipulator.blockedRules.forEach((details) => {
         this.line(
           chalk.red(
             `${DOWNWARDS_ARROW} [${details.name}]` +
@@ -200,6 +195,6 @@ export class CliPrettyOutput extends CliActionOutput {
       }
     }
 
-    manipulator.logged.forEach(message => this.line(message));
+    manipulator.logged.forEach((message) => this.line(message));
   }
 }

@@ -19,7 +19,7 @@ import {
   Ast,
   AstBuilder,
   AT,
-  sqrlInvariant
+  sqrlInvariant,
 } from "sqrl";
 
 function loadFile(state: CompileState, sourceAst: Ast, filePath: string) {
@@ -41,7 +41,7 @@ export function register(instance: Instance) {
     {
       args: [AT.constant.string],
       argstring: "path",
-      docstring: "Loads data from a given JSON file"
+      docstring: "Loads data from a given JSON file",
     }
   );
 
@@ -54,7 +54,7 @@ export function register(instance: Instance) {
     {
       args: [AT.constant.string],
       argstring: "path",
-      docstring: "Loads data from a given YAML file"
+      docstring: "Loads data from a given YAML file",
     }
   );
 
@@ -64,14 +64,14 @@ export function register(instance: Instance) {
       const pathAst = ast.args[0] as ConstantAst;
       const parsed = loadFile(state, pathAst, pathAst.value)
         .split("\n")
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0);
       return AstBuilder.constant(parsed);
     },
     {
       args: [AT.constant.string],
       argstring: "path",
-      docstring: "Loads data as a list of lines from a given text file"
+      docstring: "Loads data as a list of lines from a given text file",
     }
   );
 }

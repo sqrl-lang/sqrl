@@ -38,14 +38,14 @@ test("when context works", async () => {
       saveCount += 1;
       savedContext = {
         whenCause,
-        word
+        word,
       };
     },
     {
       statement: true,
       statementFeature: "SqrlSaveFunctions",
       args: [AT.state, AT.whenCause, AT.any],
-      allowNull: true
+      allowNull: true,
     }
   );
 
@@ -72,20 +72,20 @@ test("when context works", async () => {
     whenCause: {
       firedRules: [
         { name: "RuleOne", reason: "" },
-        { name: "RuleThree", reason: "5" }
-      ]
+        { name: "RuleThree", reason: "5" },
+      ],
     },
-    word: "bloop"
+    word: "bloop",
   });
 
   // Try fire it manually (without whenCause)
   await runSqrlTest('saveContext("manual!"); EXECUTE;', {
-    instance
+    instance,
   });
   expect(saveCount).toEqual(2);
   expect(savedContext).toEqual({
     whenCause: null,
-    word: "manual!"
+    word: "manual!",
   });
 
   // Ensure multiple strings as reasons work
@@ -104,8 +104,8 @@ test("when context works", async () => {
   expect(saveCount).toEqual(3);
   expect(savedContext).toEqual({
     whenCause: {
-      firedRules: [{ name: "RuleX", reason: "Got your 5 here!" }]
+      firedRules: [{ name: "RuleX", reason: "Got your 5 here!" }],
     },
-    word: "fire!"
+    word: "fire!",
   });
 });

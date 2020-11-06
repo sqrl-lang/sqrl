@@ -19,7 +19,7 @@ export class CloseableGroup {
   }
   close() {
     this.closed = true;
-    this.list.forEach(o => o.close());
+    this.list.forEach((o) => o.close());
     this.list = [];
   }
 }

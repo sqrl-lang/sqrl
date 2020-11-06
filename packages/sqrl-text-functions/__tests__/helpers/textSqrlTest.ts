@@ -17,11 +17,11 @@ export async function runTextSqrlTest(sqrl: string, options: Options) {
 
   return runSqrlTest(sqrl, {
     instance,
-    register: async instance => {
+    register: async (instance) => {
       await registerLoadFunctions(instance);
       await registerTextFunctions(instance);
     },
-    ...options
+    ...options,
   });
 }
 

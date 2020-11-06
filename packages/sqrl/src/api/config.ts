@@ -15,18 +15,18 @@ const CONFIG_SCHEMA = {
     "state.allow-in-memory": {
       type: "boolean",
       description:
-        "Enable in-memory state storage if database addresses are not provided"
+        "Enable in-memory state storage if database addresses are not provided",
     },
 
     "redis.address": {
       type: "string",
-      description: "Address of a redis server to use as storage"
+      description: "Address of a redis server to use as storage",
     },
 
     "testing.fixed-date": {
       type: "string",
-      description: "A fixed date time for testing"
-    }
+      description: "A fixed date time for testing",
+    },
   },
 
   // Per-package configuration is in square brackets by package name
@@ -34,10 +34,10 @@ const CONFIG_SCHEMA = {
     "^[.*]$": {
       type: "object",
       patternProperties: {
-        "^[a-z][a-z-]*(.[a-z][a-z-]*)+$": {}
-      }
-    }
-  }
+        "^[a-z][a-z-]*(.[a-z][a-z-]*)+$": {},
+      },
+    },
+  },
 };
 
 // @todo: We should be able to generate a type from the schema
@@ -55,7 +55,7 @@ export interface Config {
 
 const DEFAULT_CONFIG: Config = {
   "state.allow-in-memory": false,
-  "redis.address": process.env.SQRL_REDIS || null
+  "redis.address": process.env.SQRL_REDIS || null,
 };
 
 export function getConfigSchema() {

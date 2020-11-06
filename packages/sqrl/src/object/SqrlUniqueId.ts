@@ -31,7 +31,7 @@ export default class SqrlUniqueId extends SqrlObject {
   getData() {
     return {
       time: new Date(this.uniqueId.getTimeMs()).toISOString(),
-      remaining: this.uniqueId.getRemainder()
+      remaining: this.uniqueId.getRemainder(),
     };
   }
 
@@ -42,7 +42,7 @@ export default class SqrlUniqueId extends SqrlObject {
       mkSpan("value:time", new Date(this.uniqueId.getTimeMs()).toISOString()),
       mkSpan("value:separator", "@"),
       mkSpan("value:remainder", this.uniqueId.getRemainder().toString()),
-      mkSpan("type:syntax", ">")
+      mkSpan("type:syntax", ">"),
     ]);
   }
 

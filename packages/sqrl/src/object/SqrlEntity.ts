@@ -61,11 +61,11 @@ export default class SqrlEntity extends SqrlObject {
       mkSpan("value:entityId", [
         mkSpan("entityId:type", this.entityId.type),
         mkSpan("value:separator", "/"),
-        mkSpan("entityId:key", this.entityId.key)
+        mkSpan("entityId:key", this.entityId.key),
       ]),
       mkSpan("type:syntax", "> {\n"),
       indentSpan(this.uniqueId.render(), 2),
-      mkSpan("type:syntax", "\n}")
+      mkSpan("type:syntax", "\n}"),
     ]);
   }
 
@@ -73,7 +73,7 @@ export default class SqrlEntity extends SqrlObject {
     return {
       type: this.type,
       value: this.value,
-      uniqueId: this.uniqueId.getData()
+      uniqueId: this.uniqueId.getData(),
     };
   }
 
@@ -81,7 +81,7 @@ export default class SqrlEntity extends SqrlObject {
     ctx: Context,
     ...featureValues: Array<any>
   ): Promise<SqrlKey | null> {
-    const hasEmpty = featureValues.some(v => {
+    const hasEmpty = featureValues.some((v) => {
       return v === null || v === "";
     });
     if (hasEmpty) {
@@ -124,8 +124,8 @@ export default class SqrlEntity extends SqrlObject {
 
     return Promise.all(
       sqrlCartesianProduct(featureValues, {
-        maxArrays: 1
-      }).map(values => this.buildCounterKey(ctx, ...values))
+        maxArrays: 1,
+      }).map((values) => this.buildCounterKey(ctx, ...values))
     );
   }
 }

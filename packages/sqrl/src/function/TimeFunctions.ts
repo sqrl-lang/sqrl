@@ -16,7 +16,7 @@ export function registerTimeFunctions(instance: StdlibRegistry) {
       args: [],
       safe: true,
       argstring: "",
-      docstring: "Returns the current time as an ISO 8601 string"
+      docstring: "Returns the current time as an ISO 8601 string",
     }
   );
 
@@ -29,7 +29,7 @@ export function registerTimeFunctions(instance: StdlibRegistry) {
       safe: true,
       argstring: "",
       docstring:
-        "Returns the current time as a count of milliseconds since the unix epoch"
+        "Returns the current time as a count of milliseconds since the unix epoch",
     }
   );
 
@@ -43,7 +43,7 @@ export function registerTimeFunctions(instance: StdlibRegistry) {
       async: true,
       argstring: "ms, value",
       docstring:
-        "Returns the given value after delaying for the specified number of milliseconds"
+        "Returns the given value after delaying for the specified number of milliseconds",
     }
   );
 }

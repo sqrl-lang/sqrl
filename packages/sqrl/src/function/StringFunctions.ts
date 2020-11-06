@@ -32,7 +32,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
       pure: true,
       allowNull: true,
       argstring: "value",
-      docstring: "Represent the given value (including nulls) as a string"
+      docstring: "Represent the given value (including nulls) as a string",
     }
   );
 
@@ -43,7 +43,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any],
       argstring: "value",
-      docstring: "Returns the value encoded as a json string"
+      docstring: "Returns the value encoded as a json string",
     }
   );
   instance.save(
@@ -53,7 +53,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any],
       argstring: "value",
-      docstring: "Returns the value encoded as a hex string"
+      docstring: "Returns the value encoded as a hex string",
     }
   );
 
@@ -65,7 +65,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
       args: [AT.any.string],
       argstring: "value",
       docstring: "Strips whitespace from either end of the given string",
-      pure: true
+      pure: true,
     }
   );
 
@@ -77,7 +77,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
       args: [AT.any.string],
       argstring: "value",
       docstring:
-        "Encodes special characters in the given string for a component in a URI"
+        "Encodes special characters in the given string for a component in a URI",
     }
   );
 
@@ -89,7 +89,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
       args: [AT.state, AT.any.string],
       argstring: "value",
       docstring:
-        "Encodes special characters in the given string for use in a regular expression"
+        "Encodes special characters in the given string for use in a regular expression",
     }
   );
 
@@ -103,7 +103,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any, AT.any],
       argstring: "value, by",
-      docstring: "Splits a string into a list of strings"
+      docstring: "Splits a string into a list of strings",
     }
   );
 
@@ -119,7 +119,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
       args: [AT.any],
       allowSqrlObjects: true,
       argstring: "date",
-      docstring: "Returns the date as a valid ISO8601 date string"
+      docstring: "Returns the date as a valid ISO8601 date string",
     }
   );
 
@@ -130,7 +130,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any],
       argstring: "string",
-      docstring: "Returns the lowercase version of the given string"
+      docstring: "Returns the lowercase version of the given string",
     }
   );
   instance.save(
@@ -140,7 +140,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any],
       argstring: "string",
-      docstring: "Returns the uppercase version of the given string"
+      docstring: "Returns the uppercase version of the given string",
     }
   );
   instance.save(
@@ -150,7 +150,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any],
       argstring: "string",
-      docstring: "Returns true if the given string contains a digit"
+      docstring: "Returns true if the given string contains a digit",
     }
   );
 
@@ -164,7 +164,7 @@ export function registerStringFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any, AT.any],
       argstring: "string, prefix",
-      docstring: "Returns true if the given string starts with the prefix"
+      docstring: "Returns true if the given string starts with the prefix",
     }
   );
 
@@ -178,19 +178,19 @@ export function registerStringFunctions(instance: StdlibRegistry) {
     {
       args: [AT.any, AT.any],
       argstring: "string, suffix",
-      docstring: "Returns true if the given string ends with the suffix"
+      docstring: "Returns true if the given string ends with the suffix",
     }
   );
 
   instance.save(
     function substr(state, string, start, end = null) {
-      return string.substr(...[start, end].filter(v => v !== null));
+      return string.substr(...[start, end].filter((v) => v !== null));
     },
     {
       args: [AT.state, AT.any.string, AT.any.number, AT.any.optional.number],
       argstring: "string, start, [end]",
       docstring:
-        "Returns the substring from the given start index of the string"
+        "Returns the substring from the given start index of the string",
     }
   );
 }

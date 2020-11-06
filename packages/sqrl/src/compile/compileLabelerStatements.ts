@@ -20,7 +20,7 @@ const featuresToOrAst = (features): Ast => {
       type: "boolean_expr",
       operator: "or",
       left,
-      right: featuresToOrAst(features.slice(1))
+      right: featuresToOrAst(features.slice(1)),
     };
   }
 };
@@ -67,7 +67,7 @@ export function labelerPushStatement(
       type: "call",
       func: "assert",
       args: [ast.expr],
-      location: ast.location
+      location: ast.location,
     });
   } else if (ast.type === "if") {
     let resultAst: Ast = ast;
@@ -107,7 +107,7 @@ export function labelerPushStatement(
     instance.assertStatementAst(ast.output);
     const funcAst = ast.output;
     const newAst = Object.assign({}, ast, {
-      output: SqrlAst.registerCall(ast.output)
+      output: SqrlAst.registerCall(ast.output),
     });
 
     if (funcAst.type !== "call") {
