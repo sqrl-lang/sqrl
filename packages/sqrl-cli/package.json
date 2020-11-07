@@ -1,6 +1,6 @@
 {
   "name": "sqrl-cli",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - command line tools",
   "homepage": "https://twitter.github.io/sqrl",
   "license": "Apache-2.0",
@@ -66,13 +66,13 @@
     "micro-route": "^2.5.0",
     "moment": "^2.24.0",
     "split2": "^3.2.2",
-    "sqrl": "^0.6.7",
-    "sqrl-cli-functions": "^0.6.7",
-    "sqrl-common": "^0.6.7",
-    "sqrl-jsonpath": "^0.6.7",
-    "sqrl-load-functions": "^0.6.7",
-    "sqrl-redis-functions": "^0.6.7",
-    "sqrl-text-functions": "^0.6.7",
+    "sqrl": "^0.6.8",
+    "sqrl-cli-functions": "^0.6.8",
+    "sqrl-common": "^0.6.8",
+    "sqrl-jsonpath": "^0.6.8",
+    "sqrl-load-functions": "^0.6.8",
+    "sqrl-redis-functions": "^0.6.8",
+    "sqrl-text-functions": "^0.6.8",
     "wait-for-sigint": "^0.1.0"
   },
   "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"

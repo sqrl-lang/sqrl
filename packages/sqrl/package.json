@@ -1,6 +1,6 @@
 {
   "name": "sqrl",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - engine",
   "license": "Apache-2.0",
   "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl",
@@ -50,7 +50,7 @@
     "murmurhash3.js": "https://github.com/qix/murmurHash3.js/releases/download/3.0.0-qix-0/murmurhash3.js-3.0.0-qix-0.tgz",
     "node-nice": "^0.0.1",
     "prettier": "^2.1.2",
-    "sqrl-common": "^0.6.7"
+    "sqrl-common": "^0.6.8"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
@@ -64,7 +64,7 @@
     "jest-extended": "^0.11.2",
     "pegjs": "^0.10.0",
     "rimraf": "^3.0.0",
-    "sqrl-test-utils": "^0.6.7",
+    "sqrl-test-utils": "^0.6.8",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "ts-pegjs": "^0.2.6",
