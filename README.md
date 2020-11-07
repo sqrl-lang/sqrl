@@ -12,10 +12,6 @@ The Smyte Query and Rules Language (SQRL) is a Safe, Stateful Rules Language for
 
 If you were looking for the [Secure Quick Reliable Login project, check here](https://www.grc.com/sqrl/sqrl.htm).
 
-## Early Preview
-
-This is an early preview of SQRL open-source release. This release is intended to onboard existing community members and prepare us for a full release in the near future. Through SQRL, we hope to partner with the open source community, and help better address spam on all websites.
-
 ## Documentation
 
 You can find the **SQRL** (Smyte Query & Rules Language) documentation [on the website](https://twitter.github.io/sqrl).
