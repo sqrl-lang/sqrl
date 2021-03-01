@@ -10,6 +10,8 @@ matrix:
     - node_js: "node"
     - node_js: "12"
       if: type = push AND branch = master
+    - node_js: "14"
+      if: type = push AND branch = master
 services:
   - redis-server
 install:

@@ -5,7 +5,7 @@
  */
 import { runCli } from "../helpers/runCli";
 import { examplePath } from "../helpers/examplePath";
-import * as stripAnsi from "strip-ansi";
+import stripAnsi from "strip-ansi";
 
 test("works", async () => {
   const stdout = await runCli([

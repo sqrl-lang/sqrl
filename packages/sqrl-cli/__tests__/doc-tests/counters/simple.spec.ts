@@ -5,7 +5,7 @@
  */
 import { runCli } from "../../helpers/runCli";
 import { VirtualFilesystem } from "sqrl";
-import * as stripAnsi from "strip-ansi";
+import stripAnsi from "strip-ansi";
 
 test("works", async () => {
   const filesystem = new VirtualFilesystem({
