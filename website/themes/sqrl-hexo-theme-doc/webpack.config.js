@@ -2,6 +2,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'production',
   externals: {
     jquery: '$',
     lunr: true,
@@ -14,13 +15,15 @@ module.exports = {
     filename: '[name].js'
   },
   module: {
-    loaders: [
+    rules: [
       {
-        test: /.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets: ['es2015', 'react']
+        test: /\.jsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env', "@babel/preset-react"]
+          }
         }
       }
     ]
