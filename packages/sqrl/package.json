@@ -25,7 +25,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib && rimraf coverage",
-    "docs": "typedoc --out ../../website/public/reference --ignoreCompilerErrors --stripInternal --excludeExternals src/api/",
+    "docs": "typedoc --out ../../website/public/reference --excludeInternal --excludeExternals src/api/ --entryPointStrategy expand",
     "format": "prettier --write \"{src,__tests__}/**/*.ts\"",
     "generate-parser": "ts-node ./src/parser/generateParser.ts > ./src/parser/sqrl.ts && ../../scripts/clean-pegjs-ts src/parser/sqrl.ts",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
