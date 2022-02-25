@@ -4,7 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import { query as jsonpathQuery } from "jsonpath";
+import * as JSONPath from "jsonpath";
 
 import {
   Instance,
@@ -17,7 +17,8 @@ import {
 } from "sqrl";
 
 // $[ (digits / single quoted string / double quoted string) ] (anything)
-const JSON_BRAKET_REGEX = /^\$\[([0-9]+|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")\](.*)$/;
+const JSON_BRAKET_REGEX =
+  /^\$\[([0-9]+|'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")\](.*)$/;
 
 export function register(instance: Instance) {
   instance.registerTransform(
@@ -78,7 +79,7 @@ export function register(instance: Instance) {
        *  return jsonpathQuery(data, path);
        */
       const stringified = JSON.stringify(data);
-      return jsonpathQuery(JSON.parse(stringified), path);
+      return JSONPath.query(JSON.parse(stringified), path);
     },
     {
       args: [AT.state, AT.any, AT.constant.string],

@@ -1,6 +1,7 @@
 import * as path from "path";
 import { readFileSync, readdirSync } from "fs";
 import { Filesystem } from "../api/filesystem";
+import { invariant } from "sqrl-common";
 
 export class LocalFilesystem extends Filesystem {
   constructor(private pwd: string) {
@@ -13,7 +14,8 @@ export class LocalFilesystem extends Filesystem {
         filename.endsWith(".sqrl")
       );
     } catch (err) {
-      if (err.code === "ENOENT") {
+      invariant(err instanceof Error, "Expected Error object");
+      if ((err as any).code === "ENOENT") {
         return null;
       }
       throw err;
@@ -36,9 +38,7 @@ export function pathJoin(...paths: string[]) {
   return path.join(...paths);
 }
 
-export function splitPath(
-  filePath: string
-): {
+export function splitPath(filePath: string): {
   dirname: string;
   basename: string;
 } {

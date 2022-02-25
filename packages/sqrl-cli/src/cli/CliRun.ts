@@ -102,7 +102,7 @@ export class CliRun {
 
     // Wait for the stream to finish
     await new Promise((resolve, reject) => {
-      stream.on("end", () => resolve());
+      stream.on("end", () => resolve(null));
       stream.on("error", (err) => reject(err));
     });
     await busy.waitForZero();

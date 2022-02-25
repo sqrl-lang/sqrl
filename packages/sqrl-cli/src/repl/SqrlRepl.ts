@@ -135,6 +135,7 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
 
       return result;
     } catch (e) {
+      invariant(e instanceof Error, "Expected error object");
       if (this.isRecoverableError(e)) {
         throw new repl.Recoverable(e);
       } else if (e instanceof SqrlCompileError) {
