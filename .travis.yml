@@ -1,6 +1,6 @@
 branches:
   only:
-    master
+    main
 language: node_js
 env:
   global:
@@ -9,9 +9,9 @@ matrix:
   include:
     - node_js: "node"
     - node_js: "12"
-      if: type = push AND branch = master
+      if: type = push AND branch = main
     - node_js: "14"
-      if: type = push AND branch = master
+      if: type = push AND branch = main
 services:
   - redis-server
 install:
