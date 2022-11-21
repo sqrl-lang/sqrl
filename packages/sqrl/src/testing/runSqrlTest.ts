@@ -22,7 +22,7 @@ export class CapturingAssertService implements AssertService {
   compare(left: any, operator: string, right: any, arrow: string) {
     try {
       (expect(left) as any).toSqrlCompare(operator, right, arrow);
-    } catch (err) {
+    } catch (err: unknown) {
       invariant(err instanceof Error, "Expected Error object");
       this.captureError(err);
     }
@@ -30,7 +30,7 @@ export class CapturingAssertService implements AssertService {
   ok(value: any, arrow: string) {
     try {
       (expect(value) as any).toBeSqrlTruthy(arrow);
-    } catch (err) {
+    } catch (err: unknown) {
       invariant(err instanceof Error, "Expected Error object");
       this.captureError(err);
     }
