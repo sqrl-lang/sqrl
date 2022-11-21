@@ -14,8 +14,14 @@
 // you install it in a project with the usual `npm install`... ¯\_(ツ)_/¯
 //
 
+require('@babel/register')({
+  'presets': [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
+});
 
-require('node-jsx').install();
+// require('node-jsx').install();
 
 const React = require('react');
 const ReactDOM = require('react-dom/server');
