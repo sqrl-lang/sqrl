@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import * as micro from "micro";
+import micro, { createError, json as microJson } from "micro";
 import * as microQuery from "micro-query";
 // tslint:disable-next-line:no-submodule-imports (it is the documented suggestion)
 import * as dispatch from "micro-route/dispatch";
@@ -14,7 +14,7 @@ import { invariant } from "sqrl-common";
 
 function userInvariant(cond, message) {
   if (!cond) {
-    throw micro.createError(400, message);
+    throw createError(400, message);
   }
 }
 
@@ -50,7 +50,7 @@ async function run(
   const featureTimeoutMs = parseInt(query.timeoutMs || "1000", 10);
   userInvariant(!isNaN(featureTimeoutMs), "timeoutMs was not a valid integer");
 
-  const inputs = await micro.json(req, { limit: "128mb" });
+  const inputs = await microJson(req, { limit: "128mb" });
 
   const manipulator = new CliManipulator();
   const execution: Execution = await executable.execute(ctx, {
@@ -89,7 +89,7 @@ async function run(
       );
     } catch (e) {
       invariant(e instanceof Error, "Expected error object");
-      throw micro.createError(500, e.message, e);
+      throw createError(500, e.message, e);
     }
   }
 
@@ -110,7 +110,7 @@ async function deleteRoute(
   res: ServerResponse
 ) {
   // @TODO: Delete entity
-  throw micro.createError(500, "Not implemented\n");
+  throw createError(500, "Not implemented\n");
 }
 
 export function createSqrlServer(ctx: Context, executable: Executable): Server {
@@ -118,10 +118,11 @@ export function createSqrlServer(ctx: Context, executable: Executable): Server {
     .dispatch("/run", ["POST"], (req, res) => run(ctx, executable, req, res))
     .dispatch("/delete", ["POST"], (req, res) => deleteRoute(ctx, req, res))
     .otherwise(async (req, res) => {
-      throw micro.createError(404, "Route not found\n");
+      throw createError(404, "Route not found\n");
     });
 
-  return micro(router);
+  // The types included with the micro() package do not match the documentation/reality
+  return micro(router) as unknown as Server;
 }
 
 export type ServerWaitCallback = (props: { server: Server }) => Promise<void>;
