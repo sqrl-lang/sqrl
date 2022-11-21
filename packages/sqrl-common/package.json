@@ -2,9 +2,9 @@
   "name": "sqrl-common",
   "version": "0.6.8",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - internal shared code",
-  "homepage": "https://twitter.github.io/sqrl",
+  "homepage": "https://sqrl-lang.github.io/sqrl",
   "license": "Apache-2.0",
-  "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl-common",
+  "repository": "https://github.com/sqrl-lang/sqrl/tree/main/packages/sqrl-common",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

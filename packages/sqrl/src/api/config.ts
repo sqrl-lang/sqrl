@@ -7,7 +7,7 @@ import { validate } from "jsonschema";
 
 const CONFIG_SCHEMA = {
   $schema: "http://json-schema.org/draft-07/schema#",
-  $id: "http://twitter.github.io/sqrl/schema/Config",
+  $id: "http://sqrl-lang.github.io/sqrl/schema/Config",
   title: "Config",
   additionalProperties: false,
 

@@ -5,7 +5,7 @@ hexo-theme-doc
 [![dependencies Status](https://david-dm.org/zalando-incubator/hexo-theme-doc/status.svg)](https://david-dm.org/zalando-incubator/hexo-theme-doc)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a927311457a4180a4d7606a8f66ab5f)](https://www.codacy.com/app/bhaskarmelkani/hexo-theme-doc)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/0a927311457a4180a4d7606a8f66ab5f)](https://www.codacy.com/app/bhaskarmelkani/hexo-theme-doc)
-[![Build Status](https://travis-ci.org/zalando-incubator/hexo-theme-doc.svg?branch=master)](https://travis-ci.org/zalando-incubator/hexo-theme-doc)
+[![Build Status](https://travis-ci.org/zalando-incubator/hexo-theme-doc.svg?branch=main)](https://travis-ci.org/zalando-incubator/hexo-theme-doc)
 [![npm version](https://badge.fury.io/js/hexo-theme-doc.svg)](https://badge.fury.io/js/hexo-theme-doc)
 
 **LiveDemo:** [https://zalando-incubator.github.io/hexo-theme-doc](https://zalando-incubator.github.io/hexo-theme-doc)

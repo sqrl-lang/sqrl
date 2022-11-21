@@ -48,4 +48,4 @@ registry.registerStatement(
 );
 ```
 
-Your `addUserToReviewQueue` function will be provided with additional context about why it was triggered. For more information about exactly what is included see the [`WhenCause`](https://twitter.github.io/sqrl/reference/interfaces/_when_.whencause.html) reference documentation.
+Your `addUserToReviewQueue` function will be provided with additional context about why it was triggered. For more information about exactly what is included see the [`WhenCause`](https://sqrl-lang.github.io/sqrl/reference/interfaces/_when_.whencause.html) reference documentation.

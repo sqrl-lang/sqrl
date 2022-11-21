@@ -1,9 +1,9 @@
 {
   "name": "sqrl-monorepo",
   "private": true,
-  "homepage": "https://twitter.github.io/sqrl",
+  "homepage": "https://sqrl-lang.github.io/sqrl",
   "license": "Apache-2.0",
-  "repository": "https://github.com/twitter/sqrl",
+  "repository": "https://github.com/sqrl-lang/sqrl",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },

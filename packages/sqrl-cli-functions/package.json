@@ -2,9 +2,9 @@
   "name": "sqrl-cli-functions",
   "version": "0.6.8",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - functions intended for command line tools",
-  "homepage": "https://twitter.github.io/sqrl",
+  "homepage": "https://sqrl-lang.github.io/sqrl",
   "license": "Apache-2.0",
-  "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl-cli-functions",
+  "repository": "https://github.com/sqrl-lang/sqrl/tree/main/packages/sqrl-cli-functions",
   "directories": {
     "lib": "lib",
     "test": "__tests__"

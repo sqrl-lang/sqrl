@@ -7,7 +7,7 @@ title: Custom Functions
 
 Once you're comfortable creating simple functions you can create a function with custom syntax. We use this functionality to provide our counters that have their own syntax.
 
-You can view our [`sqrl-redis-functions`](https://github.com/twitter/sqrl/tree/master/packages/sqrl-redis-functions) package for examples on how they were defined.
+You can view our [`sqrl-redis-functions`](https://github.com/sqrl-lang/sqrl/tree/main/packages/sqrl-redis-functions) package for examples on how they were defined.
 
 ```
   registry.registerCustom(function count(

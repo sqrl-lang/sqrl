@@ -36,16 +36,16 @@ Thanks for your contributions!
 
 The workflow that we use to contribute is mostly based on [GitHub Flow](https://guides.github.com/introduction/flow/)
 
-**master** is the latest stable version and should be used when opening feature branches.
+**main** is the latest stable version and should be used when opening feature branches.
 
 > If a github issue is related to a branch we suggest to append the number at the start of the branch name.<br>
   example: 98-dropdown-refactor (github issue)
 
-If a feature branch is outdated **always** rebase it against master instead of merging it.
+If a feature branch is outdated **always** rebase it against main instead of merging it.
 
 ## Pull request
 
-**Always open a pull request** to merge into `master` branch.
+**Always open a pull request** to merge into `main` branch.
 
 Consider opening a PR as soon as a commit on the feature branch is available to ease the reviewing process,
 you can add a `WIP:` prefix to communicate that the current PR is still a work in progress.
