@@ -3,7 +3,7 @@
   "version": "0.6.8",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - engine",
   "license": "Apache-2.0",
-  "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl",
+  "repository": "https://github.com/sqrl-lang/sqrl/tree/master/packages/sqrl",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },

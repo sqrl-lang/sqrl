@@ -3,7 +3,7 @@
   "version": "0.6.8",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - helpers for writing tests",
   "license": "Apache-2.0",
-  "repository": "https://github.com/twitter/sqrl/tree/master/packages/sqrl-test-utils",
+  "repository": "https://github.com/sqrl-lang/sqrl/tree/master/packages/sqrl-test-utils",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
