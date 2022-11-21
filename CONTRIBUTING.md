@@ -23,9 +23,9 @@ We follow the [GitHub Flow Workflow](https://guides.github.com/introduction/flow
 2.  Check out the `master` branch
 3.  Create a feature branch
 4.  Write code and tests for your change
-5.  From your branch, make a pull request against `twitter/sqrl/master`
+5.  From your branch, make a pull request against `sqrl-lang/sqrl/master`
 6.  Work with repo maintainers to get your change reviewed
-7.  Wait for your change to be pulled into `twitter/sqrl/master`
+7.  Wait for your change to be pulled into `sqrl-lang/sqrl/master`
 8.  Delete your feature branch
 
 ## Testing
@@ -103,12 +103,12 @@ Some important notes regarding the summary line:
 ## Documentation
 
 We also welcome improvements to the project documentation or to the existing
-docs. Please file an [issue](https://github.com/twitter/sqrl/issues).
+docs. Please file an [issue](https://github.com/sqrl-lang/sqrl/issues).
 
 # License
 
 By contributing your code, you agree to license your contribution under the
-terms of the APLv2: https://github.com/twitter/sqrl/blob/master/LICENSE
+terms of the APLv2: https://github.com/sqrl-lang/sqrl/blob/master/LICENSE
 
 # Code of Conduct
 

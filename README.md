@@ -1,4 +1,4 @@
-# [SQRL](https://twitter.github.io/sqrl/) &middot; [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/twitter/sqrl/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/sqrl.svg?style=flat)](https://www.npmjs.com/package/sqrl) [![Build Status](https://travis-ci.org/twitter/sqrl.svg?branch=master)](https://travis-ci.org/twitter/sqrl) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/twitter/sqrl/blob/master/CONTRIBUTING.md)
+# [SQRL](https://sqrl-lang.github.io/sqrl/) &middot; [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/sqrl-lang/sqrl/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/sqrl.svg?style=flat)](https://www.npmjs.com/package/sqrl) [![Build Status](https://travis-ci.org/sqrl-lang/sqrl.svg?branch=master)](https://travis-ci.org/sqrl-lang/sqrl) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/sqrl-lang/sqrl/blob/master/CONTRIBUTING.md)
 
 The Smyte Query and Rules Language (SQRL) is a Safe, Stateful Rules Language for Event Streams
 
@@ -14,17 +14,11 @@ If you were looking for the [Secure Quick Reliable Login project, check here](ht
 
 ## Documentation
 
-You can find the **SQRL** (Smyte Query & Rules Language) documentation [on the website](https://twitter.github.io/sqrl).
+You can find the **SQRL** (Smyte Query & Rules Language) documentation [on the website](https://sqrl-lang.github.io/sqrl).
 
 ## Support
 
-Create a [new issue](https://github.com/twitter/sqrl/issues/new) on GitHub.
-
-## Contributing
-
-We feel that a welcoming community is important and we ask that you follow Twitter's
-[Open Source Code of Conduct](https://github.com/twitter/code-of-conduct/blob/master/code-of-conduct.md)
-in all interactions with the community.
+Create a [new issue](https://github.com/sqrl-lang/sqrl/issues/new) on GitHub.
 
 ## Authors
 
@@ -43,16 +37,11 @@ It would not have come together without lots of dogfooding and suggestions from:
 
 Special thanks to [Justin Tormey](https://github.com/jtormey) for contributing the NPM package namespace.
 
-A full list of [contributors](https://github.com/twitter/sqrl/graphs/contributors?type=a) can be found on GitHub.
-
-Follow [@TwitterOSS](https://twitter.com/twitteross) on Twitter for updates.
+A full list of [contributors](https://github.com/sqrl-lang/sqrl/graphs/contributors?type=a) can be found on GitHub.
 
 ## License
 
 Copyright 2018 Twitter, Inc.
+Copyright 2022 Josh Yudaken
 
 Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0
-
-## Security Issues?
-
-Please report sensitive security issues via Twitter's bug-bounty program (https://hackerone.com/twitter) rather than GitHub.
