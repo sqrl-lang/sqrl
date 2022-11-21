@@ -1,0 +1,39 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [14, 16, 18, 19]
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+      - name: Install redis
+        run: sudo apt-get install -y redis-tools redis-server
+      - name: Verify that redis is up
+        run: redis-cli ping
+      - name: "Setup node"
+        uses: "actions/setup-node@v2"
+      - name: "Install dependencies"
+        run: npm ci
+      - name: "TypeScript build"
+        run: npm run build
+      - name: "Run tests without coverage"
+        run: npm run test:integration
+        if: ${{ matrix.node != '19' }}
+        env:
+          SQRL_TEST_REDIS: localhost:6379
+      - name: "Run tests with coverage"
+        run: npm run test:integration -- --coverage --detectOpenHandles
+        if: ${{ matrix.node == '19' }}
+        env:
+          SQRL_TEST_REDIS: localhost:6379
+      - name: "Check redis okay"
+        run: "redis-cli get 'sqrl:test' | grep '^okay'"
+      - name: "Upload coverage"
+        uses: coverallsapp/github-action@master
+        if: ${{ matrix.node == '19' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
