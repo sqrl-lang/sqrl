@@ -5,7 +5,7 @@
  */
 import { SqrlInstance, FunctionCostData } from "../function/Instance";
 import { registerAllFunctions } from "../function/registerAllFunctions";
-import { AssertService } from "sqrl-common";
+import { AssertService, invariant } from "sqrl-common";
 import { Instance, FunctionServices } from "../api/execute";
 import { getDefaultConfig, Config } from "../api/config";
 
@@ -23,6 +23,7 @@ export class CapturingAssertService implements AssertService {
     try {
       (expect(left) as any).toSqrlCompare(operator, right, arrow);
     } catch (err) {
+      invariant(err instanceof Error, "Expected Error object");
       this.captureError(err);
     }
   }
@@ -30,6 +31,7 @@ export class CapturingAssertService implements AssertService {
     try {
       (expect(value) as any).toBeSqrlTruthy(arrow);
     } catch (err) {
+      invariant(err instanceof Error, "Expected Error object");
       this.captureError(err);
     }
   }

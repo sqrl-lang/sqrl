@@ -8,10 +8,10 @@ import { invariant } from "./invariant";
 // Flattens an array containing arrays into a single array
 // Only performs a single level
 
-export function flatten(array) {
+export function flatten<T>(array: Array<Array<T>>): Array<T> {
   invariant(Array.isArray(array), "Flatten must be given an array to flatten");
   if (!array.length) {
-    return array;
+    return [];
   }
   array.forEach(function (inner) {
     invariant(
@@ -19,6 +19,6 @@ export function flatten(array) {
       "Every inner element of the array must be an array"
     );
   });
-  // @NOTE: This could be done without a function but is pretty hairy as it is
-  return Array.prototype.concat.call.apply(Array.prototype.concat, array);
+
+  return [].concat(...array);
 }

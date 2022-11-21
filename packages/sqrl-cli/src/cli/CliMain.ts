@@ -129,9 +129,7 @@ export class CliLogService implements LogService {
   }
 }
 
-async function createInstance(
-  args: CliArgs
-): Promise<{
+async function createInstance(args: CliArgs): Promise<{
   instance: Instance;
 }> {
   const config: Config = {
@@ -389,7 +387,7 @@ export async function cliMain(
       });
       repl.start();
       await new Promise((resolve) => {
-        repl.on("exit", resolve);
+        repl.on("exit", () => resolve(null));
       });
     } else if (args.command === "serve") {
       // Read the port from the argument, or `0` for automatically pick

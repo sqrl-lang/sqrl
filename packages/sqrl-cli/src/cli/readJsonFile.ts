@@ -4,6 +4,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 import { readFile, readFileSync } from "fs";
+import { invariant } from "sqrl-common";
 import { promisify } from "util";
 import { CliError } from "./CliError";
 
@@ -14,7 +15,8 @@ export async function readJsonFile(path: string) {
   try {
     data = await readFileAsync(path);
   } catch (err) {
-    if (err.code === "ENOENT") {
+    invariant(err instanceof Error, "Expected error object");
+    if ((err as any).code === "ENOENT") {
       throw new CliError("Could not find file: " + path);
     } else {
       throw err;
@@ -33,7 +35,8 @@ export function readJsonFileSync(path: string) {
   try {
     data = readFileSync(path);
   } catch (err) {
-    if (err.code === "ENOENT") {
+    invariant(err instanceof Error, "Expected error object");
+    if ((err as any).code === "ENOENT") {
       throw new CliError("Could not find file: " + path);
     } else {
       throw err;

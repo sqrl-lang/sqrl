@@ -11,11 +11,11 @@
   "dependencies": {
     "hexo": "^5.2.0",
     "hexo-cli": "^4.2.0",
-    "hexo-deployer-git": "^1.0.0",
+    "hexo-deployer-git": "^3.0.0",
     "hexo-renderer-ejs": "^0.3.1",
     "hexo-renderer-less": "^1.0.0",
-    "hexo-renderer-marked": "^2.0.0",
-    "hexo-renderer-sass": "^0.4.0",
+    "hexo-renderer-marked": "^5.0.0",
+    "hexo-renderer-sass": "git://github.com/robincafolla/hexo-renderer-sass.git#3a2c7f862987cc9742aca3dc6d6d588cdb51ebff",
     "hexo-server": "^0.3.3",
     "sqrl-hexo-theme-doc": "file:themes/sqrl-hexo-theme-doc"
   },

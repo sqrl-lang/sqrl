@@ -10,6 +10,7 @@ import * as dispatch from "micro-route/dispatch";
 import { IncomingMessage, ServerResponse, Server } from "http";
 import { Context, FeatureMap, Executable, Execution, FiredRule } from "sqrl";
 import { CliManipulator } from "sqrl-cli-functions";
+import { invariant } from "sqrl-common";
 
 function userInvariant(cond, message) {
   if (!cond) {
@@ -87,6 +88,7 @@ async function run(
         })
       );
     } catch (e) {
+      invariant(e instanceof Error, "Expected error object");
       throw micro.createError(500, e.message, e);
     }
   }

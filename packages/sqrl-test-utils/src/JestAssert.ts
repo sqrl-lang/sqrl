@@ -3,8 +3,8 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import diff from "jest-diff";
-import { AssertService, SqrlObject, sqrlCompare } from "sqrl-common";
+import { diffStringsUnified } from "jest-diff";
+import { AssertService, SqrlObject, sqrlCompare, invariant } from "sqrl-common";
 
 export class JestAssertService implements AssertService {
   private captureError(manipulator: any, err: Error) {
@@ -28,6 +28,7 @@ export class JestAssertService implements AssertService {
     try {
       (expect(left) as any).toSqrlCompare(operator, right, arrow);
     } catch (err) {
+      invariant(err instanceof Error, "Expected error object");
       this.captureError(manipulator, err);
     }
   }
@@ -35,6 +36,7 @@ export class JestAssertService implements AssertService {
     try {
       (expect(value) as any).toBeSqrlTruthy(arrow);
     } catch (err) {
+      invariant(err instanceof Error, "Expected error object");
       this.captureError(manipulator, err);
     }
   }
@@ -81,7 +83,7 @@ expect.extend({
           `  ${this.utils.printReceived(received)}` +
           source
       : () => {
-          const diffString = diff(expected, received, {
+          const diffString = diffStringsUnified(expected, received, {
             expand: (this as any).expand,
           });
           return (
