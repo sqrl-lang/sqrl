@@ -28,7 +28,7 @@ export async function readJsonFile(path: string) {
   }
 }
 
-export async function readJsonFileSync(path: string) {
+export function readJsonFileSync(path: string) {
   let data: Buffer;
   try {
     data = readFileSync(path);

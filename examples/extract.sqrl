@@ -1,0 +1,4 @@
+LET EventData := input();
+LET EventType := jsonValue(EventData, "$.event");
+LET Username := jsonValue(EventData, "$.username");
+LET Text := jsonValue(EventData, "$.text");

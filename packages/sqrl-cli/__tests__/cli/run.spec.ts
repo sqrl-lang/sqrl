@@ -21,6 +21,21 @@ test("works", async () => {
   );
 });
 
+test("works with file inputs", async () => {
+  const stdout = await runCli([
+    "run",
+    examplePath("extract.sqrl"),
+    "-s",
+    'EventData=@' + examplePath("data/tweet.json"),
+    "Text",
+    "Username",
+  ]);
+
+  expect(stripAnsi(stdout).replace(/[0-9]/g, "x")).toEqual(
+    "✓ xxxx-xx-xx xx:xx action was allowed.\n" + 'Text="hello world!"\n' + 'Username="floydophone"\n'
+  );
+});
+
 test("does not work with set after text", async () => {
   // @todo: it would be nice if this worked, but seems like a docopt bug
   await expect(
