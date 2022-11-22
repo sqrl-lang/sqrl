@@ -6,7 +6,7 @@ title: Wikipedia
 Once you get a little further, we have a demonstration that looks for a set of bad words on wikipedia.
 
 ```
-git clone git@github.com:twitter/sqrl
+git clone git@github.com:sqrl-lang/sqrl
 cd sqrl/examples/wikipedia
 npx wikipedia-diff-stream en.wikipedia.org | sqrl run main.sqrl --stream=EventData --only-blocked
 
