@@ -1,4 +1,4 @@
-# [SQRL](https://sqrl-lang.github.io/sqrl/) &middot; [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/sqrl-lang/sqrl/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/sqrl.svg?style=flat)](https://www.npmjs.com/package/sqrl) [![Build Status](https://github.com/sqrl-lang/sqrl/actions/workflows/tests.yml/badge.svg)](https://travis-ci.org/twitter/sqrl.svg?branch=main) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/sqrl-lang/sqrl/blob/main/CONTRIBUTING.md)
+# [SQRL](https://sqrl-lang.github.io/sqrl/) &middot; [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/sqrl-lang/sqrl/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/sqrl.svg?style=flat)](https://www.npmjs.com/package/sqrl) [![Build Status](https://github.com/sqrl-lang/sqrl/actions/workflows/tests.yml/badge.svg)](https://github.com/qix/sqrl/actions/workflows/tests.yml) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/sqrl-lang/sqrl/blob/main/CONTRIBUTING.md)
 
 # `sqrl-cli` package
 

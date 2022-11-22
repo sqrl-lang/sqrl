@@ -29,7 +29,7 @@ ignore:
 
 deploy:
   type: git
-  repo: git@github.com:twitter/sqrl
+  repo: git@github.com:sqrl-lang/sqrl
   branch: gh-pages-staging
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}"
   ignore_hidden: false
