@@ -12,9 +12,14 @@ import {
   sqrlInvariant,
 } from "sqrl";
 import { registerPatternFunctions } from "./PatternFunctions";
-import { InProcessPatternService } from "./InProcessPatternService";
+import { InProcessPatternService, CreateRegExp } from "./InProcessPatternService";
 import { SimHash } from "simhash-js";
 import { createHash } from "crypto";
+import * as RE2 from "re2";
+
+interface TextFunctionsConfig {
+  'builtinRegExp'?: boolean
+}
 
 export function register(instance: Instance) {
   const jsSimhash = new SimHash();
@@ -128,5 +133,13 @@ export function register(instance: Instance) {
     }
   );
 
-  registerPatternFunctions(instance, new InProcessPatternService());
+  const config: TextFunctionsConfig = instance.getConfig()['sqrl-text-functions'];
+
+  let createRegExp: CreateRegExp;
+  if (config.builtinRegExp) {
+    createRegExp = (source, flags) => new RegExp(source, flags);
+  } else {
+    createRegExp = (source, flags) => new RE2(source, flags);
+  }
+  registerPatternFunctions(instance, new InProcessPatternService(createRegExp));
 }
