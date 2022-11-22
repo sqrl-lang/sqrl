@@ -1,6 +1,6 @@
 {
   "name": "sqrl-text-functions",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - functions for working with text",
   "homepage": "https://sqrl-lang.github.io/sqrl",
   "license": "Apache-2.0",
@@ -40,8 +40,7 @@
     "@types/jest": "^27.4.1",
     "@types/node": "^11.9.5",
     "jest": "^27.5.1",
-    "sqrl-load-functions": "^0.6.8",
-    "sqrl-load-functions": "^0.6.6-beta.7",
+    "sqrl-load-functions": "^0.6.9",
     "ts-jest": "^27.1.3",
     "ts-node": "^8.3.0",
     "typescript": "^4.8.4"
@@ -53,7 +52,7 @@
     "node-nice": "0.0.1",
     "re2": "^1.15.8",
     "simhash-js": "^1.0.0",
-    "sqrl": "^0.6.8"
+    "sqrl": "^0.6.9"
   },
   "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }
