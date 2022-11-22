@@ -4,5 +4,5 @@ set -eo pipefail
 cd "$(dirname $0)/../.."
 ./scripts/ensure-installed
 
-node packages/wikipedia-diff-stream/main.js en.wikipedia.org | \
+node tools/wikipedia-diff-stream/main.js en.wikipedia.org | \
   ./sqrl run ./examples/wikipedia/main.sqrl --stream=EventData "$@"
