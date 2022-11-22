@@ -42,6 +42,7 @@
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.23.20",
     "typescript": "^4.8.4",
+    "websqrl": "file:websqrl",
     "wikipedia-diff-stream": "file:packages/wikipedia-diff-stream"
   },
   "scripts": {
@@ -54,7 +55,7 @@
     "coverage": "jest --coverage",
     "build": "lerna run build",
     "generate-parser": "lerna run --parallel generate-parser",
-    "watch": "lerna run --parallel watch -- -- --preserveWatchOutput",
+    "watch": "lerna run --stream --parallel watch -- --preserveWatchOutput",
     "watch:test": "npm run test -- --watch",
     "watch:test:integration": "npm run test:integration -- --watch"
   }

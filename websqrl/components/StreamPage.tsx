@@ -139,7 +139,6 @@ export function StreamPage(props: {
         }
         firstBatch = false;
       }
-      console.log("Got", events.length, "in batch, starting from", eventIndex);
       scheduleNextEvent();
     };
 
