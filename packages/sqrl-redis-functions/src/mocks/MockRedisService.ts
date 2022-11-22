@@ -20,7 +20,7 @@ export class MockRedisService implements RedisInterface, MockRedisDatabase {
   ): Promise<number> {
     return mockRateLimitFetch(
       this,
-      key.toString("utf-8"),
+      key.toString("hex"),
       opt.maxAmount,
       opt.take,
       opt.at,
@@ -37,7 +37,7 @@ export class MockRedisService implements RedisInterface, MockRedisDatabase {
   ): Promise<number> {
     return mockSessionize(
       this,
-      key.toString("utf-8"),
+      key.toString("hex"),
       opt.maxAmount,
       opt.take,
       opt.at,

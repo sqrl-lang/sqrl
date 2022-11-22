@@ -40,6 +40,39 @@ test("Basic test works", async () => {
   );
 });
 
+test("out of order events work", async () => {
+  await runSqrl(
+    `
+    LET StartClock := now();
+
+    LET Ip := "1.2.3.4";
+
+    # Log one event 25 seconds in the future
+    LET SqrlClock := dateAdd(StartClock, "PT25S");
+    ASSERT rateLimit(BY Ip EVERY 10 SECONDS) = 1;
+    EXECUTE;
+
+    # Unexpected times before that event all use the same rate limit
+    LET SqrlClock := dateAdd(StartClock, "PT5S");
+    ASSERT rateLimit(BY Ip EVERY 10 SECONDS) = 0;
+    EXECUTE;
+    LET SqrlClock := dateAdd(StartClock, "PT20S");
+    ASSERT rateLimit(BY Ip EVERY 10 SECONDS) = 0;
+    EXECUTE;
+    LET SqrlClock := dateAdd(StartClock, "PT1S");
+    ASSERT rateLimit(BY Ip EVERY 10 SECONDS) = 0;
+    EXECUTE;
+
+    # But 10 seconds after the initial event, rate limit is reset
+    LET SqrlClock := dateAdd(StartClock, "PT35S");
+    ASSERT rateLimit(BY Ip EVERY 10 SECONDS) = 1;
+    EXECUTE;
+    `,
+    { instance }
+  );
+});
+
+
 test("take works with features", async () => {
   const run = () =>
     getResult(
