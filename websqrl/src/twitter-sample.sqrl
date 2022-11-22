@@ -1,0 +1,15 @@
+LET EventData := input();
+LET SqrlClock := jsonValue(EventData, '$.data.created_at');
+LET Text := jsonValue(EventData, '$.data.text');
+LET AuthorId := jsonValue(EventData, '$.data.author_id');
+LET TweetId := jsonValue(EventData, '$.data.id');
+LET Users := jsonValue(EventData, '$.includes.users');
+LET UserData := first([It for It in Users where jsonValue(It, "$.id") = AuthorId]);
+LET User := entity("User", jsonValue(UserData, "$.username"));
+LET UserCreatedAt := jsonValue(UserData, "$.created_at");
+LET UserName := jsonValue(UserData, "$.name");
+
+LET Global := true;
+LET TotalTweets := count(BY Global);
+LET ShouldLog := rateLimit(BY Global EVERY 5 SECONDS);
+log("[%d] @%s: %s (?%d)", TotalTweets, User, Text, ShouldLog) WHERE ShouldLog;
