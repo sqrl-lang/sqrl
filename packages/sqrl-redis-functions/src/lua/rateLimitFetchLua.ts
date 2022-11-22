@@ -8,6 +8,7 @@ import { MockRedisDatabase } from "../mocks/MockRedisDatabase";
 export function rateLimitFetchLua() {
   // It is likely inefficient to update the expiry time on every ratelimit,
   // change, that could be optimized a lot.
+
   return (
     `
 local maxAmount = tonumber(ARGV[1])
@@ -27,6 +28,10 @@ if not current then
   lastRefill = at
 else
   tokens, lastRefill = struct.unpack("i8i8", current)
+
+  if lastRefill > at then
+    at = lastRefill
+  end
 end
 
 if take == 0 then
@@ -84,6 +89,9 @@ export function mockRateLimitFetch(
     lastRefill = at;
   } else {
     [tokens, lastRefill] = JSON.parse(current);
+    if (lastRefill > at) {
+      at = lastRefill;
+    }
   }
 
   if (take === 0) {
