@@ -22,6 +22,10 @@ module.exports = {
       type: "asset/source",
     });
 
+    // Disable code optimization, SQRL uses function names
+    assert(config.optimization);
+    config.optimization.minimize = false
+
     const oneOfRule = config.module.rules.find(
       /** @returns {rule is import('webpack').RuleSetRule} */
       (rule) => typeof rule === "object" && !!rule.oneOf
