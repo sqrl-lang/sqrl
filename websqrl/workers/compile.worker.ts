@@ -1,7 +1,7 @@
 import * as SQRL from "sqrl";
 import * as sqrlJsonPath from "sqrl-jsonpath";
 import * as sqrlRedisFunctions from "sqrl-redis-functions";
-import * as sqrlTextFunctions from "sqrl-text-functions";
+import * as sqrlTextFunctions from "sqrl-text-functions/web";
 import { Request, Response, WikiEvent, LogEntry } from "../src/types";
 import { Execution, AT } from "sqrl";
 import { invariant } from "../src/invariant";
@@ -24,9 +24,9 @@ async function buildInstance() {
   const instance = SQRL.createInstance({
     config: {
       "state.allow-in-memory": true,
-      'sqrl-text-functions': {
+      "sqrl-text-functions": {
         builtinRegExp: true,
-      }
+      },
     },
   });
   await instance.importFromPackage("sqrl-jsonpath", sqrlJsonPath);

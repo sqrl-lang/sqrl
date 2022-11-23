@@ -23,6 +23,10 @@
     "lib"
   ],
   "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./web": "./lib/web.js"
+  },
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib && rimraf coverage",
