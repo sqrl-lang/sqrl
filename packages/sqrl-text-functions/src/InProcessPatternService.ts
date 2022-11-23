@@ -5,10 +5,9 @@
  */
 import { PatternService } from "./PatternFunctions";
 import { nice } from "node-nice";
-import RE2 = require("re2");
 
 // Regular expression looking for a regular expression
-const REGEXP_REGEXP = /^\/(.*)\/(i)?$/;
+const REGEXP_REGEXP = /^\/(.*)\/([a-z]*)$/;
 
 const matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
 
@@ -16,20 +15,26 @@ function escapeRegExp(str: string): string {
   return str.replace(matchOperatorsRe, "\\$&");
 }
 
+interface GenericRegExp {
+  lastIndex: number;
+  exec(content: string): string[]
+}
+export type CreateRegExp = (source, flags) => GenericRegExp;
+
 class RegisteredPattern {
-  private re2: RE2;
-  constructor(source: string, flags: string) {
-    this.re2 = new RE2(source, flags + "g");
+  private regExp: GenericRegExp;
+  constructor(regExp: GenericRegExp) {
+    this.regExp = regExp;
   }
 
   match(content: string): Promise<string[]> {
     return nice(() => {
-      this.re2.lastIndex = 0;
+      this.regExp.lastIndex = 0;
       const rv = [];
-      let match = this.re2.exec(content);
+      let match = this.regExp.exec(content);
       while (match) {
         rv.push(match[0]);
-        match = this.re2.exec(content);
+        match = this.regExp.exec(content);
       }
       return rv;
     });
@@ -46,7 +51,7 @@ export class InProcessPatternService implements PatternService {
     [source: string]: RegisteredPattern;
   };
 
-  constructor() {
+  constructor(private createRegExp: CreateRegExp) {
     this.patterns = {};
   }
 
@@ -56,14 +61,14 @@ export class InProcessPatternService implements PatternService {
     if (match) {
       // Use the provided regular expression as is.
       const [, source, flags] = match;
-      return new RegisteredPattern(source, flags);
+      return new RegisteredPattern(this.createRegExp(source, flags + 'g'));
     } else if (pattern.startsWith('"') && pattern.endsWith('"')) {
       // Do an exact match search
-      return new RegisteredPattern(escapeRegExp(pattern.slice(1, -1)), "");
+      return new RegisteredPattern(this.createRegExp(escapeRegExp(pattern.slice(1, -1)), "g"));
     } else {
       // Do a fuzzy match, this could be improved but for now just search with word boundaries and
       // case insensitive
-      return new RegisteredPattern("\\b" + escapeRegExp(pattern) + "\\b", "i");
+      return new RegisteredPattern(this.createRegExp("\\b" + escapeRegExp(pattern) + "\\b", "gi"));
     }
   }
 

@@ -14,6 +14,7 @@ module.exports = {
     config.resolve.fallback = {
       // the require for this module is wrapped in a try/catch, so it can fail without causing issues
       "sqrl-test-utils": false,
+      "re2": false,
     };
 
     assert(config.module?.rules);
