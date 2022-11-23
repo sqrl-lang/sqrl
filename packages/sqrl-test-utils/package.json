@@ -1,6 +1,6 @@
 {
   "name": "sqrl-test-utils",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "SQRL (A Safe, Stateful Rules Language for Event Streams) - helpers for writing tests",
   "license": "Apache-2.0",
   "repository": "https://github.com/sqrl-lang/sqrl/tree/main/packages/sqrl-test-utils",
@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "jest-diff": "^26.6.1",
-    "sqrl-common": "^0.6.9"
+    "sqrl-common": "^0.6.10"
   },
   "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
 }
