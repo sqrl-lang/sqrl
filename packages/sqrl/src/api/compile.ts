@@ -15,6 +15,7 @@ import { SqrlParserState } from "../compile/SqrlParserState";
 import { compileParserStateAst } from "../compile/SqrlCompile";
 import { Filesystem } from "./filesystem";
 import { invariant } from "sqrl-common";
+import { sqrlSourceArrow } from "../compile/sqrlSourceArrow";
 
 interface CompileFromStatementsOptions {
   context?: Context;
@@ -188,4 +189,11 @@ export function executableFromSpec(
 ): Executable {
   const context = new JsExecutionContext(instance._instance);
   return new Executable(new SqrlExecutable(context, spec));
+}
+
+/**
+ * This method returns a string explaining where the error occurred in the source code.
+ */
+export function sourceArrow(location: any): string {
+  return sqrlSourceArrow(location);
 }

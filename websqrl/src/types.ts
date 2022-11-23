@@ -1,34 +1,8 @@
-export interface WikiEvent {
-  meta: {
-    uri: string;
-    request_id: string;
-    id: string;
-    dt: string;
-    domain: string;
-    stream: string;
-    topic: string;
-    partition: number;
-    offset: number;
-  };
-  id: number;
-  type: string;
-  namespace: 0;
-  title: string;
-  comment: string;
-  timestamp: number;
-  user: string;
-  bot: false;
-  minor: true;
-  length: { old: number; new: number };
-  revision: { old: number; new: number };
-  server_url: string;
-  server_name: string;
-  server_script_path: string;
-  wiki: string;
-  parsedcomment: string;
-  content: {
-    added: string;
-  };
+import { FeatureMap } from "sqrl";
+import { TweetResult } from "../TweetManipulator";
+
+export interface EventData {
+  [key: string]: any;
 }
 
 export interface CompileRequest {
@@ -37,7 +11,8 @@ export interface CompileRequest {
 }
 export interface EventRequest {
   type: "event";
-  event: WikiEvent;
+  event: EventData;
+  requestFeatures: string[];
 }
 export type Request = CompileRequest | EventRequest;
 
@@ -62,6 +37,8 @@ export interface LogEntry {
 export interface Result {
   type: "result";
   logs: Array<LogEntry>;
+  result: TweetResult;
+  features: FeatureMap;
   source: string;
 }
 export interface Render {

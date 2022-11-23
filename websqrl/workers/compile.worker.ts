@@ -2,11 +2,13 @@ import * as SQRL from "sqrl";
 import * as sqrlJsonPath from "sqrl-jsonpath";
 import * as sqrlRedisFunctions from "sqrl-redis-functions";
 import * as sqrlTextFunctions from "sqrl-text-functions/web";
-import { Request, Response, WikiEvent, LogEntry } from "../src/types";
-import { Execution, AT } from "sqrl";
+import { Request, Response, EventData, LogEntry } from "../src/types";
+import { Execution, AT, WhenCause, sourceArrow, FeatureMap } from "sqrl";
 import { invariant } from "../src/invariant";
+import { TweetManipulator } from "../TweetManipulator";
 
 const COMPILE_DEBOUNCE_MS = 15;
+
 const ctx: Worker = self as any;
 
 let compileTimeout: any = null;
@@ -61,6 +63,23 @@ async function buildInstance() {
       docstring: "Logs a message using console.log()",
     }
   );
+
+  instance.registerStatement(
+    "SqrlBlockStatements",
+    async function blockTweet(state: Execution, cause: WhenCause) {
+      if (!(state.manipulator instanceof TweetManipulator)) {
+        throw new Error("Expected TweetManipulator for WebSQRL");
+      }
+      state.manipulator.blockTweet(cause);
+    },
+    {
+      args: [AT.state, AT.whenCause],
+      allowNull: true,
+      argstring: "",
+      docstring: "Mark the current action as blocked",
+    }
+  );
+
   return instance;
 }
 
@@ -107,7 +126,7 @@ function triggerCompile() {
           "Line " +
           err.location.start.line +
           ":\n" +
-          // sourceArrow(source, err.location) +
+          sourceArrow(err.location) +
           "\n" +
           message;
       }
@@ -125,22 +144,34 @@ function triggerCompile() {
     });
 }
 
-async function runEvent(event: WikiEvent) {
+async function runEvent(event: EventData, requestFeatures: string[]) {
   invariant(latestExecutable, "No executable to process event");
 
   const ctx = SQRL.createSimpleContext();
+  const manipulator = new TweetManipulator();
   const execution = await latestExecutable.execute(ctx, {
-    manipulator: new SQRL.SimpleManipulator(),
+    manipulator,
     inputs: {
       EventData: event,
     },
   });
 
-  await execution.fetchFeature("SqrlExecutionComplete");
-  await execution.manipulator.mutate(ctx);
+  const completePromise = execution.fetchFeature("SqrlExecutionComplete");
+
+  const features: FeatureMap = {};
+  await Promise.all(
+    requestFeatures.map(async (name) => {
+      features[name] = await execution.fetchValue(name);
+    })
+  );
+
+  await completePromise;
+  await manipulator.mutate(ctx);
 
   return {
     logs: execution.get<LogEntry[]>(logStore, []),
+    result: manipulator.getResult(),
+    features,
   };
 }
 function debounceCompile() {
@@ -159,7 +190,7 @@ ctx.addEventListener("message", (event) => {
     debounceCompile();
   } else if (message.type === "event") {
     if (latestExecutable) {
-      runEvent(message.event).then(
+      runEvent(message.event, message.requestFeatures).then(
         (props) => {
           respond({
             type: "result",
