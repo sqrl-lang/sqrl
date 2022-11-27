@@ -1,7 +1,7 @@
 import * as SQRL from "sqrl";
 import * as sqrlJsonPath from "sqrl-jsonpath";
 import * as sqrlRedisFunctions from "sqrl-redis-functions";
-import * as sqrlTextFunctions from "sqrl-text-functions/web";
+import * as sqrlTextFunctions from "sqrl-text-functions";
 import { Request, Response, EventData, LogEntry } from "../src/types";
 import { Execution, AT, WhenCause, sourceArrow, FeatureMap } from "sqrl";
 import { invariant } from "../src/invariant";

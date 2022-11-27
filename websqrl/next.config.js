@@ -11,10 +11,14 @@ module.exports = {
     { isServer }
   ) => {
     config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // ignore re2 import
+      re2: false,
+    };
     config.resolve.fallback = {
       // the require for this module is wrapped in a try/catch, so it can fail without causing issues
       "sqrl-test-utils": false,
-      "re2": false,
     };
 
     assert(config.module?.rules);
@@ -25,7 +29,7 @@ module.exports = {
 
     // Disable code optimization, SQRL uses function names
     assert(config.optimization);
-    config.optimization.minimize = false
+    config.optimization.minimize = false;
 
     const oneOfRule = config.module.rules.find(
       /** @returns {rule is import('webpack').RuleSetRule} */
