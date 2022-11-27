@@ -9,16 +9,17 @@ import {
   startOfMinute,
   differenceInMilliseconds,
 } from "date-fns";
-import { Request, Response, WikiEvent, Result } from "../src/types";
+import { Request, Response, EventData, Result } from "../src/types";
 import { MonacoEditor } from "../src/MonacoEditor";
 
 let LOG_ID = 0;
 const DELAY_MS = 60_000 * 3;
+const FETCH_FEATURES = ["Text", "User", "TweetId", "TweetDate"];
 
 export function StreamPage(props: {
-  urlPrefix: string,
-  extractDate: (payload: any) => Date,
-  sampleCode: string
+  urlPrefix: string;
+  extractDate: (payload: any) => Date;
+  sampleCode: string;
 }) {
   const { extractDate, urlPrefix } = props;
   const worker = useRef<Worker>();
@@ -58,14 +59,64 @@ export function StreamPage(props: {
 
   function buildEntry(res: Result) {
     const messages = [];
+    const { features, result } = res;
     for (const msg of res.logs) {
       messages.push(sprintf(msg.format, ...msg.args));
     }
-    return <div style={{
-      backgroundColor: '#555',
-      marginTop: '2px'
-    }}>{messages}</div>;
+
+    const userUrl = `https://twitter.com/${features.User}`;
+    const tweetUrl = `https://twitter.com/${features.User}/status/${features.TweetId}`;
+
+    // Only show blocked tweets for now
+    if (!result.blocked) {
+      return null;
+    }
+
+    return (
+      <div
+        style={{
+          padding: "2px",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "#555",
+          }}
+        >
+          <strong>
+            <a href={userUrl}>{features.User}</a>
+          </strong>{" "}
+          <span style={{ color: "#ddd" }}>
+            (<a href={tweetUrl}>{features.TweetDate}</a>)
+          </span>
+          <br />
+          <div>{features.Text}</div>
+          {result.blockedCause ? (
+            <div style={{ color: "#f99" }}>
+              Blocked for:{" "}
+              {result.blockedCause.firedRules
+                .map(
+                  (rule) => rule.name + (rule.reason ? ": " + rule.reason : "")
+                )
+                .join(", ")}
+            </div>
+          ) : null}
+          {messages.map((message) => (
+            <div
+              style={{
+                padding: "2px",
+                whiteSpace: "pre",
+                fontFamily: "monospace",
+              }}
+            >
+              {message.trim()}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
+
   useEffect(() => {
     const scripts: HTMLScriptElement[] = [];
 
@@ -80,7 +131,7 @@ export function StreamPage(props: {
       scripts.push(script);
     }
 
-    let events: WikiEvent[] = [];
+    let events: EventData[] = [];
     let eventIndex = 0;
     let nextEventTimeout: NodeJS.Timeout;
     let downloadDate = startOfMinute(subMilliseconds(new Date(), DELAY_MS));
@@ -91,6 +142,7 @@ export function StreamPage(props: {
         req({
           type: "event",
           event: events[eventIndex],
+          requestFeatures: FETCH_FEATURES,
         });
         eventIndex++;
       } else {

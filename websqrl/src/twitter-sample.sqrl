@@ -1,15 +1,34 @@
 LET EventData := input();
-LET SqrlClock := jsonValue(EventData, '$.data.created_at');
+LET SqrlClock := TweetDate;
+
 LET Text := jsonValue(EventData, '$.data.text');
 LET AuthorId := jsonValue(EventData, '$.data.author_id');
 LET TweetId := jsonValue(EventData, '$.data.id');
+LET TweetDate := jsonValue(EventData, '$.data.created_at');
 LET Users := jsonValue(EventData, '$.includes.users');
 LET UserData := first([It for It in Users where jsonValue(It, "$.id") = AuthorId]);
 LET User := entity("User", jsonValue(UserData, "$.username"));
 LET UserCreatedAt := jsonValue(UserData, "$.created_at");
 LET UserName := jsonValue(UserData, "$.name");
 
+LET Simhash := simhash(Text);
+
+LET TweetsByUser := count(BY User TOTAL);
+LET CountBySimhash := count(BY Simhash LAST 1 HOUR);
+LET UsersBySimhash := countUnique(User BY Simhash LAST HOUR);
+
+
 LET Global := true;
 LET TotalTweets := count(BY Global);
-LET ShouldLog := rateLimit(BY Global EVERY 5 SECONDS);
-log("[%d] @%s: %s (?%d)", TotalTweets, User, Text, ShouldLog) WHERE ShouldLog;
+LET ShouldLog := rateLimit(BY Global EVERY 5 SECONDS) OR
+    CountBySimhash>1 OR UsersBySimhash>1;
+
+CREATE RULE SimilarTweetText WHERE CountBySimhash>1 WITH REASON
+    "Seen multiple tweets with similar text";
+CREATE RULE SameTweetMultipleUsers WHERE UsersBySimhash>1 WITH REASON
+    "Seen multiple users tweeting the same text";
+
+WHEN SimilarTweetText THEN blockTweet();
+
+log("Common tweet text (seen %d similar)" , CountBySimhash) WHERE CountBySimhash>1;
+log("Seen %d tweets by user" , TweetsByUser) WHERE TweetsByUser>1;
