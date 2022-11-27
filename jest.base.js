@@ -3,13 +3,18 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 
 module.exports = {
-  setupFilesAfterEnv: ["jest-extended"],
+  setupFilesAfterEnv: ["jest-extended/all"],
   transform: {
-    "\\.ts$": "ts-jest"
+    ".+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "<rootDir>/tsconfig.jest.json",
+      },
+    ],
   },
   globals: {
-    __INTEGRATION__: false
+    __INTEGRATION__: false,
   },
   moduleFileExtensions: ["ts", "js", "node"],
-  testEnvironment: "node"
+  testEnvironment: "node",
 };

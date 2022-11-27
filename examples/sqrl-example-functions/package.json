@@ -14,16 +14,9 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },
-  "peerDependencies": {
-    "sqrl": ">= 0.0.1 < 1"
-  },
-  "devDependencies": {
-    "@types/node": "^11.9.5",
-    "tslint": "^5.19.0",
-    "typescript": "^4.5.5"
-  },
   "dependencies": {
     "sqrl": "^0.6.10"
   },
-  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
+  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815",
+  "repository": "https://github.com/sqrl-lang/sqrl/tree/main/examples/sqrl-example-functions"
 }

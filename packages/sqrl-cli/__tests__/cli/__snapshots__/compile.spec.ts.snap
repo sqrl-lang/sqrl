@@ -1,65 +1,65 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`repl works 1`] = `
-Object {
-  "slotExprs": Array [
-    Object {
+{
+  "slotExprs": [
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
-      "exprs": Array [],
+    {
+      "exprs": [],
       "func": "now",
       "type": "call",
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
-    Object {
+    {
       "type": "input",
     },
-    Object {
-      "exprs": Array [
-        Object {
-          "exprs": Array [
-            Object {
+    {
+      "exprs": [
+        {
+          "exprs": [
+            {
               "type": "constant",
               "value": "Hello, ",
             },
-            Object {
+            {
               "slot": 10,
               "type": "value",
             },
-            Object {
+            {
               "type": "constant",
               "value": "!",
             },
@@ -68,17 +68,17 @@ Object {
           "type": "call",
         },
       ],
-      "load": Array [
+      "load": [
         10,
       ],
       "type": "load",
     },
-    Object {
+    {
       "type": "constant",
       "value": true,
     },
   ],
-  "slotNames": Array [
+  "slotNames": [
     "SqrlMutate",
     "SqrlIsClassify",
     "SqrlClock",

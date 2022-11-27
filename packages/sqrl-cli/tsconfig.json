@@ -1,9 +1,35 @@
 {
-  "extends": "../../tsconfig.json",
-
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
     "rootDir": "./src",
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "tsBuildInfoFile": "lib/cache.tsbuildinfo"
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ],
+  "references": [
+    {
+      "path": "../sqrl"
+    },
+    {
+      "path": "../sqrl-cli-functions"
+    },
+    {
+      "path": "../sqrl-common"
+    },
+    {
+      "path": "../sqrl-jsonpath"
+    },
+    {
+      "path": "../sqrl-load-functions"
+    },
+    {
+      "path": "../sqrl-redis-functions"
+    },
+    {
+      "path": "../sqrl-text-functions"
+    }
+  ],
 }

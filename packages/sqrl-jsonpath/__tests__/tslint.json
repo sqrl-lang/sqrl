@@ -1,6 +1,0 @@
-{
-  "extends": ["../../../tslint"],
-  "rules": {
-    "no-implicit-dependencies": [true, "dev"]
-  }
-}

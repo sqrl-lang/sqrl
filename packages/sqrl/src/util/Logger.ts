@@ -3,7 +3,6 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import * as util from "util";
 import { LogProperties, Logger } from "../api/log";
 
 export abstract class AbstractLogger implements Logger {
@@ -36,9 +35,8 @@ export abstract class AbstractLogger implements Logger {
 
 export class ConsoleLogger extends AbstractLogger {
   log(level: string, props: LogProperties, format: string, ...param: any[]) {
-    const message = util.format(format, ...param);
     // tslint:disable-next-line
-    console.error(message);
+    console.error(format, ...param);
     if (props.err && props.err.stack) {
       // tslint:disable-next-line
       console.error(props.err.stack);
