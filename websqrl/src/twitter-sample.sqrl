@@ -1,27 +1,25 @@
 LET EventData := input();
 LET SqrlClock := TweetDate;
 
-LET Text := jsonValue(EventData, '$.data.text');
+LET TweetText := jsonValue(EventData, '$.data.text');
 LET AuthorId := jsonValue(EventData, '$.data.author_id');
 LET TweetId := jsonValue(EventData, '$.data.id');
 LET TweetDate := jsonValue(EventData, '$.data.created_at');
 LET Users := jsonValue(EventData, '$.includes.users');
-LET UserData := first([It for It in Users where jsonValue(It, "$.id") = AuthorId]);
-LET User := entity("User", jsonValue(UserData, "$.username"));
-LET UserCreatedAt := jsonValue(UserData, "$.created_at");
-LET UserName := jsonValue(UserData, "$.name");
+LET AuthorUserData := first([It for It in Users where jsonValue(It, "$.id") = AuthorId]);
+LET AuthorUsername := entity("User", jsonValue(AuthorUserData, "$.username"));
+LET AuthorCreatedAt := jsonValue(AuthorUserData, "$.created_at");
+LET AuthorName := jsonValue(AuthorUserData, "$.name");
+LET AuthorProfileImageUrl := jsonValue(AuthorUserData, "$.profile_image_url");
 
-LET Simhash := simhash(Text);
+LET TweetTextSimhash := simhash(TweetText);
 
-LET TweetsByUser := count(BY User TOTAL);
-LET CountBySimhash := count(BY Simhash LAST 1 HOUR);
-LET UsersBySimhash := countUnique(User BY Simhash LAST HOUR);
-
+LET TweetsByUser := count(BY AuthorUsername TOTAL);
+LET CountBySimhash := count(BY TweetTextSimhash LAST 1 HOUR);
+LET UsersBySimhash := countUnique(AuthorUsername BY TweetTextSimhash LAST HOUR);
 
 LET Global := true;
 LET TotalTweets := count(BY Global);
-LET ShouldLog := rateLimit(BY Global EVERY 5 SECONDS) OR
-    CountBySimhash>1 OR UsersBySimhash>1;
 
 CREATE RULE SimilarTweetText WHERE CountBySimhash>1 WITH REASON
     "Seen multiple tweets with similar text";

@@ -3,24 +3,22 @@ import * as sqrlJsonPath from "sqrl-jsonpath";
 import * as sqrlRedisFunctions from "sqrl-redis-functions";
 import * as sqrlTextFunctions from "sqrl-text-functions";
 import { Request, Response, EventData, LogEntry } from "../src/types";
-import { Execution, AT, WhenCause, sourceArrow, FeatureMap } from "sqrl";
+import { Execution, AT, WhenCause, FeatureMap } from "sqrl";
 import { invariant } from "../src/invariant";
 import { TweetManipulator } from "../TweetManipulator";
 
-const COMPILE_DEBOUNCE_MS = 15;
-
-const ctx: Worker = self as any;
+const COMPILE_DEBOUNCE_MS = 200;
 
 let compileTimeout: any = null;
 
-function respond(response: Response) {
-  ctx.postMessage(response);
+function respond(response: Response<string>) {
+  self.postMessage(response);
 }
 
 // TODO(meyer) look into why this isn't getting transformed
-(ctx as any).setImmediate = (func: (...args: any) => void) => {
+self.setImmediate = ((func: (...args: any[]) => void) => {
   setTimeout(func, 0);
-};
+}) as any;
 
 async function buildInstance() {
   const instance = SQRL.createInstance({
@@ -83,7 +81,7 @@ async function buildInstance() {
   return instance;
 }
 
-let instancePromise: Promise<SQRL.Instance> = null;
+let instancePromise: Promise<SQRL.Instance> | null = null;
 
 const logStore = Symbol("logs");
 async function compile(source: string) {
@@ -104,7 +102,7 @@ async function compile(source: string) {
 
 let latestSource: string = "";
 let latestExecutable: SQRL.Executable;
-let compilePromise: Promise<void> = null;
+let compilePromise: Promise<void> | null = null;
 
 function triggerCompile() {
   const source = latestSource;
@@ -120,19 +118,12 @@ function triggerCompile() {
       }
     })
     .catch((err) => {
-      let message = err.stack;
-      if (err.location) {
-        message =
-          "Line " +
-          err.location.start.line +
-          ":\n" +
-          sourceArrow(err.location) +
-          "\n" +
-          message;
-      }
+      console.error(err);
       respond({
         type: "compileError",
-        message,
+        stack: err.stack,
+        message: err.message,
+        location: err.location,
         source,
       });
     })
@@ -144,7 +135,7 @@ function triggerCompile() {
     });
 }
 
-async function runEvent(event: EventData, requestFeatures: string[]) {
+async function runEvent(event: EventData, requestFeatures: readonly string[]) {
   invariant(latestExecutable, "No executable to process event");
 
   const ctx = SQRL.createSimpleContext();
@@ -181,8 +172,8 @@ function debounceCompile() {
   }
 }
 
-ctx.addEventListener("message", (event) => {
-  const message = event.data as Request;
+self.addEventListener("message", (event) => {
+  const message = event.data as Request<string>;
 
   if (message.type === "compile") {
     const { source } = message;

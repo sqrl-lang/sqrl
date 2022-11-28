@@ -1,7 +1,4 @@
-import Head from "next/head";
 import { useEffect, useState, useRef } from "react";
-import { sprintf } from "sprintf-js";
-import Split from "react-split";
 import { invariant } from "../src/invariant";
 import {
   addMinutes,
@@ -9,112 +6,93 @@ import {
   startOfMinute,
   differenceInMilliseconds,
 } from "date-fns";
-import { Request, Response, EventData, Result } from "../src/types";
+import type {
+  Request,
+  Response,
+  EventData,
+  Result,
+  CompileError,
+} from "../src/types";
 import { MonacoEditor } from "../src/MonacoEditor";
+import { useMatchMedia, Col, Box, Block, Row } from "jsxstyle";
+import { styleConstants } from "../src/constants";
+import { Container } from "./Container";
+import type { editor } from "monaco-editor";
 
 let LOG_ID = 0;
 const DELAY_MS = 60_000 * 3;
-const FETCH_FEATURES = ["Text", "User", "TweetId", "TweetDate"];
+const MAX_STORY_FEED_LENGTH = 30;
 
-export function StreamPage(props: {
-  urlPrefix: string;
-  extractDate: (payload: any) => Date;
+interface StreamPageProps<T extends string> {
+  extractDate: (payload: EventData) => Date;
+  fetchFeatures: readonly T[];
   sampleCode: string;
-}) {
-  const { extractDate, urlPrefix } = props;
-  const worker = useRef<Worker>();
-  const lastSource = useRef<string>(null);
-  const logs = useRef<JSX.Element[]>([]);
+  storyComponent: React.FC<Result<T>>;
+  urlPrefix: string;
+  shouldLogResult?: (result: Result<T>) => boolean;
+}
+
+interface ResultOrMessage<T extends string> {
+  value: string | Result<T>;
+  key: number;
+}
+
+declare global {
+  interface Window {
+    sqrlInjectData:
+      | null
+      | ((data: {
+          version: string;
+          timestamp: string;
+          events: EventData[];
+        }) => void);
+  }
+}
+
+export function StreamPage<T extends string>({
+  extractDate,
+  fetchFeatures,
+  sampleCode,
+  storyComponent: StoryComponent,
+  urlPrefix,
+  shouldLogResult = () => true,
+}: StreamPageProps<T>): React.ReactElement {
+  const workerRef = useRef<Worker | null>();
+  const lastSourceRef = useRef<string>();
+  const storiesRef = useRef<Array<ResultOrMessage<T>>>([]);
+  const lastTimestampRef = useRef<string>();
+  const [compileStatus, setCompileStatus] = useState<{
+    status: "error" | "success" | "pending";
+    message: string;
+    errorMarker?: editor.IMarkerData;
+  }>({ status: "pending", message: "Requesting initial compilation…" });
 
   const [, setLogId] = useState(LOG_ID);
-  const [source, setSource] = useState(props.sampleCode);
+  const [source, setSource] = useState(sampleCode);
+
+  const isDarkMode = useMatchMedia("screen and (prefers-color-scheme: dark)");
+  const isSmallScreen = useMatchMedia("screen and (max-width: 1000px)");
 
   function recompile() {
-    clearLog("Compiling...");
-    lastSource.current = source;
+    setCompileStatus({ status: "pending", message: "Recompiling…" });
+    lastSourceRef.current = source;
     req({ type: "compile", source });
   }
 
-  if (lastSource.current !== source && worker.current) {
+  if (lastSourceRef.current !== source && workerRef.current) {
     recompile();
   }
 
-  function req(request: Request) {
-    worker.current.postMessage(request);
+  function req(request: Request<T>) {
+    workerRef.current!.postMessage(request);
   }
 
-  function clearLog(message: string) {
-    logs.current = [<div key={LOG_ID++}>{message}</div>];
+  function append(result: Result<T>) {
+    if (storiesRef.current.length === MAX_STORY_FEED_LENGTH) {
+      storiesRef.current.pop();
+    }
+    storiesRef.current.unshift({ value: result, key: LOG_ID++ });
     setLogId(LOG_ID);
-  }
-
-  function append(entry: JSX.Element) {
-    // @todo: This is an extremely hacky way to do logs
-    if (logs.current.length > 150) {
-      logs.current.shift();
-    }
-    logs.current.push(<div key={LOG_ID++}>{entry}</div>);
-    setLogId(LOG_ID);
-  }
-
-  function buildEntry(res: Result) {
-    const messages = [];
-    const { features, result } = res;
-    for (const msg of res.logs) {
-      messages.push(sprintf(msg.format, ...msg.args));
-    }
-
-    const userUrl = `https://twitter.com/${features.User}`;
-    const tweetUrl = `https://twitter.com/${features.User}/status/${features.TweetId}`;
-
-    // Only show blocked tweets for now
-    if (!result.blocked) {
-      return null;
-    }
-
-    return (
-      <div
-        style={{
-          padding: "2px",
-        }}
-      >
-        <div
-          style={{
-            backgroundColor: "#555",
-          }}
-        >
-          <strong>
-            <a href={userUrl}>{features.User}</a>
-          </strong>{" "}
-          <span style={{ color: "#ddd" }}>
-            (<a href={tweetUrl}>{features.TweetDate}</a>)
-          </span>
-          <br />
-          <div>{features.Text}</div>
-          {result.blockedCause ? (
-            <div style={{ color: "#f99" }}>
-              Blocked for:{" "}
-              {result.blockedCause.firedRules
-                .map(
-                  (rule) => rule.name + (rule.reason ? ": " + rule.reason : "")
-                )
-                .join(", ")}
-            </div>
-          ) : null}
-          {messages.map((message) => (
-            <div
-              style={{
-                padding: "2px",
-                whiteSpace: "pre",
-                fontFamily: "monospace",
-              }}
-            >
-              {message.trim()}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
   }
 
   useEffect(() => {
@@ -142,7 +120,7 @@ export function StreamPage(props: {
         req({
           type: "event",
           event: events[eventIndex],
-          requestFeatures: FETCH_FEATURES,
+          requestFeatures: fetchFeatures,
         });
         eventIndex++;
       } else {
@@ -174,13 +152,21 @@ export function StreamPage(props: {
       );
     }
 
-    (window as any).sqrlInjectData = (data: {
-      version: string;
-      timestamp: string;
-      events: any[];
-    }) => {
+    window.sqrlInjectData = (data) => {
+      // useEffect callbacks are run twice in dev mode, so we need to guard against duplicate data injections here
+      if (data.timestamp === lastTimestampRef.current) {
+        console.warn(
+          "Ignoring injected data with duplicate timestamp %s",
+          data.timestamp
+        );
+        return;
+      }
+
+      lastTimestampRef.current = data.timestamp;
+
       events = data.events;
       eventIndex = 0;
+
       if (firstBatch) {
         while (eventIndex < events.length) {
           const eventDate = new Date(extractDate(events[eventIndex]));
@@ -196,43 +182,46 @@ export function StreamPage(props: {
 
     startDownload(downloadDate);
 
-    return () => {
-      clearTimeout(nextEventTimeout);
-      scripts.forEach((script) => {
-        document.body.removeChild(script);
-      });
-    };
-  });
-
-  useEffect(() => {
-    invariant(!worker.current, "Worker created twice");
-    worker.current = new Worker(
+    invariant(!workerRef.current, "Worker created twice");
+    workerRef.current = new Worker(
       new URL("../workers/compile.worker", import.meta.url)
     );
-    worker.current.onmessage = (event) => {
-      const res = event.data as Response;
+    workerRef.current.onmessage = (event) => {
+      const res = event.data as Response<T>;
       if (res.type === "compileOkay") {
-        if (res.source === lastSource.current) {
-          clearLog("Compiled! Running...");
+        if (res.source === lastSourceRef.current) {
+          setCompileStatus({
+            status: "success",
+            message: "Compiled! Running...",
+          });
         }
       } else if (res.type === "compileError") {
-        if (res.source === lastSource.current) {
-          clearLog(res.message);
+        if (res.source === lastSourceRef.current) {
+          setCompileStatus({
+            status: "error",
+            message: res.message,
+            errorMarker: res.location
+              ? {
+                  message: res.message,
+                  severity: 8,
+                  startColumn: res.location.start.column,
+                  endColumn: res.location.end.column,
+                  startLineNumber: res.location.start.line,
+                  endLineNumber: res.location.start.line,
+                }
+              : undefined,
+          });
         }
       } else if (res.type === "runtimeError") {
-        if (res.source === lastSource.current) {
-          clearLog("Error during execution\n\n" + res.message);
+        if (res.source === lastSourceRef.current) {
+          setCompileStatus({
+            status: "error",
+            message: "Error during execution\n\n" + res.message,
+          });
         }
       } else if (res.type === "result") {
-        try {
-          append(buildEntry(res));
-        } catch (err) {
-          append(
-            <div>
-              <h2>Error rendering result</h2>
-              <div>{err.stack}</div>
-            </div>
-          );
+        if (shouldLogResult(res)) {
+          append(res);
         }
       } else {
         console.log("Unknown webworker message:", res);
@@ -241,64 +230,91 @@ export function StreamPage(props: {
     recompile();
 
     return () => {
-      worker.current.terminate();
-      worker.current = null;
+      clearTimeout(nextEventTimeout);
+
+      scripts.forEach((script) => {
+        document.body.removeChild(script);
+      });
+
+      if (workerRef.current) {
+        workerRef.current.terminate();
+        workerRef.current = null;
+      }
+
+      window.sqrlInjectData = null;
     };
   }, []);
 
   return (
-    <main
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        width: "100%",
-        height: "100%",
-      }}
+    <Box
+      display="flex"
+      width="100%"
+      height="100%"
+      // flip from 2 columns to 2 rows on smaller screens
+      flexDirection={isSmallScreen ? "column" : "row"}
+      gap={10}
+      padding={10}
+      backgroundColor={styleConstants.pageBackground}
+      overflow="hidden"
+      color={styleConstants.pageForeground}
     >
-      <Head>
-        <title>SQRL Wikipedia Demo</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <Split
-        direction="horizontal"
-        elementStyle={(dimension, size, gutterSize) => ({
-          "flex-basis": `calc(${size}% - ${gutterSize}px)`,
-        })}
-        gutterStyle={(dimension, gutterSize) => ({
-          "flex-basis": `${gutterSize}px`,
-          cursor: "ew-resize",
-        })}
-        style={{ width: "100%", height: "100%", display: "flex" }}
+      <Col
+        flex="1 1 200px"
+        overflow="hidden"
+        borderRadius={styleConstants.containerRadius}
+        backgroundColor={styleConstants.insetBackground}
+        border="1px solid"
+        borderColor={styleConstants.containerOutlineColor}
+        backgroundClip="padding-box"
       >
+        <Row flex="0 0 auto" fontSize={18} gap={20} padding="5px 10px">
+          <Block>SQRL Editor</Block>
+          <Row gap={5} fontSize={14} fontWeight={500}>
+            <Block
+              backgroundColor={
+                compileStatus.status === "pending"
+                  ? "grey"
+                  : compileStatus.status === "error"
+                  ? "red"
+                  : compileStatus.status === "success"
+                  ? "green"
+                  : null
+              }
+              height={16}
+              width={16}
+              borderRadius={8}
+            />
+            <Block whiteSpace="nowrap" overflow="hidden" flex="1 1 auto">
+              {compileStatus.status === "error"
+                ? "Compile error"
+                : compileStatus.message}
+            </Block>
+          </Row>
+        </Row>
         <MonacoEditor
-          style={{ height: "100%", width: "100%" }}
+          style={{ flex: "1 1 auto" }}
           value={source}
+          markers={
+            compileStatus.errorMarker ? [compileStatus.errorMarker] : undefined
+          }
           onChange={setSource}
-          theme="vs-dark"
+          theme={isDarkMode ? "vs-dark" : "vs-light"}
         />
+      </Col>
 
-        <div
-          style={{
-            paddingTop: "5px",
-            height: "100%",
-            overflow: "auto",
-            backgroundColor: "#111",
-          }}
-        >
-          <div
-            id="compileOutput"
-            style={{
-              whiteSpace: "pre-wrap",
-              wordWrap: "break-word",
-              padding: "5px",
-              color: "#fff",
-              height: "100%",
-            }}
-          >
-            {logs.current}
-          </div>
-        </div>
-      </Split>
-    </main>
+      <Col flex="1 1 200px" component="ul" overflowY="scroll" gap={10}>
+        {storiesRef.current.map((value) =>
+          typeof value.value === "string" ? (
+            <Container key={value.key}>
+              <p>{value.value}</p>
+            </Container>
+          ) : (
+            <Container key={value.key}>
+              <StoryComponent {...value.value} />
+            </Container>
+          )
+        )}
+      </Col>
+    </Box>
   );
 }

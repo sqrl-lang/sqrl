@@ -13,15 +13,14 @@
     "strict": true,
     "outDir": "./lib",
     "preserveConstEnums": true,
-    "removeComments": true,
-    "inlineSourceMap": false,
-    "typeRoots": ["./node_modules/@types"],
+    "sourceMap": false,
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "stripInternal": true
   }
 }

@@ -6,18 +6,27 @@
 
 import { SimpleManipulator, WhenCause } from "sqrl";
 
-export interface TweetResult {
-  blocked: boolean;
-  blockedCause?: WhenCause;
+interface BlockedTweetResult {
+  blocked: true;
+  blockedCause: WhenCause;
 }
+
+interface UnblockedTweetResult {
+  blocked: false;
+}
+
+export type TweetResult = BlockedTweetResult | UnblockedTweetResult;
+
 export class TweetManipulator extends SimpleManipulator {
   private result: TweetResult = {
     blocked: false,
   };
 
   blockTweet(cause: WhenCause) {
-    this.result.blocked = true;
-    this.result.blockedCause = cause;
+    this.result = {
+      blocked: true,
+      blockedCause: cause,
+    };
   }
 
   getResult() {
