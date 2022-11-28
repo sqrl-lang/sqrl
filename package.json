@@ -42,6 +42,7 @@
     "clean": "lerna run clean",
     "deploy-website": "lerna run docs; npm run deploy-website-source",
     "deploy-website-source": "./scripts/hexo-website-pull-request",
+    "format": "prettier --write .",
     "serve-website": "lerna run docs; (cd website && npm run serve-website)",
     "start": "npm -w websqrl run dev",
     "test": "jest",
