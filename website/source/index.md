@@ -1,5 +1,4 @@
-title: Home
----
+## title: Home
 
 # SQRL: A Safe, Stateful Language for Event Streams
 
@@ -29,15 +28,17 @@ Message="Hello, josh!"
 ```
 
 Once you have the command line running, you could:
-* Read about our [motivations](motivation.html) for writing SQRL
-* Learn about the [features that make SQRL unique](unique.html)
-* Try write some basic SQRL in the [Tutorial](tutorial.html)
-* Set up external state storage in [Redis](examples/redis.html)
-* See a real-life use case on [Wikipedia](examples/wikipedia.html)
+
+- Read about our [motivations](motivation.html) for writing SQRL
+- Learn about the [features that make SQRL unique](unique.html)
+- Try write some basic SQRL in the [Tutorial](tutorial.html)
+- Set up external state storage in [Redis](examples/redis.html)
+- See a real-life use case on [Wikipedia](examples/wikipedia.html)
 
 ## SQRL snippets
 
 ### Stopping account compromise
+
 ```
 -- Check for lots of failed login attempts from a single IP address
 LET NumLoginAttemptsForIpLastDay := count(BY Ip LAST DAY);
@@ -50,6 +51,7 @@ CREATE RULE IsCredentialStuffingLoginAttempt WHERE
 ```
 
 ### Mitigating abuse and bullying
+
 ```
 -- If users swear too much we give them a warning
 LET UsedBadWord := patternMatches("BadWords.txt", UserGeneratedText);
@@ -60,6 +62,7 @@ CREATE RULE IsToxicComment
 ```
 
 ### Preventing credit card fraud
+
 ```
 -- If a single user is using lots of credit cards it's an indicator of fraud
 LET NumCards := countUnique(CreditCard BY Actor LAST 5 DAYS);
@@ -76,8 +79,9 @@ CREATE RULE MultiRiskyCountryCreditCard WHERE NumRiskyCountries > 1
 ```
 
 ### Identifying duplicate accounts
+
 ```
--- If a user has signed up with the same normalized email address (i.e. 
+-- If a user has signed up with the same normalized email address (i.e.
 -- lowercased, removing + suffixes, etc), cookie, or phone number, or if a
 -- subnet is creating lots of accounts, flag it.
 LET NormalizedActorEmail := normalizeEmail(ActorEmail);
@@ -91,6 +95,7 @@ CREATE RULE IsDuplicateSignup
 ```
 
 ### Stopping spam
+
 ```
 -- Limit quickly accelerating, similar looking messages.
 -- It's a good idea to do this with URLs too.
@@ -105,15 +110,16 @@ CREATE RULE IsSpammyMessage
 ```
 
 ### Interfacing with ML models
+
 ```
--- When someone reports an NSFW image, automatically take it down if our NSFW 
+-- When someone reports an NSFW image, automatically take it down if our NSFW
 -- model agrees and the reporter does not have a history of false positives.
 LET NsfwScore := mlScores("nsfw", ReportedImageUrl);
 LET IsLikelyNsfwImage := NsfwScore > 0.92;
 LET NumReporterReports := count(BY Actor LAST MONTH);
-LET NumReporterFalsePositives := 
+LET NumReporterFalsePositives :=
   count(BY Actor WHERE NOT IsLikelyNsfwImage LAST MONTH);
-LET IsReporterTrustworthy := 
+LET IsReporterTrustworthy :=
   NumReporterReports < 3 OR NumReporterFalsePositives / NumReporterReports < 0.3;
 CREATE RULE AutomaticTakeDown
   WHERE IsLikelyNsfwImage AND IsReporterTrustworthy
@@ -121,13 +127,14 @@ CREATE RULE AutomaticTakeDown
 ```
 
 ### Coupon codes for high-value users
+
 ```
 -- Give users spending $200 every month for at least 3 months a discount.
 LET PurchaseSession := sessionize(
   BY User EVERY 1 MONTH WHERE PurchaseAmountUsd >= 200);
 LET PurchaseSessionAgeInMonths := dateDiff(
-  "MONTH", 
-  PurchaseSession, 
+  "MONTH",
+  PurchaseSession,
   Timestamp
 );
 
@@ -139,6 +146,6 @@ CREATE RULE GiveLoyaltyDiscount
 
 ## Next steps
 
-* Try out SQRL in the [Tutorial](tutorial.html)
-* Set up external state storage in [Redis](examples/redis.html)
-* See a real-life use case on [Wikipedia](examples/wikipedia.html)
+- Try out SQRL in the [Tutorial](tutorial.html)
+- Set up external state storage in [Redis](examples/redis.html)
+- See a real-life use case on [Wikipedia](examples/wikipedia.html)

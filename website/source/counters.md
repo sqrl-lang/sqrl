@@ -1,5 +1,4 @@
-title: Counters
----
+## title: Counters
 
 # SQRL
 
@@ -11,11 +10,11 @@ The [`sqrl`](https://github.com/sqrl-lang/sqrl/tree/main/packages/sqrl) package 
 
 We've included [`sqrl-text-functions`](https://github.com/sqrl-lang/sqrl/tree/main/packages/sqrl-text-functions) which has more advanced text analysis functions such as `patternMatch` (RE2 regular expression text based pattern matching), and `simhash()` which returns similar values for similar text.
 
-The real power of SQRL comes with its streaming counters. While the *Redis database* is not the best choice for large production systems, it is one of the most wildly available and easy to set up choices. The [`sqrl-redis-functions`](https://github.com/sqrl-lang/sqrl/tree/main/packages/sqrl-redis-functions) builds a couple of common counters on top of this database:
+The real power of SQRL comes with its streaming counters. While the _Redis database_ is not the best choice for large production systems, it is one of the most wildly available and easy to set up choices. The [`sqrl-redis-functions`](https://github.com/sqrl-lang/sqrl/tree/main/packages/sqrl-redis-functions) builds a couple of common counters on top of this database:
 
-* count() - Streaming counters (*How many requests from this IP in the last day*)
-* countUnique() - Streaming set cardinatily (*How many unique users on this IP in the last day*)
-* rateLimit() - Token-bucket based rate limiter (*Have we seen more than X requests per hour*)
-* sessionize() - Sessionization (*When did the current session from this IP start*)
+- count() - Streaming counters (_How many requests from this IP in the last day_)
+- countUnique() - Streaming set cardinatily (_How many unique users on this IP in the last day_)
+- rateLimit() - Token-bucket based rate limiter (_Have we seen more than X requests per hour_)
+- sessionize() - Sessionization (_When did the current session from this IP start_)
 
 These packages are all designed as examples, we built SQRL to be extendable with functions you need, as well as any new databases as you require. We're hoping the community can come together and use/extend these tools to protect online users.

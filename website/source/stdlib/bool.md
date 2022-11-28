@@ -1,5 +1,4 @@
-title: Bool Functions
----
+## title: Bool Functions
 
 # Bool Functions
 
@@ -14,4 +13,3 @@ Returns the first truthy value, otherwise the final value.
 **coalesce**(value[, ...])
 
 Returns the first value that is not null
-

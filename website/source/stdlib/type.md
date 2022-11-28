@@ -1,5 +1,4 @@
-title: Type Functions
----
+## title: Type Functions
 
 # Type Functions
 
@@ -38,4 +37,3 @@ Returns a list of the provided values
 **str**(value)
 
 Creates a string representation of the given value
-

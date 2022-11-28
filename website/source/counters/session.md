@@ -1,5 +1,4 @@
-title: Sessionization
----
+## title: Sessionization
 
 # Sessionization
 
@@ -18,9 +17,8 @@ Let’s imagine a simple case where we wanted to create a one hour session for a
 ```
 LET UserHourSession := sessionize(BY User EVERY 1 HOUR);
 ```
- 
+
 From now on, whenever the user performs an action (logs in, sends a message, makes a payment, etc) we will check to see if a session exists. If no session exists, we will create a session that lasts for one hour.
-	
 ![Creating a one hour session](../images/session/one_session.jpeg)
 
 If the specified time elapses with no activity, the current session is destroyed. Any subsequent event will create a new session.
@@ -58,8 +56,8 @@ LET UserMessageHourSession := sessionize(BY User EVERY 1 HOUR WHERE ActionName="
 
 -- Get session age in hours
 LET MessageHourSessionAgeInHours := dateDiff(
-  "HOUR", 
-  UserMessageHourSession, 
+  "HOUR",
+  UserMessageHourSession,
   EventTimestamp
 );
 ```
@@ -76,8 +74,8 @@ With this insight, you can easily create a rule to flag and review this suspicio
 CREATE RULE DayLongMessageSession WHERE MessageHourSessionAgeInHours >= 24
  WITH REASON "User has been sending a message for the "
              "past ${MessageHourSessionAgeInHours} hours straight";
- ```
- 
+```
+
 <!-- @todo: These features have not been implemented in open-source SQRL (yet!)
 
 ## Variance checks
@@ -158,11 +156,11 @@ This can be done with three lines of code using the velocity function.
 LET PaymentSessionHour := sessionize(BY User EVERY 1 HOUR WHERE IsPaymentAction);
 -- Track how many payments are being made in the current session
 LET PaymentSessionSize := count(BY PaymentSessionHour LAST DAY);
--- Calculate velocity / rate at which payments are being made. 
+-- Calculate velocity / rate at which payments are being made.
 -- The third parameter is the minimum # of events required for us to calculate velocities.
 LET PaymentVelocity := velocity(
-  PaymentSessionHour, 
-  PaymentSessionSize, 
+  PaymentSessionHour,
+  PaymentSessionSize,
   3
 );
 ```

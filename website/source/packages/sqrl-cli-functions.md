@@ -1,5 +1,4 @@
-title: sqrl-cli-functions
----
+## title: sqrl-cli-functions
 
 # sqrl-cli-functions
 
@@ -64,4 +63,3 @@ Check if the current action was marked as blocked
 **whitelistAction**(None)
 
 Mark the current action as whitelisted
-

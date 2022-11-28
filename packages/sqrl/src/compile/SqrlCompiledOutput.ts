@@ -340,9 +340,7 @@ export class SqrlCompiledOutput extends SqrlParseInfo {
   /**
    * Fetch the cost for a single slot without recursing all the others
    */
-  getSlotCost(
-    slotName: string
-  ): {
+  getSlotCost(slotName: string): {
     cost: number;
     recursiveCost: number;
   } {

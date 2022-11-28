@@ -6,7 +6,5 @@
     "outDir": "./lib",
     "tsBuildInfoFile": "lib/cache.tsbuildinfo"
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

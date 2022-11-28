@@ -1,5 +1,4 @@
-title: Entities
----
+## title: Entities
 
 # Entities
 

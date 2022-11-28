@@ -26,13 +26,15 @@ test("works with file inputs", async () => {
     "run",
     examplePath("extract.sqrl"),
     "-s",
-    'EventData=@' + examplePath("data/tweet.json"),
+    "EventData=@" + examplePath("data/tweet.json"),
     "Text",
     "Username",
   ]);
 
   expect(stripAnsi(stdout).replace(/[0-9]/g, "x")).toEqual(
-    "✓ xxxx-xx-xx xx:xx action was allowed.\n" + 'Text="hello world!"\n' + 'Username="floydophone"\n'
+    "✓ xxxx-xx-xx xx:xx action was allowed.\n" +
+      'Text="hello world!"\n' +
+      'Username="floydophone"\n'
   );
 });
 

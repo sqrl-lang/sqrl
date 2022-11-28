@@ -66,9 +66,7 @@ export default class SqrlSourcePrinter {
     });
   }
 
-  getHumanAllSource(
-    props: SourcePrintOptions = {}
-  ): {
+  getHumanAllSource(props: SourcePrintOptions = {}): {
     [slotName: string]: string;
   } {
     const output = {};

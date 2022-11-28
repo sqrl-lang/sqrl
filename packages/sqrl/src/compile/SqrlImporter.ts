@@ -47,9 +47,7 @@ export default class SqrlImporter {
     return { path, scriptAst };
   }
 
-  getIncludeFiles(
-    ast: IncludeAst
-  ): {
+  getIncludeFiles(ast: IncludeAst): {
     ast: ScriptAst;
     filename: string;
     where: Ast;

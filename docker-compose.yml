@@ -1,15 +1,15 @@
-version: '3'
+version: "3"
 services:
   web:
     build: .
     ports:
-     - "2288:2288"
+      - "2288:2288"
     volumes:
-     - ./examples:/sqrl
+      - ./examples:/sqrl
     command:
-     - sqrl
-     - --redis=redis:6379
-     - serve
-     - /sqrl/main.sqrl
+      - sqrl
+      - --redis=redis:6379
+      - serve
+      - /sqrl/main.sqrl
   redis:
     image: "redis:alpine"

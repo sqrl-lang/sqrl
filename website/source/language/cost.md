@@ -1,5 +1,4 @@
-title: Cost Optimisation
----
+## title: Cost Optimisation
 
 # Cost Optimisation
 
@@ -19,15 +18,16 @@ const instance = createInstance({
 Using this data SQRL will calculate a cost for each feature based on the recursive cost of everything it depends on.
 
 For example, in the following code:
+
 ```
 LET X := expensiveFunction();
 LET Y := X + cheapFunction();
 LET Z := Y + X;
 ```
 
-* The cost of `X` will be `10,000` (using the `functionCost`) data above.
-* The cost of `Y` will be `10,036` (the cost of the add function defaults to `1`).
-* The cost of `Z` will be `10,037`. Depending twice on `X` does not affect its cost, but there is an additional addition that adds `1`.
+- The cost of `X` will be `10,000` (using the `functionCost`) data above.
+- The cost of `Y` will be `10,036` (the cost of the add function defaults to `1`).
+- The cost of `Z` will be `10,037`. Depending twice on `X` does not affect its cost, but there is an additional addition that adds `1`.
 
 This data is then used when ordering `AND` or `OR` conditions. Since the order of the parameters does not affect the result in SQRL, we can safely re-order to make the code cheaper and/or faster to run.
 

@@ -1,5 +1,4 @@
-Wikipedia SQRL Example
-======================
+# Wikipedia SQRL Example
 
 To stream live data from wikipedia and run it against the SQRL files here, simply run:
 $ ./stream
