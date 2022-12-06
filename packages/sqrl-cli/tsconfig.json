@@ -6,9 +6,7 @@
     "outDir": "./lib",
     "tsBuildInfoFile": "lib/cache.tsbuildinfo"
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"],
   "references": [
     {
       "path": "../sqrl"
@@ -31,5 +29,5 @@
     {
       "path": "../sqrl-text-functions"
     }
-  ],
+  ]
 }

@@ -23,17 +23,19 @@ Create a [new issue](https://github.com/sqrl-lang/sqrl/issues/new) on GitHub.
 ## Authors
 
 SQRL was designed and implemented by:
-* Josh Yudaken
-* Pete Hunt
-* Julian Tempelsman
-* Paul Mou
-* Yunjing Xu
-* David Newman
+
+- Josh Yudaken
+- Pete Hunt
+- Julian Tempelsman
+- Paul Mou
+- Yunjing Xu
+- David Newman
 
 It would not have come together without lots of dogfooding and suggestions from:
-* Jonathan Root
-* Alana Glassco
-* Jason Wu
+
+- Jonathan Root
+- Alana Glassco
+- Jason Wu
 
 Special thanks to [Justin Tormey](https://github.com/jtormey) for contributing the NPM package namespace.
 

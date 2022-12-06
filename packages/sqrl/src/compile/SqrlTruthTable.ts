@@ -153,9 +153,7 @@ function buildTruthTable(ast, features) {
   return truthTable;
 }
 
-export function reduceTruthTable(
-  ast: Ast
-): {
+export function reduceTruthTable(ast: Ast): {
   features: string[];
   truthTable: string;
 } {

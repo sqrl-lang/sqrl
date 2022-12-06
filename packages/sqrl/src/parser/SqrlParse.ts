@@ -70,9 +70,9 @@ export function parseSqrl(text: string, options: ParseOptions = {}): ScriptAst {
   return ast;
 }
 
-export function parseSqrlFiles(files: {
-  [filename: string]: string;
-}): { [filename: string]: ScriptAst } {
+export function parseSqrlFiles(files: { [filename: string]: string }): {
+  [filename: string]: ScriptAst;
+} {
   return sqrlErrorWrap(
     {
       files,

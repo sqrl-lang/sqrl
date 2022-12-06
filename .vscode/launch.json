@@ -13,9 +13,7 @@
       "sourceMaps": true,
       "smartStep": true,
       "preLaunchTask": "build",
-      "outFiles": [
-        "${workspaceRoot}/lib/*.js"
-      ]
+      "outFiles": ["${workspaceRoot}/lib/*.js"]
     },
     {
       "type": "node",

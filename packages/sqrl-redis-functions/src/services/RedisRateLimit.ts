@@ -23,22 +23,20 @@ export class RedisRateLimit implements RateLimitService {
 
   async fetch(ctx: Context, props: RateLimitProps): Promise<number[]> {
     return Promise.all(
-      props.keys.map(
-        (key: SqrlKey): Promise<number> => {
-          return this.redis.rateLimitFetch(
-            ctx,
-            Buffer.concat([this.prefix, key.getBuffer()]),
-            {
-              maxAmount: props.maxAmount,
-              refillTimeMs: props.refillTimeMs,
-              refillAmount: props.refillAmount,
-              take: props.take,
-              at: props.at,
-              strict: props.strict,
-            }
-          );
-        }
-      )
+      props.keys.map((key: SqrlKey): Promise<number> => {
+        return this.redis.rateLimitFetch(
+          ctx,
+          Buffer.concat([this.prefix, key.getBuffer()]),
+          {
+            maxAmount: props.maxAmount,
+            refillTimeMs: props.refillTimeMs,
+            refillAmount: props.refillAmount,
+            take: props.take,
+            at: props.at,
+            strict: props.strict,
+          }
+        );
+      })
     );
   }
 

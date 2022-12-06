@@ -23,7 +23,7 @@
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher":[]
+      "problemMatcher": []
     },
     {
       "type": "npm",
@@ -51,9 +51,7 @@
       "type": "npm",
       "label": "lint",
       "script": "lint",
-      "problemMatcher": [
-        "$eslint-stylish"
-      ]
+      "problemMatcher": ["$eslint-stylish"]
     }
   ]
 }

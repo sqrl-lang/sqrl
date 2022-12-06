@@ -8,6 +8,6 @@ module.exports = {
   ...config,
   globals: {
     ...(config.globals || {}),
-    __INTEGRATION__: true
-  }
+    __INTEGRATION__: true,
+  },
 };

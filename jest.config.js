@@ -8,7 +8,7 @@ const path = require("path");
 
 module.exports = {
   ...base,
-  projects: glob.sync(path.join(__dirname, 'packages/*/jest.config.js')),
+  projects: glob.sync(path.join(__dirname, "packages/*/jest.config.js")),
   coverageDirectory: "<rootDir>/coverage/",
-  testRegex: `.*/__tests__/.*\\.spec\\.ts$`
+  testRegex: `.*/__tests__/.*\\.spec\\.ts$`,
 };

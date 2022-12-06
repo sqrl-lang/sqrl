@@ -1,5 +1,5 @@
-title: What makes SQRL unique?
-----
+## title: What makes SQRL unique?
+
 # What makes SQRL unique?
 
 SQRL has a number of features that we think are cool and/or unique.
@@ -33,10 +33,11 @@ SQRL will optimise your code to be cheaper to run in production. Expressions suc
 SQRL has a notion of an "entity", which is a `type` (i.e. "EmailAddress") and a string `key` (i.e. "foo@bar.com"). It gets a stable 64 bit ID called a `UniqueId` where the most significant bits of the ID are the timestamp that the ID was created. Subsequent references to the same (`type`, `key`) pair will get the same `UniqueId`.
 
 This has many advantages:
-* We often use entities as keys in databases, and a 64 bit `UniqueId` requires less storage than the full entity `key`.
-* Storing an opaque `UniqueId` instead of the string `key` limits the proliferation of personal data across different databases.
-* We automatically know the date that we first saw an entity with no additional storage. We use this signal often in the anti-spam, anti-fraud and security domains that SQRL is primarily used in.
-* If the `UniqueId` is used as a database key, most databases will store entities in chronological order (i.e. B-trees and LSM-trees, the most popular type of DB indexes, store rows in key-sorted order). When doing spam, fraud, or security investigations, you usually want to query the oldest or newest entities of a given type, which won't require a separate (slow) sort step since they're already sorted.
+
+- We often use entities as keys in databases, and a 64 bit `UniqueId` requires less storage than the full entity `key`.
+- Storing an opaque `UniqueId` instead of the string `key` limits the proliferation of personal data across different databases.
+- We automatically know the date that we first saw an entity with no additional storage. We use this signal often in the anti-spam, anti-fraud and security domains that SQRL is primarily used in.
+- If the `UniqueId` is used as a database key, most databases will store entities in chronological order (i.e. B-trees and LSM-trees, the most popular type of DB indexes, store rows in key-sorted order). When doing spam, fraud, or security investigations, you usually want to query the oldest or newest entities of a given type, which won't require a separate (slow) sort step since they're already sorted.
 
 This has proven to be incredibly useful and we think it's unique to SQRL.
 

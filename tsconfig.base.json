@@ -15,9 +15,7 @@
     "preserveConstEnums": true,
     "removeComments": true,
     "inlineSourceMap": false,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
+    "typeRoots": ["./node_modules/@types"],
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,

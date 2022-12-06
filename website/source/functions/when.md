@@ -1,5 +1,4 @@
-title: When Cause Functions
----
+## title: When Cause Functions
 
 # When cause functions
 
@@ -16,6 +15,7 @@ WHEN SimilarTextIpSpam THEN addUserToReviewQueue("spam");
 The function `addUserToReviewQueue` does not exist in the standard library, but if you were implementing it you can access the rules that triggered the call and their reasons.
 
 In the case above the cause may be:
+
 ```
 {
   "firedRules": [{

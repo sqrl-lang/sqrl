@@ -53,13 +53,13 @@ async function fetchChangeContent(domain, revids, callback) {
     {
       json: true,
       qs: {
-        revids: revids.join("|")
-      }
+        revids: revids.join("|"),
+      },
     }
   );
 
   const [page] = Object.values(body.query.pages);
-  return page.revisions.map(rev => rev.slots.main["*"]);
+  return page.revisions.map((rev) => rev.slots.main["*"]);
 }
 
 async function processEvent(domain, event) {
@@ -73,7 +73,7 @@ async function processEvent(domain, event) {
 
     const [r1, r2] = await fetchChangeContent(domain, [
       data.revision.old,
-      data.revision.new
+      data.revision.new,
     ]);
 
     const added = diffAdded(r1, r2);
@@ -85,8 +85,8 @@ async function processEvent(domain, event) {
       JSON.stringify(
         Object.assign({}, data, {
           content: {
-            added
-          }
+            added,
+          },
         })
       )
     );
@@ -97,16 +97,16 @@ function startStream(domain) {
   console.error(`Connecting to EventStreams at ${url}`);
   var eventSource = new EventSource(url);
 
-  eventSource.onopen = function(event) {
+  eventSource.onopen = function (event) {
     console.error("-- Opened connection.");
   };
 
-  eventSource.onerror = function(err) {
+  eventSource.onerror = function (err) {
     console.error("-- Stream error: " + err.toString());
   };
 
-  eventSource.onmessage = msg =>
-    processEvent(domain, msg).catch(err => {
+  eventSource.onmessage = (msg) =>
+    processEvent(domain, msg).catch((err) => {
       console.error("-- Processing error: " + err.toString());
       console.error(err.stack);
     });

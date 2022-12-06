@@ -72,7 +72,6 @@ test("out of order events work", async () => {
   );
 });
 
-
 test("take works with features", async () => {
   const run = () =>
     getResult(

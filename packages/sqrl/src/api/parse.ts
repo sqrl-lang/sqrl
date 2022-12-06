@@ -131,9 +131,7 @@ export class CompileState {
    * Combines a WHERE statement with the current global WHERE state. Returns a
    * slot as well as hashable truth table for the boolean condition
    */
-  combineGlobalWhere(
-    where: Ast
-  ): {
+  combineGlobalWhere(where: Ast): {
     combinedAst: Ast;
     whereAst: Ast;
     whereFeatures: string[];

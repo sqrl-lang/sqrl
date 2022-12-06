@@ -1,9 +1,8 @@
-title: Running as a Server
----
+## title: Running as a Server
 
 # Running SQRL as a Server
 
-### Starting 
+### Starting
 
 One way of running SQRL in production is by running it as a stateless server:
 
@@ -64,9 +63,9 @@ $ curl -d '{"Ip": "1.2.3.4"}' \
 ```
 
 ### State storage and scalability
- 
+
 By default the command line tool stores all state in memory. Enabling [Redis](../examples/redis.html) (or any external database) state storage will give you a stateless server that you can scale horizontally.
 
 ### Sync and Async Paths
- 
+
 We recommend running every event through two separate SQRL configurations. Read our [Async](async.html) deployment documentation for more information.

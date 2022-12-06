@@ -549,10 +549,8 @@ export class SqrlParserState extends SqrlParseInfo {
     const combinedAst = SqrlAst.and(globalWhere, whereAst);
     combinedAst.location = whereAst.location;
 
-    const {
-      features: whereFeatures,
-      truthTable: whereTruth,
-    } = reduceTruthTable(combinedAst);
+    const { features: whereFeatures, truthTable: whereTruth } =
+      reduceTruthTable(combinedAst);
 
     whereAst = SqrlAst.bool(combinedAst);
 
@@ -659,9 +657,7 @@ export class SqrlParserState extends SqrlParseInfo {
     });
   }
 
-  interpretCounterCallAst(
-    ast: CallAst
-  ): {
+  interpretCounterCallAst(ast: CallAst): {
     args: Ast;
     whereAst: Ast;
     whereFeatures?: string[];

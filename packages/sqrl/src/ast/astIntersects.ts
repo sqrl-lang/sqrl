@@ -55,9 +55,7 @@ function calculate(ast: Ast, values) {
   }
 }
 
-function extractFeatureValueSets(
-  ast: Ast
-): {
+function extractFeatureValueSets(ast: Ast): {
   [feature: string]: Set<boolean | string>;
 } {
   /***

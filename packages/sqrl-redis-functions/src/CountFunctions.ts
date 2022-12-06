@@ -205,13 +205,8 @@ export function ensureCounterBump(
 ) {
   const interpretResult = interpretCountArgs(state, sourceAst, args);
 
-  const {
-    hasAlias,
-    whereAst,
-    keyedCounterName,
-    bumpByAst,
-    keysAst,
-  } = interpretResult;
+  const { hasAlias, whereAst, keyedCounterName, bumpByAst, keysAst } =
+    interpretResult;
 
   // [@todo: check] Only base the counter identity on features/where
   if (hasAlias) {

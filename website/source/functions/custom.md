@@ -1,5 +1,4 @@
-title: Custom Functions
----
+## title: Custom Functions
 
 # Custom functions
 
@@ -22,4 +21,3 @@ You can view our [`sqrl-redis-functions`](https://github.com/sqrl-lang/sqrl/tree
 ```
 
 You are responsible for parsing the features and any values inside the provided argument source.
-  

@@ -17,7 +17,7 @@ function replaceEmojis(content) {
   });
 }
 
-hexo.extend.filter.register("after_post_render", data => {
+hexo.extend.filter.register("after_post_render", (data) => {
   const $ = cheerio.load(data.content);
 
   function recurse(node) {
@@ -40,7 +40,7 @@ hexo.extend.filter.register("after_post_render", data => {
     }
   }
 
-  Array.from($.root().children()).forEach(child => recurse(child));
+  Array.from($.root().children()).forEach((child) => recurse(child));
 
   data.content = $.root().html();
 

@@ -1,2 +1,6 @@
-website/themes/sqrl-hexo-theme-doc
+**/.next
 **/lib
+coverage/
+website/themes/sqrl-hexo-theme-doc
+# TODO(meyer): these files use mustache-style variables in the yaml frontmatter. prettier doesn't like 'em.
+website/scaffolds/**/*.md

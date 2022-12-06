@@ -25,9 +25,7 @@ export function pathJoin(paths: string[]) {
   return paths.join("/");
 }
 
-export function splitPath(
-  filePath: string
-): {
+export function splitPath(filePath: string): {
   dirname: string;
   basename: string;
 } {
