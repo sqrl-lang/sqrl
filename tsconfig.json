@@ -1,23 +1,32 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "lib": ["es2019", "es2020.bigint", "es2020.string", "es2020.symbol.wellknown"],
-    "target": "es2019",
-    "strict": true,
-    "outDir": "./lib",
-    "preserveConstEnums": true,
-    "removeComments": true,
-    "inlineSourceMap": false,
-    "typeRoots": ["./node_modules/@types"],
-    "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": false,
-    "strictNullChecks": false
-  },
-  "exclude": ["node_modules"]
+  "files": [],
+  "references": [
+    {
+      "path": "packages/sqrl"
+    },
+    {
+      "path": "packages/sqrl-cli"
+    },
+    {
+      "path": "packages/sqrl-cli-functions"
+    },
+    {
+      "path": "packages/sqrl-common"
+    },
+    {
+      "path": "packages/sqrl-jsonpath"
+    },
+    {
+      "path": "packages/sqrl-load-functions"
+    },
+    {
+      "path": "packages/sqrl-redis-functions"
+    },
+    {
+      "path": "packages/sqrl-test-utils"
+    },
+    {
+      "path": "packages/sqrl-text-functions"
+    }
+  ]
 }

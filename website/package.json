@@ -22,5 +22,6 @@
   "scripts": {
     "deploy-website": "hexo deploy --generate",
     "serve-website": "hexo serve"
-  }
+  },
+  "repository": "https://github.com/sqrl-lang/sqrl/tree/main/website"
 }

@@ -1,6 +1,7 @@
 {
   "name": "wikipedia-diff-stream",
   "version": "0.6.7",
+  "private": true,
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
@@ -15,5 +16,6 @@
   "bin": {
     "wikipedia-diff-stream": "main.js"
   },
-  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815"
+  "gitHead": "d6f4789442ac2e1dea7b1f39b87c6db3395fd815",
+  "repository": "https://github.com/sqrl-lang/sqrl/tree/main/tools/wikipedia-diff-stream"
 }
