@@ -15,11 +15,11 @@ function escapeRegExp(str: string): string {
   return str.replace(matchOperatorsRe, "\\$&");
 }
 
-interface GenericRegExp {
-  lastIndex: number;
-  exec(content: string): string[]
-}
-export type CreateRegExp = (source, flags) => GenericRegExp;
+type GenericRegExp = Pick<RegExp, "lastIndex" | "exec">;
+
+export type CreateRegExp = (
+  ...args: Parameters<typeof RegExp>
+) => GenericRegExp;
 
 class RegisteredPattern {
   private regExp: GenericRegExp;
@@ -61,14 +61,18 @@ export class InProcessPatternService implements PatternService {
     if (match) {
       // Use the provided regular expression as is.
       const [, source, flags] = match;
-      return new RegisteredPattern(this.createRegExp(source, flags + 'g'));
+      return new RegisteredPattern(this.createRegExp(source, flags + "g"));
     } else if (pattern.startsWith('"') && pattern.endsWith('"')) {
       // Do an exact match search
-      return new RegisteredPattern(this.createRegExp(escapeRegExp(pattern.slice(1, -1)), "g"));
+      return new RegisteredPattern(
+        this.createRegExp(escapeRegExp(pattern.slice(1, -1)), "g")
+      );
     } else {
       // Do a fuzzy match, this could be improved but for now just search with word boundaries and
       // case insensitive
-      return new RegisteredPattern(this.createRegExp("\\b" + escapeRegExp(pattern) + "\\b", "gi"));
+      return new RegisteredPattern(
+        this.createRegExp("\\b" + escapeRegExp(pattern) + "\\b", "gi")
+      );
     }
   }
 

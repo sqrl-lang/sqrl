@@ -63,7 +63,6 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
 
     // TODO(meyer) debounce this
     const resizeHandler = () => {
-      console.log("layout!");
       editor.layout();
     };
 
