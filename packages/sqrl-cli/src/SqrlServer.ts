@@ -115,7 +115,7 @@ async function deleteRoute(
 
 export function createSqrlServer(ctx: Context, executable: Executable): Server {
   const router = dispatch()
-    .dispatch('/', '*', (req, res, { params, query }) => send(res, 200, "Hello"))
+    .dispatch('/health', '*', (req, res, { params, query }) => send(res, 200, "Hello"))
     .dispatch("/run", ["POST"], (req, res) => run(ctx, executable, req, res))
     .dispatch("/delete", ["POST"], (req, res) => deleteRoute(ctx, req, res))
     .otherwise(async (req, res) => {
