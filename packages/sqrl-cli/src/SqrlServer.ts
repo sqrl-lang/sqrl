@@ -3,7 +3,7 @@
  * Licensed under the Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0
  */
-import micro, { createError, json as microJson } from "micro";
+import micro, { createError, send, json as microJson } from "micro";
 import * as microQuery from "micro-query";
 // tslint:disable-next-line:no-submodule-imports (it is the documented suggestion)
 import * as dispatch from "micro-route/dispatch";
@@ -115,6 +115,7 @@ async function deleteRoute(
 
 export function createSqrlServer(ctx: Context, executable: Executable): Server {
   const router = dispatch()
+    .dispatch('/health', ["GET"], (req, res, { params, query }) => send(res, 200, "Healthy"))
     .dispatch("/run", ["POST"], (req, res) => run(ctx, executable, req, res))
     .dispatch("/delete", ["POST"], (req, res) => deleteRoute(ctx, req, res))
     .otherwise(async (req, res) => {
