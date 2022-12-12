@@ -9,21 +9,30 @@ export interface CompileRequest {
   type: "compile";
   source: string;
 }
-export interface EventRequest {
+export interface EventRequest<T extends string> {
   type: "event";
   event: EventData;
-  requestFeatures: string[];
+  requestFeatures: readonly T[];
 }
-export type Request = CompileRequest | EventRequest;
+export type Request<T extends string> = CompileRequest | EventRequest<T>;
 
 export interface CompileOkay {
   type: "compileOkay";
   source: string;
 }
+
+interface Location {
+  column: number;
+  line: number;
+  offset: number;
+}
+
 export interface CompileError {
   type: "compileError";
+  stack: string;
   message: string;
   source: string;
+  location: Record<"start" | "end", Location> | undefined;
 }
 export interface RuntimeError {
   type: "runtimeError";
@@ -34,15 +43,19 @@ export interface LogEntry {
   format: string;
   args: any[];
 }
-export interface Result {
+export interface Result<T extends string> {
   type: "result";
   logs: Array<LogEntry>;
   result: TweetResult;
-  features: FeatureMap;
+  features: FeatureMap<T>;
   source: string;
 }
 export interface Render {
   type: "render";
   buffer: Uint8Array;
 }
-export type Response = CompileOkay | CompileError | RuntimeError | Result;
+export type Response<T extends string> =
+  | CompileOkay
+  | CompileError
+  | RuntimeError
+  | Result<T>;

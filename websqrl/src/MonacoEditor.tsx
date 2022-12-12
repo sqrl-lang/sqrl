@@ -14,6 +14,7 @@ export interface MonacoEditorProps {
   theme?: string;
   value: string;
   style?: React.CSSProperties;
+  markers?: Omit<EditorApi.editor.IMarkerData, "relatedInformation">[];
 }
 
 export const MonacoEditor: React.FC<MonacoEditorProps> = ({
@@ -23,6 +24,7 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
   theme = "vs-dark",
   value,
   style,
+  markers,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const monacoEditorObj = useMonacoEditor();
@@ -30,7 +32,20 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
 
   useEffect(() => {
     editorRef.current?.updateOptions({ theme });
-  }, [theme]);
+  }, [editorRef.current, theme]);
+
+  useEffect(() => {
+    if (!editorRef.current || monacoEditorObj.state !== "success") return;
+
+    const model = editorRef.current.getModel();
+    if (!model) return;
+
+    monacoEditorObj.value.editor.setModelMarkers(
+      model,
+      "monaco editor react",
+      markers || []
+    );
+  }, [editorRef.current, monacoEditorObj.state, markers]);
 
   useEffect(() => {
     if (monacoEditorObj.state !== "success") return;
@@ -48,13 +63,13 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
     );
 
     const editor = monacoEditor.editor.create(containerRef.current, {
-      ...options,
-      extraEditorClassName: className,
-      language: "cpp",
-      scrollBeyondLastLine: false,
+      scrollBeyondLastLine: true,
       minimap: {
         enabled: true,
       },
+      ...options,
+      extraEditorClassName: className,
+      language: "cpp",
       model,
       theme,
     });

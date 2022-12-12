@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "date-fns": "^2.29.3",
+    "jsxstyle": "canary",
     "monaco-editor": "^0.34.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
     "next": "^13.0.4",
@@ -23,7 +24,9 @@
     "sqrl-text-functions": "^0.6.9"
   },
   "devDependencies": {
-    "@types/react": "^18.0.25"
+    "@types/react": "^18.0.25",
+    "@types/sprintf-js": "^1.1.2",
+    "@types/webpack-env": "^1.18.0"
   },
   "repository": "https://github.com/sqrl-lang/sqrl/tree/main/websqrl"
 }
