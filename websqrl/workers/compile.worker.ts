@@ -3,7 +3,7 @@ import * as sqrlJsonPath from "sqrl-jsonpath";
 import * as sqrlRedisFunctions from "sqrl-redis-functions";
 import * as sqrlTextFunctions from "sqrl-text-functions";
 import { Request, Response, EventData, LogEntry } from "../src/types";
-import { Execution, AT, WhenCause, FeatureMap } from "sqrl";
+import { Execution, AT, WhenCause, FeatureMap, FunctionInfo } from "sqrl";
 import { invariant } from "../src/invariant";
 import { TweetManipulator } from "../TweetManipulator";
 
@@ -86,10 +86,18 @@ let instancePromise: Promise<SQRL.Instance> | null = null;
 const logStore = Symbol("logs");
 async function compile(source: string) {
   if (!instancePromise) {
-    instancePromise = buildInstance().catch((err) => {
-      instancePromise = null;
-      throw err;
-    });
+    instancePromise = buildInstance()
+      .catch((err) => {
+        instancePromise = null;
+        throw err;
+      })
+      .then((instance) => {
+        respond({
+          type: "sqrlInit",
+          functions: instance.listFunctions(),
+        });
+        return instance;
+      });
   }
   const instance = await instancePromise;
   const fs = new SQRL.VirtualFilesystem({

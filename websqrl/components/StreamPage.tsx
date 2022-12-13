@@ -13,7 +13,7 @@ import type {
   Result,
   CompileError,
 } from "../src/types";
-import { MonacoEditor } from "../src/MonacoEditor";
+import { FunctionInfoMap, MonacoEditor } from "../src/MonacoEditor";
 import { useMatchMedia, Col, Box, Block, Row } from "jsxstyle";
 import { styleConstants } from "../src/constants";
 import { Container } from "./Container";
@@ -69,6 +69,8 @@ export function StreamPage<T extends string>({
 
   const [, setLogId] = useState(LOG_ID);
   const [source, setSource] = useState(sampleCode);
+
+  const [sqrlFunctions, setFunctions] = useState<FunctionInfoMap | null>(null);
 
   const isDarkMode = useMatchMedia("screen and (prefers-color-scheme: dark)");
   const isSmallScreen = useMatchMedia("screen and (max-width: 1000px)");
@@ -188,7 +190,12 @@ export function StreamPage<T extends string>({
     );
     workerRef.current.onmessage = (event) => {
       const res = event.data as Response<T>;
-      if (res.type === "compileOkay") {
+      if (res.type === "sqrlInit") {
+        const functionMap = Object.fromEntries(
+          res.functions.map((f) => [f.name, f])
+        );
+        setFunctions(functionMap);
+      } else if (res.type === "compileOkay") {
         if (res.source === lastSourceRef.current) {
           setCompileStatus({
             status: "success",
@@ -297,6 +304,7 @@ export function StreamPage<T extends string>({
           markers={
             compileStatus.errorMarker ? [compileStatus.errorMarker] : undefined
           }
+          sqrlFunctions={sqrlFunctions}
           onChange={setSource}
           theme={isDarkMode ? "vs-dark" : "vs-light"}
         />

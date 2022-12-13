@@ -50,7 +50,7 @@ module.exports = {
     if (!isServer) {
       config.plugins.push(
         new MonacoWebpackPlugin({
-          languages: ["cpp"],
+          languages: [],
           filename: "static/[name].worker.js",
           publicPath: "_next",
         })
