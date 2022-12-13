@@ -37,7 +37,9 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
   private historyPath: string = expandTilde("~/.sqrl_repl_history");
   private stdin: Readable;
   private stdout: Writable;
-  private busy = new Semaphore();
+  private busy = new Semaphore({
+    max: 1,
+  });
 
   constructor(
     private instance: Instance,
@@ -116,7 +118,7 @@ export class SqrlRepl extends EventEmitter<EventTypes> {
   }
 
   private async eval(cmd, context, filename) {
-    this.busy.increment();
+    await this.busy.increment();
     const ctx = this.traceFactory();
     try {
       appendFileSync(this.historyPath, cmd);

@@ -26,14 +26,41 @@ export function registerSourceFunction(instance: Instance) {
     }
   );
 
+  instance.registerStatement(
+    "SqrlLogStatements",
+    async function printAllSource(state: Execution) {
+      state.getSourcePrinter().printAllSource();
+    },
+    {
+      args: [AT.state],
+      argstring: "",
+      docstring: "Prints the SQRL execution source",
+    }
+  );
+
   instance.registerSync(
-    function featureSource(state: Execution, featureName, props = {}) {
+    function _featureSource(state: Execution, featureName, props = {}) {
       return state.getSourcePrinter().getSourceForSlotName(featureName, props);
     },
     {
       args: [AT.state, AT.constant.string, AT.any.optional],
+    }
+  );
+
+  instance.registerTransform(
+    function featureSource(state: CompileState, ast: CallAst): Ast {
+      const arg = ast.args[0];
+      if (arg.type !== "feature") {
+        throw new Error("Expected feature arguments");
+      }
+      return AstBuilder.call("_featureSource", [
+        AstBuilder.constant(arg.value),
+      ]);
+    },
+    {
+      args: [AT.feature],
       argstring: "feature",
-      docstring: "Returns the source code for the given feature",
+      docstring: "Returns the JavaScript source of the given feature",
     }
   );
 
@@ -48,18 +75,6 @@ export function registerSourceFunction(instance: Instance) {
     }
   );
 
-  instance.registerStatement(
-    "SqrlLogStatements",
-    async function printAllSource(state: Execution) {
-      state.getSourcePrinter().printAllSource();
-    },
-    {
-      args: [AT.state],
-      argstring: "",
-      docstring: "Prints the SQRL execution source",
-    }
-  );
-
   instance.registerTransform(
     function printSource(state: CompileState, ast: CallAst): Ast {
       const arg = ast.args[0];
@@ -71,26 +86,7 @@ export function registerSourceFunction(instance: Instance) {
     {
       args: [AT.feature],
       argstring: "feature",
-      docstring: "Prints the SQRL source of the given feature",
-    }
-  );
-
-  instance.registerTransform(
-    function source(state: CompileState, ast: CallAst): Ast {
-      const feature = ast.args[0];
-      if (feature.type !== "feature") {
-        throw new Error("Expected feature argument");
-      }
-      return AstBuilder.call("featureSource", [
-        AstBuilder.constant(feature.value),
-        ...ast.args.slice(1),
-      ]);
-    },
-    {
-      args: [AT.feature, AT.any.optional],
-
-      argstring: "feature",
-      docstring: "Returns the source code of the given feature",
+      docstring: "Prints the JavaScript source of the given feature",
     }
   );
 }

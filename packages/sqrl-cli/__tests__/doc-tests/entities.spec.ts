@@ -10,13 +10,26 @@ test("works", async () => {
     await runRepl(
       [],
       `
-    LET User := entity('User', '1234')
-    User='1234'
-    str(date(User))`
+      LET ActionData := {"name": "hi", "user_id": "1.2.3.4"};
+      LET ActionName := jsonValue(ActionData, "$.name")
+      LET UserId := jsonValue(ActionData, "$.user_id")
+      LET User := entity('User', UserId)
+      featureSource(User)
+      User="tom"
+      User="1.2.3.4"
+      str(date(User))
+      `
     )
   ).toEqual([
-    "'1234'",
-    "'2019-01-02T03:04:56.789Z'",
+    "{ name: 'hi', user_id: '1.2.3.4' }",
+    "'hi'",
+    "'1.2.3.4'",
+    "'1.2.3.4'",
+    "'function () {\\n' +\n  '  const f0 = () =>\\n' +\n  '    " +
+      'functions._entity(this, "User", this.slots["UserId"].value());\\n\' +\n  \'  ' +
+      "return this.load(\"UserId\").then(f0);\\n' +\n  '}'",
+    "false",
+    "true",
     "'2019-01-02T03:04:56.789Z'",
   ]);
 });
