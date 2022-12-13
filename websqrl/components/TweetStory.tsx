@@ -75,17 +75,19 @@ export const TweetStory: React.FC<TweetStoryProps> = ({
         </Block>
       )}
 
-      <Block color={styleConstants.secondary}>
-        <Block>
-          {messages.length || "No"} logged message
-          {messages.length === 1 ? "" : "s"}
+      {messages.length ? (
+        <Block color={styleConstants.secondary}>
+          <Block>
+            {messages.length || "No"} logged message
+            {messages.length === 1 ? "" : "s"}
+          </Block>
+          <Block component="ul" listStyle="inside">
+            {messages.map((message, index) => (
+              <li key={index}>{message}</li>
+            ))}
+          </Block>
         </Block>
-        <Block component="ul" listStyle="inside">
-          {messages.map((message, index) => (
-            <li key={index}>{message}</li>
-          ))}
-        </Block>
-      </Block>
+      ) : null}
     </Col>
   );
 };

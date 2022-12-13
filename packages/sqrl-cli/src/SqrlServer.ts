@@ -116,14 +116,18 @@ async function deleteRoute(
 // The micro dispatch types are broken, so manually type this
 type Route = (req: IncomingMessage, res: ServerResponse) => Promise<any>;
 interface Dispatcher {
-  dispatch(uri: string, methods: ("GET" | "POST")[], handler: Route): Dispatcher
-  otherwise(handler: Route)
+  dispatch(
+    uri: string,
+    methods: ("GET" | "POST")[],
+    handler: Route
+  ): Dispatcher;
+  otherwise(handler: Route);
 }
 
 export function createSqrlServer(ctx: Context, executable: Executable): Server {
   const router = (dispatch() as Dispatcher)
     .dispatch("/health", ["GET"], async (req, res) => {
-      send(res, 200, "Healthy")
+      send(res, 200, "Healthy");
     })
     .dispatch("/run", ["POST"], run.bind(null, ctx, executable))
     .dispatch("/delete", ["POST"], deleteRoute.bind(null, ctx))
