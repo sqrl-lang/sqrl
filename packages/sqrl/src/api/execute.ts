@@ -59,9 +59,8 @@ export interface ExecutableOptions {
   instance: Instance;
 }
 
-export type FeatureMap<T extends string = string> = {
-  // TODO(meyer) any --> unknown
-  [key in T]: any;
+export type FeatureMap<K extends string = string, V extends any = any> = {
+  [key in K]: V;
 };
 
 export interface FunctionInfo {
