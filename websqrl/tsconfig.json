@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "composite": true,
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -15,7 +14,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "sqrl": ["../packages/sqrl"],
+      "sqrl-cli": ["../packages/sqrl-cli"],
+      "sqrl-cli-functions": ["../packages/sqrl-cli-functions"],
+      "sqrl-common": ["../packages/sqrl-common"],
+      "sqrl-jsonpath": ["../packages/sqrl-jsonpath"],
+      "sqrl-load-functions": ["../packages/sqrl-load-functions"],
+      "sqrl-redis-functions": ["../packages/sqrl-redis-functions"],
+      "sqrl-test-utils": ["../packages/sqrl-test-utils"],
+      "sqrl-text-functions": ["../packages/sqrl-text-functions"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "references": [
