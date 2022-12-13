@@ -1,6 +1,9 @@
+# Basic event set up
 LET EventData := input();
 LET SqrlClock := TweetDate;
+LET DatasetId := 1;
 
+# Feature extraction from the Twitter data
 LET TweetText := jsonValue(EventData, '$.data.text');
 LET AuthorId := jsonValue(EventData, '$.data.author_id');
 LET TweetId := jsonValue(EventData, '$.data.id');
@@ -12,21 +15,30 @@ LET AuthorCreatedAt := jsonValue(AuthorUserData, "$.created_at");
 LET AuthorName := jsonValue(AuthorUserData, "$.name");
 LET AuthorProfileImageUrl := jsonValue(AuthorUserData, "$.profile_image_url");
 
+# Simhash is a perceptual hash of text, such that similar text results in a similar hash
 LET TweetTextSimhash := simhash(TweetText);
 
+# Set up some counters
 LET TweetsByUser := count(BY AuthorUsername TOTAL);
 LET CountBySimhash := count(BY TweetTextSimhash LAST 1 HOUR);
 LET UsersBySimhash := countUnique(AuthorUsername BY TweetTextSimhash LAST HOUR);
 
-LET Global := true;
-LET TotalTweets := count(BY Global);
+# Simple rule to make sure atleast one tweet shows up in the UI
+LET IsFirstTweetSeen := NOT rateLimited(BY DatasetId MAX 1 EVERY YEARS);
+CREATE RULE FirstTweetSeen WHERE IsFirstTweetSeen;
 
+# Simple rules for too much similar text
 CREATE RULE SimilarTweetText WHERE CountBySimhash>1 WITH REASON
-    "Seen multiple tweets with similar text";
+    "Seen ${CountBySimhash} tweets with similar text";
 CREATE RULE SameTweetMultipleUsers WHERE UsersBySimhash>1 WITH REASON
-    "Seen multiple users tweeting the same text";
+    "Seen ${UsersBySimhash} users tweeting similar text";
 
-WHEN SimilarTweetText THEN blockTweet();
+# This defines what gets "blocked" (i.e. displayed in the sidebar)
+WHEN
+    SimilarTweetText,
+    SameTweetMultipleUsers,
+    FirstTweetSeen
+THEN blockTweet();
 
-log("Common tweet text (seen %d similar)" , CountBySimhash) WHERE CountBySimhash>1;
-log("Seen %d tweets by user" , TweetsByUser) WHERE TweetsByUser>1;
+# Add some additional features if they are interesting
+log("Seen %d tweets by user", TweetsByUser) WHERE TweetsByUser>1;

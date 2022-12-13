@@ -36,6 +36,8 @@ function configureSqrlLanguage(
   const keywords = [
     // definitions
     "let",
+    // logic
+    "not",
     // rules
     "create",
     "rule",
@@ -48,12 +50,25 @@ function configureSqrlLanguage(
     "for",
     "in",
     // counters
+    // @todo: These should only apply *inside count function parameters
     "by",
     "total",
     "last",
+    "every",
+    // @note: max() is also a function
+    "max",
+    "second",
+    "seconds",
+    "minute",
+    "minutes",
     "hour",
+    "hours",
     "day",
+    "days",
+    "week",
+    "weeks",
     "month",
+    "months",
   ];
   const builtin = ["input"];
   const functionNames = Object.keys(functions).sort();
@@ -183,9 +198,8 @@ function configureSqrlLanguage(
         const word = model.getWordAtPosition(position);
         const info = word && functions[word.word];
         if (info) {
-          const callstring = `${info.name}(${
-            functions[word.word].argstring || ""
-          })`;
+          const callstring = `${info.name}(${functions[word.word].argstring || ""
+            })`;
 
           return {
             range: {

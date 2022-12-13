@@ -206,22 +206,18 @@ TimespanSecondsExpr = timespan:(
   "HOURS"i / "HOUR"i /
   "DAYS"i / "DAY"i /
   "WEEKS"i / "WEEK"i /
-  "MONTHS"i / "MONTH"i
+  "MONTHS"i / "MONTH"i /
+  "YEARS"i / "YEAR"i
 ) {
   return {
     second: 1,
-    seconds: 1,
     minute: 60,
-    minutes: 60,
     hour: 60 * 60,
-    hours: 60 * 60,
     day: 60 * 60 * 24,
-    days: 60 * 60 * 24,
     week: 60 * 60 * 24 * 7,
-    weeks: 60 * 60 * 24 * 7,
     month: 60 * 60 * 24 * 30,
-    months: 60 * 60 * 24 * 30,
-  }[timespan.toLowerCase()];
+    year: 60 * 60 * 24 * 365,
+  }[timespan.toLowerCase().replace(/s$/, '')];
 }
 
 DurationMsExpr = quantity:(IntLiteral _)? timespanSeconds:TimespanSecondsExpr {
