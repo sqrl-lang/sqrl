@@ -1,4 +1,4 @@
-import { FeatureMap } from "sqrl";
+import { FeatureMap, FunctionInfo } from "sqrl";
 import { TweetResult } from "../TweetManipulator";
 
 export interface EventData {
@@ -15,6 +15,11 @@ export interface EventRequest<T extends string> {
   requestFeatures: readonly T[];
 }
 export type Request<T extends string> = CompileRequest | EventRequest<T>;
+
+export interface SqrlInit {
+  type: "sqrlInit";
+  functions: FunctionInfo[];
+}
 
 export interface CompileOkay {
   type: "compileOkay";
@@ -55,6 +60,7 @@ export interface Render {
   buffer: Uint8Array;
 }
 export type Response<T extends string> =
+  | SqrlInit
   | CompileOkay
   | CompileError
   | RuntimeError
