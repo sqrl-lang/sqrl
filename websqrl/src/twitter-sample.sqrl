@@ -20,24 +20,30 @@ LET TweetTextSimhash := simhash(TweetText);
 
 # Set up some counters
 LET TweetsByUser := count(BY AuthorUsername TOTAL);
-LET CountBySimhash := count(BY TweetTextSimhash LAST 1 HOUR);
-LET UsersBySimhash := countUnique(AuthorUsername BY TweetTextSimhash LAST HOUR);
+LET CountBySimhash := count(BY TweetTextSimhash LAST 5 MINUTES);
+LET UsersBySimhash := countUnique(AuthorUsername BY TweetTextSimhash LAST 5 MINUTES);
 
 # Simple rule to make sure atleast one tweet shows up in the UI
 LET IsFirstTweetSeen := NOT rateLimited(BY DatasetId MAX 1 EVERY YEARS);
 CREATE RULE FirstTweetSeen WHERE IsFirstTweetSeen;
 
 # Simple rules for too much similar text
-CREATE RULE SimilarTweetText WHERE CountBySimhash>1 WITH REASON
+CREATE RULE SimilarTweetText WHERE CountBySimhash>2 WITH REASON
     "Seen ${CountBySimhash} tweets with similar text";
-CREATE RULE SameTweetMultipleUsers WHERE UsersBySimhash>1 WITH REASON
+CREATE RULE SameTweetMultipleUsers WHERE UsersBySimhash>2 WITH REASON
     "Seen ${UsersBySimhash} users tweeting similar text";
+
+# Flag any users using profanity (not a great spam rule! but easy)
+LET BadWordMatches := patternMatches("bad-words.txt", TweetText);
+CREATE RULE UsedBadWords WHERE BadWordMatches WITH REASON
+    "Matched simple profanity filter: ${BadWordMatches}";
 
 # This defines what gets "blocked" (i.e. displayed in the sidebar)
 WHEN
     SimilarTweetText,
     SameTweetMultipleUsers,
-    FirstTweetSeen
+    FirstTweetSeen,
+    UsedBadWords
 THEN blockTweet();
 
 # Add some additional features if they are interesting
