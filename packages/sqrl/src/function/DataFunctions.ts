@@ -85,6 +85,17 @@ export function registerDataFunctions(instance: StdlibRegistry) {
   );
 
   instance.save(
+    function jsonStringify(obj: any) {
+      return JSON.stringify(obj);
+    },
+    {
+      args: [AT.any],
+      argstring: "any",
+      docstring: "Returns the argument as a JSON encoded string",
+    }
+  );
+
+  instance.save(
     function _createMap(...items) {
       const result = {};
       for (let idx = 0; idx < items.length; idx += 2) {

@@ -45,7 +45,6 @@ export interface RuntimeError {
   source: string;
 }
 export interface LogEntry {
-  format: string;
   args: any[];
 }
 export interface Result<T extends string> {

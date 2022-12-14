@@ -1,6 +1,4 @@
 import { Block, Col, Inline, Row } from "jsxstyle";
-import { useMemo } from "react";
-import { sprintf } from "sprintf-js";
 import { styleConstants } from "../src/constants";
 import type { Result } from "../src/types";
 
@@ -25,7 +23,17 @@ export const TweetStory: React.FC<TweetStoryProps> = ({
 
   const messages = [];
   for (const msg of logs) {
-    messages.push(sprintf(msg.format, ...msg.args));
+    messages.push(
+      msg.args
+        .map((value) => {
+          if (typeof value === "string") {
+            return value;
+          } else {
+            return JSON.stringify(value);
+          }
+        })
+        .join(" ")
+    );
   }
 
   return (

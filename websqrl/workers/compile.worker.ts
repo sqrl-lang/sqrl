@@ -51,16 +51,16 @@ async function buildInstance() {
 
   instance.registerStatement(
     "SqrlLogStatements",
-    async function log(state: Execution, format: string, ...args) {
+    async function log(state: Execution, ...args: any[]) {
       state.setDefault<LogEntry[]>(logStore, []).push({
-        format,
         args,
       });
     },
     {
       allowNull: true,
       args: [AT.state, AT.any.repeated],
-      argstring: "format string, value...",
+      allowSqrlObjects: true,
+      argstring: "value...",
       docstring: "Logs a message using console.log()",
     }
   );
