@@ -89,12 +89,15 @@ let instancePromise: Promise<SQRL.Instance> | null = null;
 const logStore = Symbol("logs");
 
 function stringRot13(input) {
-  const prev = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-  const next = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
-  return input.split('').map(chr => {
-    const idx = prev.indexOf(chr);
-    return idx >= 0 ? next[idx] : chr;
-  }).join('');
+  const prev = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  const next = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+  return input
+    .split("")
+    .map((chr) => {
+      const idx = prev.indexOf(chr);
+      return idx >= 0 ? next[idx] : chr;
+    })
+    .join("");
 }
 
 async function compile(source: string) {
@@ -113,12 +116,10 @@ async function compile(source: string) {
       });
   }
 
-
-
   const instance = await instancePromise;
   const fs = new SQRL.VirtualFilesystem({
     "main.sqrl": source,
-    'bad-words.txt': badWordsRot13.map(w => stringRot13(w)).join('\n'),
+    "bad-words.txt": badWordsRot13.map((w) => stringRot13(w)).join("\n"),
   });
   const { executable } = await SQRL.compileFromFilesystem(instance, fs);
 
