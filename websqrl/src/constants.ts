@@ -5,6 +5,7 @@ import { EXPERIMENTAL_makeCustomProperties } from "jsxstyle";
 export const styleConstants = EXPERIMENTAL_makeCustomProperties({
   boxShadowColor: "#333",
   pageForeground: "#000",
+  pageLink: "#44D",
   secondary: "#888",
   pageBackground: "#EEE",
   insetBackground: "#FFF",
@@ -15,6 +16,7 @@ export const styleConstants = EXPERIMENTAL_makeCustomProperties({
     mediaQuery: "screen and (prefers-color-scheme: dark)",
     boxShadowColor: "#AAA",
     pageForeground: "#FFF",
+    pageLink: "#CCF",
     secondary: "#AAA",
     pageBackground: "#000",
     insetBackground: "#333",
