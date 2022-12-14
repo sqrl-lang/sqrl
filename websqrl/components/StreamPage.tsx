@@ -306,7 +306,7 @@ export function StreamPage<T extends string>({
           }
           sqrlFunctions={sqrlFunctions}
           onChange={setSource}
-          theme={isDarkMode ? "vs-dark" : "vs-light"}
+          isDarkMode={isDarkMode}
         />
       </Col>
 

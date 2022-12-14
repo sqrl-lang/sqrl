@@ -17,7 +17,7 @@ export interface MonacoEditorProps {
   className?: string;
   onChange?: ChangeHandler;
   options?: EditorApi.editor.IStandaloneEditorConstructionOptions;
-  theme?: string;
+  isDarkMode?: boolean;
   value: string;
   style?: React.CSSProperties;
   markers?: Omit<EditorApi.editor.IMarkerData, "relatedInformation">[];
@@ -145,7 +145,8 @@ function configureSqrlLanguage(
           { include: "@whitespace" },
         ],
         string: [
-          [/[^"']+/, { token: "string" }],
+          [/\$\{[a-z]+\}/i, { token: "string.identifier" }],
+          [/[^"'$]+|\$/, { token: "string" }],
           [/@escapes/, "string.escape"],
           [/\\./, "string.escape.invalid"],
 
@@ -198,8 +199,9 @@ function configureSqrlLanguage(
         const word = model.getWordAtPosition(position);
         const info = word && functions[word.word];
         if (info) {
-          const callstring = `${info.name}(${functions[word.word].argstring || ""
-            })`;
+          const callstring = `${info.name}(${
+            functions[word.word].argstring || ""
+          })`;
 
           return {
             range: {
@@ -221,6 +223,20 @@ function configureSqrlLanguage(
     })
   );
 
+  monaco.editor.defineTheme("custom", {
+    base: "vs",
+    inherit: true,
+    rules: [{ token: "string.identifier", foreground: "9f8500" }],
+    colors: {},
+  });
+
+  monaco.editor.defineTheme("custom-dark", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [{ token: "string.identifier", foreground: "e0a500" }],
+    colors: {},
+  });
+
   return {
     dispose() {
       disposables.forEach((d) => d.dispose());
@@ -232,7 +248,7 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
   className,
   onChange,
   options = {},
-  theme = "vs-dark",
+  isDarkMode = true,
   value,
   style,
   markers,
@@ -241,6 +257,7 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const monacoEditorObj = useMonacoEditor();
   const editorRef = useRef<EditorApi.editor.IStandaloneCodeEditor>();
+  const theme = isDarkMode ? "custom-dark" : "custom";
 
   useEffect(() => {
     editorRef.current?.updateOptions({ theme });
