@@ -38,12 +38,17 @@ LET BadWordMatches := patternMatches("bad-words.txt", TweetText);
 CREATE RULE UsedBadWords WHERE BadWordMatches WITH REASON
     "Matched simple profanity filter: ${BadWordMatches}";
 
+# Look out for impersonated users
+LET LooksLikeOlMusky := regexMatch("^[E][1lI][0o]n.+Mu[$s]k.*$", AuthorName);
+CREATE RULE ImpersonatedMusk WHERE LooksLikeOlMusky AND AuthorUsername != "elonmusk";
+
 # This defines what gets "blocked" (i.e. displayed in the sidebar)
 WHEN
     SimilarTweetText,
     SameTweetMultipleUsers,
     FirstTweetSeen,
-    UsedBadWords
+    UsedBadWords,
+    ImpersonatedMusk
 THEN blockTweet();
 
 # Add some additional features if they are interesting
