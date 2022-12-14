@@ -1,11 +1,13 @@
 import * as SQRL from "sqrl";
 import * as sqrlJsonPath from "sqrl-jsonpath";
+import * as sqrlLoadFunctions from "sqrl-load-functions";
 import * as sqrlRedisFunctions from "sqrl-redis-functions";
 import * as sqrlTextFunctions from "sqrl-text-functions";
 import { Request, Response, EventData, LogEntry } from "../src/types";
-import { Execution, AT, WhenCause, FeatureMap, FunctionInfo } from "sqrl";
+import { Execution, AT, WhenCause, FeatureMap } from "sqrl";
 import { invariant } from "../src/invariant";
 import { TweetManipulator } from "../TweetManipulator";
+import badWordsRot13 from "../src/bad-words-rot13.json";
 
 const COMPILE_DEBOUNCE_MS = 200;
 
@@ -32,6 +34,7 @@ async function buildInstance() {
   await instance.importFromPackage("sqrl-jsonpath", sqrlJsonPath);
   await instance.importFromPackage("sqrl-redis-functions", sqrlRedisFunctions);
   await instance.importFromPackage("sqrl-text-functions", sqrlTextFunctions);
+  await instance.importFromPackage("sqrl-load-functions", sqrlLoadFunctions);
 
   instance.registerStatement(
     "SqrlLogStatements",
@@ -84,6 +87,19 @@ async function buildInstance() {
 let instancePromise: Promise<SQRL.Instance> | null = null;
 
 const logStore = Symbol("logs");
+
+function stringRot13(input) {
+  const prev = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  const next = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+  return input
+    .split("")
+    .map((chr) => {
+      const idx = prev.indexOf(chr);
+      return idx >= 0 ? next[idx] : chr;
+    })
+    .join("");
+}
+
 async function compile(source: string) {
   if (!instancePromise) {
     instancePromise = buildInstance()
@@ -99,9 +115,11 @@ async function compile(source: string) {
         return instance;
       });
   }
+
   const instance = await instancePromise;
   const fs = new SQRL.VirtualFilesystem({
     "main.sqrl": source,
+    "bad-words.txt": badWordsRot13.map((w) => stringRot13(w)).join("\n"),
   });
   const { executable } = await SQRL.compileFromFilesystem(instance, fs);
 
