@@ -6,7 +6,7 @@ import * as sqrlTextFunctions from "sqrl-text-functions";
 import { Request, Response, EventData, LogEntry } from "../src/types";
 import { Execution, AT, WhenCause, FeatureMap } from "sqrl";
 import { invariant } from "../src/invariant";
-import { TweetManipulator } from "../TweetManipulator";
+import { WebSQRLManipulator } from "../TweetManipulator";
 import badWordsRot13 from "../src/bad-words-rot13.json";
 
 const COMPILE_DEBOUNCE_MS = 200;
@@ -51,27 +51,27 @@ async function buildInstance() {
 
   instance.registerStatement(
     "SqrlLogStatements",
-    async function log(state: Execution, format: string, ...args) {
+    async function log(state: Execution, ...args: any[]) {
       state.setDefault<LogEntry[]>(logStore, []).push({
-        format,
         args,
       });
     },
     {
       allowNull: true,
       args: [AT.state, AT.any.repeated],
-      argstring: "format string, value...",
+      allowSqrlObjects: true,
+      argstring: "value...",
       docstring: "Logs a message using console.log()",
     }
   );
 
   instance.registerStatement(
     "SqrlBlockStatements",
-    async function blockTweet(state: Execution, cause: WhenCause) {
-      if (!(state.manipulator instanceof TweetManipulator)) {
+    async function showEvent(state: Execution, cause: WhenCause) {
+      if (!(state.manipulator instanceof WebSQRLManipulator)) {
         throw new Error("Expected TweetManipulator for WebSQRL");
       }
-      state.manipulator.blockTweet(cause);
+      state.manipulator.showEvent(cause);
     },
     {
       args: [AT.state, AT.whenCause],
@@ -165,7 +165,7 @@ async function runEvent(event: EventData, requestFeatures: readonly string[]) {
   invariant(latestExecutable, "No executable to process event");
 
   const ctx = SQRL.createSimpleContext();
-  const manipulator = new TweetManipulator();
+  const manipulator = new WebSQRLManipulator();
   const execution = await latestExecutable.execute(ctx, {
     manipulator,
     inputs: {

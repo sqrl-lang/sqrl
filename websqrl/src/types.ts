@@ -1,5 +1,5 @@
 import { FeatureMap, FunctionInfo } from "sqrl";
-import { TweetResult } from "../TweetManipulator";
+import { WebSQRLResult } from "../TweetManipulator";
 
 export interface EventData {
   [key: string]: any;
@@ -45,13 +45,12 @@ export interface RuntimeError {
   source: string;
 }
 export interface LogEntry {
-  format: string;
   args: any[];
 }
 export interface Result<T extends string> {
   type: "result";
   logs: Array<LogEntry>;
-  result: TweetResult;
+  result: WebSQRLResult;
   features: FeatureMap<T>;
   source: string;
 }

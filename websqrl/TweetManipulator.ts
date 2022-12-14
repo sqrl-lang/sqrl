@@ -6,26 +6,26 @@
 
 import { SimpleManipulator, WhenCause } from "sqrl";
 
-interface BlockedTweetResult {
-  blocked: true;
-  blockedCause: WhenCause;
+interface ShownWebSQRLResult {
+  shown: true;
+  shownCause: WhenCause;
 }
 
-interface UnblockedTweetResult {
-  blocked: false;
+interface HiddenWebSQRLResult {
+  shown: false;
 }
 
-export type TweetResult = BlockedTweetResult | UnblockedTweetResult;
+export type WebSQRLResult = ShownWebSQRLResult | HiddenWebSQRLResult;
 
-export class TweetManipulator extends SimpleManipulator {
-  private result: TweetResult = {
-    blocked: false,
+export class WebSQRLManipulator extends SimpleManipulator {
+  private result: WebSQRLResult = {
+    shown: false,
   };
 
-  blockTweet(cause: WhenCause) {
+  showEvent(cause: WhenCause) {
     this.result = {
-      blocked: true,
-      blockedCause: cause,
+      shown: true,
+      shownCause: cause,
     };
   }
 

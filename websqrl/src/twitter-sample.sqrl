@@ -15,6 +15,10 @@ LET AuthorCreatedAt := jsonValue(AuthorUserData, "$.created_at");
 LET AuthorName := jsonValue(AuthorUserData, "$.name");
 LET AuthorProfileImageUrl := jsonValue(AuthorUserData, "$.profile_image_url");
 
+# These features follow a standard naming scheme, and allow rules to be shared between
+# multiple websites, in our case the Wikipedia and Twitter demos.
+LET UserGeneratedContent := TweetText;
+
 # Simhash is a perceptual hash of text, such that similar text results in a similar hash
 LET TweetTextSimhash := simhash(TweetText);
 
@@ -34,7 +38,7 @@ CREATE RULE SameTweetMultipleUsers WHERE UsersBySimhash>2 WITH REASON
     "Seen ${UsersBySimhash} users tweeting similar text";
 
 # Flag any users using profanity (not a great spam rule! but easy)
-LET BadWordMatches := patternMatches("bad-words.txt", TweetText);
+LET BadWordMatches := patternMatches("bad-words.txt", UserGeneratedContent);
 CREATE RULE UsedBadWords WHERE BadWordMatches WITH REASON
     "Matched simple profanity filter: ${BadWordMatches}";
 
@@ -42,14 +46,15 @@ CREATE RULE UsedBadWords WHERE BadWordMatches WITH REASON
 LET LooksLikeOlMusky := regexMatch("^E[1lI][0o]n.+Mu[$s]k.*$", AuthorName);
 CREATE RULE ImpersonatedMusk WHERE LooksLikeOlMusky AND AuthorUsername != "elonmusk";
 
-# This defines what gets "blocked" (i.e. displayed in the sidebar)
+# This defines what gets shown in the sidebar
+# At Twitter this might mean deleted tweets, suspending users, etc.
 WHEN
     SimilarTweetText,
     SameTweetMultipleUsers,
     FirstTweetSeen,
     UsedBadWords,
     ImpersonatedMusk
-THEN blockTweet();
+THEN showEvent();
 
 # Add some additional features if they are interesting
 log("Seen %d tweets by user", TweetsByUser) WHERE TweetsByUser>1;

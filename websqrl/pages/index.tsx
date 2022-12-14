@@ -25,6 +25,11 @@ export default function IndexPage() {
             View SQRL running on a sampled Twitter live stream
           </a>
         </Block>
+        <Block>
+          <a href="/wikipedia">
+            View SQRL running on the live set of changes to Wikipedia
+          </a>
+        </Block>
       </Box>
     </>
   );
