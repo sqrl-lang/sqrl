@@ -61,6 +61,7 @@ export function StreamPage<T extends string>({
   const lastSourceRef = useRef<string>();
   const storiesRef = useRef<Array<ResultOrMessage<T>>>([]);
   const lastTimestampRef = useRef<string>();
+  const [showDetails, setShowDetails] = useState(true);
   const [compileStatus, setCompileStatus] = useState<{
     status: "error" | "success" | "pending";
     message: string;
@@ -252,6 +253,10 @@ export function StreamPage<T extends string>({
     };
   }, []);
 
+  const linkStyle = {
+    color: styleConstants.pageLink,
+    textDecoration: "underline",
+  };
   return (
     <Box
       display="flex"
@@ -297,7 +302,62 @@ export function StreamPage<T extends string>({
                 : compileStatus.message}
             </Block>
           </Row>
+          <Block fontSize={14} whiteSpace="nowrap" marginLeft="auto">
+            <a href="#" onClick={() => setShowDetails(!showDetails)}>
+              {showDetails ? (
+                <>Hide Language Details &uarr;</>
+              ) : (
+                <>Show Language Details &darr;</>
+              )}
+            </a>
+          </Block>
         </Row>
+        {showDetails && (
+          <>
+            <Row
+              padding={10}
+              display="block"
+              borderLeftColor={styleConstants.pageForeground}
+              borderLeftWidth="2px"
+              borderLeftStyle="solid"
+            >
+              SQRL was the language designed by Smyte, and later acquired by
+              Twitter in 2018. It is a safe, stateful language for event
+              streams, designed to make it easy to enforce anti-abuse rules.
+              <br />
+              <br />
+              This demonstration is running on the Twitter{" "}
+              <a
+                style={linkStyle}
+                href="https://developer.twitter.com/en/docs/twitter-api/tweets/volume-streams/introduction"
+              >
+                1% sampled stream
+              </a>
+              , and include some basic example rules. These are not recommended
+              for use in production, but are rather examples of what can be
+              achieved easily with the language.
+              <br />
+              <br />
+              For more information see{" "}
+              <a style={linkStyle} href="https://sqrl-lang.github.io/sqrl/">
+                the website
+              </a>
+              , or{" "}
+              <a
+                style={linkStyle}
+                href="https://sqrl-lang.github.io/sqrl/motivation.html"
+              >
+                the motivation
+              </a>
+              .
+            </Row>
+            <Row padding={10} fontSize={12}>
+              <a href="#" onClick={() => setShowDetails(false)}>
+                <>Hide Language Details &uarr;</>
+              </a>
+            </Row>
+          </>
+        )}
         <MonacoEditor
           style={{ flex: "1 1 auto" }}
           value={source}
