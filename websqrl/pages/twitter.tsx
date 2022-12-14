@@ -16,7 +16,7 @@ export default function TwitterPage() {
         sampleCode={sampleCode}
         storyComponent={TweetStory}
         fetchFeatures={TWEET_FETCH_FEATURES}
-        shouldLogResult={(result) => result.result.blocked}
+        shouldLogResult={(result) => result.result.shown}
       />
     </>
   );

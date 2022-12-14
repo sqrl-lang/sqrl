@@ -1,6 +1,8 @@
 LET EventData := input();
 LET SqrlClock := jsonValue(EventData, '$.meta.dt');
+LET DatasetId := 1;
 
+# Feature extraction from the Wikipedia data format
 LET Domain := jsonValue(EventData, "$.meta.domain");
 LET Timestamp := jsonValue(EventData, "$.timestamp");
 LET Title := jsonValue(EventData, "$.title");
@@ -15,5 +17,22 @@ LET DiffUrl := concat(
     "diff=", NewRev, "&oldid=", OldRev
 );
 
-LET CountByUser := count(BY User);
-log(concat(Title, " [By ", User, " x", CountByUser, "]"));
+# These features follow a standard naming scheme, and allow rules to be shared between
+# multiple websites, in our case the Wikipedia and Twitter demos.
+LET UserGeneratedContent := AddedContent;
+
+# Simple rule to make sure atleast one event shows up in the UI
+LET IsFirstEventSeen := NOT rateLimited(BY DatasetId MAX 1 EVERY YEARS);
+CREATE RULE FirstEventSeen WHERE IsFirstEventSeen;
+
+# Flag any users using profanity (not a great spam rule! but easy)
+LET BadWordMatches := patternMatches("bad-words.txt", UserGeneratedContent);
+CREATE RULE UsedBadWords WHERE BadWordMatches WITH REASON
+    "Matched simple profanity filter: ${BadWordMatches}";
+
+# Apply the rules, and show the event if some fired
+WHEN
+    FirstEventSeen,
+    UsedBadWords
+THEN
+    showEvent();

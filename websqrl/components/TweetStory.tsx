@@ -1,6 +1,7 @@
 import { Block, Col, Inline, Row } from "jsxstyle";
 import { styleConstants } from "../src/constants";
 import type { Result } from "../src/types";
+import { StoryResult } from "./StoryResult";
 
 export const TWEET_FETCH_FEATURES = [
   "AuthorUsername",
@@ -20,21 +21,6 @@ export const TweetStory: React.FC<TweetStoryProps> = ({
 }) => {
   const userUrl = `https://twitter.com/${features.AuthorUsername}`;
   const tweetUrl = `https://twitter.com/${features.AuthorUsername}/status/${features.TweetId}`;
-
-  const messages = [];
-  for (const msg of logs) {
-    messages.push(
-      msg.args
-        .map((value) => {
-          if (typeof value === "string") {
-            return value;
-          } else {
-            return JSON.stringify(value);
-          }
-        })
-        .join(" ")
-    );
-  }
 
   return (
     <Col gap={10}>
@@ -69,33 +55,7 @@ export const TweetStory: React.FC<TweetStoryProps> = ({
         {features.TweetText}
       </Block>
 
-      {result.blocked && (
-        <Block color={styleConstants.secondary}>
-          <Block>Rules fired</Block>
-          <Block component="ul" listStyle="inside">
-            {result.blockedCause.firedRules.map((rule) => (
-              <li key={rule.name}>
-                {rule.name}
-                {rule.reason ? ": " + rule.reason : null}
-              </li>
-            ))}
-          </Block>
-        </Block>
-      )}
-
-      {messages.length ? (
-        <Block color={styleConstants.secondary}>
-          <Block>
-            {messages.length || "No"} logged message
-            {messages.length === 1 ? "" : "s"}
-          </Block>
-          <Block component="ul" listStyle="inside">
-            {messages.map((message, index) => (
-              <li key={index}>{message}</li>
-            ))}
-          </Block>
-        </Block>
-      ) : null}
+      <StoryResult result={result} logs={logs}></StoryResult>
     </Col>
   );
 };

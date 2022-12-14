@@ -19,7 +19,7 @@ export default function WikipediaPage() {
         sampleCode={sampleCode}
         storyComponent={WikipediaEventStory}
         fetchFeatures={WIKIPEDIA_FETCH_FEATURES}
-        shouldLogResult={(result) => result.result.blocked}
+        shouldLogResult={(result) => result.result.shown}
       />
     </>
   );
