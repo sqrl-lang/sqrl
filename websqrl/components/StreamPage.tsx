@@ -30,6 +30,7 @@ interface StreamPageProps<T extends string> {
   storyComponent: React.FC<Result<T>>;
   urlPrefix: string;
   shouldLogResult?: (result: Result<T>) => boolean;
+  children: React.ReactNode;
 }
 
 interface ResultOrMessage<T extends string> {
@@ -56,6 +57,7 @@ export function StreamPage<T extends string>({
   storyComponent: StoryComponent,
   urlPrefix,
   shouldLogResult = () => true,
+  children,
 }: StreamPageProps<T>): React.ReactElement {
   const workerRef = useRef<Worker | null>();
   const lastSourceRef = useRef<string>();
@@ -326,16 +328,7 @@ export function StreamPage<T extends string>({
               streams, designed to make it easy to enforce anti-abuse rules.
               <br />
               <br />
-              This demonstration is running on the Twitter{" "}
-              <a
-                style={linkStyle}
-                href="https://developer.twitter.com/en/docs/twitter-api/tweets/volume-streams/introduction"
-              >
-                1% sampled stream
-              </a>
-              , and include some basic example rules. These are not recommended
-              for use in production, but are rather examples of what can be
-              achieved easily with the language.
+              {children}
               <br />
               <br />
               For more information see{" "}

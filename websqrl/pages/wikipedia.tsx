@@ -4,6 +4,7 @@ import {
   WikipediaEventStory,
   WIKIPEDIA_FETCH_FEATURES,
 } from "../components/WikipediaEventStory";
+import { styleConstants } from "../src/constants";
 import sampleCode from "../src/wikipedia-sample.sqrl";
 
 export default function WikipediaPage() {
@@ -20,7 +21,21 @@ export default function WikipediaPage() {
         storyComponent={WikipediaEventStory}
         fetchFeatures={WIKIPEDIA_FETCH_FEATURES}
         shouldLogResult={(result) => result.result.shown}
-      />
+      >
+        This demonstration is running on the Wikipedia{" "}
+        <a
+          style={{
+            color: styleConstants.pageLink,
+            textDecoration: "underline",
+          }}
+          href="https://www.mediawiki.org/wiki/API:Recent_changes_stream"
+        >
+          Recent Changes Stream
+        </a>
+        , and include some basic example rules. These are not recommended for
+        use in production, but are rather examples of what can be achieved
+        easily with the language.
+      </StreamPage>
     </>
   );
 }
