@@ -312,12 +312,17 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
 
     editorRef.current = editor;
 
-    // TODO(meyer) debounce this
-    const resizeHandler = () => {
-      editor.layout();
-    };
+    const resizeObserver = new ResizeObserver((entries) => {
+      const containerElement = entries.find(
+        (entry) => entry.target === containerRef.current
+      );
+      // container was resized
+      if (containerElement) {
+        editor.layout();
+      }
+    });
 
-    window.addEventListener("resize", resizeHandler);
+    resizeObserver.observe(containerRef.current);
 
     const onChangeModelContentSubscription = editor.onDidChangeModelContent(
       (event) => {
@@ -331,7 +336,7 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
       editor.dispose();
       model.dispose();
       onChangeModelContentSubscription.dispose();
-      window.removeEventListener("resize", resizeHandler);
+      resizeObserver.disconnect();
     };
   }, [monacoEditorObj.state, sqrlFunctions]);
 

@@ -24,7 +24,8 @@
       "sqrl-redis-functions": ["../packages/sqrl-redis-functions"],
       "sqrl-test-utils": ["../packages/sqrl-test-utils"],
       "sqrl-text-functions": ["../packages/sqrl-text-functions"]
-    }
+    },
+    "noEmit": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "references": [
