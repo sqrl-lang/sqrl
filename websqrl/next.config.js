@@ -5,6 +5,15 @@ const assert = require("assert");
 
 module.exports = {
   reactStrictMode: true,
+
+  redirects: () => [
+    {
+      source: "/",
+      destination: "/twitter",
+      permanent: false,
+    },
+  ],
+
   webpack: (
     /** @type {import('webpack').Configuration} */
     config,
