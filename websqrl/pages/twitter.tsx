@@ -31,7 +31,17 @@ export default function TwitterPage() {
         </a>
         , and include some basic example rules. These are not recommended for
         use in production, but are rather examples of what can be achieved
-        easily with the language.
+        easily with the language. We also have a demonstration running on the{" "}
+        <a
+          style={{
+            color: styleConstants.pageLink,
+            textDecoration: "underline",
+          }}
+          href="/wikipedia"
+        >
+          Wikipedia event stream
+        </a>
+        .
       </StreamPage>
     </>
   );
