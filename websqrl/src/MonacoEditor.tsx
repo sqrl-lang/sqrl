@@ -38,6 +38,8 @@ function configureSqrlLanguage(
     "let",
     // logic
     "not",
+    "and",
+    "or",
     // rules
     "create",
     "rule",
@@ -70,6 +72,7 @@ function configureSqrlLanguage(
     "month",
     "months",
   ];
+  // @todo @TODO
   const builtin = ["input"];
   const functionNames = Object.keys(functions).sort();
   const functionsInfo = functionNames.map((f) => functions[f]);
@@ -102,7 +105,7 @@ function configureSqrlLanguage(
 
       tokenizer: {
         root: [
-          // identifiers
+          // identifiers @todo
           [
             /[a-z]\w+/,
             {
@@ -139,10 +142,18 @@ function configureSqrlLanguage(
           ],
 
           // comments
-          [/#.*/, "comment"],
+          [/#/, "comment", "@comment"],
 
           // whitespace
           { include: "@whitespace" },
+        ],
+        comment: [
+          [/@(EXAMPLE|NOTE|TODO)$/, "comment.todo", "@pop"],
+          [/@(EXAMPLE|NOTE|TODO)/, "comment.todo"],
+          [/\[(EXAMPLE|NOTE|TODO)\]$/, "comment.todo", "@pop"],
+          [/\[(EXAMPLE|NOTE|TODO)\]/, "comment.todo"],
+          [/.$/, "comment", "@pop"],
+          [/./, "comment"],
         ],
         string: [
           [/\$\{[a-z]+\}/i, { token: "string.identifier" }],
@@ -226,14 +237,20 @@ function configureSqrlLanguage(
   monaco.editor.defineTheme("custom", {
     base: "vs",
     inherit: true,
-    rules: [{ token: "string.identifier", foreground: "9f8500" }],
+    rules: [
+      { token: "string.identifier", foreground: "9f8500" },
+      { token: "comment.todo", foreground: "006600", fontStyle: "bold" },
+    ],
     colors: {},
   });
 
   monaco.editor.defineTheme("custom-dark", {
     base: "vs-dark",
     inherit: true,
-    rules: [{ token: "string.identifier", foreground: "e0a500" }],
+    rules: [
+      { token: "string.identifier", foreground: "e0a500" },
+      { token: "comment.todo", foreground: "88af88", fontStyle: "bold" },
+    ],
     colors: {},
   });
 

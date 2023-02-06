@@ -1,6 +1,11 @@
-# Basic event set up
+# Basic event set up. Read in EventData, and set the current clock time
+# [NOTE] Features to not need to be defined in order (TweetDate is set lower down)
 LET EventData := input();
 LET SqrlClock := TweetDate;
+
+# In production we used data sets to seperate counters and other variables
+# from seperate runs. By changing the dataset number it automatically resets
+# all counters to zero. Can be used for reprocessing and backtesting.
 LET DatasetId := 1;
 
 # Feature extraction from the Twitter data
@@ -20,12 +25,15 @@ LET AuthorProfileImageUrl := jsonValue(AuthorUserData, "$.profile_image_url");
 LET UserGeneratedContent := TweetText;
 
 # Simhash is a perceptual hash of text, such that similar text results in a similar hash
-LET TweetTextSimhash := simhash(TweetText);
+LET TextSimhash := simhash(UserGeneratedContent);
 
-# Set up some counters
+# [EXAMPLE] This sets up some counters
+# Easily defining counters like this is one of the powers of SQRL. These counters
+# will automatically start at 0 when a new one is created. This requires a bit of
+# forethought, but as long as rules deal with `greater than X` it works.
 LET TweetsByUser := count(BY AuthorUsername TOTAL);
-LET CountBySimhash := count(BY TweetTextSimhash LAST 5 MINUTES);
-LET UsersBySimhash := countUnique(AuthorUsername BY TweetTextSimhash LAST 5 MINUTES);
+LET CountBySimhash := count(BY TextSimhash LAST 5 MINUTES);
+LET UsersBySimhash := countUnique(AuthorUsername BY TextSimhash LAST 5 MINUTES);
 
 # Simple rule to make sure atleast one tweet shows up in the UI
 LET IsFirstTweetSeen := NOT rateLimited(BY DatasetId MAX 1 EVERY YEARS);
@@ -37,12 +45,16 @@ CREATE RULE SimilarTweetText WHERE CountBySimhash>2 WITH REASON
 CREATE RULE SameTweetMultipleUsers WHERE UsersBySimhash>2 WITH REASON
     "Seen ${UsersBySimhash} users tweeting similar text";
 
-# Flag any users using profanity (not a great spam rule! but easy)
+# Flag any users using profanity
+# [NOTE] Not a great spam rule!... but it's an easy demo
 LET BadWordMatches := patternMatches("bad-words.txt", UserGeneratedContent);
 CREATE RULE UsedBadWords WHERE BadWordMatches WITH REASON
     "Matched simple profanity filter: ${BadWordMatches}";
 
 # Look out for impersonated users
+# [NOTE] A rule like this would be a lot more advanced in production.
+# We let used to use a `deconfuse()` function that dealt with similar looking
+# unicode characters. See https://util.unicode.org/UnicodeJsps/confusables.jsp
 LET LooksLikeOlMusky := regexMatch("^E[1lI][0o]n.+Mu[$s]k.*$", AuthorName);
 CREATE RULE ImpersonatedMusk WHERE LooksLikeOlMusky AND AuthorUsername != "elonmusk";
 
