@@ -11,7 +11,9 @@ export default function WikipediaPage() {
   return (
     <>
       <Head>
-        <title>SQRL Wikipedia Demo</title>
+        <title>
+          Open-source SQRL: Demo running on Wikipedia recent changes
+        </title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <StreamPage
@@ -32,9 +34,22 @@ export default function WikipediaPage() {
         >
           Recent Changes Stream
         </a>
-        , and include some basic example rules. These are not recommended for
-        use in production, but are rather examples of what can be achieved
-        easily with the language.
+        , and include some basic example rules.
+        <br />
+        <br />
+        These are not recommended for use in production, but are rather examples
+        of what can be achieved easily with the language. We also have a
+        demonstration running on the{" "}
+        <a
+          style={{
+            color: styleConstants.pageLink,
+            textDecoration: "underline",
+          }}
+          href="/twitter"
+        >
+          Twitter event stream
+        </a>
+        .
       </StreamPage>
     </>
   );

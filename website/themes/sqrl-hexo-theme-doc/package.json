@@ -43,7 +43,7 @@
     "@babel/preset-env": "^7.16.11",
     "cheerio": "^1.0.0-rc.10",
     "clipboard": "^2.0.10",
-    "consolidate": "git://github.com:sfger/consolidate.js.git#e918850f97e919e86c8464ab7689885e40424077",
+    "consolidate": "~0.16.0",
     "dress-code": "~2.4.0",
     "ejs": "^2.6.2",
     "escape-string-regexp": "^4.0.0",

@@ -26,17 +26,11 @@ Returns true if the given attribute is set on the data
 
 Parses the provided JSON encoded string
 
-## jsonPath
+## jsonStringify
 
-**jsonPath**(object, path string)
+**jsonStringify**(any)
 
-Returns the values matching the given JSONPath query
-
-## jsonValue
-
-**jsonValue**(object, path string)
-
-Returns the value at the given path in the JSON object
+Returns the argument as a JSON encoded string
 
 ## keys
 
