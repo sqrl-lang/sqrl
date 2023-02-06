@@ -72,7 +72,7 @@ function configureSqrlLanguage(
     "month",
     "months",
   ];
-  // @todo @TODO
+
   const builtin = ["input"];
   const functionNames = Object.keys(functions).sort();
   const functionsInfo = functionNames.map((f) => functions[f]);
@@ -105,7 +105,7 @@ function configureSqrlLanguage(
 
       tokenizer: {
         root: [
-          // identifiers @todo
+          // identifiers
           [
             /[a-z]\w+/,
             {
