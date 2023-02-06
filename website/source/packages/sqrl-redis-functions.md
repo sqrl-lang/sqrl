@@ -1,4 +1,5 @@
-## title: sqrl-redis-functions
+title: sqrl-redis-functions
+---
 
 # sqrl-redis-functions
 
@@ -23,8 +24,8 @@ Adds the provided label to the specified entities
 Returns the streaming count for the given window
 
 Timespans: LAST [X] SECONDS/MINUTES/HOURS/DAYS/WEEKS
-DAY OVER DAY, DAY OVER WEEK, WEEK OVER WEEK
-TOTAL
+           DAY OVER DAY, DAY OVER WEEK, WEEK OVER WEEK
+           TOTAL
 
 ## countUnique
 
@@ -87,3 +88,4 @@ Creates a new session using a token bucket rate limiter
 Returns values whose counts have gone up by an order of magnitude
 
 Timespans: DAY OVER DAY, DAY OVER WEEK, DAY OVER FULL WEEK
+

@@ -1,4 +1,5 @@
-## title: Control Functions
+title: Control Functions
+---
 
 # Control Functions
 
@@ -25,3 +26,4 @@ Sets the given feature as an input value
 **wait**(feature[, ...])
 
 Function that returns once all of the input features have been calculated
+
