@@ -1,5 +1,4 @@
-title: sqrl-text-functions
----
+## title: sqrl-text-functions
 
 # sqrl-text-functions
 
@@ -52,4 +51,3 @@ Returns the sha256 hash of the given value as hex
 **simhash**(text)
 
 Return the simhash of the given text
-

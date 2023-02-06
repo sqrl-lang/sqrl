@@ -1,5 +1,4 @@
-title: Assert Functions
----
+## title: Assert Functions
 
 # Assert Functions
 
@@ -8,4 +7,3 @@ title: Assert Functions
 **assert**(condition)
 
 Assert that an expected condition is true
-

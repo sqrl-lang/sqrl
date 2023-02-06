@@ -34,7 +34,7 @@ export interface ILiteralExpectation {
   ignoreCase: boolean;
 }
 
-export interface IClassParts extends Array<string | IClassParts> { }
+export interface IClassParts extends Array<string | IClassParts> {}
 
 export interface IClassExpectation {
   type: "class";
@@ -103,8 +103,8 @@ export class SyntaxError extends Error {
           const escapedParts = expectation.parts.map((part) => {
             return Array.isArray(part)
               ? classEscape(part[0] as string) +
-              "-" +
-              classEscape(part[1] as string)
+                  "-" +
+                  classEscape(part[1] as string)
               : classEscape(part);
           });
 
@@ -309,9 +309,9 @@ function peg$parse(input: string, options?: IParseOptions) {
       groups: groups ? groups[3] : [],
       setOperation: setOperation
         ? {
-          operation: setOperation[1].toLowerCase(),
-          features: setOperation[3],
-        }
+            operation: setOperation[1].toLowerCase(),
+            features: setOperation[3],
+          }
         : null,
       windowMs: windowMs || null,
       beforeAction: beforeAction === true,
@@ -556,7 +556,7 @@ function peg$parse(input: string, options?: IParseOptions) {
   );
   const peg$c149 = "group";
   const peg$c150 = peg$literalExpectation("GROUP", true);
-  const peg$c151 = function (): any { };
+  const peg$c151 = function (): any {};
   const peg$c152 = function (value: any): any {
     return { type: "constant", value: value, location: loc() };
   };

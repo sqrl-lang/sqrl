@@ -1,5 +1,4 @@
-title: Data Functions
----
+## title: Data Functions
 
 # Data Functions
 
@@ -44,4 +43,3 @@ Returns a list of all the keys in the given object
 **mergeMaps**(map, map...)
 
 Merges the given maps together
-
