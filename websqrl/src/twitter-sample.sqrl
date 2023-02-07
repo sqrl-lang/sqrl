@@ -10,6 +10,7 @@ LET DatasetId := 1;
 
 # [NOTE] === [NOTE]
 # Turn this on if you want to use the *extremely basic* profanity filter
+# [WARNING] The content with profanity is often NSFW
 LET ProfanityFilterEnabled := false;
 
 # Feature extraction from the Twitter data
