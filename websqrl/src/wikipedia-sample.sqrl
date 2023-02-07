@@ -23,8 +23,8 @@ LET UserGeneratedContent := AddedContent;
 
 # Simple rule to make sure atleast one event shows up in the UI
 LET IsFirstEventSeen := NOT rateLimited(BY DatasetId MAX 1 EVERY YEARS);
-CREATE RULE FirstEventSeen WHERE IsFirstEventSeen;
-
+CREATE RULE FirstEventSeen WHERE IsFirstEventSeen WITH REASON
+    "This is not a bad thing, just flagging this first tweet scene so there is output here.";
 # Flag any users using profanity (not a great spam rule! but easy)
 LET BadWordMatches := patternMatches("bad-words.txt", UserGeneratedContent);
 CREATE RULE UsedBadWords WHERE BadWordMatches WITH REASON

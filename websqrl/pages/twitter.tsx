@@ -17,7 +17,7 @@ export default function TwitterPage() {
         sampleCode={sampleCode}
         storyComponent={TweetStory}
         fetchFeatures={TWEET_FETCH_FEATURES}
-        startDateISO={"2023-02-06T19:00Z"}
+        startDateISO={"2023-02-07T09:00Z"}
         shouldLogResult={(result) => result.result.shown}
       >
         This demonstration is running on the Twitter{" "}
