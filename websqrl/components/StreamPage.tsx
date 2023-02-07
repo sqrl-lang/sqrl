@@ -31,6 +31,7 @@ interface StreamPageProps<T extends string> {
   urlPrefix: string;
   shouldLogResult?: (result: Result<T>) => boolean;
   children: React.ReactNode;
+  startDateISO?: string;
 }
 
 interface ResultOrMessage<T extends string> {
@@ -58,6 +59,7 @@ export function StreamPage<T extends string>({
   urlPrefix,
   shouldLogResult = () => true,
   children,
+  startDateISO,
 }: StreamPageProps<T>): React.ReactElement {
   const workerRef = useRef<Worker | null>();
   const lastSourceRef = useRef<string>();
@@ -69,6 +71,11 @@ export function StreamPage<T extends string>({
     message: string;
     errorMarker?: editor.IMarkerData;
   }>({ status: "pending", message: "Requesting initial compilation…" });
+
+  let timeDifference = 0;
+  if (startDateISO) {
+    timeDifference = Date.parse(startDateISO) - Date.now();
+  }
 
   const [, setLogId] = useState(LOG_ID);
   const [source, setSource] = useState(sampleCode);
@@ -117,7 +124,9 @@ export function StreamPage<T extends string>({
     let events: EventData[] = [];
     let eventIndex = 0;
     let nextEventTimeout: NodeJS.Timeout;
-    let downloadDate = startOfMinute(subMilliseconds(new Date(), DELAY_MS));
+    let downloadDate = startOfMinute(
+      subMilliseconds(new Date(Date.now() + timeDifference), DELAY_MS)
+    );
     let firstBatch = true;
 
     function nextEvent() {
@@ -139,7 +148,10 @@ export function StreamPage<T extends string>({
     }
 
     function delayedMsUntil(nextEventDate: Date) {
-      const now = subMilliseconds(new Date(), DELAY_MS);
+      const now = subMilliseconds(
+        new Date(new Date(Date.now() + timeDifference)),
+        DELAY_MS
+      );
       return differenceInMilliseconds(nextEventDate, now);
     }
 
