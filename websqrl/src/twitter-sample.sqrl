@@ -41,7 +41,8 @@ LET UsersBySimhash := countUnique(AuthorUsername BY TextSimhash LAST 5 MINUTES);
 
 # Simple rule to make sure atleast one tweet shows up in the UI
 LET IsFirstTweetSeen := NOT rateLimited(BY DatasetId MAX 1 EVERY YEARS);
-CREATE RULE FirstTweetSeen WHERE IsFirstTweetSeen;
+CREATE RULE FirstTweetSeen WHERE IsFirstTweetSeen WITH REASON
+    "This is not a bad thing, just flagging this first tweet scene so there is output here.";
 
 # Simple rules for too much similar text
 CREATE RULE SimilarTweetText WHERE CountBySimhash>2 WITH REASON
