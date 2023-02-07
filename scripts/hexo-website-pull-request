@@ -4,5 +4,6 @@ set -xeo pipefail
 cd "$(dirname $0)/../website"
 rm -rf .deploy_git
 git clone --branch gh-pages git@github.com:sqrl-lang/sqrl .deploy_git
-./node_modules/.bin/hexo deploy --generate
+(cd .deploy_git && git-config-personal)
+../node_modules/.bin/hexo deploy --generate
 (cd .deploy_git && hub pull-request -f -b gh-pages -h gh-pages-staging -m 'Deploy site')

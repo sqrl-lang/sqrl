@@ -140,7 +140,7 @@ main:
     type: label
   - text: API Reference
     type: link
-    path: reference/globals.html
+    path: reference/index.html
   - text: Discord Chat
     type: link
     path: https://discord.gg/mMJwWT6

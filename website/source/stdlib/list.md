@@ -1,4 +1,5 @@
-## title: List Functions
+title: List Functions
+---
 
 # List Functions
 
@@ -61,3 +62,4 @@ Returns the length of a provided list
 **sort**(list)
 
 Returns the provided list in sorted order
+

@@ -1,4 +1,5 @@
-## title: sqrl-cli-functions
+title: sqrl-cli-functions
+---
 
 # sqrl-cli-functions
 
@@ -20,7 +21,7 @@ Mark the current action as blocked
 
 **featureSource**(feature)
 
-Returns the JavaScript source of the given feature
+Returns the source code for the given feature
 
 ## log
 
@@ -44,7 +45,13 @@ Prints the SQRL execution source
 
 **printSource**(feature)
 
-Prints the JavaScript source of the given feature
+Prints the SQRL source of the given feature
+
+## source
+
+**source**(feature)
+
+Returns the source code of the given feature
 
 ## wasBlocked
 
@@ -57,3 +64,4 @@ Check if the current action was marked as blocked
 **whitelistAction**(None)
 
 Mark the current action as whitelisted
+

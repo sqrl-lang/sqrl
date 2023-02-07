@@ -1,4 +1,5 @@
-## title: Simple Functions
+title: Simple Functions
+---
 
 # Defining simple functions
 
@@ -27,7 +28,6 @@ function registerFunctions(instance: Instance) => {
 ```
 
 Finally `sqrl-cli` exposes a run method that makes testing this out far easier:
-
 ```
 import { run } from "sqrl-cli";
 run({ registerFunctions });

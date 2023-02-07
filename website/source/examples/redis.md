@@ -1,4 +1,5 @@
-## title: Redis example
+title: Redis example
+---
 
 # Redis example
 

@@ -6,7 +6,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "hexo": {
-    "version": "6.0.0"
+    "version": "6.3.0"
   },
   "dependencies": {
     "hexo": "^6.0.0",

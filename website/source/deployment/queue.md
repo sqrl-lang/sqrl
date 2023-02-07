@@ -1,4 +1,5 @@
-## title: Queue consumer
+title: Queue consumer
+---
 
 # Deploying SQRL as a queue consumer
 
