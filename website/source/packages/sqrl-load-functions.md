@@ -1,4 +1,5 @@
-## title: sqrl-load-functions
+title: sqrl-load-functions
+---
 
 # sqrl-load-functions
 
@@ -21,3 +22,4 @@ Loads data as a list of lines from a given text file
 **loadYaml**(path)
 
 Loads data from a given YAML file
+

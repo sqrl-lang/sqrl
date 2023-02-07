@@ -1,4 +1,5 @@
-## title: Rate limiters
+title: Rate limiters
+---
 
 # Rate limiters
 
@@ -12,7 +13,7 @@ A good first rate limiter is limiting the number of signups that can come from a
 CREATE RULE QuickSignupsByIp
   WHERE rateLimited(BY Ip MAX 3 EVERY 10 MINUTES);
 ```
-
+ 
 The rateLimited function checks if the ratelimit has been hit. It has quite a few different options available. The ones in use here are:
 
 **BY** - The features to ratelimit by. Specifying multiple features (Ip, Machine) will group by each specific pair.
@@ -44,7 +45,7 @@ LET IsHighDollarPaymentAmount := PaymentAmountUsd >= 100;
 CREATE RULE MultipleHighValuePurchasesByActorDay WHERE
   rateLimited(BY Actor MAX 2 EVERY DAY WHERE IsHighDollarPaymentAmount);
 ```
-
+ 
 ### A strikes system example
 
 You can use rate limiters to build advanced policies, such as a strikes system for rules.
@@ -55,9 +56,10 @@ If you already have a rule in place and you want to give the user (or IP, or any
 CREATE RULE ThreeStrikesCheating
   WHERE rateLimited(BY Actor MAX 2 EVERY WEEK WHERE Cheated);
 ```
-
+ 
 We leave it up to the user to define the Cheated feature. To get started on that though you'll want to review our features documentation.
 
+ 
 ### Conditional rate limiters behavior
 
 Sometimes you may only want a rate limiter to run if a given condition is met. For example, perhaps we want to limit the number of high-value purchases a user can make.

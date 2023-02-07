@@ -1,4 +1,5 @@
-## title: Tutorial
+title: Tutorial
+----
 
 # Tutorial
 
@@ -28,7 +29,6 @@ LET Text := jsonValue(ActionData, "$.text");
 `jsonValue()` is a builtin function that parses a JSON string and returns the value at the given [JSONPath](http://jsonpath.com/). Note that SQRL is smart enough to only parse the JSON once.
 
 Let's fire up the [repl](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop) and play with it.
-
 ```
 $ npm install -g sqrl-cli
 $ sqrl repl main.sqrl -s ActionData=@tweet.json
@@ -152,7 +152,6 @@ This is super useful for replaying old actions or writing unit tests.
 As we all know, cryptocurrencies come and go... often. We may want to keep a list of known crypto keywords that people can update rather than requiring a code change all the time.
 
 First, make a file `CryptoKeywords.txt` containing:
-
 ```
 btc
 eth
@@ -201,6 +200,6 @@ The fuction `addUserToReviewQueue()` is not included with the default SQRL distr
 
 ## Next steps
 
-- View functions in the [standard library](stdlib/assert.html)
-- See the example using [redis to store state](examples/redis.html)
-- Try out a real life use case on [Wikipedia edits](examples/wikipedia.html)
+* View functions in the [standard library](stdlib/assert.html)
+* See the example using [redis to store state](examples/redis.html)
+* Try out a real life use case on [Wikipedia edits](examples/wikipedia.html)

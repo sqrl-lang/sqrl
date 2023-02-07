@@ -1,4 +1,5 @@
-## title: Statement Functions
+title: Statement Functions
+---
 
 # Statement functions
 
@@ -12,9 +13,9 @@ writeFile("last-username.txt", Username);
 
 ### Execution of statements
 
-By default when you start up a SQRL execution _nothing_ is run. Calling `execution.fetchFeature` will start calculating that feature and any dependant ones.
+By default when you start up a SQRL execution *nothing* is run. Calling `execution.fetchFeature` will start calculating that feature and any dependant ones.
 
-Running statements uses special _Statement Features_ such as `SqrlFileStatements` below. These features **always** evaluate to `true`, however their promise will only be resolved once all the statements have been run. If you want an execution to run _all_ statements you can fetch the magic feature `SqrlExecutionComplete`.
+Running statements uses special *Statement Features* such as `SqrlFileStatements` below. These features **always** evaluate to `true`, however their promise will only be resolved once all the statements have been run. If you want an execution to run *all* statements you can fetch the magic feature `SqrlExecutionComplete`.
 
 ### Example statement definition
 

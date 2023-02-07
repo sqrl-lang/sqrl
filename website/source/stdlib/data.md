@@ -1,4 +1,5 @@
-## title: Data Functions
+title: Data Functions
+---
 
 # Data Functions
 
@@ -26,11 +27,17 @@ Returns true if the given attribute is set on the data
 
 Parses the provided JSON encoded string
 
-## jsonStringify
+## jsonPath
 
-**jsonStringify**(any)
+**jsonPath**(object, path string)
 
-Returns the argument as a JSON encoded string
+Returns the values matching the given JSONPath query
+
+## jsonValue
+
+**jsonValue**(object, path string)
+
+Returns the value at the given path in the JSON object
 
 ## keys
 
@@ -43,3 +50,4 @@ Returns a list of all the keys in the given object
 **mergeMaps**(map, map...)
 
 Merges the given maps together
+

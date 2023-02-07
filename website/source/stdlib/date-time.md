@@ -1,4 +1,5 @@
-## title: Date-time Functions
+title: Date-time Functions
+---
 
 # Date-time Functions
 
@@ -55,3 +56,4 @@ Returns the current time as a count of milliseconds since the unix epoch
 **timeMs**(date)
 
 Returns the count of milliseconds since the unix epoch for the provided value
+

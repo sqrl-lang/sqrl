@@ -1,4 +1,6 @@
-## title: Home
+---
+title: Home
+---
 
 # SQRL: A Safe, Stateful Language for Event Streams
 
@@ -6,6 +8,8 @@
 **Inclusive** – Non-technical users can review and safely deploy changes to production without talking to an engineer.
 **Powerful** – Rules can declaratively aggregate state, trigger side effects, and call functions in other languages.
 **Auditable** – It's easy to understand why a rule fired or a side effect occured, and rules can be safely replayed.
+
+The language was originally written for abuse prevention at scale. Preventing spam, fraud, and other types of abuse through flexible rules that can be implemented quickly. You can see a demonstration running on [Wikipedia Recent Changes](https://websqrl.vercel.app/wikipedia) or the [Twitter sampled stream](https://websqrl.vercel.app/twitter).
 
 ## Community
 

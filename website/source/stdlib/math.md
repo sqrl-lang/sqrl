@@ -1,4 +1,5 @@
-## title: Math Functions
+title: Math Functions
+---
 
 # Math Functions
 
@@ -37,3 +38,4 @@ Returns the rounded value of the given number
 **sum**(number list)
 
 Returns the sum of the values in the list provided
+

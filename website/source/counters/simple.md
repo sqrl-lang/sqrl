@@ -1,4 +1,5 @@
-## title: Simple Counters
+title: Simple Counters
+---
 
 # Simple Counters
 
@@ -27,21 +28,22 @@ LET NumIpMessages := count(BY User, Ip LAST HOUR);
 LET PercentMessagesByIp := 100 * (NumIpMessages / NumMessages);
 ```
 
+
 ## Available timespans
 
 The LAST clause specifies the timespan we want to count by. For simple counters we do not allow custom timespans, even though we do for unique counts.
 
 The list of available timespans are:
 
-- TOTAL
-- LAST MONTH
-- LAST TWO WEEKS
-- LAST EIGHT DAYS
-- LAST TWO DAYS
-- LAST DAY
-- LAST HOUR
+* TOTAL
+* LAST MONTH
+* LAST TWO WEEKS
+* LAST EIGHT DAYS
+* LAST TWO DAYS
+* LAST DAY
+* LAST HOUR
 
-**Note:** _TOTAL_ counts will still expire after 90 days if they have not been seen for that period.
+**Note:** *TOTAL* counts will still expire after 90 days if they have not been seen for that period.
 
 ## Conditions
 
@@ -54,7 +56,7 @@ Let's imagine you were interested in tracking users who had a high percentage of
 LET TextWithStrongProfanity := regexMatch('\\b(shit)\\b', Text);
 
 LET NumMessagesWithProfanity := count(BY User WHERE TextWithStrongProfanity LAST WEEK);
-LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK);
+LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK); 
 ```
 
 Here we have set up two counters – `NumMessagesWithProfanity` will be increased when the text contains profanity, otherwise `NumMessagesWithoutProfanity` will be increased. Both counters are available to be read on every action.
@@ -71,12 +73,12 @@ The example below creates IsYoungActor and uses that in order to count how many 
 LET IsYoungActor := ActorAgeDays < 10;
 LET NumMessagesByYoungActorsOnIp := count(BY Ip WHERE IsYoungActor);
 ```
-
+ 
 ### Labeling users that use a high percentage of profanity
 
 To tie it all together we could create a rule for flagging users who have a high percentage of messages containing profanity.
 
-```
+``` 
 LET NumMessagesWithProfanity := count(BY User WHERE TextWithStrongProfanity LAST WEEK);
 LET NumMessagesWithoutProfanity := count(BY User WHERE NOT TextWithStrongProfanity LAST WEEK);
 
@@ -85,7 +87,7 @@ LET TotalMessages := NumMessagesWithProfanity + NumMessagesWithoutProfanity;
 LET PercentProfaneMessages := NumMessagesWithProfanity / TotalMessages;
 CREATE RULE HighPercentageProfanity
   WHERE PercentProfaneMessages > 0.5 AND TotalMessages > 2;
-
+  
 WHEN HighPercentageProfanity THEN blockAction(), addLabel(User, "bad_user");
 ```
 
@@ -100,7 +102,7 @@ LET TotalReceived := NumReceivedWithProfanity + NumReceivedWithoutProfanity;
 LET PercentProfaneReceived := NumReceivedWithProfanity / TotalReceived;
 CREATE RULE HighPercentageProfanityReceived
   WHERE PercentProfaneReceived > 0.5 AND TotalReceived > 2;
-
+  
 WHEN HighPercentageProfanityReceived THEN
   blockAction(),
   addLabel(Target, "harassment_recipient");

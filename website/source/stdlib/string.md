@@ -1,4 +1,5 @@
-## title: String Functions
+title: String Functions
+---
 
 # String Functions
 
@@ -89,3 +90,4 @@ Returns the substring from the given start index of the string
 **upper**(string)
 
 Returns the uppercase version of the given string
+

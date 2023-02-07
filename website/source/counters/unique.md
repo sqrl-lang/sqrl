@@ -1,4 +1,5 @@
-## title: Unique Counters
+title: Unique Counters
+---
 
 # Unique Counters
 
@@ -35,7 +36,7 @@ We include the number of risky countries it has been seen in inside the rule rea
 LET NumRiskyCountries := countUnique(Country BY CreditCard WHERE RiskyCountry LAST 5 DAYS);
 CREATE RULE MultiRiskyCountryCreditCard WHERE NumRiskyCountries > 1
   WITH REASON "Credit card was used in ${NumRiskyCountries} risky countries in last 5 days.";
-
+  
 WHEN MultiRiskyCountryCreditCard
   blockAction(),
   addLabel(CreditCard, "bad_credit_card");

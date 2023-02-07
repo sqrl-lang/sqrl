@@ -1,4 +1,5 @@
-## title: Entity Functions
+title: Entity Functions
+---
 
 # Entity Functions
 
@@ -13,3 +14,4 @@ Returns the entity id of the entity
 **uniqueId**(entity)
 
 Returns the unique id of the entity as a string
+

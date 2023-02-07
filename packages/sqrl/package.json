@@ -26,7 +26,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib && rimraf coverage",
-    "docs": "typedoc --out ../../website/public/reference --excludeInternal --excludeExternals src/api/ --entryPointStrategy expand",
+    "docs": "typedoc --out ../../website/public/reference --excludeInternal --excludeExternals --entryPointStrategy expand --emit both --readme none src/api/",
     "generate-parser": "ts-node ./src/parser/generateParser.ts > ./src/parser/sqrl.ts && ../../scripts/clean-pegjs-ts src/parser/sqrl.ts",
     "test": "jest",
     "test:integration": "jest --config=jest.integration.config.js",
