@@ -21,15 +21,15 @@ LET UserHourSession := sessionize(BY User EVERY 1 HOUR);
  
 From now on, whenever the user performs an action (logs in, sends a message, makes a payment, etc) we will check to see if a session exists. If no session exists, we will create a session that lasts for one hour.
 	
-![Creating a one hour session](../images/session/one_session.jpeg)
+![Creating a one hour session](../sqrl/images/session/one_session.jpeg)
 
 If the specified time elapses with no activity, the current session is destroyed. Any subsequent event will create a new session.
 
-![Creating a new session after too much time has elapsed](../images/session/two_sessions.jpeg)
+![Creating a new session after too much time has elapsed](../sqrl/images/session/two_sessions.jpeg)
 
 If the session does exist, then we will extend the current session’s window by an additional hour.
 
-![Extending a session](../images/session/extended_session.jpeg)
+![Extending a session](../sqrl/images/session/extended_session.jpeg)
 
 It is important to note that each session gets its own unique ID. This identifier can be used in simple counters, unique counters, or rate-limits to identify suspect behavior and can even be used to determine the age of the session since we embed timestamps in all Smyte IDs.
 
@@ -66,7 +66,7 @@ LET MessageHourSessionAgeInHours := dateDiff(
 
 Remember that as soon as an hour has elapsed with no activity the session is destroyed and a new one will be created. This means that if a user has a message session that is 24 hours old they have been actively sending messages for the past 24 hours straight! This type of behavior often indicates that the user is in fact a bot.
 
-![Bot session](../images/session/bot_session.jpeg)
+![Bot session](../sqrl/images/session/bot_session.jpeg)
 
 With this insight, you can easily create a rule to flag and review this suspicious behavior.
 
