@@ -25,17 +25,11 @@ export const useMonacoEditor = (): ErrorState | PendingState | SuccessState => {
     // only fetch monaco-editor in a browser environment
     if (typeof window === "undefined") return;
 
-    const disposables: IDisposable[] = [];
-
     import(
       /* webpackChunkName: "monaco-editor" */ "monaco-editor/esm/vs/editor/editor.api"
     )
       .then(setMonacoEditorState)
       .catch(setErrorState);
-
-    return () => {
-      disposables.forEach((obj) => obj.dispose());
-    };
   }, []);
 
   if (errorState) {

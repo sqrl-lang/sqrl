@@ -294,13 +294,9 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
   }, [editorRef.current, monacoEditorObj.state, markers]);
 
   useEffect(() => {
-    if (monacoEditorObj.state !== "success") return;
+    if (monacoEditorObj.state !== "success" || !containerRef.current) return;
 
     const monacoEditor = monacoEditorObj.value;
-
-    if (!containerRef.current) {
-      throw new Error("Missing containerRef");
-    }
 
     // @todo(josh): Not sure if this is the correct way to do this only once per editor? The SQRL
     // functions will be compiled in so they won't change ever.
@@ -355,7 +351,7 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
       onChangeModelContentSubscription.dispose();
       resizeObserver.disconnect();
     };
-  }, [monacoEditorObj.state, sqrlFunctions]);
+  }, [monacoEditorObj.state, sqrlFunctions, containerRef.current]);
 
   return <div style={style} ref={containerRef} />;
 };
