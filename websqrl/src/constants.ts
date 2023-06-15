@@ -1,8 +1,8 @@
-import { EXPERIMENTAL_makeCustomProperties } from "jsxstyle";
+import { makeCustomProperties } from "jsxstyle";
 
 // `makeCustomProperties` generates a JS object of CSS variables that can be used in place of style values.
 // Variable values can be optionally overridden for each style variant.
-export const styleConstants = EXPERIMENTAL_makeCustomProperties({
+export const styleConstants = makeCustomProperties({
   boxShadowColor: "#333",
   pageForeground: "#000",
   pageLink: "#44D",
