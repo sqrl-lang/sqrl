@@ -8,6 +8,11 @@ LET SqrlClock := TweetDate;
 # all counters to zero. Can be used for reprocessing and backtesting.
 LET DatasetId := 1;
 
+# [NOTE] === [NOTE]
+# Turn this on if you want to use the *extremely basic* profanity filter
+# [WARNING] The content with profanity is often NSFW
+LET ProfanityFilterEnabled := false;
+
 # Feature extraction from the Twitter data
 LET TweetText := jsonValue(EventData, '$.data.text');
 LET AuthorId := jsonValue(EventData, '$.data.author_id');
@@ -37,7 +42,8 @@ LET UsersBySimhash := countUnique(AuthorUsername BY TextSimhash LAST 5 MINUTES);
 
 # Simple rule to make sure atleast one tweet shows up in the UI
 LET IsFirstTweetSeen := NOT rateLimited(BY DatasetId MAX 1 EVERY YEARS);
-CREATE RULE FirstTweetSeen WHERE IsFirstTweetSeen;
+CREATE RULE FirstTweetSeen WHERE IsFirstTweetSeen WITH REASON
+    "This is not a bad thing, just flagging this first tweet scene so there is output here. If you want more content you can turn on the profanity filter.";
 
 # Simple rules for too much similar text
 CREATE RULE SimilarTweetText WHERE CountBySimhash>2 WITH REASON
@@ -48,7 +54,7 @@ CREATE RULE SameTweetMultipleUsers WHERE UsersBySimhash>2 WITH REASON
 # Flag any users using profanity
 # [NOTE] Not a great spam rule!... but it's an easy demo
 LET BadWordMatches := patternMatches("bad-words.txt", UserGeneratedContent);
-CREATE RULE UsedBadWords WHERE BadWordMatches WITH REASON
+CREATE RULE UsedBadWords WHERE ProfanityFilterEnabled AND BadWordMatches WITH REASON
     "Matched simple profanity filter: ${BadWordMatches}";
 
 # Look out for impersonated users
