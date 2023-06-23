@@ -317,7 +317,6 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
         enabled: true,
       },
       ...options,
-      extraEditorClassName: className,
       language: "sqrl",
       model,
       theme,
@@ -353,5 +352,5 @@ export const MonacoEditor: React.FC<MonacoEditorProps> = ({
     };
   }, [monacoEditorObj.state, sqrlFunctions, containerRef.current]);
 
-  return <div style={style} ref={containerRef} />;
+  return <div style={style} className={className} ref={containerRef} />;
 };

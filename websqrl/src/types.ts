@@ -1,5 +1,6 @@
 import { FeatureMap, FunctionInfo } from "sqrl";
 import { WebSQRLResult } from "../TweetManipulator";
+import type { EventDomainOptions } from "./EventDomain";
 
 export interface EventData {
   [key: string]: any;
@@ -9,12 +10,28 @@ export interface CompileRequest {
   type: "compile";
   source: string;
 }
-export interface EventRequest<T extends string> {
-  type: "event";
-  event: EventData;
-  requestFeatures: readonly T[];
+
+export interface InitRequest<T extends string> extends EventDomainOptions {
+  type: "init";
+  source: string;
+  fetchFeatures: readonly T[];
 }
-export type Request<T extends string> = CompileRequest | EventRequest<T>;
+
+export interface ConfigureRequest<T extends string>
+  extends Omit<InitRequest<T>, "type" | "urlPrefix"> {
+  type: "configure";
+}
+
+export interface PlayheadRequest {
+  type: "playhead";
+  position: Date;
+}
+
+export type Request<T extends string> =
+  | CompileRequest
+  | InitRequest<T>
+  | ConfigureRequest<T>
+  | PlayheadRequest;
 
 export interface SqrlInit {
   type: "sqrlInit";
@@ -39,14 +56,17 @@ export interface CompileError {
   source: string;
   location: Record<"start" | "end", Location> | undefined;
 }
+
 export interface RuntimeError {
   type: "runtimeError";
   message: string;
   source: string;
 }
+
 export interface LogEntry {
   args: any[];
 }
+
 export interface Result<T extends string> {
   type: "result";
   logs: Array<LogEntry>;
@@ -54,13 +74,18 @@ export interface Result<T extends string> {
   features: FeatureMap<T>;
   source: string;
 }
-export interface Render {
-  type: "render";
-  buffer: Uint8Array;
+
+export interface StatusResponse {
+  type: "status";
+  currentIndex: number;
+  total: number;
+  timestamp: string;
 }
+
 export type Response<T extends string> =
   | SqrlInit
   | CompileOkay
   | CompileError
   | RuntimeError
+  | StatusResponse
   | Result<T>;

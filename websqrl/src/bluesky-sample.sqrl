@@ -14,16 +14,16 @@ LET DatasetId := 1;
 LET ProfanityFilterEnabled := false;
 
 # Feature extraction from the Twitter data
-LET TweetText := jsonValue(EventData, '$.data.text');
-LET AuthorId := jsonValue(EventData, '$.data.author_id');
-LET TweetId := jsonValue(EventData, '$.data.id');
-LET TweetDate := jsonValue(EventData, '$.data.created_at');
-LET Users := jsonValue(EventData, '$.includes.users');
-LET AuthorUserData := first([It for It in Users where jsonValue(It, "$.id") = AuthorId]);
-LET AuthorUsername := entity("User", jsonValue(AuthorUserData, "$.username"));
-LET AuthorCreatedAt := jsonValue(AuthorUserData, "$.created_at");
-LET AuthorName := jsonValue(AuthorUserData, "$.name");
-LET AuthorProfileImageUrl := jsonValue(AuthorUserData, "$.profile_image_url");
+LET Version := jsonValue(EventData, '$.v');
+LET EventName := jsonValue(EventData, '$.eventName');
+LET RecordType := jsonValue(EventData, '$.payload.record.$type');
+LET AuthorId := jsonValue(EventData, '$.payload.author');
+LET TweetText := jsonValue(EventData, '$.payload.record.text');
+LET TweetId := jsonValue(EventData, '$.payload.cid');
+# TODO(meyer) payload.record.createdAt is not available on all events
+LET TweetDate := jsonValue(EventData, '$.timestamp');
+LET SubjectCid := jsonValue(EventData, '$.payload.record.subject.cid');
+LET Subject := jsonValue(EventData, '$.payload.record.subject');
 
 # These features follow a standard naming scheme, and allow rules to be shared between
 # multiple websites, in our case the Wikipedia and Twitter demos.
@@ -36,14 +36,14 @@ LET TextSimhash := simhash(UserGeneratedContent);
 # Easily defining counters like this is one of the powers of SQRL. These counters
 # will automatically start at 0 when a new one is created. This requires a bit of
 # forethought, but as long as rules deal with `greater than X` it works.
-LET TweetsByUser := count(BY AuthorUsername TOTAL);
+LET TweetsByUser := count(BY AuthorId, EventName TOTAL);
 LET CountBySimhash := count(BY TextSimhash LAST 5 MINUTES);
-LET UsersBySimhash := countUnique(AuthorUsername BY TextSimhash LAST 5 MINUTES);
+LET UsersBySimhash := countUnique(AuthorId BY TextSimhash LAST 5 MINUTES);
 
 # Simple rule to make sure atleast one tweet shows up in the UI
 LET IsFirstTweetSeen := NOT rateLimited(BY DatasetId MAX 1 EVERY YEARS);
 CREATE RULE FirstTweetSeen WHERE IsFirstTweetSeen WITH REASON
-    "This is not a bad thing, just flagging this first tweet scene so there is output here. If you want more content you can turn on the profanity filter.";
+    "This is not a bad thing, just flagging this first tweet seen so there is output here. If you want more content you can turn on the profanity filter.";
 
 # Simple rules for too much similar text
 CREATE RULE SimilarTweetText WHERE CountBySimhash>2 WITH REASON
@@ -57,22 +57,14 @@ LET BadWordMatches := patternMatches("bad-words.txt", UserGeneratedContent);
 CREATE RULE UsedBadWords WHERE ProfanityFilterEnabled AND BadWordMatches WITH REASON
     "Matched simple profanity filter: ${BadWordMatches}";
 
-# Look out for impersonated users
-# [NOTE] A rule like this would be a lot more advanced in production.
-# We let used to use a `deconfuse()` function that dealt with similar looking
-# unicode characters. See https://util.unicode.org/UnicodeJsps/confusables.jsp
-LET LooksLikeOlMusky := regexMatch("^E[1lI][0o]n.+Mu[$s]k.*$", AuthorName);
-CREATE RULE ImpersonatedMusk WHERE LooksLikeOlMusky AND AuthorUsername != "elonmusk";
-
 # This defines what gets shown in the sidebar
 # At Twitter this might mean deleted tweets, suspending users, etc.
 WHEN
     SimilarTweetText,
     SameTweetMultipleUsers,
     FirstTweetSeen,
-    UsedBadWords,
-    ImpersonatedMusk
+    UsedBadWords
 THEN showEvent();
 
 # Add some additional features if they are interesting
-log("Seen %d tweets by user", TweetsByUser) WHERE TweetsByUser>1;
+log("Seen", TweetsByUser, EventName, "by user") WHERE TweetsByUser>1;

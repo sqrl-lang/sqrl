@@ -15,12 +15,15 @@ export default function TwitterPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <StreamPage
-        urlPrefix="https://sqrl-twitter-stream.s3.amazonaws.com/v1/"
-        extractDate={(payload) => new Date(payload.dt)}
+        dateJsonPath="timestamp"
+        urlPrefix={
+          process.env.BLUESKY_MOCK_API
+            ? "/api/bluesky-dev/"
+            : "https://sqrl-bluesky-demo.s3.amazonaws.com/prod/v0/"
+        }
         sampleCode={sampleCode}
         storyComponent={BlueskyEventStory}
         fetchFeatures={BLUESKY_FETCH_FEATURES}
-        startDateISO={"2023-02-07T09:00Z"}
         shouldLogResult={(result) => result.result.shown}
       >
         This demonstration is running on the

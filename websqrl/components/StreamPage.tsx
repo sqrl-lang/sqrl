@@ -1,37 +1,23 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useReducer } from "react";
 import { invariant } from "../src/invariant";
-import {
-  addMinutes,
-  subMilliseconds,
-  startOfMinute,
-  differenceInMilliseconds,
-} from "date-fns";
-import type {
-  Request,
-  Response,
-  EventData,
-  Result,
-  CompileError,
-} from "../src/types";
+import type { Request, Response, Result, StatusResponse } from "../src/types";
 import { FunctionInfoMap, MonacoEditor } from "../src/MonacoEditor";
-import { useMatchMedia, Col, Box, Block, Row } from "jsxstyle";
+import { useMatchMedia, Col, Box, Block, Row, css } from "jsxstyle";
 import { styleConstants } from "../src/constants";
 import { Container } from "./Container";
 import type { editor } from "monaco-editor";
+import { Playhead, PlayheadSpeed } from "./Playhead";
 
-let LOG_ID = 0;
-const DELAY_MS = 60_000 * 3;
 const MAX_STORY_FEED_LENGTH = 30;
 
 interface StreamPageProps<T extends string> {
-  extractDate: (payload: EventData) => Date;
+  dateJsonPath: string;
   fetchFeatures: readonly T[];
   sampleCode: string;
   storyComponent: React.FC<Result<T>>;
   urlPrefix: string;
   shouldLogResult?: (result: Result<T>) => boolean;
   children: React.ReactNode;
-  startDateISO?: string;
 }
 
 interface ResultOrMessage<T extends string> {
@@ -39,45 +25,77 @@ interface ResultOrMessage<T extends string> {
   key: number;
 }
 
-declare global {
-  interface Window {
-    sqrlInjectData:
-      | null
-      | ((data: {
-          version: string;
-          timestamp: string;
-          events: EventData[];
-        }) => void);
+const storiesReducer: React.Reducer<
+  {
+    index: number;
+    stories: ResultOrMessage<string>[];
+  },
+  { action: "reset" } | { action: "append"; value: string | Result<string> }
+> = (state, action) => {
+  if (action.action === "reset") {
+    return {
+      index: 0,
+      stories: [],
+    };
+  } else if (action.action === "append") {
+    const key = state.index + 1;
+    return {
+      index: key,
+      stories: [{ key, value: action.value }, ...state.stories].slice(
+        0,
+        MAX_STORY_FEED_LENGTH
+      ),
+    };
+  } else {
+    throw new Error("Unhandled action");
   }
-}
+};
+
+const statusReducer: React.Reducer<
+  Omit<StatusResponse, "type">,
+  Omit<StatusResponse, "type">
+> = (state, action) => {
+  if (
+    action.timestamp !== state.timestamp ||
+    action.total !== state.total ||
+    action.currentIndex + 1 === action.total ||
+    // slow down state updates a bit
+    (action.currentIndex + 1) % 10 === 0
+  ) {
+    return action;
+  }
+  return state;
+};
 
 export function StreamPage<T extends string>({
-  extractDate,
+  dateJsonPath,
   fetchFeatures,
   sampleCode,
   storyComponent: StoryComponent,
   urlPrefix,
   shouldLogResult = () => true,
   children,
-  startDateISO,
 }: StreamPageProps<T>): React.ReactElement {
   const workerRef = useRef<Worker | null>();
   const lastSourceRef = useRef<string>();
-  const storiesRef = useRef<Array<ResultOrMessage<T>>>([]);
-  const lastTimestampRef = useRef<string>();
-  const [showDetails, setShowDetails] = useState(true);
+  const [storyObjects, setStories] = useReducer(storiesReducer, {
+    index: 0,
+    stories: [],
+  });
+  const [showDetails, setShowDetails] = useState(false);
   const [compileStatus, setCompileStatus] = useState<{
     status: "error" | "success" | "pending";
     message: string;
     errorMarker?: editor.IMarkerData;
   }>({ status: "pending", message: "Requesting initial compilation…" });
 
-  let timeDifference = 0;
-  if (startDateISO) {
-    timeDifference = Date.parse(startDateISO) - Date.now();
-  }
+  const [playheadSpeed, setPlayheadSpeed] = useState<PlayheadSpeed>(0);
+  const [status, setStatus] = useReducer(statusReducer, {
+    currentIndex: 0,
+    total: 0,
+    timestamp: "",
+  });
 
-  const [, setLogId] = useState(LOG_ID);
   const [source, setSource] = useState(sampleCode);
 
   const [sqrlFunctions, setFunctions] = useState<FunctionInfoMap | null>(null);
@@ -91,6 +109,27 @@ export function StreamPage<T extends string>({
     req({ type: "compile", source });
   }
 
+  function setTimestamp(timestamp: number) {
+    req({ type: "playhead", position: new Date(timestamp) });
+    setStories({ action: "reset" });
+  }
+
+  function init() {
+    setCompileStatus({ status: "pending", message: "Recompiling…" });
+    lastSourceRef.current = source;
+    const startDate = new Date();
+    startDate.setMinutes(startDate.getMinutes() - 11);
+    req({
+      type: "init",
+      source,
+      dateJsonPath,
+      fetchFeatures,
+      speed: playheadSpeed,
+      cursor: startDate,
+      urlPrefix,
+    });
+  }
+
   if (lastSourceRef.current !== source && workerRef.current) {
     recompile();
   }
@@ -100,105 +139,10 @@ export function StreamPage<T extends string>({
   }
 
   function append(result: Result<T>) {
-    if (storiesRef.current.length === MAX_STORY_FEED_LENGTH) {
-      storiesRef.current.pop();
-    }
-    storiesRef.current.unshift({ value: result, key: LOG_ID++ });
-    setLogId(LOG_ID);
+    setStories({ action: "append", value: result });
   }
 
   useEffect(() => {
-    const scripts: HTMLScriptElement[] = [];
-
-    function startDownload(date: Date) {
-      const filename = date
-        .toISOString()
-        .substring(0, "0000-00-00T00:00".length);
-      const script = document.createElement("script");
-      script.src = `${urlPrefix}${filename}.js`;
-      script.async = true;
-      document.body.appendChild(script);
-      scripts.push(script);
-    }
-
-    let events: EventData[] = [];
-    let eventIndex = 0;
-    let nextEventTimeout: NodeJS.Timeout;
-    let downloadDate = startOfMinute(
-      subMilliseconds(new Date(Date.now() + timeDifference), DELAY_MS)
-    );
-    let firstBatch = true;
-
-    function nextEvent() {
-      if (eventIndex < events.length) {
-        req({
-          type: "event",
-          event: events[eventIndex],
-          requestFeatures: fetchFeatures,
-        });
-        eventIndex++;
-      } else {
-        const nextDownload = addMinutes(downloadDate, 1);
-        if (delayedMsUntil(nextDownload) <= 0) {
-          downloadDate = nextDownload;
-          startDownload(downloadDate);
-        }
-      }
-      scheduleNextEvent();
-    }
-
-    function delayedMsUntil(nextEventDate: Date) {
-      const now = subMilliseconds(
-        new Date(new Date(Date.now() + timeDifference)),
-        DELAY_MS
-      );
-      return differenceInMilliseconds(nextEventDate, now);
-    }
-
-    function scheduleNextEvent() {
-      let nextEventDate: Date;
-      if (eventIndex < events.length) {
-        nextEventDate = new Date(extractDate(events[eventIndex]));
-      } else {
-        nextEventDate = addMinutes(downloadDate, 1);
-      }
-      clearTimeout(nextEventTimeout);
-      nextEventTimeout = setTimeout(
-        nextEvent,
-        Math.max(10, delayedMsUntil(nextEventDate))
-      );
-    }
-
-    window.sqrlInjectData = (data) => {
-      // useEffect callbacks are run twice in dev mode, so we need to guard against duplicate data injections here
-      if (data.timestamp === lastTimestampRef.current) {
-        console.warn(
-          "Ignoring injected data with duplicate timestamp %s",
-          data.timestamp
-        );
-        return;
-      }
-
-      lastTimestampRef.current = data.timestamp;
-
-      events = data.events;
-      eventIndex = 0;
-
-      if (firstBatch) {
-        while (eventIndex < events.length) {
-          const eventDate = new Date(extractDate(events[eventIndex]));
-          if (delayedMsUntil(eventDate) > 0) {
-            break;
-          }
-          eventIndex++;
-        }
-        firstBatch = false;
-      }
-      scheduleNextEvent();
-    };
-
-    startDownload(downloadDate);
-
     invariant(!workerRef.current, "Worker created twice");
     workerRef.current = new Worker(
       new URL("../workers/compile.worker", import.meta.url)
@@ -245,25 +189,19 @@ export function StreamPage<T extends string>({
         if (shouldLogResult(res)) {
           append(res);
         }
+      } else if (res.type === "status") {
+        setStatus(res);
       } else {
         console.log("Unknown webworker message:", res);
       }
     };
-    recompile();
+    init();
 
     return () => {
-      clearTimeout(nextEventTimeout);
-
-      scripts.forEach((script) => {
-        document.body.removeChild(script);
-      });
-
       if (workerRef.current) {
         workerRef.current.terminate();
         workerRef.current = null;
       }
-
-      window.sqrlInjectData = null;
     };
   }, []);
 
@@ -271,123 +209,135 @@ export function StreamPage<T extends string>({
     color: styleConstants.pageLink,
     textDecoration: "underline",
   };
+
   return (
-    <Box
-      display="flex"
-      width="100%"
-      height="100%"
-      // flip from 2 columns to 2 rows on smaller screens
-      flexDirection={isSmallScreen ? "column" : "row"}
-      gap={10}
-      padding={10}
-      backgroundColor={styleConstants.pageBackground}
-      overflow="hidden"
-      color={styleConstants.pageForeground}
-    >
-      <Col
-        flex="1 1 200px"
+    <Col width="100%" height="100%">
+      <Box
+        display="flex"
+        flex="1 1 auto"
+        width="100%"
+        height="100%"
+        // flip from 2 columns to 2 rows on smaller screens
+        flexDirection={isSmallScreen ? "column" : "row"}
+        gap={10}
+        padding={10}
+        backgroundColor={styleConstants.pageBackground}
         overflow="hidden"
-        borderRadius={styleConstants.containerRadius}
-        backgroundColor={styleConstants.insetBackground}
-        border="1px solid"
-        borderColor={styleConstants.containerOutlineColor}
-        backgroundClip="padding-box"
+        color={styleConstants.pageForeground}
       >
-        <Row flex="0 0 auto" fontSize={18} gap={20} padding="5px 10px">
-          <Block>SQRL Editor</Block>
-          <Row gap={5} fontSize={14} fontWeight={500}>
-            <Block
-              backgroundColor={
-                compileStatus.status === "pending"
-                  ? "grey"
-                  : compileStatus.status === "error"
-                  ? "red"
-                  : compileStatus.status === "success"
-                  ? "green"
-                  : null
-              }
-              height={16}
-              width={16}
-              borderRadius={8}
-            />
-            <Block whiteSpace="nowrap" overflow="hidden" flex="1 1 auto">
-              {compileStatus.status === "error"
-                ? "Compile error"
-                : compileStatus.message}
+        <Col
+          flex="1 1 200px"
+          overflow="hidden"
+          borderRadius={styleConstants.containerRadius}
+          backgroundColor={styleConstants.insetBackground}
+          border="1px solid"
+          borderColor={styleConstants.containerOutlineColor}
+          backgroundClip="padding-box"
+        >
+          <Row flex="0 0 auto" fontSize={18} gap={20} padding="5px 10px">
+            <Block>SQRL Editor</Block>
+            <Row gap={5} fontSize={14} fontWeight={500}>
+              <Block
+                backgroundColor={
+                  compileStatus.status === "pending"
+                    ? "grey"
+                    : compileStatus.status === "error"
+                    ? "red"
+                    : compileStatus.status === "success"
+                    ? "green"
+                    : null
+                }
+                height={16}
+                width={16}
+                borderRadius={8}
+              />
+              <Block whiteSpace="nowrap" overflow="hidden" flex="1 1 auto">
+                {compileStatus.status === "error"
+                  ? "Compile error"
+                  : compileStatus.message}
+              </Block>
+            </Row>
+            <Block fontSize={14} whiteSpace="nowrap" marginLeft="auto">
+              <a href="#" onClick={() => setShowDetails(!showDetails)}>
+                {showDetails ? (
+                  <>Hide Language Details &uarr;</>
+                ) : (
+                  <>Show Language Details &darr;</>
+                )}
+              </a>
             </Block>
           </Row>
-          <Block fontSize={14} whiteSpace="nowrap" marginLeft="auto">
-            <a href="#" onClick={() => setShowDetails(!showDetails)}>
-              {showDetails ? (
-                <>Hide Language Details &uarr;</>
-              ) : (
-                <>Show Language Details &darr;</>
-              )}
-            </a>
-          </Block>
-        </Row>
-        {showDetails && (
-          <>
-            <Row
-              padding={10}
-              display="block"
-              borderLeftColor={styleConstants.pageForeground}
-              borderLeftWidth="2px"
-              borderLeftStyle="solid"
-            >
-              SQRL was the language designed by Smyte, and later acquired by
-              Twitter in 2018. It is a safe, stateful language for event
-              streams, designed to make it easy to enforce anti-abuse rules.
-              <br />
-              <br />
-              {children}
-              <br />
-              <br />
-              For more information see{" "}
-              <a style={linkStyle} href="https://sqrl-lang.github.io/sqrl/">
-                the website
-              </a>
-              , or{" "}
-              <a
-                style={linkStyle}
-                href="https://sqrl-lang.github.io/sqrl/motivation.html"
+          {showDetails && (
+            <>
+              <Row
+                padding={10}
+                display="block"
+                borderLeftColor={styleConstants.pageForeground}
+                borderLeftWidth="2px"
+                borderLeftStyle="solid"
               >
-                the motivation
-              </a>
-              .
-            </Row>
-            <Row padding={10} fontSize={12}>
-              <a href="#" onClick={() => setShowDetails(false)}>
-                <>Hide Language Details &uarr;</>
-              </a>
-            </Row>
-          </>
-        )}
-        <MonacoEditor
-          style={{ flex: "1 1 auto" }}
-          value={source}
-          markers={
-            compileStatus.errorMarker ? [compileStatus.errorMarker] : undefined
-          }
-          sqrlFunctions={sqrlFunctions}
-          onChange={setSource}
-          isDarkMode={isDarkMode}
-        />
-      </Col>
+                SQRL was the language designed by Smyte, and later acquired by
+                Twitter in 2018. It is a safe, stateful language for event
+                streams, designed to make it easy to enforce anti-abuse rules.
+                <br />
+                <br />
+                {children}
+                <br />
+                <br />
+                For more information see{" "}
+                <a style={linkStyle} href="https://sqrl-lang.github.io/sqrl/">
+                  the website
+                </a>
+                , or{" "}
+                <a
+                  style={linkStyle}
+                  href="https://sqrl-lang.github.io/sqrl/motivation.html"
+                >
+                  the motivation
+                </a>
+                .
+              </Row>
+              <Row padding={10} fontSize={12}>
+                <a href="#" onClick={() => setShowDetails(false)}>
+                  <>Hide Language Details &uarr;</>
+                </a>
+              </Row>
+            </>
+          )}
+          <MonacoEditor
+            className={css({ flex: "1 1 auto" })}
+            value={source}
+            markers={
+              compileStatus.errorMarker
+                ? [compileStatus.errorMarker]
+                : undefined
+            }
+            sqrlFunctions={sqrlFunctions}
+            onChange={setSource}
+            isDarkMode={isDarkMode}
+          />
+        </Col>
 
-      <Col flex="1 1 200px" component="ul" overflowY="scroll" gap={10}>
-        {storiesRef.current.map((value) =>
-          typeof value.value === "string" ? (
-            <Container key={value.key}>
-              <p>{value.value}</p>
-            </Container>
-          ) : (
-            <Container key={value.key}>
-              <StoryComponent {...value.value} />
-            </Container>
-          )
-        )}
-      </Col>
-    </Box>
+        <Col flex="1 1 200px" component="ul" overflowY="scroll" gap={10}>
+          {storyObjects.stories.map((value) =>
+            typeof value.value === "string" ? (
+              <Container key={value.key}>
+                <p>{value.value}</p>
+              </Container>
+            ) : (
+              <Container key={value.key}>
+                <StoryComponent {...value.value} />
+              </Container>
+            )
+          )}
+        </Col>
+      </Box>
+      <Playhead
+        setTimestamp={setTimestamp}
+        speed={playheadSpeed}
+        setSpeed={setPlayheadSpeed}
+        status={status}
+      />
+    </Col>
   );
 }
