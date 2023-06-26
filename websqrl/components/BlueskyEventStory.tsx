@@ -3,18 +3,18 @@ import { styleConstants } from "../src/constants";
 import type { Result } from "../src/types";
 import { StoryResult } from "./StoryResult";
 
-export const TWEET_FETCH_FEATURES = [
+export const BLUESKY_FETCH_FEATURES = [
   "AuthorUsername",
   "AuthorProfileImageUrl",
   "TweetText",
   "TweetId",
   "TweetDate",
 ] as const;
-export type TweetFetchFeature = typeof TWEET_FETCH_FEATURES[number];
+export type BlueskyFetchFeature = typeof BLUESKY_FETCH_FEATURES[number];
 
-type TweetStoryProps = Omit<Result<TweetFetchFeature>, "type">;
+type BlueskyEventStoryProps = Omit<Result<BlueskyFetchFeature>, "type">;
 
-export const TweetStory: React.FC<TweetStoryProps> = ({
+export const BlueskyEventStory: React.FC<BlueskyEventStoryProps> = ({
   features,
   result,
   logs,

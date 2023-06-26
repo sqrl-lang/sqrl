@@ -21,9 +21,7 @@ export default function IndexPage() {
       >
         <Block fontSize={26}>SQRL Editor</Block>
         <Block>
-          <a href="/twitter">
-            View SQRL running on a sampled Twitter live stream
-          </a>
+          <a href="/bluesky">View SQRL running on the Bluesky firehose</a>
         </Block>
         <Block>
           <a href="/wikipedia">
