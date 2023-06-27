@@ -15,7 +15,7 @@ export default function TwitterPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <StreamPage
-        dateJsonPath="timestamp"
+        dateFieldName="timestamp"
         urlPrefix={
           process.env.BLUESKY_MOCK_API
             ? "/api/bluesky-dev/"

@@ -1,12 +1,11 @@
 import { getFileNameForDate } from "./getFileNameForDate";
 import type { EventData } from "./types";
 
-// TODO(meyer) actual jsonpath stuff
-const getDateFromJsonPath = (
+const getDateFromEventObject = (
   event: Record<string, unknown>,
-  jsonPath: string
+  fieldName: string
 ): Date => {
-  const value = event[jsonPath];
+  const value = event[fieldName];
   if (typeof value === "string" || typeof value === "number") {
     return new Date(value);
   }
@@ -18,16 +17,16 @@ export interface EventDomainOptions {
   urlPrefix: string;
   /** The date that event processing begins. This value will be rounded to the nearest ten minute interval. */
   cursor: Date;
-  /** JSONPath to the date value in the event object */
-  dateJsonPath: string;
+  /** Name of the date field in the event object */
+  dateFieldName: string;
   /** Event processing speed in milliseconds. Specify "realtime" if you'd like events to be processed in... _realtime_. */
   speed: number | "realtime";
 }
 
 export class EventDomain {
-  constructor({ urlPrefix, cursor, dateJsonPath, speed }: EventDomainOptions) {
+  constructor({ urlPrefix, cursor, dateFieldName, speed }: EventDomainOptions) {
     this.cursor = cursor;
-    this.dateJsonPath = dateJsonPath;
+    this.dateFieldName = dateFieldName;
     this.speed = speed;
     this.urlPrefix = urlPrefix;
     this.dataPromise = this.fetchData();
@@ -35,7 +34,7 @@ export class EventDomain {
 
   // user-configurable options
   private cursor: Date;
-  private dateJsonPath: string;
+  private dateFieldName: string;
   private speed: number | "realtime";
   private urlPrefix: string;
 
@@ -105,8 +104,8 @@ export class EventDomain {
         // calculate the number of milliseconds between event timestamps
         // TODO(meyer) probably just easier to divide 10 minutes by event count
         eventDelay = Math.max(
-          getDateFromJsonPath(currentEvent, this.dateJsonPath).valueOf() -
-            getDateFromJsonPath(previousEvent, this.dateJsonPath).valueOf(),
+          getDateFromEventObject(currentEvent, this.dateFieldName).valueOf() -
+            getDateFromEventObject(previousEvent, this.dateFieldName).valueOf(),
           0
         );
       } else {

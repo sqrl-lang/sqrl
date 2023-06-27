@@ -11,7 +11,7 @@ import { Playhead, PlayheadSpeed } from "./Playhead";
 const MAX_STORY_FEED_LENGTH = 30;
 
 interface StreamPageProps<T extends string> {
-  dateJsonPath: string;
+  dateFieldName: string;
   fetchFeatures: readonly T[];
   sampleCode: string;
   storyComponent: React.FC<Result<T>>;
@@ -68,7 +68,7 @@ const statusReducer: React.Reducer<
 };
 
 export function StreamPage<T extends string>({
-  dateJsonPath,
+  dateFieldName,
   fetchFeatures,
   sampleCode,
   storyComponent: StoryComponent,
@@ -122,7 +122,7 @@ export function StreamPage<T extends string>({
     req({
       type: "init",
       source,
-      dateJsonPath,
+      dateFieldName: dateFieldName,
       fetchFeatures,
       speed: playheadSpeed,
       cursor: startDate,
