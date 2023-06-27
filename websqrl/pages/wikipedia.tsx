@@ -18,7 +18,7 @@ export default function WikipediaPage() {
       </Head>
       <StreamPage
         urlPrefix="https://sqrl-aws-diffs.s3.amazonaws.com/v1/en.wikipedia.org/"
-        extractDate={(payload) => new Date(payload.meta.dt)}
+        dateFieldName="dt"
         sampleCode={sampleCode}
         storyComponent={WikipediaEventStory}
         fetchFeatures={WIKIPEDIA_FETCH_FEATURES}
