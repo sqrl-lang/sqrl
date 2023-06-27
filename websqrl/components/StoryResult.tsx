@@ -24,7 +24,7 @@ export const StoryResult: React.FC<{
 
   return (
     <>
-      {result.shown && (
+      {result.shown && result.shownCause && (
         <Block color={styleConstants.secondary}>
           <Block>Rules fired</Block>
           <Block component="ul" listStyle="inside">

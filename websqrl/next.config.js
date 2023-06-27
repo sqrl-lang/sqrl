@@ -3,8 +3,12 @@
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 const assert = require("assert");
 
+/** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
+  env: {
+    BLUESKY_MOCK_API: process.env.BLUESKY_MOCK_API === "true",
+  },
   webpack: (
     /** @type {import('webpack').Configuration} */
     config,

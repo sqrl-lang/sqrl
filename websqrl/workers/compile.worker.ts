@@ -8,6 +8,8 @@ import { Execution, AT, WhenCause, FeatureMap } from "sqrl";
 import { invariant } from "../src/invariant";
 import { WebSQRLManipulator } from "../TweetManipulator";
 import badWordsRot13 from "../src/bad-words-rot13.json";
+import { EventDomain } from "../src/EventDomain";
+import { getFileNameForDate } from "../src/getFileNameForDate";
 
 const COMPILE_DEBOUNCE_MS = 200;
 
@@ -161,7 +163,7 @@ function triggerCompile() {
     });
 }
 
-async function runEvent(event: EventData, requestFeatures: readonly string[]) {
+async function runEvent(event: EventData) {
   invariant(latestExecutable, "No executable to process event");
 
   const ctx = SQRL.createSimpleContext();
@@ -177,7 +179,7 @@ async function runEvent(event: EventData, requestFeatures: readonly string[]) {
 
   const features: FeatureMap = {};
   await Promise.all(
-    requestFeatures.map(async (name) => {
+    fetchFeatures.map(async (name) => {
       features[name] = await execution.fetchValue(name);
     })
   );
@@ -191,6 +193,7 @@ async function runEvent(event: EventData, requestFeatures: readonly string[]) {
     features,
   };
 }
+
 function debounceCompile() {
   if (!compilePromise) {
     clearTimeout(compileTimeout);
@@ -198,31 +201,56 @@ function debounceCompile() {
   }
 }
 
-self.addEventListener("message", (event) => {
+let eventDomain: EventDomain;
+let fetchFeatures: readonly string[] = [];
+let eventProcessTimer: NodeJS.Timer | undefined;
+
+/** Queues up the next event for processing */
+const queueNextEvent = () => {
+  eventDomain.getNextEventDelay().then((eventDelay) => {
+    eventProcessTimer = setTimeout(async () => {
+      const result = await eventDomain.processNextEvent(runEvent);
+      respond({
+        type: "status",
+        currentIndex: eventDomain["eventIndex"],
+        timestamp: getFileNameForDate(eventDomain["cursor"]),
+        total: eventDomain["events"].length,
+      });
+      respond({
+        type: "result",
+        source: latestSource,
+        ...result,
+      });
+      queueNextEvent();
+    }, eventDelay);
+  });
+};
+
+self.addEventListener("message", async (event) => {
   const message = event.data as Request<string>;
 
-  if (message.type === "compile") {
+  if (message.type === "compile" || message.type === "init") {
     const { source } = message;
     latestSource = source;
-    debounceCompile();
-  } else if (message.type === "event") {
-    if (latestExecutable) {
-      runEvent(message.event, message.requestFeatures).then(
-        (props) => {
-          respond({
-            type: "result",
-            source: latestSource,
-            ...props,
-          });
-        },
-        (err) => {
-          respond({
-            type: "runtimeError",
-            message: err.stack,
-            source: latestSource,
-          });
-        }
-      );
+    if (message.type === "init") {
+      fetchFeatures = message.fetchFeatures;
+      clearTimeout(eventProcessTimer);
+      await triggerCompile();
+      eventDomain = new EventDomain(message);
+      queueNextEvent();
+    } else {
+      debounceCompile();
     }
+    return;
+  } else if (message.type === "playhead") {
+    clearTimeout(eventProcessTimer);
+    respond({
+      type: "status",
+      currentIndex: 0,
+      total: 0,
+      timestamp: getFileNameForDate(eventDomain["cursor"]),
+    });
+    eventDomain.setCursor(message.position);
+    queueNextEvent();
   }
 });
